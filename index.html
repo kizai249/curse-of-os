@@ -2,418 +2,541 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
   <title>لعنة أوس | Curse of Os</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/animations.css" />
 </head>
 <body>
 
-<!-- Ambient overlay effects -->
-<div class="fog-overlay"></div>
-<div class="vignette"></div>
-<div class="noise"></div>
+<!-- ░░ AMBIENT LAYER ░░ -->
+<div id="fog-layer" class="fog-layer"></div>
+<div id="vignette" class="vignette"></div>
+<div id="noise-overlay" class="noise-overlay"></div>
+<div id="scanlines" class="scanlines"></div>
 
-<!-- Notification container -->
-<div id="notifications"></div>
-
-<!-- Debug panel -->
-<div id="debug-panel" class="hidden">
-  <div class="debug-header">DEBUG <span onclick="toggleDebug()">✕</span></div>
-  <div id="debug-content"></div>
+<!-- ░░ OS EYE OVERLAY ░░ -->
+<div id="os-eye-overlay" class="os-eye-overlay hidden">
+  <video id="os-eye-video" muted playsinline loop>
+    <source src="assets/videos/os-eye.mp4" type="video/mp4" />
+  </video>
+  <div class="os-eye-text" id="os-eye-text">أنا أراك</div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 1: INTRO                                        -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="intro-screen" class="screen active">
-  <div class="intro-bg"></div>
-  <div class="intro-content">
-    <div class="intro-eyebrow glitch" data-text="CURSE OF OS">CURSE OF OS</div>
-    <h1 class="intro-title">لعنة أوس</h1>
-    <div class="intro-subtitle">الصندوق يتذكرك</div>
+<!-- ░░ NOTIFICATION SYSTEM ░░ -->
+<div id="notif-container"></div>
 
-    <div class="box-container">
-      <div class="cursed-box">
-        <div class="box-glow"></div>
-        <div class="box-face top"></div>
-        <div class="box-face front">
-          <div class="box-lock">
-            <div class="lock-body"></div>
-            <div class="lock-shackle"></div>
-          </div>
-          <div class="box-rune">𓂀</div>
+<!-- ░░ DEBUG PANEL ░░ -->
+<div id="debug-panel" class="debug-panel hidden">
+  <div class="debug-bar">
+    <span class="debug-title">// DEBUG MODE</span>
+    <span class="debug-close" onclick="App.toggleDebug()">✕</span>
+  </div>
+  <pre id="debug-output"></pre>
+  <div class="debug-actions">
+    <button onclick="App.debugAdvanceDay()">+1 يوم</button>
+    <button onclick="App.debugAddStats()">+20 كل شيء</button>
+    <button onclick="App.debugReset()">إعادة تعيين</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 01 — LANDING (Door 13)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+  <div class="door13-bg" id="door13-bg">
+    <div class="door13-overlay"></div>
+    <div class="door13-fog"></div>
+    <!-- Door visual built in CSS — no image dependency -->
+    <div class="door13-frame">
+      <div class="door13-number" id="door13-number">13</div>
+      <div class="door13-door" id="door13-door">
+        <div class="door13-left-panel">
+          <div class="door-rune r1">𓂀</div>
+          <div class="door-rune r2">⬡</div>
+          <div class="door-rune r3">𓆏</div>
         </div>
-        <div class="box-face side"></div>
-        <div class="box-chains">
-          <span class="chain c1"></span>
-          <span class="chain c2"></span>
-          <span class="chain c3"></span>
+        <div class="door13-right-panel">
+          <div class="door-rune r4">𓈖</div>
+          <div class="door-rune r5">⬡</div>
+          <div class="door-rune r6">𓂋</div>
         </div>
-        <div class="box-particles" id="box-particles"></div>
+        <div class="door13-handle left-handle"></div>
+        <div class="door13-handle right-handle"></div>
+        <div class="door13-chains">
+          <div class="chain-link"></div>
+          <div class="chain-link"></div>
+          <div class="chain-link"></div>
+        </div>
+      </div>
+      <div class="door13-wall-left">
+        <div class="wall-text wt1">اليوم الثالث عشر</div>
+        <div class="wall-text wt2">لا تدخل</div>
+        <div class="wall-text wt3">الصندوق يراك</div>
+      </div>
+      <div class="door13-wall-right">
+        <div class="wall-text wt4">من فتحه لن يعود</div>
+        <div class="wall-text wt5">روح أوس</div>
+        <div class="wall-text wt6">اللعنة حقيقية</div>
       </div>
     </div>
+  </div>
 
-    <div class="intro-lore typewriter" id="intro-lore">
-      في قرية نائية... عاش أوس... ذكاؤه كان لعنته...
+  <div class="landing-content">
+    <div class="landing-logo">
+      <div class="logo-eyebrow">CURSE OF OS</div>
+      <h1 class="logo-title">لعنة أوس</h1>
     </div>
-
-    <div id="invite-notice" class="invite-notice hidden">
-      <span class="invite-icon">📜</span>
-      <span id="invite-text"></span>
+    <div class="landing-message hidden" id="landing-message">
+      <p class="landing-msg-text">"لم يُفترض أن تجد هذا المكان."</p>
     </div>
-
-    <button class="btn btn-primary btn-large pulse-btn" onclick="goToName()">
-      <span class="btn-icon">⬡</span>
-      اقبل الدعوة
-      <span class="btn-sub">Accept Invitation</span>
+    <button class="btn btn-enter" id="btn-enter" onclick="App.enterDoor()">
+      <span class="enter-icon">▶</span>
+      ENTER
     </button>
+    <div class="landing-warning">⚠ هذه التجربة تحتوي على محتوى نفسي مكثف</div>
+  </div>
 
-    <div class="intro-warning">
-      ⚠️ هذه اللعبة تحتوي على عناصر نفسية مظلمة. أكمل إذا كنت جاهزاً.
+  <!-- Ref notice -->
+  <div class="ref-notice hidden" id="ref-notice">
+    <span>📜</span>
+    <span id="ref-notice-text"></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 02 — INVITATION
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-invitation" class="screen">
+  <div class="cinematic-bg">
+    <div class="cin-overlay"></div>
+  </div>
+  <div class="invitation-container">
+    <div class="inv-symbol">⬡</div>
+    <div class="inv-from">رسالة من أوس</div>
+    <div class="inv-text typewriter-el" id="inv-typewriter">
+      أنت لستَ هنا بالصدفة.
+      الصندوق اختارك.
+      الأسرار التي ستكتشفها ستغيّر فهمك للحقيقة.
+      لكن تذكّر — لا يمكن لأحد معرفة كل شيء وحده.
+      ستحتاج إلى الآخرين... وقد لا تستطيع الوثوق بهم.
+    </div>
+    <div class="inv-seal">𓂀</div>
+    <div class="inv-actions">
+      <button class="btn btn-primary" onclick="App.goToName()">
+        اقبل الدعوة
+      </button>
+      <div class="inv-fine-print">بقبول الدعوة، تصبح جزءاً من اللعنة.</div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 2: NAME ENTRY                                   -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="name-screen" class="screen">
-  <div class="screen-header">
-    <div class="screen-eyebrow">الدخول إلى الصندوق</div>
-    <h2 class="screen-title">من أنت؟</h2>
-    <div class="screen-subtitle">The box needs to know your name</div>
-  </div>
-  <div class="screen-body">
-    <div class="form-group">
-      <label class="form-label">اسمك</label>
-      <input type="text" id="player-name-input" class="form-input" placeholder="أدخل اسمك..." maxlength="30" />
-      <div class="form-hint">سيُحفظ اسمك في الصندوق إلى الأبد</div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 03 — CREATE PLAYER
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-create" class="screen">
+  <div class="create-container">
+    <div class="create-header">
+      <div class="create-eyebrow">الصندوق يريد أن يعرفك</div>
+      <h2 class="create-title">من أنت؟</h2>
     </div>
-    <button class="btn btn-primary" onclick="submitName()">
-      <span class="btn-icon">🔓</span>
-      ادخل
-    </button>
+    <div class="create-form">
+      <div class="form-group">
+        <label class="form-label">اسمك الحقيقي</label>
+        <input type="text" id="input-name" class="form-input" placeholder="اكتب اسمك..." maxlength="25" autocomplete="off" />
+        <div class="form-note">سيُحفظ اسمك في سجلات أوس إلى الأبد</div>
+      </div>
+      <button class="btn btn-primary" onclick="App.submitName()">
+        التالي ←
+      </button>
+    </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 3: FACTION SELECTION                            -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="faction-screen" class="screen">
-  <div class="screen-header">
-    <div class="screen-eyebrow">اختر فصيلتك</div>
-    <h2 class="screen-title">من أي جانب أنت؟</h2>
-    <div class="screen-subtitle">Choose Your Faction — This cannot be undone</div>
-  </div>
-  <div class="faction-grid">
-
-    <div class="faction-card" data-faction="children" onclick="selectFaction('children')">
-      <div class="faction-icon">⚡</div>
-      <div class="faction-name">أبناء أوس</div>
-      <div class="faction-name-en">Children of Os</div>
-      <div class="faction-belief">"أوس بريء — يجب تحريره"</div>
-      <div class="faction-bonus trust-color">+10% ثقة</div>
-      <div class="faction-style">التعاون</div>
-      <div class="faction-select-indicator">اختيارك</div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 04 — FACTION SELECTION
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-faction" class="screen">
+  <div class="faction-container">
+    <div class="faction-header">
+      <div class="faction-eyebrow">خطوة لا رجوع عنها</div>
+      <h2 class="faction-title">اختر فصيلتك</h2>
+      <p class="faction-subtitle">فصيلتك تحدّد منظورك للحقيقة — ولكن ليس دورك السري</p>
     </div>
-
-    <div class="faction-card" data-faction="shepherd" onclick="selectFaction('shepherd')">
-      <div class="faction-icon">🐑</div>
-      <div class="faction-name">أتباع الراعي</div>
-      <div class="faction-name-en">Shepherd Order</div>
-      <div class="faction-belief">"القوة أهم من الحرية"</div>
-      <div class="faction-bonus dark-color">+10% نقاط مظلمة</div>
-      <div class="faction-style">الخداع</div>
-      <div class="faction-select-indicator">اختيارك</div>
-    </div>
-
-    <div class="faction-card" data-faction="keepers" onclick="selectFaction('keepers')">
-      <div class="faction-icon">🔒</div>
-      <div class="faction-name">الحراس</div>
-      <div class="faction-name-en">The Keepers</div>
-      <div class="faction-belief">"الصندوق يجب أن يبقى مغلقاً"</div>
-      <div class="faction-bonus influence-color">+10% تأثير</div>
-      <div class="faction-style">الدفاع</div>
-      <div class="faction-select-indicator">اختيارك</div>
-    </div>
-
-    <div class="faction-card" data-faction="seekers" onclick="selectFaction('seekers')">
-      <div class="faction-icon">🔍</div>
-      <div class="faction-name">الباحثون</div>
-      <div class="faction-name-en">The Seekers</div>
-      <div class="faction-belief">"الحقيقة أهم من كل شيء"</div>
-      <div class="faction-bonus intel-color">+10% ذكاء</div>
-      <div class="faction-style">حل الألغاز</div>
-      <div class="faction-select-indicator">اختيارك</div>
-    </div>
-
-  </div>
-  <button class="btn btn-primary" id="faction-confirm-btn" onclick="confirmFaction()" disabled>
-    <span class="btn-icon">⬡</span>
-    تأكيد الاختيار
-  </button>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 4: DASHBOARD                                    -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="dashboard-screen" class="screen">
-
-  <!-- Top bar -->
-  <div class="dash-topbar">
-    <div class="dash-player-info">
-      <div class="dash-avatar" id="dash-avatar">?</div>
-      <div>
-        <div class="dash-playername" id="dash-playername">—</div>
-        <div class="dash-faction-badge" id="dash-faction-badge">—</div>
+    <div class="faction-grid">
+      <div class="faction-card fc-children" data-faction="children" onclick="App.selectFaction('children')">
+        <div class="fc-glow"></div>
+        <div class="fc-icon">⚡</div>
+        <div class="fc-name">أبناء أوس</div>
+        <div class="fc-name-en">Children of Os</div>
+        <div class="fc-creed">"أوس بريء — يجب تحريره"</div>
+        <div class="fc-style">أسلوب: التعاون</div>
+        <div class="fc-bonus trust-col">+10 ثقة</div>
+        <div class="fc-selected-badge">✓ اخترت</div>
+      </div>
+      <div class="faction-card fc-shepherd" data-faction="shepherd" onclick="App.selectFaction('shepherd')">
+        <div class="fc-glow"></div>
+        <div class="fc-icon">🐑</div>
+        <div class="fc-name">أتباع الراعي</div>
+        <div class="fc-name-en">Shepherd Order</div>
+        <div class="fc-creed">"القوة أهم من الحرية"</div>
+        <div class="fc-style">أسلوب: الخداع</div>
+        <div class="fc-bonus dark-col">+10 مظلم</div>
+        <div class="fc-selected-badge">✓ اخترت</div>
+      </div>
+      <div class="faction-card fc-keepers" data-faction="keepers" onclick="App.selectFaction('keepers')">
+        <div class="fc-glow"></div>
+        <div class="fc-icon">🔒</div>
+        <div class="fc-name">الحراس</div>
+        <div class="fc-name-en">The Keepers</div>
+        <div class="fc-creed">"الصندوق يبقى مغلقاً"</div>
+        <div class="fc-style">أسلوب: الدفاع</div>
+        <div class="fc-bonus infl-col">+10 تأثير</div>
+        <div class="fc-selected-badge">✓ اخترت</div>
+      </div>
+      <div class="faction-card fc-seekers" data-faction="seekers" onclick="App.selectFaction('seekers')">
+        <div class="fc-glow"></div>
+        <div class="fc-icon">🔍</div>
+        <div class="fc-name">الباحثون</div>
+        <div class="fc-name-en">The Seekers</div>
+        <div class="fc-creed">"الحقيقة فوق كل شيء"</div>
+        <div class="fc-style">أسلوب: التحقيق</div>
+        <div class="fc-bonus intel-col">+10 ذكاء</div>
+        <div class="fc-selected-badge">✓ اخترت</div>
       </div>
     </div>
-    <div class="dash-day-info">
-      <div class="day-label">اليوم</div>
-      <div class="day-number" id="dash-day">1</div>
-      <div class="day-total">/ 7</div>
+    <button class="btn btn-primary btn-faction-confirm" id="btn-faction-confirm" onclick="App.confirmFaction()" disabled>
+      أدخل الصندوق
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 05 — DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen">
+
+  <!-- Top strip -->
+  <div class="dash-strip">
+    <div class="ds-left">
+      <div class="ds-avatar" id="ds-avatar">؟</div>
+      <div class="ds-info">
+        <div class="ds-name" id="ds-name">—</div>
+        <div class="ds-faction" id="ds-faction">—</div>
+      </div>
+    </div>
+    <div class="ds-right">
+      <div class="ds-day-wrap">
+        <div class="ds-day-label">اليوم</div>
+        <div class="ds-day-num" id="ds-day-num">١</div>
+        <div class="ds-day-max">/ ٧</div>
+      </div>
     </div>
   </div>
 
   <!-- Day progress -->
-  <div class="day-progress">
-    <div class="day-progress-fill" id="day-progress-fill"></div>
-    <div class="day-markers">
+  <div class="day-progress-wrap">
+    <div class="day-progress-track">
+      <div class="day-progress-fill" id="day-progress-fill"></div>
+    </div>
+    <div class="day-progress-labels">
       <span>١</span><span>٢</span><span>٣</span><span>٤</span><span>٥</span><span>٦</span><span>٧</span>
     </div>
   </div>
 
-  <!-- Role reveal -->
-  <div class="role-card" id="role-card">
-    <div class="role-label">دورك السري</div>
-    <div class="role-name" id="role-name">؟؟؟</div>
-    <div class="role-desc" id="role-desc"></div>
-    <button class="btn btn-sm" id="role-reveal-btn" onclick="revealRole()">اكشف دورك</button>
+  <!-- Role card -->
+  <div class="role-strip" id="role-strip">
+    <div class="rs-label">دورك السري</div>
+    <div class="rs-value blurred" id="rs-value">؟؟؟</div>
+    <button class="rs-reveal-btn" id="rs-reveal-btn" onclick="App.revealRole()">اكشف</button>
   </div>
 
-  <!-- Stats grid -->
-  <div class="stats-grid">
-    <div class="stat-card trust">
-      <div class="stat-label">الثقة <span class="stat-label-en">Trust</span></div>
-      <div class="stat-bar-wrap"><div class="stat-bar trust-bar" id="stat-trust-bar"></div></div>
-      <div class="stat-value" id="stat-trust-val">50</div>
+  <!-- Stats -->
+  <div class="stats-block">
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-head"><span class="stat-icon">🤝</span><span class="stat-name">الثقة</span></div>
+        <div class="stat-track"><div class="stat-fill trust-fill" id="fill-trust"></div></div>
+        <div class="stat-num trust-col" id="num-trust">50</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-head"><span class="stat-icon">🧠</span><span class="stat-name">الذكاء</span></div>
+        <div class="stat-track"><div class="stat-fill intel-fill" id="fill-intel"></div></div>
+        <div class="stat-num intel-col" id="num-intel">50</div>
+      </div>
     </div>
-    <div class="stat-card intel">
-      <div class="stat-label">الذكاء <span class="stat-label-en">Intel</span></div>
-      <div class="stat-bar-wrap"><div class="stat-bar intel-bar" id="stat-intel-bar"></div></div>
-      <div class="stat-value" id="stat-intel-val">50</div>
-    </div>
-    <div class="stat-card influence">
-      <div class="stat-label">التأثير <span class="stat-label-en">Influence</span></div>
-      <div class="stat-bar-wrap"><div class="stat-bar influence-bar" id="stat-influence-bar"></div></div>
-      <div class="stat-value" id="stat-influence-val">50</div>
-    </div>
-    <div class="stat-card dark">
-      <div class="stat-label">المظلم <span class="stat-label-en">Dark</span></div>
-      <div class="stat-bar-wrap"><div class="stat-bar dark-bar" id="stat-dark-bar"></div></div>
-      <div class="stat-value" id="stat-dark-val">0</div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-head"><span class="stat-icon">🔗</span><span class="stat-name">التأثير</span></div>
+        <div class="stat-track"><div class="stat-fill infl-fill" id="fill-infl"></div></div>
+        <div class="stat-num infl-col" id="num-infl">50</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-head"><span class="stat-icon">🌑</span><span class="stat-name">المظلم</span></div>
+        <div class="stat-track"><div class="stat-fill dark-fill" id="fill-dark"></div></div>
+        <div class="stat-num dark-col" id="num-dark">0</div>
+      </div>
     </div>
   </div>
 
   <!-- Currencies -->
-  <div class="currencies-row">
-    <div class="currency-chip wp">
-      <span class="currency-icon">💡</span>
-      <span class="currency-val" id="curr-wp">0</span>
-      <span class="currency-label">WP</span>
+  <div class="currencies-strip">
+    <div class="cur-chip">
+      <div class="cur-val" id="cur-wp">0</div>
+      <div class="cur-label">WP 💡</div>
     </div>
-    <div class="currency-chip tp">
-      <span class="currency-icon">🤝</span>
-      <span class="currency-val" id="curr-tp">0</span>
-      <span class="currency-label">TP</span>
+    <div class="cur-chip">
+      <div class="cur-val" id="cur-tp">0</div>
+      <div class="cur-label">TP 🤝</div>
     </div>
-    <div class="currency-chip sp">
-      <span class="currency-icon">🌑</span>
-      <span class="currency-val" id="curr-sp">0</span>
-      <span class="currency-label">SP</span>
+    <div class="cur-chip">
+      <div class="cur-val" id="cur-sp">0</div>
+      <div class="cur-label">SP 🌑</div>
     </div>
-    <div class="currency-chip ip">
-      <span class="currency-icon">🔗</span>
-      <span class="currency-val" id="curr-ip">0</span>
-      <span class="currency-label">IP</span>
+    <div class="cur-chip">
+      <div class="cur-val" id="cur-ip">0</div>
+      <div class="cur-label">IP 🔗</div>
     </div>
   </div>
 
-  <!-- Story fragment -->
-  <div class="story-fragment-card" onclick="showScreen('story-screen'); renderStory()">
-    <div class="fragment-label">جزء قصتك <span class="fragment-label-en">Your Story Fragment</span></div>
-    <div class="fragment-title" id="fragment-title">—</div>
-    <div class="fragment-preview" id="fragment-preview">اضغط للقراءة...</div>
-    <div class="fragment-arrow">←</div>
+  <!-- Story fragment teaser -->
+  <div class="fragment-teaser" onclick="App.goTo('story')">
+    <div class="ft-label">جزء قصتك المخفي</div>
+    <div class="ft-title" id="ft-title">—</div>
+    <div class="ft-preview" id="ft-preview">اضغط للكشف...</div>
+    <div class="ft-arrow">←</div>
   </div>
 
-  <!-- Daily action -->
-  <div class="daily-action-card">
-    <div class="daily-label">مهمة اليوم</div>
-    <div class="daily-title" id="daily-action-title">—</div>
-    <div class="daily-actions">
-      <button class="btn btn-primary btn-sm" id="daily-puzzle-btn" onclick="showScreen('puzzle-screen'); renderPuzzle()">
-        🧩 حل اللغز
-      </button>
-      <button class="btn btn-ghost btn-sm" id="daily-vote-btn" onclick="showScreen('voting-screen'); renderVoting()">
-        🗳️ التصويت
-      </button>
+  <!-- Daily mission -->
+  <div class="daily-mission-card" id="daily-mission-card">
+    <div class="dm-eyebrow">مهمة اليوم</div>
+    <div class="dm-title" id="dm-title">—</div>
+    <div class="dm-lore" id="dm-lore"></div>
+    <div class="dm-buttons">
+      <button class="btn btn-red" id="dm-puzzle-btn" onclick="App.goTo('puzzle')">🧩 ادخل اللغز</button>
+      <button class="btn btn-ghost" onclick="App.goTo('voting')">🗳 التصويت</button>
     </div>
   </div>
 
   <!-- Invite section -->
-  <div class="invite-section" id="invite-section">
-    <div class="invite-section-title">🔗 رمز دعوتك</div>
-    <div class="invite-code-display" id="invite-code-display">—</div>
-    <button class="btn btn-ghost btn-sm" onclick="copyInvite()">نسخ الرمز</button>
-    <div class="invite-reward-info">
-      <span>+50 IP عند التسجيل</span>
-      <span>+100 IP عند إكمال يوم</span>
-      <span>+500 IP عند النهاية</span>
+  <div class="invite-block" id="invite-block">
+    <div class="ib-title">رمز دعوتك</div>
+    <div class="ib-code" id="ib-code" onclick="App.copyInvite()">—</div>
+    <div class="ib-hint">انقر للنسخ · شارك رمزك لكسب IP</div>
+    <div class="ib-rewards">
+      <span>+50 IP تسجيل</span>
+      <span>+100 IP يوم مكتمل</span>
+      <span>+500 IP نهاية</span>
     </div>
   </div>
 
   <!-- Lineage tree -->
-  <div class="lineage-section" id="lineage-section">
-    <div class="lineage-title">🌳 شجرة سلالتك</div>
-    <div id="lineage-tree"></div>
+  <div class="lineage-block">
+    <div class="lb-title">🌳 شجرة سلالتك</div>
+    <div class="lb-tree" id="lb-tree"></div>
   </div>
 
-  <!-- Navigation hint -->
-  <div class="nav-hint">
-    <button class="nav-btn" onclick="showScreen('story-screen'); renderStory()">📖 القصة</button>
-    <button class="nav-btn" onclick="showScreen('puzzle-screen'); renderPuzzle()">🧩 اللغز</button>
-    <button class="nav-btn" onclick="showScreen('voting-screen'); renderVoting()">🗳️ التصويت</button>
-  </div>
-
+  <!-- Nav -->
+  <nav class="bottom-nav">
+    <button class="bn-item active" onclick="App.goTo('dashboard')">
+      <span>⬡</span><span>اللوحة</span>
+    </button>
+    <button class="bn-item" onclick="App.goTo('story')">
+      <span>📖</span><span>القصة</span>
+    </button>
+    <button class="bn-item" onclick="App.goTo('puzzle')">
+      <span>🧩</span><span>اللغز</span>
+    </button>
+    <button class="bn-item" onclick="App.goTo('voting')">
+      <span>🗳</span><span>التصويت</span>
+    </button>
+  </nav>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 5: PUZZLE                                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="puzzle-screen" class="screen">
-  <div class="screen-back" onclick="showScreen('dashboard-screen'); updateDashboard()">← العودة</div>
-  <div class="screen-header">
-    <div class="screen-eyebrow" id="puzzle-day-label">اليوم الأول</div>
-    <h2 class="screen-title" id="puzzle-title">—</h2>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 06 — STORY (Cinematic)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-story" class="screen">
+  <div class="story-video-bg">
+    <video id="story-video" muted playsinline loop>
+      <source src="assets/videos/eternity-tree.mp4" type="video/mp4" />
+    </video>
+    <div class="story-video-overlay"></div>
   </div>
-  <div class="screen-body">
-    <div class="puzzle-lore" id="puzzle-lore"></div>
-    <div class="puzzle-question" id="puzzle-question"></div>
-    <div class="puzzle-options" id="puzzle-options"></div>
-    <div class="puzzle-text-area hidden" id="puzzle-text-area">
-      <textarea id="puzzle-text-input" class="form-input puzzle-textarea" placeholder="أدخل إجابتك..."></textarea>
-      <button class="btn btn-primary" onclick="submitTextPuzzle()">إرسال</button>
+
+  <div class="story-ui">
+    <button class="back-btn" onclick="App.goTo('dashboard')">← رجوع</button>
+    <div class="story-eyebrow" id="story-eyebrow">جزء قصتك</div>
+    <h2 class="story-title" id="story-title">—</h2>
+    <div class="story-scroll">
+      <div class="story-text" id="story-text"></div>
+      <div class="story-clues" id="story-clues"></div>
     </div>
-    <div class="puzzle-result hidden" id="puzzle-result"></div>
-    <div class="puzzle-hint-area" id="puzzle-hint-area">
-      <button class="btn btn-ghost btn-sm" onclick="buyHint()" id="hint-btn">💡 تلميح (10 WP)</button>
-      <div class="hint-text hidden" id="hint-text"></div>
+    <div class="story-share-note">
+      💬 هذا جزء واحد فقط — تحتاج الآخرين لمعرفة الحقيقة الكاملة
     </div>
   </div>
+
+  <nav class="bottom-nav">
+    <button class="bn-item" onclick="App.goTo('dashboard')"><span>⬡</span><span>اللوحة</span></button>
+    <button class="bn-item active" onclick="App.goTo('story')"><span>📖</span><span>القصة</span></button>
+    <button class="bn-item" onclick="App.goTo('puzzle')"><span>🧩</span><span>اللغز</span></button>
+    <button class="bn-item" onclick="App.goTo('voting')"><span>🗳</span><span>التصويت</span></button>
+  </nav>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 6: VOTING                                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="voting-screen" class="screen">
-  <div class="screen-back" onclick="showScreen('dashboard-screen'); updateDashboard()">← العودة</div>
-  <div class="screen-header">
-    <div class="screen-eyebrow">مجلس الظلال</div>
-    <h2 class="screen-title">صوّت</h2>
-    <div class="screen-subtitle">Council of Shadows</div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 07 — PUZZLE
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-puzzle" class="screen">
+  <div class="puzzle-bg"></div>
+  <div class="puzzle-ui">
+    <button class="back-btn" onclick="App.goTo('dashboard')">← رجوع</button>
+    <div class="pz-day-badge" id="pz-day-badge">اليوم ١</div>
+    <h2 class="pz-title" id="pz-title">—</h2>
+    <div class="pz-lore" id="pz-lore"></div>
+    <div class="pz-question" id="pz-question"></div>
+    <div class="pz-options" id="pz-options"></div>
+    <div class="pz-text-wrap hidden" id="pz-text-wrap">
+      <textarea class="form-input pz-textarea" id="pz-textarea" placeholder="أدخل إجابتك..."></textarea>
+      <button class="btn btn-red" onclick="App.Puzzle.submitText()">إرسال</button>
+    </div>
+    <div class="pz-result hidden" id="pz-result"></div>
+    <div class="pz-hint-area">
+      <button class="btn btn-ghost btn-sm" id="pz-hint-btn" onclick="App.Puzzle.buyHint()">
+        💡 تلميح — 10 WP
+      </button>
+      <div class="pz-hint-text hidden" id="pz-hint-text"></div>
+    </div>
   </div>
-  <div class="screen-body">
+
+  <nav class="bottom-nav">
+    <button class="bn-item" onclick="App.goTo('dashboard')"><span>⬡</span><span>اللوحة</span></button>
+    <button class="bn-item" onclick="App.goTo('story')"><span>📖</span><span>القصة</span></button>
+    <button class="bn-item active" onclick="App.goTo('puzzle')"><span>🧩</span><span>اللغز</span></button>
+    <button class="bn-item" onclick="App.goTo('voting')"><span>🗳</span><span>التصويت</span></button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 08 — VOTING (Council of Shadows)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-voting" class="screen">
+  <div class="voting-bg"></div>
+  <div class="voting-ui">
+    <button class="back-btn" onclick="App.goTo('dashboard')">← رجوع</button>
+    <div class="vt-eyebrow">مجلس الظلال</div>
+    <h2 class="vt-title">التصويت</h2>
+    <div class="vt-subtitle">Council of Shadows</div>
+
     <div class="vote-section">
-      <div class="vote-question">من تثق به أكثر؟</div>
-      <div class="vote-players" id="trust-vote-players"></div>
+      <div class="vs-question">من تثق به أكثر؟</div>
+      <div class="vs-players" id="trust-players"></div>
     </div>
     <div class="vote-section">
-      <div class="vote-question">من تشك فيه؟</div>
-      <div class="vote-players" id="suspect-vote-players"></div>
+      <div class="vs-question">من تشك في نواياه؟</div>
+      <div class="vs-players" id="suspect-players"></div>
     </div>
-    <button class="btn btn-primary" onclick="submitVotes()">إرسال التصويت</button>
-    <div class="vote-result hidden" id="vote-result"></div>
+
+    <div class="vt-night-event hidden" id="vt-night-event">
+      <div class="vne-label">🔴 مهمة ليلية</div>
+      <div class="vne-text" id="vne-text"></div>
+    </div>
+
+    <button class="btn btn-red" onclick="App.Voting.submitVotes()">إرسال التصويت</button>
+    <div class="vt-result hidden" id="vt-result"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="bn-item" onclick="App.goTo('dashboard')"><span>⬡</span><span>اللوحة</span></button>
+    <button class="bn-item" onclick="App.goTo('story')"><span>📖</span><span>القصة</span></button>
+    <button class="bn-item" onclick="App.goTo('puzzle')"><span>🧩</span><span>اللغز</span></button>
+    <button class="bn-item active" onclick="App.goTo('voting')"><span>🗳</span><span>التصويت</span></button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 09 — NIGHT EVENT
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-night" class="screen">
+  <div class="night-bg"></div>
+  <div class="night-ui">
+    <div class="night-eyebrow">الحدث الليلي</div>
+    <h2 class="night-title" id="night-title">ليلة الخيانة</h2>
+    <div class="night-content" id="night-content"></div>
+    <button class="btn btn-ghost" onclick="App.goTo('dashboard')">أكمل</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 7: STORY                                        -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="story-screen" class="screen">
-  <div class="screen-back" onclick="showScreen('dashboard-screen'); updateDashboard()">← العودة</div>
-  <div class="screen-header">
-    <div class="screen-eyebrow">جزء قصتك</div>
-    <h2 class="screen-title" id="story-title">—</h2>
-    <div class="screen-subtitle">Story Fragment</div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 10 — FINAL CHOICE
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-final-choice" class="screen">
+  <div class="door13-bg fc-door-bg">
+    <div class="door13-overlay door-open-overlay"></div>
   </div>
-  <div class="screen-body">
-    <div class="story-content" id="story-content"></div>
-    <div class="story-clues" id="story-clues"></div>
-    <div class="story-share-hint">
-      💬 شارك ما تعرفه مع اللاعبين الآخرين لكشف الحقيقة الكاملة
+  <div class="final-choice-ui">
+    <div class="fcu-eyebrow glitch-text" data-text="اليوم الأخير">اليوم الأخير</div>
+    <h2 class="fcu-title">القرار النهائي</h2>
+    <div class="fcu-lore">
+      الصندوق أمامك. روح أوس تنتظر. كل قرار له ثمن.
     </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- SCREEN 8: ENDING                                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="ending-screen" class="screen">
-  <div class="ending-container">
-    <div class="ending-eyebrow glitch" data-text="النهاية">النهاية</div>
-    <h2 class="ending-title" id="ending-title">القرار النهائي</h2>
-    <div class="ending-lore" id="ending-lore">ماذا ستفعل بصندوق أوس؟</div>
-
-    <div class="ending-choices">
-      <div class="ending-choice" onclick="selectEnding('free')">
-        <div class="ending-choice-icon">🕊️</div>
-        <div class="ending-choice-name">تحرير أوس</div>
-        <div class="ending-choice-desc">أطلق روح أوس من اللعنة إلى الأبد</div>
-        <div class="ending-choice-req trust-color">يتطلب: ثقة عالية</div>
+    <div class="fcu-choices">
+      <div class="fcu-choice fc-free" onclick="App.selectEnding('free')">
+        <div class="fcc-icon">🕊️</div>
+        <div class="fcc-name">تحرير أوس</div>
+        <div class="fcc-desc">أطلق روحه للأبد</div>
+        <div class="fcc-req trust-col">الثقة ≥ 65</div>
       </div>
-      <div class="ending-choice" onclick="selectEnding('control')">
-        <div class="ending-choice-icon">⚡</div>
-        <div class="ending-choice-name">السيطرة على القوة</div>
-        <div class="ending-choice-desc">امتلك قوة الصندوق لنفسك</div>
-        <div class="ending-choice-req dark-color">يتطلب: نقاط مظلمة عالية</div>
+      <div class="fcu-choice fc-control" onclick="App.selectEnding('control')">
+        <div class="fcc-icon">⚡</div>
+        <div class="fcc-name">السيطرة على القوة</div>
+        <div class="fcc-desc">اجعل القوة لك</div>
+        <div class="fcc-req dark-col">المظلم ≥ 50</div>
       </div>
-      <div class="ending-choice" onclick="selectEnding('seal')">
-        <div class="ending-choice-icon">🔒</div>
-        <div class="ending-choice-name">إغلاق الصندوق</div>
-        <div class="ending-choice-desc">اختم الصندوق إلى الأبد — بأمان</div>
-        <div class="ending-choice-req">متاح دائماً</div>
+      <div class="fcu-choice fc-seal" onclick="App.selectEnding('seal')">
+        <div class="fcc-icon">🔒</div>
+        <div class="fcc-name">إغلاق الصندوق</div>
+        <div class="fcc-desc">أبقِه مغلقاً إلى الأبد</div>
+        <div class="fcc-req" style="color:#C0C0C0">متاح دائماً</div>
       </div>
     </div>
-
-    <div class="ending-result hidden" id="ending-result"></div>
+    <div class="fcu-err hidden" id="fcu-err"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- ENDING FINAL (after choice)                            -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div id="final-screen" class="screen">
-  <div class="final-container">
-    <div class="final-icon" id="final-icon">⬡</div>
-    <h1 class="final-title glitch" id="final-title" data-text="النهاية">النهاية</h1>
-    <div class="final-subtitle" id="final-subtitle"></div>
-    <div class="final-lore" id="final-lore"></div>
-    <div class="final-stats">
-      <div class="final-stat"><span id="final-stat-trust"></span> ثقة</div>
-      <div class="final-stat"><span id="final-stat-intel"></span> ذكاء</div>
-      <div class="final-stat"><span id="final-stat-dark"></span> مظلم</div>
-      <div class="final-stat"><span id="final-stat-ip"></span> IP</div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 11 — ENDING
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-ending" class="screen">
+  <div class="ending-bg"></div>
+  <div class="ending-ui">
+    <div class="eu-icon" id="eu-icon">⬡</div>
+    <h1 class="eu-title glitch-text" id="eu-title" data-text="النهاية">النهاية</h1>
+    <div class="eu-subtitle" id="eu-subtitle"></div>
+    <div class="eu-lore" id="eu-lore"></div>
+    <div class="eu-stats">
+      <div class="eu-stat"><span id="eu-trust"></span><br/><small>ثقة</small></div>
+      <div class="eu-stat"><span id="eu-intel"></span><br/><small>ذكاء</small></div>
+      <div class="eu-stat"><span id="eu-dark"></span><br/><small>مظلم</small></div>
+      <div class="eu-stat"><span id="eu-ip"></span><br/><small>IP</small></div>
     </div>
-    <div class="final-invite-bonus hidden" id="final-invite-bonus">
-      🎉 +500 IP مكافأة الوصول للنهاية!
-    </div>
-    <button class="btn btn-primary" onclick="resetGame()">العب مجدداً</button>
+    <div class="eu-title-earned" id="eu-title-earned"></div>
+    <div class="eu-bonus hidden" id="eu-bonus">🎉 +500 IP وصلت للنهاية!</div>
+    <button class="btn btn-ghost" onclick="App.resetGame()">العب من جديد</button>
   </div>
 </div>
 
-<script src="game.js"></script>
+<!-- Scripts — module order matters -->
+<script src="js/storage.js"></script>
+<script src="js/player.js"></script>
+<script src="js/story.js"></script>
+<script src="js/puzzle.js"></script>
+<script src="js/voting.js"></script>
+<script src="js/app.js"></script>
+
 </body>
 </html>
