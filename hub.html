@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لعنة أوس — Curse of Os</title>
+  <meta name="description" content="لعبة الغموض النفسي الاجتماعي — Psychological ARG for Saudi Gen-Z" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Supabase URL/Key — injected at deploy time via Netlify env vars -->
+  <script>
+    window.COS_SUPABASE_URL = 'SUPABASE_URL_PLACEHOLDER';
+    window.COS_SUPABASE_KEY = 'SUPABASE_ANON_KEY_PLACEHOLDER';
+  </script>
+</head>
+<body>
+
+<!-- ═══════════════ CANVAS (particles) ═══════════════════════ -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- ═══════════════ ACHIEVEMENT POPUP ════════════════════════ -->
+<div id="achievement-popup">
+  <span class="ach-popup-icon" id="ach-popup-icon">🏆</span>
+  <div class="ach-popup-text">
+    <h4>ACHIEVEMENT UNLOCKED</h4>
+    <p id="ach-popup-name">الإنجاز</p>
+    <span id="ach-popup-desc"></span>
+  </div>
+</div>
+
+<!-- ═══════════════ TOAST ════════════════════════════════════ -->
+<div id="toast-container"></div>
+
+<!-- ═══════════════ GLITCH OVERLAY ═══════════════════════════ -->
+<div id="glitch-overlay"></div>
+
+<!-- ═══════════════ MODAL ════════════════════════════════════ -->
+<div id="modal-overlay" onclick="Hub.closeModal(event)">
+  <div class="modal-box">
+    <h2 class="modal-title" id="modal-title">العنوان</h2>
+    <div class="modal-body" id="modal-body">المحتوى</div>
+    <div class="modal-actions" id="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="Hub.closeModal()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: LOADING
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-loading" class="screen active">
+  <div class="loading-eye"></div>
+  <div class="loading-title">CURSE OF OS</div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar" id="loading-bar"></div>
+  </div>
+  <div class="loading-text" id="loading-text">جارٍ تهيئة الصندوق...</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: HOME
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen">
+  <div class="home-title-wrap">
+    <div class="home-eyebrow">USERS-X PRESENTS</div>
+    <h1 class="home-title">CURSE OF OS</h1>
+    <p class="home-title-ar">لعنة أوس</p>
+  </div>
+
+  <div class="box-scene" id="box-scene">
+    <div class="box-whisper" id="box-whisper">افتح الصندوق...</div>
+    <div class="box-3d">
+      <div class="box-face front">
+        <div class="box-seal">👁</div>
+      </div>
+      <div class="box-face back">  <span class="box-rune">XIII</span> </div>
+      <div class="box-face left">  <span class="box-rune">ﻻ</span>   </div>
+      <div class="box-face right"> <span class="box-rune">∞</span>   </div>
+      <div class="box-face top">   <span class="box-rune">⊗</span>   </div>
+      <div class="box-face bottom"><span class="box-rune">◈</span>   </div>
+    </div>
+  </div>
+
+  <div class="home-cta">
+    <p>صندوق يحمل سرًّا لم يُفتح منذ سبعة أجيال. هل أنت مستعد لمواجهة اللعنة؟</p>
+    <button class="btn btn-primary btn-lg" onclick="Hub.goTo('setup')">ابدأ الرحلة</button>
+    <button class="btn btn-secondary btn-sm" onclick="Hub.goTo('leaderboard')">🏆 المتصدرون</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: SETUP
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-setup" class="screen">
+  <div class="setup-card" style="margin-top:40px">
+    <h2>مرحبًا باللاعب الجديد</h2>
+
+    <div class="form-group">
+      <label>اسمك الكامل</label>
+      <input type="text" id="setup-name" placeholder="أدخل اسمك..." maxlength="30" />
+    </div>
+
+    <div class="form-group">
+      <label>اختر فصيلك</label>
+      <div class="faction-grid">
+        <div class="faction-btn" data-faction="children" onclick="Hub.selectFaction(this)">
+          <span class="faction-icon">🕯️</span>
+          أبناء الأمس
+        </div>
+        <div class="faction-btn" data-faction="shepherd" onclick="Hub.selectFaction(this)">
+          <span class="faction-icon">🌿</span>
+          رعاة الظل
+        </div>
+        <div class="faction-btn" data-faction="keepers" onclick="Hub.selectFaction(this)">
+          <span class="faction-icon">🔐</span>
+          حراس الختم
+        </div>
+        <div class="faction-btn" data-faction="seekers" onclick="Hub.selectFaction(this)">
+          <span class="faction-icon">🔍</span>
+          طلاب الحقيقة
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>كود الدعوة (اختياري)</label>
+      <input type="text" id="setup-ref" placeholder="OS-XXXX" maxlength="10" />
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="Hub.createPlayer()">
+      ادخل عالم اللعنة
+    </button>
+
+    <p class="text-ghost text-center mt16" style="font-size:.78rem;line-height:1.8">
+      بدخولك توافق على أن أوس يراك.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: HUB
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-hub" class="screen">
+
+  <!-- Header -->
+  <div class="hub-header">
+    <div class="hub-player-info">
+      <div class="hub-avatar" id="hub-avatar">؟</div>
+      <div>
+        <div class="hub-name" id="hub-name">اللاعب</div>
+        <div class="hub-rank" id="hub-rank-label">SEEKER</div>
+      </div>
+    </div>
+
+    <div class="hub-xp-wrap">
+      <div class="hub-xp-label">
+        <span id="hub-xp-cur">0</span>
+        <span id="hub-xp-next">XP</span>
+      </div>
+      <div class="hub-xp-bar">
+        <div class="hub-xp-fill" id="hub-xp-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="hub-actions">
+      <button class="btn btn-ghost btn-sm" onclick="Hub.goTo('profile')">👤</button>
+      <button class="btn btn-ghost btn-sm" onclick="Hub.goTo('leaderboard')">🏆</button>
+    </div>
+  </div>
+
+  <div class="hub-content">
+
+    <!-- Phase I -->
+    <div class="hub-phase">
+      <div class="phase-header">
+        <div class="phase-badge">I</div>
+        <div class="phase-info">
+          <h3>AWAKENING</h3>
+          <p>الصحوة — اكتشاف عالم اللعنة</p>
+        </div>
+      </div>
+      <div class="games-grid" id="phase1-grid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Phase II -->
+    <div class="hub-phase">
+      <div class="phase-header">
+        <div class="phase-badge">II</div>
+        <div class="phase-info">
+          <h3>UNRAVELING</h3>
+          <p>الكشف — مواجهة الحقيقة المخفية</p>
+        </div>
+      </div>
+      <div class="games-grid" id="phase2-grid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Phase III -->
+    <div class="hub-phase">
+      <div class="phase-header">
+        <div class="phase-badge">III</div>
+        <div class="phase-info">
+          <h3>RECKONING</h3>
+          <p>الحساب — القرار الأخير</p>
+        </div>
+      </div>
+      <div class="games-grid" id="phase3-grid"></div>
+    </div>
+
+    <!-- Secret Room teaser -->
+    <div class="divider"></div>
+    <div id="secret-room-teaser" class="game-card locked" style="margin:0 0 24px;cursor:not-allowed">
+      <span class="game-icon">🚪</span>
+      <div class="game-title">الغرفة المحجوبة</div>
+      <div class="game-title-en">SECRET ROOM</div>
+      <div class="game-desc">أكمل جميع المهام لفتح الغرفة المحجوبة وكشف سر أوس النهائي.</div>
+      <div class="game-meta">
+        <span class="game-xp">+ 2000 XP</span>
+        <span class="game-diff diff-3">🔒 مقفل</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Eye of Os (عين أوس)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-eye" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">👁</span>
+    <div class="game-topbar-title">
+      <h2>عين أوس</h2>
+      <p>EYE OF OS</p>
+    </div>
+    <span id="eye-xp-badge" class="game-xp">+300 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="eye-container">
+
+      <svg class="os-eye-svg" id="os-eye-svg" viewBox="0 0 200 200" onclick="Games.eyeClickEye()">
+        <ellipse cx="100" cy="100" rx="90" ry="55" fill="none" stroke="#8B0000" stroke-width="2"/>
+        <circle cx="100" cy="100" r="38" fill="#1a0000" stroke="#8B0000" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="22" fill="#8B0000"/>
+        <circle cx="100" cy="100" r="10" fill="#050505"/>
+        <circle cx="107" cy="93" r="4" fill="rgba(255,255,255,.3)"/>
+        <line x1="10" y1="100" x2="62" y2="100" stroke="#8B0000" stroke-width="1" opacity=".4"/>
+        <line x1="138" y1="100" x2="190" y2="100" stroke="#8B0000" stroke-width="1" opacity=".4"/>
+      </svg>
+
+      <p class="text-ghost text-center" style="font-size:.85rem;max-width:320px;line-height:1.8">
+        العين ترسل تسلسلًا من الأضواء. احفظ التسلسل وكرّره بالضغط على الأزرار بنفس الترتيب.
+      </p>
+
+      <!-- Pattern display -->
+      <div class="hb-pattern-display" id="eye-pattern-display"></div>
+
+      <!-- Input buttons -->
+      <div class="eye-input-row" id="eye-input-row"></div>
+
+      <div id="eye-status" class="text-center text-ghost" style="font-size:.85rem;min-height:1.2em"></div>
+
+      <div id="eye-result" class="result-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Message from Past (رسالة من الماضي)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-message" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">📜</span>
+    <div class="game-topbar-title">
+      <h2>رسالة من الماضي</h2>
+      <p>MESSAGE FROM THE PAST</p>
+    </div>
+    <span class="game-xp">+350 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="scroll-reveal">
+      <div class="message-lines" id="message-lines"></div>
+    </div>
+    <p class="text-ghost mt16" style="font-size:.82rem">اسحب الكلمات الصحيحة من البنك إلى الفراغات:</p>
+    <div class="word-bank" id="word-bank"></div>
+    <div id="message-result" class="result-box mt16"></div>
+    <button class="btn btn-primary mt16" onclick="Games.checkMessage()" id="message-check-btn">التحقق من الإجابة</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Seven Mirrors (سبعة مرايا)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-mirrors" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">🪞</span>
+    <div class="game-topbar-title">
+      <h2>سبعة مرايا</h2>
+      <p>SEVEN MIRRORS</p>
+    </div>
+    <span class="game-xp">+400 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="mirrors-question" id="mirrors-question"></div>
+    <div class="mirrors-grid" id="mirrors-grid"></div>
+    <div id="mirrors-result" class="result-box mt16"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Box of Betrayal (صندوق الخيانة)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-box" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">📦</span>
+    <div class="game-topbar-title">
+      <h2>صندوق الخيانة</h2>
+      <p>BOX OF BETRAYAL</p>
+    </div>
+    <span class="game-xp">+450 XP</span>
+  </div>
+  <div class="game-body">
+    <p class="text-ghost mb16" style="font-size:.9rem;line-height:1.9" id="box-scenario"></p>
+    <div class="betrayal-grid" id="betrayal-grid"></div>
+    <div id="box-result" class="result-box mt16"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Trust or Betrayal (ثقة أم خيانة)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-trust" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">⚖️</span>
+    <div class="game-topbar-title">
+      <h2>ثقة أم خيانة</h2>
+      <p>TRUST OR BETRAYAL</p>
+    </div>
+    <span class="game-xp">+500 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="scenario-card" id="trust-scenario"></div>
+    <div class="trust-options" id="trust-options"></div>
+    <div id="trust-result" class="result-box mt16"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Curse Heartbeat (نبض اللعنة)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-heartbeat" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">💓</span>
+    <div class="game-topbar-title">
+      <h2>نبض اللعنة</h2>
+      <p>CURSE HEARTBEAT</p>
+    </div>
+    <span class="game-xp">+550 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="heartbeat-container">
+      <p class="text-ghost text-center" style="font-size:.85rem;max-width:320px;line-height:1.8">
+        استمع لنبض اللعنة وكرر النمط. اضغط على الدوائر بالإيقاع الصحيح.
+      </p>
+      <div class="hb-canvas-wrap">
+        <canvas id="heartbeat-canvas" width="400" height="120"></canvas>
+      </div>
+      <div class="hb-pattern-display" id="hb-pattern-display"></div>
+      <div class="hb-controls">
+        <button class="hb-btn" id="hb-play-btn" onclick="Games.heartbeatPlay()">▶ تشغيل النمط</button>
+        <button class="hb-btn" id="hb-record-btn" onclick="Games.heartbeatRecord()">⏺ تسجيل</button>
+        <button class="hb-btn" onclick="Games.heartbeatCheck()">✓ تحقق</button>
+      </div>
+      <div id="hb-result" class="result-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Village Secrets (أسرار القرية)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-village" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">🏚️</span>
+    <div class="game-topbar-title">
+      <h2>أسرار القرية</h2>
+      <p>VILLAGE SECRETS</p>
+    </div>
+    <span class="game-xp">+600 XP</span>
+  </div>
+  <div class="game-body">
+    <p class="text-ghost mb16" style="font-size:.85rem;line-height:1.8">
+      فتش مواقع القرية للعثور على الأدلة الخمسة المخفية.
+    </p>
+    <div class="village-map" id="village-map"></div>
+    <div class="clues-found" id="clues-found"></div>
+    <div id="village-result" class="result-box mt16"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME: Cursed Clock (الساعة الملعونة)
+══════════════════════════════════════════════════════════════ -->
+<div id="game-clock" class="screen game-screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">⏰</span>
+    <div class="game-topbar-title">
+      <h2>الساعة الملعونة</h2>
+      <p>CURSED CLOCK</p>
+    </div>
+    <span class="game-xp">+700 XP</span>
+  </div>
+  <div class="game-body">
+    <div class="clock-container">
+      <div class="analog-clock" id="analog-clock">
+        <div class="clock-center"></div>
+        <div class="clock-hand hour"   id="clock-hour"></div>
+        <div class="clock-hand minute" id="clock-minute"></div>
+        <div class="clock-hand second" id="clock-second"></div>
+      </div>
+      <div class="clock-riddle" id="clock-riddle"></div>
+      <div class="time-answer">
+        <input type="number" class="time-input" id="clock-hours-in" min="1" max="12" placeholder="12" />
+        <span class="time-sep">:</span>
+        <input type="number" class="time-input" id="clock-mins-in" min="0" max="59" placeholder="00" />
+      </div>
+      <button class="btn btn-primary" onclick="Games.checkClock()">تأكيد الوقت</button>
+      <div id="clock-result" class="result-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: SECRET ROOM
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-secret" class="screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">🚪</span>
+    <div class="game-topbar-title">
+      <h2>الغرفة المحجوبة</h2>
+      <p>SECRET ROOM</p>
+    </div>
+  </div>
+  <div class="secret-header">
+    <h2>الغرفة رقم ١٣</h2>
+    <p>وجدتها أخيرًا. هذه الغرفة تحتوي على ما لم يُقله أوس لأحد. تصفّح الملفات بحذر.</p>
+  </div>
+  <div class="secret-files">
+    <div class="secret-file glitch-file" onclick="Games.openSecretFile('image')">
+      <span class="secret-file-icon">🖼️</span>
+      <div class="secret-file-name">صورة_مشوهة_١٣.jpg</div>
+      <div class="secret-file-type">CORRUPTED IMAGE</div>
+    </div>
+    <div class="secret-file" onclick="Games.openSecretFile('audio')">
+      <span class="secret-file-icon">🎙️</span>
+      <div class="secret-file-name">تسجيل_صوتي_أوس.wav</div>
+      <div class="secret-file-type">AUDIO RECORDING</div>
+    </div>
+    <div class="secret-file glitch-file" onclick="Games.openSecretFile('video')">
+      <span class="secret-file-icon">📹</span>
+      <div class="secret-file-name">فيديو_مشوش_أخير.mp4</div>
+      <div class="secret-file-type">GLITCHED VIDEO</div>
+    </div>
+    <div class="secret-file" onclick="Games.openSecretFile('message')">
+      <span class="secret-file-icon">🔒</span>
+      <div class="secret-file-name">رسالة_مشفرة.txt</div>
+      <div class="secret-file-type">ENCRYPTED MESSAGE</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: LEADERBOARD
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-leaderboard" class="screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goBack()">←</button>
+    <span class="game-topbar-icon">🏆</span>
+    <div class="game-topbar-title">
+      <h2>المتصدرون</h2>
+      <p>GLOBAL LEADERBOARD</p>
+    </div>
+  </div>
+  <div class="lb-header">
+    <h2>🏆 قائمة الشرف</h2>
+    <p>أفضل اللاعبين في عالم اللعنة</p>
+  </div>
+  <div class="lb-list" id="lb-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: PROFILE
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-profile" class="screen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="Hub.goTo('hub')">←</button>
+    <span class="game-topbar-icon">👤</span>
+    <div class="game-topbar-title">
+      <h2>الملف الشخصي</h2>
+      <p>PLAYER PROFILE</p>
+    </div>
+  </div>
+
+  <div class="profile-hero">
+    <div class="profile-avatar-lg" id="profile-avatar">؟</div>
+    <div class="profile-name" id="profile-name">اللاعب</div>
+    <div class="profile-rank-title" id="profile-rank"></div>
+    <div class="profile-stats">
+      <div class="pstat">
+        <div class="pstat-val" id="pstat-xp">0</div>
+        <div class="pstat-label">XP</div>
+      </div>
+      <div class="pstat">
+        <div class="pstat-val" id="pstat-games">0</div>
+        <div class="pstat-label">ألعاب مكتملة</div>
+      </div>
+      <div class="pstat">
+        <div class="pstat-val" id="pstat-ach">0</div>
+        <div class="pstat-label">إنجازات</div>
+      </div>
+      <div class="pstat">
+        <div class="pstat-val" id="pstat-refs">0</div>
+        <div class="pstat-label">دعوات</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Referral panel -->
+  <div class="referral-panel">
+    <h3>🔗 نظام الإحالة</h3>
+    <div class="referral-code-display">
+      <div class="referral-code" id="ref-code-display">OS-????</div>
+      <button class="btn btn-ghost btn-sm" onclick="Hub.copyReferral()">نسخ</button>
+    </div>
+    <div class="referral-tiers" id="ref-tiers"></div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">ACHIEVEMENTS</span>
+    <span class="text-ghost" style="font-size:.8rem" id="ach-count">0 / 12</span>
+  </div>
+  <div class="achievements-grid" id="achievements-grid"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
