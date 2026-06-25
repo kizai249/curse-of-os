@@ -17,6 +17,7 @@ const App = (() => {
 
   // ── Boot ─────────────────────────────────────────────────────
   function init() {
+    Analytics.init(); // start session timer + beforeunload hook
     _checkURLParams();
     player = Storage.loadPlayer();
 
@@ -27,9 +28,11 @@ const App = (() => {
     if (player) {
       showScreen('dashboard');
       updateDashboard();
+      Analytics.setStage('dashboard_day_' + player.currentDay);
     } else {
       showScreen('landing');
       _animateDoor();
+      Analytics.setStage('landing');
     }
 
     _spawnDustMotes();
@@ -81,6 +84,8 @@ const App = (() => {
     if (key === 'voting')    Voting.render(player);
     if (key === 'final-choice') _initFinalChoice();
     _updateBottomNav(key);
+    // Track last active stage for session_ended
+    Analytics.setStage(player ? `${key}_day_${player.currentDay}` : key);
   }
 
   // ── Landing ────────────────────────────────────────────────── */
@@ -140,6 +145,9 @@ const App = (() => {
     Storage.savePlayer(player);
     Storage.clearRef();
     sessionStorage.removeItem('cos_pending_name');
+
+    // ── ANALYTICS: player_registered ────────────────────────
+    Analytics.playerRegistered(selectedFact, ref || null);
 
     if (ref) notify(`انضممت بدعوة ${ref} — شكراً لمن دعاك!`, 'info');
 

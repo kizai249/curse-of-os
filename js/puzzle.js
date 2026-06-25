@@ -4,8 +4,9 @@
 
 const Puzzle = (() => {
 
-  let _answered = false;
-  let _player   = null;
+  let _answered    = false;
+  let _player      = null;
+  let _puzzleStart = 0; // timestamp when puzzle was rendered
 
   // ── Day puzzle data ──────────────────────────────────────────
   const DAYS = [
@@ -135,6 +136,7 @@ const Puzzle = (() => {
   function render(player) {
     _player = player;
     _answered = player.completedDays.includes(player.currentDay);
+    _puzzleStart = Date.now();
     const day = DAYS[player.currentDay];
     if (!day) return;
 
@@ -195,12 +197,19 @@ const Puzzle = (() => {
     if (idx === day.answer) {
       _applyReward(day);
       _showResult(resultEl, true, `✅ إجابة صحيحة! ${_rewardText(day.reward)}`);
+      // ── ANALYTICS: puzzle_progress (correct) ────────────────
+      Analytics.puzzleProgress(
+        `day_${day.num}_mcq`, true,
+        Math.round((Date.now() - _puzzleStart) / 1000)
+      );
       _completeDay();
       _scheduleAdvance();
     } else {
       Player.addStat(_player, 'intelligence', -5);
       Storage.savePlayer(_player);
       _showResult(resultEl, false, '❌ إجابة خاطئة. -5 ذكاء. حاول مرة أخرى.');
+      // ── ANALYTICS: puzzle_progress (wrong attempt) ──────────
+      Analytics.puzzleProgress(`day_${day.num}_mcq`, false, 0);
       App.triggerOsEye('إجابة خاطئة.');
       setTimeout(() => {
         resultEl.classList.add('hidden');
@@ -233,10 +242,16 @@ const Puzzle = (() => {
     if (correct) {
       _applyReward(day);
       _showResult(resultEl, true, `✅ إجابة صحيحة! ${_rewardText(day.reward)}`);
+      // ── ANALYTICS: puzzle_progress (text correct) ───────────
+      Analytics.puzzleProgress(
+        `day_${day.num}_text`, true,
+        Math.round((Date.now() - _puzzleStart) / 1000)
+      );
       _completeDay();
       _scheduleAdvance();
     } else {
       _showResult(resultEl, false, '❌ غير صحيح. تلميح: ابحث في قصة اللاعب الأول.');
+      Analytics.puzzleProgress(`day_${day.num}_text`, false, 0);
       App.triggerOsEye('أعد المحاولة.');
     }
   }
@@ -263,6 +278,17 @@ const Puzzle = (() => {
         _showResult(resultEl, true, 'قرارك اتُّخذ. عواقبه ستظهر لاحقاً.');
         div.classList.add('correct');
         container.querySelectorAll('.pz-option').forEach(o => o.onclick = null);
+        // ── ANALYTICS: decision_made (choice puzzle) ────────────
+        const decType = i === 0 ? 'share' : i === 1 ? 'hide' : 'betray';
+        Analytics.decisionMade(decType, {
+          puzzle_id:   `day_${day.num}_choice`,
+          dark_effect: e.dark || 0,
+        });
+        // ── ANALYTICS: puzzle_progress ───────────────────────────
+        Analytics.puzzleProgress(
+          `day_${day.num}_choice`, true,
+          Math.round((Date.now() - _puzzleStart) / 1000)
+        );
         _completeDay();
         _scheduleAdvance();
       };

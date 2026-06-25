@@ -101,6 +101,22 @@ const Voting = (() => {
       suspect: _voteData.suspect,
     });
 
+    // ── ANALYTICS: decision_made (vote) ─────────────────────────
+    if (_voteData.trust) {
+      Analytics.decisionMade('vote_trust', {
+        target: _voteData.trust,
+        day: _player.currentDay,
+      });
+    }
+    if (_voteData.suspect) {
+      Analytics.decisionMade('vote_suspect', {
+        target: _voteData.suspect,
+        day: _player.currentDay,
+      });
+    }
+    // ── ANALYTICS: puzzle_progress (voting day) ─────────────────
+    Analytics.puzzleProgress(`day_${_player.currentDay}_vote`, true, 0);
+
     Storage.savePlayer(_player);
 
     // Show result

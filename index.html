@@ -530,9 +530,25 @@
   </div>
 </div>
 
+<!-- ══ Analytics config ══════════════════════════════════════
+     Replace the two placeholder values below with real keys from:
+     Supabase Dashboard → Settings → API
+     NEVER commit real keys to git — use Netlify env vars instead:
+       Site settings → Environment variables → Add:
+         COS_SUPABASE_URL   = https://xxxxx.supabase.co
+         COS_SUPABASE_KEY   = eyJhbGc...
+     Then reference them via a netlify.toml [[headers]] build plugin
+     or inject at build time. For local dev, replace directly here.
+═══════════════════════════════════════════════════════════════ -->
+<script>
+  window.COS_SUPABASE_URL = 'SUPABASE_URL_PLACEHOLDER';
+  window.COS_SUPABASE_KEY = 'SUPABASE_ANON_KEY_PLACEHOLDER';
+</script>
+
 <!-- Scripts — module order matters -->
 <script src="js/storage.js"></script>
 <script src="js/player.js"></script>
+<script src="js/analytics.js"></script>
 <script src="js/story.js"></script>
 <script src="js/puzzle.js"></script>
 <script src="js/voting.js"></script>
