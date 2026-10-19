@@ -45,7 +45,7 @@ src/ui           DOM screens (Arabic, RTL), router, HUD
 |---|---|---|
 | 1 | Audit, plan | ✅ this document |
 | 2 | Project setup, core, domain, persistence, mini-game rules, tests | ✅ |
-| 3 | One playable loop: 3D arena → discover → collect → timing-shot mini-game → results → missions/inventory | 🚧 in progress |
+| 3 | One playable loop: 3D arena → discover → collect → timing-shot mini-game → results → missions/inventory | ✅ see QA_REPORT.md |
 | 4 | Achievements, quiz + squad mini-games, profile polish | ⏳ |
 | 5 | Art pass, audio pass, transitions | ⏳ (temporary procedural assets in place) |
 | 6 | GPS map mode, backend (auth, server reward validation, leaderboards) | ⏳ blocked on provider/credentials decision |
