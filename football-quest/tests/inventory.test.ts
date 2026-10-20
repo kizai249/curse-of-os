@@ -5,7 +5,7 @@ import { ItemCatalog } from '../src/domain/catalog';
 import { addItem, addShards, EMPTY_INVENTORY, uniqueOwnedCount } from '../src/domain/inventory';
 import type { ItemDefinition } from '../src/domain/types';
 
-const epic: ItemDefinition = { id: 'x', nameAr: 'x', nameEn: 'x', descriptionAr: '', rarity: 'epic', category: 'ball', modelKey: 'ball', color: '#fff' };
+const epic: ItemDefinition = { id: 'x', nameAr: 'x', nameEn: 'x', descriptionAr: '', rarity: 'epic', kind: 'team_badge', modelKey: 'badge', color: '#fff', secondaryColor: '#000' };
 
 describe('inventory', () => {
   it('adds a new item without shards', () => {

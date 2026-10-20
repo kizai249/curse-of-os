@@ -51,6 +51,7 @@ src/ui           DOM screens (Arabic, RTL), router, HUD
 | 6 | GPS map mode, backend (auth, server reward validation, leaderboards) | ⏳ blocked on provider/credentials decision |
 | 7 | Perf profiling on devices, e2e tests | ⏳ |
 | 8 | Android build (Capacitor) + release docs | ⏳ needs Android SDK / device |
+| 3b | **Re-theme: 2027 continental cup in KSA** — map of 3 host cities, 8 venues, fan zones with 12 landmarks, 140-item album, cup quiz, squad builder, party shootout, save v2 migration | ✅ see QA_REPORT.md |
 
 ## 5. Risks
 

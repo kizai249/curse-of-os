@@ -1,6 +1,6 @@
 import './ui/styles.css';
-import { ARENA_POINTS } from './config/arena';
-import { ITEM_CATALOG } from './config/items';
+import { ITEM_CATALOG, RANDOM_DROP_POOL } from './config/items';
+import { LOCATIONS } from './config/locations';
 import { DAILY_MISSION_POOL, INTRO_MISSIONS } from './config/missions';
 import { systemClock } from './core/Clock';
 import { EventBus } from './core/EventBus';
@@ -11,9 +11,7 @@ import { MissionBook } from './domain/missions';
 import { GameSession, type SessionEvents } from './game/GameSession';
 import { createNewSave } from './game/newSave';
 import { SaveManager, type KeyValueStore } from './persistence/SaveManager';
-import type { Settings } from './persistence/saveSchema';
 import { ArenaScene } from './render/ArenaScene';
-import { generateThumbnails } from './render/ItemThumbnails';
 import { LocalAnalytics } from './services/Analytics';
 import { AudioService } from './services/AudioService';
 import { LocalRewardAuthority } from './services/RewardAuthority';
@@ -57,41 +55,26 @@ function boot(): void {
   logger.info(`Save ${loaded.status}`);
 
   const session = new GameSession({
-    saveManager, catalog, missionBook, points: ARENA_POINTS,
+    saveManager, catalog, missionBook, locations: LOCATIONS, dropPool: RANDOM_DROP_POOL,
     authority: new LocalRewardAuthority((id) => catalog.get(id) !== undefined),
     clock, rng: mathRng, logger: logger.child('session'), bus,
   }, loaded.data);
   session.refreshDaily();
 
-  let arena: ArenaScene | null = null;
-  let ui: UIController | null = null;
+  const webglSupported = ArenaScene.isSupported();
   const arenaEl = document.getElementById('arena')!;
-  if (ArenaScene.isSupported()) {
-    try {
-      arena = new ArenaScene(arenaEl, ARENA_POINTS, { onNearestPointChange: (id) => ui?.onNearestPointChange(id) }, logger.child('arena'), session.data.settings.quality);
-    } catch (err) {
-      logger.error('Arena failed to initialise', err);
-      arena = null;
-    }
-  }
-  const thumbnails = arena ? generateThumbnails(ITEM_CATALOG, logger.child('thumbs')) : new Map<string, string>();
-
-  const applySettings = (s: Settings) => {
-    audio.setVolumes(s.sfxVolume, s.musicVolume);
-    arena?.setQuality(s.quality);
-    arena?.setReducedMotion(s.reducedMotion);
-    document.documentElement.classList.toggle('reduced-motion', s.reducedMotion);
-  };
-  let lastSettings = session.data.settings;
-  applySettings(lastSettings);
-  bus.on('saveChanged', (data) => {
-    if (data.settings !== lastSettings) {
-      lastSettings = data.settings;
-      applySettings(data.settings);
-    }
+  const arenaLogger = logger.child('arena');
+  const ui = new UIController({
+    session, catalog, missionBook, audio, analytics, clock, bus, logger: logger.child('ui'), webglSupported,
+    createArena: (location, callbacks, settings) => {
+      try {
+        return new ArenaScene(arenaEl, location, callbacks, arenaLogger, settings.quality);
+      } catch (err) {
+        arenaLogger.error(`Arena failed to initialise for ${location.id}`, err);
+        return null;
+      }
+    },
   });
-
-  ui = new UIController({ session, catalog, missionBook, audio, analytics, clock, thumbnails, bus, arena, logger: logger.child('ui') });
   ui.mount(loaded.status);
   analytics.track({ name: 'session_start', props: { loadStatus: loaded.status } });
 

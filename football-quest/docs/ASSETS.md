@@ -5,20 +5,25 @@ third-party models, textures, sounds or fonts are bundled.
 
 | Asset | Source | Status | Licence |
 |---|---|---|---|
-| 16 collectibles (`config/items.ts`) — names, descriptions, fictional characters | Written for this project | Final copy (review with marketing) | Project-owned |
-| Collectible 3D models (`render/models.ts`) | Procedural Three.js primitives | **TEMPORARY** — replace per `ModelKey` with glTF | Project-owned |
-| Avatar (mascot) | Procedural | **TEMPORARY** | Project-owned |
-| Arena: pitch, stands, crowd, floodlights, palms, goals | Procedural | **TEMPORARY** (correct scale: FIFA-like 7.32 × 2.44 m goals) | Project-owned |
-| Inventory thumbnails | Rendered at runtime from the models above | Auto-updates when models change | Project-owned |
+| Tournament facts (teams, groups, venues, dates) | Public reporting — see CONTENT_SOURCES.md | Re-verify before release | Facts (not copyrightable); no official marks used |
+| 24 team fan badges | Original shield design generated from flag colours (`ui/art.ts`, `render/models.ts`) | Final candidate | Project-owned; **not** federation crests |
+| 96 player position cards | Generated; fictional characters, no names/likenesses | Final candidate | Project-owned |
+| 12 landmark postcards (2D) + replicas (3D) | Procedural silhouettes & primitives (`ui/art.ts`, `render/landmarks.ts`) | **TEMPORARY** — commission illustrated postcards/models | Project-owned; depicting public landmarks |
+| 8 venue stamps | Generated from venue data | Final candidate | Project-owned |
+| Stadium & fan-zone environments | Procedural (`render/environments.ts`) | **TEMPORARY** | Project-owned |
+| Map of Saudi Arabia | Simplified outline from ~30 approximate border points | Illustrative only — replace with a licensed/official map asset before release | Project-owned drawing |
 | Timing-shot stage (goal, keeper, ball) | Inline SVG | **TEMPORARY** | Project-owned |
-| SFX + crowd ambience (`services/AudioService.ts`) | Web Audio synthesis | **TEMPORARY** | Project-owned |
+| SFX + crowd ambience | Web Audio synthesis | **TEMPORARY** | Project-owned |
 | UI icons | Unicode emoji (system font) | Temporary | Rendered by the OS font |
-| Font: Tajawal | Google Fonts (loaded from CDN, not bundled) | Final candidate | SIL Open Font License 1.1 |
+| Font: Tajawal | Google Fonts (CDN) | Final candidate | SIL Open Font License 1.1 |
+
+> **Not used anywhere:** the official tournament logo, trophy design, mascot, federation crests,
+> real player names or photos, sponsor logos. Adding any of them requires a signed licence.
+> The official map of the Kingdom should be used for any public release (border accuracy is a legal matter).
 
 ## Replacing temporary assets
 
-* **Models:** export glTF/GLB per `ModelKey` (`ball, boots, gloves, kit, scarf, cone, whistle, trophy,
-  card`), ~1 world unit tall, origin at centre, ≤ 3k triangles, one 512² texture atlas. Swap the
+* **Models:** export glTF/GLB per `ModelKey` (`badge, card, postcard, stamp`) and per `LandmarkModel`, ~1 world unit tall, origin at centre, ≤ 3k triangles, one 512² texture atlas. Swap the
   body of `createItemModel()` for a cached `GLTFLoader` lookup — gameplay code is unaffected.
 * **Audio:** replace `AudioService.play()` cases with decoded buffers (OGG/AAC, mono, 44.1 kHz).
 * **No real clubs, players, kits, crests or league marks** may be used without a licence.

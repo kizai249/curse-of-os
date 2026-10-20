@@ -9,7 +9,7 @@ export const profileScreen: Screen = (root, ctx) => {
   const stat = (label: string, value: string) => el('div', { class: 'stat' }, el('strong', {}, value), el('span', { class: 'muted small' }, label));
   root.append(
     el('header', { class: 'screen-header profile-header' },
-      el('div', { class: 'avatar-badge', 'aria-hidden': 'true' }, '⚽'),
+      el('div', { class: 'avatar-badge', 'aria-hidden': 'true' }, '🏆'),
       el('div', {},
         el('h2', {}, d.player.displayName),
         el('p', { class: 'muted small' }, 'حساب ضيف — تقدّمك محفوظ على هذا الجهاز')),
@@ -20,10 +20,10 @@ export const profileScreen: Screen = (root, ctx) => {
       progressBar(lvl.xpIntoLevel, lvl.isMaxLevel ? 1 : lvl.xpForNextLevel, 'progress-xp')),
     el('section', { class: 'stats-grid' },
       stat('اكتشافات', fmt(d.stats.discoveries)),
-      stat('قطع مجموعة', `${owned}/${ctx.catalog.items.length}`),
+      stat('الألبوم', `${owned}/${ctx.catalog.items.length}`),
       stat('شظايا 💎', fmt(d.inventory.shards)),
       stat('تحديات', fmt(d.stats.miniGamesPlayed)),
       stat('فوز', fmt(d.stats.miniGamesWon)),
-      stat('أفضل تسديد', fmt(d.stats.bestScores.timing_shot ?? 0))),
+      stat('أفضل كويز', fmt(d.stats.bestScores.cup_quiz ?? 0))),
   );
 };

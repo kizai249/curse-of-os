@@ -1,4 +1,41 @@
-# QA Report — Phase 3 (2026-10-19)
+# QA Report — Phase 3b: tournament re-theme (2026-10-20)
+
+| Check | Command | Result |
+|---|---|---|
+| Strict typecheck | `npm run typecheck` | ✅ 0 errors |
+| Unit + integration tests | `npm test` | ✅ **106 / 106** passed (10 files) |
+| Production build | `npm run build` | ✅ 650 kB JS (175 kB gzip), 22 kB CSS |
+| End-to-end (real bundle, Chromium, 390×844 touch) | `npm run e2e` | ✅ **15 / 15** checks, 0 unexpected console errors/warnings |
+
+New coverage in this phase:
+* **Tournament data integrity** — 24 teams / 4 per group / one host, draw facts, 8 venues in exactly
+  the 3 host cities, landmarks per city, valid colours.
+* **Generated content** — catalogue counts (24/96/12/8), unique ids, cards marked fictional,
+  random drops never include postcards/stamps, every landmark and stamp reachable from a fixed
+  point, all points inside the walkable area.
+* **Quiz** — bank validity, answers checked against data, unconfirmed teams and shared nicknames
+  excluded (also as distractors), timer/timeout, double answers, pause, scoring, max score.
+* **Squad builder** — rarity/fit/team/group scoring, ownership/duplicate/kind validation,
+  session-side scoring (client score never trusted).
+* **Party shootout** — turn order, single winner, sudden death with only tied leaders, shared win
+  after limit, player-count bounds, double-kick lock.
+* **Save v2 migration** — retired items → shards, cooldowns cleared, XP/settings kept, missions
+  reconciled; also verified end-to-end in the browser.
+
+E2E flow: map (3 pins) → Riyadh → King Fahd Sports City → venue stamp · Jeddah fan zone →
+landmark postcard · missions claim · album (teams tab, team sheet, landmarks tab) · full 10-question
+quiz → results · squad builder submit · 2-player party shootout to results · timing shot pause/exit
+· settings · reload persistence · v1→v2 migration · corrupted-save recovery · empty album · offline badge.
+
+Bugs found by e2e and fixed in this phase:
+| Bug | Fix |
+|---|---|
+| Fan-zone landmark points were off-screen on portrait phones (narrow horizontal FOV) | Per-location camera offsets + fan-zone spawn at plaza centre |
+| Map sea labels overlapped the Jeddah and Al Khobar pins | Labels moved to open water |
+| Two Korea badges showed the same "KOREA" text | Badge shows the unique team code |
+| Unconfirmed team appeared as a quiz distractor | Quiz uses confirmed teams only |
+
+# Previous: Phase 3 (2026-10-19)
 
 Environment: Linux cloud container, Node 22.22, Chromium headless shell 1194 (Playwright 1.56.1)
 with **software** WebGL (SwiftShader). No physical device, no GPU, no Android SDK.

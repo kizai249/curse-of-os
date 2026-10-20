@@ -1,8 +1,13 @@
-# Football Quest ⚽ (working title)
+# درب الكأس | Cup Trail 🏆 (working title — folder still named `football-quest`)
 
-Original football exploration & collection game for mobile — Arabic-first (RTL), aimed at
-Saudi Gen Z. Explore a 3D desert-night stadium, collect original football collectibles,
-complete missions and play mini-games.
+Fan-journey game for the 2027 continental cup hosted by Saudi Arabia — Arabic-first (RTL),
+aimed at Saudi Gen Z. Travel the map between **Riyadh, Jeddah and Al Khobar**, walk the
+**8 tournament stadiums** and each city's **fan zone with its landmarks**, and fill the
+tournament album (team badges, fictional position cards, landmark postcards, venue stamps).
+Play the cup quiz, squad builder, timing shot, and a pass-and-play **party shootout** with friends.
+
+See [docs/CONCEPT_AR.md](docs/CONCEPT_AR.md) for the concept (Arabic) and
+[docs/CONTENT_SOURCES.md](docs/CONTENT_SOURCES.md) for fact sources and licensing limits.
 
 > Lives in its own folder; the surrounding repository («لعنة أوس») is a separate project.
 
@@ -25,7 +30,7 @@ Everything runs on-device: guest profile, saves in `localStorage`, no backend, n
 | `npm test` | Vitest unit + integration tests (Node, no browser) |
 | `npm run build` | Typecheck + production bundle in `dist/` |
 | `npm run preview` | Serve `dist/` locally |
-| `npm run e2e` | Build, then drive the real bundle in headless Chromium (phone viewport): collect, missions, inventory, full mini-game, pause/exit, settings, reload persistence, corrupted-save recovery, offline badge. Screenshots → `e2e/screenshots/` |
+| `npm run e2e` | Build, then drive the real bundle in headless Chromium (phone viewport): map → city → stadium stamp → fan-zone landmark, missions, album, quiz, squad, party shootout, timing shot pause/exit, settings, reload persistence, v1→v2 migration, corrupted-save recovery, offline badge. Screenshots → `e2e/screenshots/` |
 
 `npm run e2e` needs a Chromium for Playwright 1.56.1: `npx playwright install chromium`
 (already present in the Claude Code cloud environment).

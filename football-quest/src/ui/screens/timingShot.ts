@@ -168,10 +168,7 @@ export const timingShotScreen: Screen = (root, ctx) => {
     const result = game.result();
     if (!result) return;
     ctx.audio.play('whistle');
-    ctx.analytics.track({ name: 'minigame_finished', props: { gameId: result.gameId, success: result.success, score: result.score, durationMs: result.durationMs } });
-    const recorded = await ctx.session.recordMiniGame(result);
-    if (recorded.ok) ctx.navigate('results', { result, xpAwarded: recorded.value.xpAwarded, newBest: recorded.value.newBest });
-    else ctx.navigate('results', { result, xpAwarded: 0, newBest: false, error: 'ما قدرنا نسجل النتيجة، المكافأة ما انضافت.' });
+    await ctx.finishRun({ result });
   }
 
   const loop = (now: number) => {

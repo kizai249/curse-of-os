@@ -1,8 +1,9 @@
 import type { Rng } from '../core/Rng';
 import { TIMING_SHOT_CONFIG, type TimingShotConfig } from '../config/minigames';
+import { gradeShot, meterPosition, type ShotGrade } from './shot';
 import type { MiniGameResult, MiniGameState } from './types';
 
-export type ShotGrade = 'perfect' | 'good' | 'saved';
+export type { ShotGrade } from './shot';
 
 export interface ShotOutcome {
   readonly grade: ShotGrade;
@@ -100,8 +101,7 @@ export class TimingShot {
   shoot(): ShotOutcome | null {
     if (this.state !== 'active' || this.phase !== 'aiming') return null;
     const meterValue = this.meterValue();
-    const distance = Math.abs(meterValue - this.target);
-    const grade: ShotGrade = distance <= this.config.perfectWindow ? 'perfect' : distance <= this.config.goodWindow ? 'good' : 'saved';
+    const grade: ShotGrade = gradeShot(meterValue, this.target, this.config);
     const goal = grade !== 'saved';
     let points = this.config.points[grade];
     if (goal) {
@@ -122,9 +122,7 @@ export class TimingShot {
 
   /** Current needle position in [0, 1] — a triangle wave that speeds up every shot. */
   meterValue(): number {
-    const sweep = this.sweepMs();
-    const t = (this.aimElapsed % sweep) / sweep;
-    return t < 0.5 ? t * 2 : 2 - t * 2;
+    return meterPosition(this.aimElapsed, this.sweepMs());
   }
 
   sweepMs(): number {

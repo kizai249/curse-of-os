@@ -1,5 +1,5 @@
-import { ITEM_CATALOG } from '../src/config/items';
-import { ARENA_POINTS } from '../src/config/arena';
+import { ITEM_CATALOG, RANDOM_DROP_POOL } from '../src/config/items';
+import { LOCATIONS } from '../src/config/locations';
 import { DAILY_MISSION_POOL, INTRO_MISSIONS } from '../src/config/missions';
 import { FakeClock } from '../src/core/Clock';
 import { EventBus } from '../src/core/EventBus';
@@ -29,7 +29,7 @@ export function createHarness(opts: { authority?: RewardAuthority; store?: Memor
   const loaded = opts.initial ? { data: opts.initial, status: 'loaded' as const } : saveManager.load();
   const session = new GameSession(
     {
-      saveManager, catalog, missionBook, points: ARENA_POINTS,
+      saveManager, catalog, missionBook, locations: LOCATIONS, dropPool: RANDOM_DROP_POOL,
       authority: opts.authority ?? new LocalRewardAuthority((id) => catalog.get(id) !== undefined),
       clock, rng: createSeededRng(opts.seed ?? 42), logger, bus,
     },
@@ -37,3 +37,8 @@ export function createHarness(opts: { authority?: RewardAuthority; store?: Memor
   );
   return { clock, logs: memory.entries, logger, bus, catalog, missionBook, store, saveManager, session, loadStatus: loaded.status };
 }
+
+/** Well-known point ids used across tests. */
+export const STAMP_POINT = 'stadium_kfsc:center';
+export const RANDOM_POINT = 'stadium_kfsc:left_wing';
+export const LANDMARK_POINT = 'fanzone_jeddah:al_balad';

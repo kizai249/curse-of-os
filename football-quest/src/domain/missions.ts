@@ -46,6 +46,27 @@ export function createMissionsState(book: MissionBook): MissionsState {
   return { intro, daily: { dayKey: '', entries: {} } };
 }
 
+/**
+ * Aligns a (possibly older) missions state with the current mission book: intro missions added
+ * in a content update appear as fresh, removed ones are dropped. Daily entries no longer in the
+ * pool are dropped too. Returns the same object when nothing changed.
+ */
+export function reconcileMissions(state: MissionsState, book: MissionBook): MissionsState {
+  let changed = false;
+  const intro: Record<string, MissionProgress> = {};
+  for (const def of book.intro) {
+    const existing = state.intro[def.id];
+    if (!existing) changed = true;
+    intro[def.id] = existing ?? FRESH;
+  }
+  if (Object.keys(state.intro).some((id) => !(id in intro))) changed = true;
+  const entries: Record<string, MissionProgress> = {};
+  for (const [id, p] of Object.entries(state.daily.entries)) {
+    if (book.get(id)?.kind === 'daily') entries[id] = p; else changed = true;
+  }
+  return changed ? { intro, daily: { ...state.daily, entries } } : state;
+}
+
 /** Deterministic daily selection: every player gets the same set for a given day. */
 export function selectDailyMissions(book: MissionBook, dayKey: string, count: number): string[] {
   const rng = createSeededRng(hashString(dayKey));
@@ -78,9 +99,12 @@ export function refreshDailyMissions(state: MissionsState, book: MissionBook, da
 export function objectiveIncrement(objective: MissionObjective, event: GameplayEvent): number {
   switch (objective.type) {
     case 'discover':
-      return event.type === 'discovery' ? 1 : 0;
+      if (event.type !== 'discovery') return 0;
+      if (objective.locationKind !== undefined && objective.locationKind !== event.locationKind) return 0;
+      return objective.cityId === undefined || objective.cityId === event.cityId ? 1 : 0;
     case 'collect':
       if (event.type !== 'item_collected') return 0;
+      if (objective.itemKind !== undefined && objective.itemKind !== event.kind) return 0;
       return objective.minRarity === undefined || rarityRank(event.rarity) >= rarityRank(objective.minRarity) ? 1 : 0;
     case 'play_minigame':
       return event.type === 'minigame_finished' && (objective.gameId === undefined || objective.gameId === event.gameId) ? 1 : 0;

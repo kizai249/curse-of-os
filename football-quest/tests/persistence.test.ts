@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { BACKUP_KEY, MemoryKeyValueStore, SAVE_KEY } from '../src/persistence/SaveManager';
-import { migrateSave, parseSave, SAVE_VERSION } from '../src/persistence/saveSchema';
-import { createHarness, T0 } from './helpers';
+import { migrateSave, parseSave, SAVE_VERSION, V1_RETIRED_ITEM_SHARDS } from '../src/persistence/saveSchema';
+import { createHarness, RANDOM_POINT, T0 } from './helpers';
 
 describe('save manager', () => {
   it('creates a new profile when no save exists', () => {
@@ -15,7 +15,7 @@ describe('save manager', () => {
     const store = new MemoryKeyValueStore();
     const a = createHarness({ store });
     a.session.refreshDaily();
-    const res = await a.session.collectDiscovery('p_center');
+    const res = await a.session.collectDiscovery(RANDOM_POINT);
     expect(res.ok).toBe(true);
     const b = createHarness({ store });
     expect(b.loadStatus).toBe('loaded');
@@ -89,7 +89,7 @@ describe('save manager', () => {
     const failures: string[] = [];
     h.bus.on('saveFailed', (e) => failures.push(e.reason));
     store.failWrites = true;
-    const res = await h.session.collectDiscovery('p_center');
+    const res = await h.session.collectDiscovery(RANDOM_POINT);
     expect(res.ok).toBe(true);
     expect(failures).toEqual(['write_failed']);
     expect(h.session.data.stats.discoveries).toBe(1);
@@ -104,6 +104,35 @@ describe('save manager', () => {
 });
 
 describe('save migrations', () => {
+  it('v1 → v2 turns retired items into shards, clears old cooldowns, keeps XP and settings', () => {
+    const store = new MemoryKeyValueStore();
+    const h = createHarness({ store });
+    const v2 = JSON.parse(JSON.stringify(h.session.data));
+    const v1 = {
+      ...v2, version: 1,
+      progression: { totalXp: 345 },
+      inventory: { items: { ball_dune: { count: 3, firstObtainedAt: 1 }, trophy_oasis: { count: 1, firstObtainedAt: 2 } }, shards: 7 },
+      arena: { collectedAt: { p_center: 123 } },
+      settings: { ...v2.settings, quality: 'low' },
+      missions: { intro: { intro_first_find: { progress: 1, status: 'claimed' } }, daily: { dayKey: '2026-10-19', entries: {} } },
+    };
+    store.setItem(SAVE_KEY, JSON.stringify(v1));
+    const m = createHarness({ store });
+    expect(m.loadStatus).toBe('migrated');
+    const d = m.session.data;
+    expect(d.version).toBe(2);
+    expect(d.progression.totalXp).toBe(345);
+    expect(d.inventory.items).toEqual({});
+    expect(d.inventory.shards).toBe(7 + 4 * V1_RETIRED_ITEM_SHARDS);
+    expect(d.arena.collectedAt).toEqual({});
+    expect(d.settings.quality).toBe('low');
+    // retired intro mission dropped, new intro missions present
+    expect(d.missions.intro.intro_first_find).toBeUndefined();
+    expect(d.missions.intro.intro_first_stadium).toEqual({ progress: 0, status: 'active' });
+    // the migrated save was written back at the new version
+    expect(JSON.parse(store.getItem(SAVE_KEY)!).version).toBe(2);
+  });
+
   it('runs registered migrations in order', () => {
     const migrations = {
       0: (r: Record<string, unknown>) => ({ ...r, a: 1 }),

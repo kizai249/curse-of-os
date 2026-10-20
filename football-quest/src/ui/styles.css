@@ -1,5 +1,5 @@
-/* Football Quest — "Desert Night Stadium" art direction.
-   Navy night sky, floodlight gold, pitch green, warm sand. */
+/* درب الكأس — "Desert Night Stadium" art direction for the 2027 continental cup in KSA.
+   Navy night sky, floodlight gold, host green (#006c35), warm sand. */
 :root {
   --bg: #0b1430;
   --bg-2: #13204a;
@@ -9,7 +9,7 @@
   --muted: #a9b4d0;
   --gold: #ffd166;
   --gold-2: #f4a261;
-  --green: #2e8b47;
+  --green: #006c35;
   --green-2: #36d07a;
   --sand: #c9a16b;
   --danger: #ef476f;
@@ -224,7 +224,7 @@ input[type='range'] { width: 100%; accent-color: var(--gold); min-height: 32px; 
 .loading { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(circle at 50% 40%, var(--bg-2), var(--bg)); transition: opacity .5s; }
 .loading.done { opacity: 0; pointer-events: none; }
 .loading-ball { font-size: 3.5rem; animation: bounce .9s ease-in-out infinite; }
-.loading-title { font-weight: 900; font-size: 1.8rem; letter-spacing: .5px; direction: ltr; }
+.loading-title { font-weight: 900; font-size: 2rem; }
 .loading.error .loading-ball { animation: none; }
 @keyframes bounce { 50% { transform: translateY(-18px) rotate(180deg); } }
 
@@ -233,3 +233,84 @@ input[type='range'] { width: 100%; accent-color: var(--gold); min-height: 32px; 
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 .reduced-motion *, .reduced-motion *::before, .reduced-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .05s !important; }
+
+/* ── Map & cities ────────────────────────────────────────── */
+.center-text { text-align: center; }
+.map-wrap { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.ksa-map { display: block; width: 100%; height: auto; }
+.map-pins { position: absolute; inset: 0; }
+.map-pin { position: absolute; transform: translate(-50%, -50%); background: none; border: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; min-width: 48px; min-height: 48px; justify-content: center; }
+.pin-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(255, 255, 255, .25), 0 0 18px var(--accent); animation: pinPulse 1.8s ease-in-out infinite; }
+.pin-label { font-weight: 900; font-size: .85rem; background: rgba(11, 20, 48, .85); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+@keyframes pinPulse { 50% { box-shadow: 0 0 0 9px rgba(255, 255, 255, 0), 0 0 26px var(--accent); } }
+.city-card { width: 100%; text-align: start; cursor: pointer; border-inline-start: 4px solid var(--accent); }
+.fanzone-card { border-color: color-mix(in srgb, var(--accent) 50%, transparent); display: flex; flex-direction: column; gap: 10px; }
+.postcards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.postcard-mini { display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
+.postcard-mini.locked .item-art, .locked-art { filter: grayscale(1) brightness(.45); opacity: .7; }
+.venue-card { display: flex; align-items: center; gap: 12px; width: 100%; text-align: start; cursor: pointer; }
+.venue-text { flex: 1; }
+
+/* ── HUD place row ───────────────────────────────────────── */
+.hud-place-row { position: absolute; top: calc(78px + var(--safe-t)); inset-inline: 12px; display: flex; }
+.hud-back { border: 1px solid var(--card-border); background: var(--card); backdrop-filter: blur(8px); border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: .85rem; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 40px; }
+
+/* ── Album ───────────────────────────────────────────────── */
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.grid-4 .tile { padding: 8px 4px; }
+.grid-4 .item-art { width: 56px; height: 60px; }
+.group-title { margin-top: 8px; }
+.tile-locked { cursor: pointer; opacity: 1; }
+.tile-locked .tile-name { color: var(--muted); }
+.postcard-art { width: 100%; height: auto; aspect-ratio: 100 / 80; }
+.postcard-lg { width: 100%; max-width: 300px; height: auto; aspect-ratio: 100 / 80; }
+.card-art-sm { width: 52px; height: 72px; }
+.mini-cards { display: flex; gap: 8px; justify-content: center; }
+.ideas ul { margin: 6px 0; padding-inline-start: 18px; display: flex; flex-direction: column; gap: 4px; }
+
+/* ── Quiz ────────────────────────────────────────────────── */
+.quiz-counter { font-weight: 900; font-size: 1.1rem; }
+.quiz-timer .progress { height: 10px; }
+.progress-danger .progress-fill { background: var(--danger); }
+.progress-dim .progress-fill { background: linear-gradient(90deg, #5b6b8c, #8d99ae); }
+.quiz-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; max-width: 560px; width: 100%; margin: 0 auto; }
+.quiz-prompt { font-size: 1.35rem; text-align: center; line-height: 1.5; }
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option { border: 2px solid var(--card-border); background: var(--card); border-radius: 16px; padding: 14px 16px; font-weight: 800; font-size: 1.05rem; cursor: pointer; min-height: 56px; text-align: start; transition: transform .12s var(--ease), background .2s, border-color .2s; }
+.quiz-option:active { transform: scale(.98); }
+.quiz-option.correct { background: rgba(54, 208, 122, .25); border-color: var(--green-2); }
+.quiz-option.wrong { background: rgba(239, 71, 111, .25); border-color: var(--danger); }
+.quiz-option[disabled] { cursor: default; }
+
+/* ── Squad builder ───────────────────────────────────────── */
+.squad-pitch { position: relative; width: 100%; aspect-ratio: 3 / 4; max-height: 52vh; margin: 0 auto; border-radius: 20px; background: repeating-linear-gradient(0deg, #2e8b47 0 12%, #36a052 12% 24%); border: 3px solid rgba(255, 255, 255, .7); overflow: hidden; }
+.squad-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.squad-lines .link { stroke-width: 1.4; stroke-linecap: round; }
+.squad-lines .link-team { stroke: var(--gold); }
+.squad-lines .link-group { stroke: var(--info); stroke-dasharray: 3 2; }
+.slot { position: absolute; transform: translate(-50%, -50%); background: none; border: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.slot-empty { width: 52px; height: 72px; border-radius: 10px; border: 2px dashed rgba(255, 255, 255, .8); display: grid; place-items: center; font-size: 1.6rem; font-weight: 900; background: rgba(0, 0, 0, .15); }
+.slot-label { font-size: .72rem; font-weight: 800; background: rgba(11, 20, 48, .8); border-radius: 999px; padding: 1px 8px; }
+.score-mid { font-size: 1.8rem; font-weight: 900; color: var(--gold); }
+.pick-list { display: flex; flex-direction: column; gap: 8px; width: 100%; max-height: 50vh; overflow-y: auto; }
+.pick-item { display: flex; gap: 12px; align-items: center; text-align: start; background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 8px 10px; cursor: pointer; }
+
+/* ── Party shootout ──────────────────────────────────────── */
+.party-body { display: flex; flex-direction: column; gap: 14px; height: 100%; }
+.party-row { display: flex; align-items: center; gap: 8px; }
+.team-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--team, #fff); border: 2px solid rgba(255, 255, 255, .6); flex-shrink: 0; }
+.input { background: rgba(255, 255, 255, .08); border: 1px solid var(--card-border); border-radius: 12px; color: var(--text); padding: 10px 12px; font: inherit; min-height: 44px; min-width: 0; flex: 1; }
+select.input { flex: 1.3; }
+.party-scoreboard { display: flex; flex-direction: column; gap: 6px; }
+.party-score { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--card-border); --team: #fff; }
+.party-score.current { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(255, 209, 102, .4); }
+.party-score.out { opacity: .45; }
+.party-score .team-dot { background: var(--team); }
+.party-name { flex: 1; font-weight: 700; }
+.party-turn { display: flex; align-items: center; gap: 8px; justify-content: center; font-size: 1.15rem; }
+.party-stage { min-height: 140px; }
+.party-goal { font-size: 6rem; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .4)); }
+.party-final { width: 100%; max-width: 360px; }
+.party-final .winner { border-color: var(--gold); }

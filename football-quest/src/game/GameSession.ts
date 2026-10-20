@@ -7,10 +7,12 @@ import { fail, ok, type Result } from '../core/Result';
 import type { Rng } from '../core/Rng';
 import type { ItemCatalog } from '../domain/catalog';
 import { addItem, addShards } from '../domain/inventory';
-import { applyGameplayEvent, markClaimed, refreshDailyMissions, type ClaimError, type MissionBook } from '../domain/missions';
+import { applyGameplayEvent, markClaimed, reconcileMissions, refreshDailyMissions, type ClaimError, type MissionBook } from '../domain/missions';
 import { addXp, levelFromTotalXp, type LevelInfo } from '../domain/progression';
 import { ledgerHas, ledgerRecord, type RewardError } from '../domain/rewards';
-import { MINI_GAME_IDS, type DiscoveryPointDefinition, type GameplayEvent, type ItemDefinition, type Reward } from '../domain/types';
+import { MINI_GAME_IDS, type DiscoveryPointDefinition, type GameplayEvent, type ItemDefinition, type LocationDefinition, type Reward } from '../domain/types';
+import { scoreSquad, SQUAD_SLOTS, validateLineup, type SquadLineup, type SquadScore, type SquadSlot } from '../minigames/SquadBuilder';
+import { SQUAD_CONFIG } from '../config/minigames';
 import type { MiniGameResult } from '../minigames/types';
 import type { SaveManager } from '../persistence/SaveManager';
 import type { SaveData, Settings } from '../persistence/saveSchema';
@@ -28,7 +30,9 @@ export interface SessionDeps {
   readonly saveManager: SaveManager;
   readonly catalog: ItemCatalog;
   readonly missionBook: MissionBook;
-  readonly points: readonly DiscoveryPointDefinition[];
+  readonly locations: readonly LocationDefinition[];
+  /** Items that random (non-fixed) discovery points can drop. */
+  readonly dropPool: readonly ItemDefinition[];
   readonly authority: RewardAuthority;
   readonly clock: Clock;
   readonly rng: Rng;
@@ -49,6 +53,12 @@ export interface MiniGameOutcome {
 }
 
 export type CollectError = 'unknown_point' | 'cooldown' | RewardError;
+export type SquadError = 'not_a_player' | 'duplicate_card' | 'not_owned' | 'empty_lineup' | MiniGameRecordError;
+
+export interface SquadOutcome extends MiniGameOutcome {
+  readonly score: SquadScore;
+  readonly success: boolean;
+}
 export type MiniGameRecordError = 'unknown_game' | 'invalid_score' | RewardError;
 
 /**
@@ -60,9 +70,13 @@ export class GameSession {
   private state: SaveData;
   /** Keys of grants currently awaiting authorization — blocks rapid repeated input. */
   private readonly pending = new Set<string>();
+  private readonly pointIndex = new Map<string, { point: DiscoveryPointDefinition; location: LocationDefinition }>();
 
   constructor(private readonly deps: SessionDeps, initial: SaveData) {
-    this.state = initial;
+    for (const location of deps.locations) for (const point of location.points) this.pointIndex.set(point.id, { point, location });
+    // Content updates may add/remove missions; align old saves without losing progress.
+    const missions = reconcileMissions(initial.missions, deps.missionBook);
+    this.state = missions === initial.missions ? initial : { ...initial, missions };
   }
 
   get data(): SaveData { return this.state; }
@@ -85,12 +99,15 @@ export class GameSession {
   }
 
   async collectDiscovery(pointId: string, signal?: AbortSignal): Promise<Result<CollectOutcome, CollectError>> {
-    if (!this.deps.points.some((p) => p.id === pointId)) return fail('unknown_point');
+    const found = this.pointIndex.get(pointId);
+    if (!found) return fail('unknown_point');
+    const { point, location } = found;
     if (this.pointCooldownRemaining(pointId) > 0) return fail('cooldown');
     const pendingKey = `discovery:${pointId}`;
     if (this.pending.has(pendingKey)) return fail('grant_in_progress');
 
-    const item = this.deps.catalog.roll(RARITY_WEIGHTS, this.deps.rng);
+    const fixed = point.grantItemId ? this.deps.catalog.get(point.grantItemId) : undefined;
+    const item = fixed ?? this.deps.catalog.roll(RARITY_WEIGHTS, this.deps.rng, this.deps.dropPool);
     const reward: Reward = { xp: XP_REWARDS.discovery, itemId: item.id };
     const grantId = `discovery:${pointId}:${this.deps.clock.now()}`;
 
@@ -105,12 +122,12 @@ export class GameSession {
       let next: SaveData = {
         ...this.state,
         inventory: added.inventory,
-        arena: { collectedAt: { ...this.state.arena.collectedAt, [pointId]: now } },
+        arena: { ...this.state.arena, collectedAt: { ...this.state.arena.collectedAt, [pointId]: now } },
         stats: { ...this.state.stats, discoveries: this.state.stats.discoveries + 1, itemsCollected: this.state.stats.itemsCollected + 1 },
       };
       next = this.withXp(next, XP_REWARDS.discovery);
-      next = this.withEvent(next, { type: 'discovery', pointId });
-      next = this.withEvent(next, { type: 'item_collected', itemId: item.id, rarity: item.rarity, duplicate: added.duplicate });
+      next = this.withEvent(next, { type: 'discovery', pointId, locationKind: location.kind, cityId: location.cityId });
+      next = this.withEvent(next, { type: 'item_collected', itemId: item.id, rarity: item.rarity, kind: item.kind, duplicate: added.duplicate });
       this.commit(next);
       return ok({ item, duplicate: added.duplicate, shardsAwarded: added.shardsAwarded, xpAwarded: XP_REWARDS.discovery });
     } finally {
@@ -176,6 +193,34 @@ export class GameSession {
     } finally {
       this.pending.delete(grantId);
     }
+  }
+
+  /**
+   * Scores a lineup on the session side from card ids (never trusts a client-computed score),
+   * checks ownership, then records it like any other mini-game run.
+   */
+  async submitSquad(runId: string, cardIds: Readonly<Partial<Record<SquadSlot, string>>>, durationMs: number, signal?: AbortSignal): Promise<Result<SquadOutcome, SquadError>> {
+    const lineup: Partial<Record<SquadSlot, ItemDefinition>> = {};
+    for (const slot of SQUAD_SLOTS) {
+      const id = cardIds[slot];
+      if (id === undefined) continue;
+      const card = this.deps.catalog.get(id);
+      if (!card) return fail('not_a_player');
+      lineup[slot] = card;
+    }
+    if (Object.keys(lineup).length === 0) return fail('empty_lineup');
+    const invalid = validateLineup(lineup as SquadLineup, (id) => this.state.inventory.items[id] !== undefined);
+    if (invalid) return fail(invalid as SquadError);
+    const score = scoreSquad(lineup as SquadLineup);
+    const success = score.total >= SQUAD_CONFIG.winScore;
+    const recorded = await this.recordMiniGame({ runId, gameId: 'squad_builder', success, score: score.total, durationMs }, signal);
+    if (!recorded.ok) return recorded;
+    return ok({ ...recorded.value, score, success });
+  }
+
+  setLastLocation(locationId: string): void {
+    if (this.state.arena.lastLocationId === locationId || !this.deps.locations.some((l) => l.id === locationId)) return;
+    this.commit({ ...this.state, arena: { ...this.state.arena, lastLocationId: locationId } });
   }
 
   updateSettings(patch: Partial<Settings>): void {

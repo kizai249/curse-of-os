@@ -20,13 +20,14 @@ export class ItemCatalog {
   }
 
   /** Rolls a rarity by weight, then an item of that rarity. Empty rarities are skipped. */
-  roll(weights: Readonly<Record<Rarity, number>>, rng: Rng): ItemDefinition {
+  roll(weights: Readonly<Record<Rarity, number>>, rng: Rng, pool: readonly ItemDefinition[] = this.items): ItemDefinition {
+    if (pool.length === 0) throw new RangeError('roll: empty pool');
     const available = { ...weights };
     for (const rarity of Object.keys(available) as Rarity[]) {
-      if (!this.items.some((i) => i.rarity === rarity)) available[rarity] = 0;
+      if (!pool.some((i) => i.rarity === rarity)) available[rarity] = 0;
     }
     const rarity = pickWeighted(available, rng);
-    const pool = this.items.filter((i) => i.rarity === rarity);
-    return pool[Math.floor(rng() * pool.length)]!;
+    const candidates = pool.filter((i) => i.rarity === rarity);
+    return candidates[Math.floor(rng() * candidates.length)]!;
   }
 }

@@ -3,7 +3,7 @@ import type { MissionProgress, MissionsState, MissionStatus } from '../domain/mi
 import type { MiniGameId } from '../domain/types';
 import { MINI_GAME_IDS } from '../domain/types';
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export type QualityLevel = 'low' | 'medium' | 'high';
 
@@ -38,7 +38,7 @@ export interface SaveData {
   readonly missions: MissionsState;
   /** Applied reward grant ids (duplicate-claim protection). */
   readonly ledger: readonly string[];
-  readonly arena: { readonly collectedAt: Readonly<Record<string, number>> };
+  readonly arena: { readonly collectedAt: Readonly<Record<string, number>>; readonly lastLocationId?: string };
   readonly stats: PlayerStats;
   readonly settings: Settings;
   readonly updatedAt: number;
@@ -166,7 +166,9 @@ export function parseSave(raw: unknown): { ok: true; data: SaveData } | { ok: fa
       inventory: { items: items!, shards: (inv as Rec).shards as number },
       missions: { intro: intro!, daily: { dayKey: daily!.dayKey as string, entries: dailyEntries! } },
       ledger: ledger as string[],
-      arena: { collectedAt: arenaRaw ?? {} },
+      arena: isRec(raw.arena) && isStr(raw.arena.lastLocationId)
+        ? { collectedAt: arenaRaw ?? {}, lastLocationId: raw.arena.lastLocationId }
+        : { collectedAt: arenaRaw ?? {} },
       stats: parseStats(raw.stats),
       settings: parseSettings(raw.settings),
       updatedAt: isNonNegInt(raw.updatedAt) ? raw.updatedAt : 0,
@@ -181,7 +183,27 @@ export type Migration = (raw: Rec) => Rec;
  * Registered migrations keyed by the version they upgrade *from*.
  * Add an entry here (and a test) whenever SAVE_VERSION is bumped.
  */
-export const MIGRATIONS: Readonly<Record<number, Migration>> = {};
+export const MIGRATIONS: Readonly<Record<number, Migration>> = {
+  1: migrateV1toV2,
+};
+
+/** Shards granted per owned copy of a retired v1 item when the catalogue was re-themed. */
+export const V1_RETIRED_ITEM_SHARDS = 5;
+
+/**
+ * v1 → v2: the generic football catalogue and arena were replaced by the tournament theme.
+ * Old items become shards (nothing is silently lost), old point cooldowns are cleared because
+ * the point ids no longer exist. XP, missions, ledger, stats and settings are kept.
+ */
+export function migrateV1toV2(raw: Rec): Rec {
+  const inv = isRec(raw.inventory) ? raw.inventory : {};
+  let copies = 0;
+  if (isRec(inv.items)) {
+    for (const v of Object.values(inv.items)) if (isRec(v) && isNonNegInt(v.count)) copies += v.count;
+  }
+  const shards = isNonNegInt(inv.shards) ? inv.shards : 0;
+  return { ...raw, inventory: { items: {}, shards: shards + copies * V1_RETIRED_ITEM_SHARDS }, arena: { collectedAt: {} } };
+}
 
 export type MigrationOutcome =
   | { kind: 'current'; raw: Rec }

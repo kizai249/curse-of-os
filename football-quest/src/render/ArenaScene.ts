@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { ARENA, PERFORMANCE } from '../config/balance';
 import type { Logger } from '../core/Logger';
-import type { DiscoveryPointDefinition, ItemDefinition, Rarity } from '../domain/types';
+import { cityById, venueById } from '../config/tournament';
+import type { DiscoveryPointDefinition, ItemDefinition, LocationDefinition, LocationKind, Rarity } from '../domain/types';
 import type { QualityLevel } from '../persistence/saveSchema';
+import { buildFanZone, buildStadium } from './environments';
 import { createAvatar, createBall, createItemModel, isSharedGeometry } from './models';
 import { ParticlePool } from './ParticlePool';
 import { PerfMonitor } from './PerfMonitor';
@@ -15,11 +17,20 @@ export const RARITY_COLORS: Readonly<Record<Rarity, string>> = {
 };
 
 /** Keep in sync with e2e/smoke.mjs, which projects point positions to tap them. */
-export const CAMERA_OFFSET = new THREE.Vector3(0, 15, 14);
+export const CAMERA_OFFSETS: Readonly<Record<LocationKind, THREE.Vector3>> = {
+  stadium: new THREE.Vector3(0, 15, 14),
+  // Fan zones are wider: pull back so the landmark ring is visible from the spawn point.
+  fanzone: new THREE.Vector3(0, 21, 19),
+};
+/** Where the avatar appears in each location kind (XZ). */
+export const SPAWN: Readonly<Record<LocationKind, readonly [number, number]>> = { stadium: [0, 8], fanzone: [0, 2] };
 export const CAMERA_FOV = 55;
 const CAMERA_LERP = 4;
 const TAP_MAX_MOVE_PX = 12;
 const POINT_HOVER_HEIGHT = 1.3;
+/** Random-drop points glow gold; fixed points (landmark postcard, venue stamp) glow teal. */
+const RANDOM_POINT_COLOR = '#ffd166';
+const FIXED_POINT_COLOR = '#4dd0e1';
 /** Taps within this multiple of the interaction radius of a point snap to that point. */
 const TAP_SNAP_FACTOR = 1.25;
 /** Where the avatar stops relative to the interaction radius (inside it, beside the orb). */
@@ -59,6 +70,7 @@ export class ArenaScene {
   private readonly resizeObserver: ResizeObserver;
   private readonly reveals: { obj: THREE.Object3D; t: number; duration: number; resolve: () => void }[] = [];
   private nearest: string | null = null;
+  private readonly cameraOffset: THREE.Vector3;
   private running = false;
   private frameHandle = 0;
   private reducedMotion = false;
@@ -67,7 +79,7 @@ export class ArenaScene {
 
   constructor(
     private readonly container: HTMLElement,
-    defs: readonly DiscoveryPointDefinition[],
+    readonly location: LocationDefinition,
     private readonly callbacks: ArenaCallbacks,
     private readonly logger: Logger,
     quality: QualityLevel,
@@ -81,7 +93,7 @@ export class ArenaScene {
 
     this.camera = new THREE.PerspectiveCamera(CAMERA_FOV, 1, 0.5, 200);
     this.scene.background = new THREE.Color('#0b1430');
-    this.scene.fog = new THREE.Fog('#0b1430', 45, 95);
+    this.scene.fog = new THREE.Fog('#0b1430', 55, 110);
 
     this.scene.add(new THREE.HemisphereLight('#9fb8ff', '#3b2a1a', 0.9));
     this.sun = new THREE.DirectionalLight('#ffe7c2', 2.2);
@@ -92,10 +104,11 @@ export class ArenaScene {
     this.sun.shadow.camera.bottom = -30;
     this.scene.add(this.sun);
 
-    this.buildEnvironment();
+    this.buildEnvironment(location);
     this.avatar = createAvatar();
     this.scene.add(this.avatar);
-    this.avatar.position.set(0, 0, 8);
+    this.cameraOffset = CAMERA_OFFSETS[location.kind];
+    this.avatar.position.set(SPAWN[location.kind][0], 0, SPAWN[location.kind][1]);
     this.target.copy(this.avatar.position);
 
     this.targetMarker = new THREE.Mesh(
@@ -107,10 +120,10 @@ export class ArenaScene {
     this.targetMarker.visible = false;
     this.scene.add(this.targetMarker);
 
-    for (const def of defs) this.addPoint(def);
+    for (const def of location.points) this.addPoint(def);
     this.scene.add(this.particles.object);
 
-    this.camera.position.copy(this.avatar.position).add(CAMERA_OFFSET);
+    this.camera.position.copy(this.avatar.position).add(this.cameraOffset);
     this.camera.lookAt(this.avatar.position);
 
     this.setQuality(quality);
@@ -172,7 +185,7 @@ export class ArenaScene {
     const color = new THREE.Color(RARITY_COLORS[item.rarity]);
     const rarityBoost = { common: 1, rare: 1.4, epic: 1.8, legendary: 2.5 }[item.rarity];
     this.particles.burst(origin, color, Math.round((this.reducedMotion ? 14 : 40) * rarityBoost));
-    const model = createItemModel(item.modelKey, item.color);
+    const model = createItemModel(item.modelKey, item.color, item.secondaryColor);
     model.position.copy(origin);
     this.scene.add(model);
     return new Promise((resolve) => {
@@ -252,7 +265,7 @@ export class ArenaScene {
       const pulse = 1 + Math.sin(t * 6) * 0.1;
       this.targetMarker.scale.set(pulse, pulse, pulse);
     }
-    const desired = this.avatar.position.clone().add(CAMERA_OFFSET);
+    const desired = this.avatar.position.clone().add(this.cameraOffset);
     this.camera.position.lerp(desired, this.reducedMotion ? 1 : Math.min(1, dt * CAMERA_LERP));
     this.camera.lookAt(this.avatar.position.x, this.avatar.position.y + 1, this.avatar.position.z);
     this.renderer.render(this.scene, this.camera);
@@ -351,153 +364,40 @@ export class ArenaScene {
 
   // ── environment ─────────────────────────────────────────────────────────
 
+  private buildEnvironment(location: LocationDefinition): void {
+    if (location.kind === 'stadium') {
+      const venue = location.venueId ? venueById(location.venueId) : undefined;
+      if (!venue) throw new Error(`Unknown venue for location ${location.id}`);
+      buildStadium(this.scene, venue);
+    } else {
+      const city = cityById(location.cityId);
+      if (!city) throw new Error(`Unknown city for location ${location.id}`);
+      buildFanZone(this.scene, city);
+    }
+  }
+
   private addPoint(def: DiscoveryPointDefinition): void {
     const root = new THREE.Group();
     root.position.set(def.x, 0, def.z);
+    const tint = def.grantItemId ? FIXED_POINT_COLOR : RANDOM_POINT_COLOR;
     const ring = new THREE.Mesh(
       new THREE.RingGeometry(0.9, 1.15, 32),
-      new THREE.MeshBasicMaterial({ color: '#ffd166', transparent: true, opacity: 0.9, side: THREE.DoubleSide }),
+      new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.9, side: THREE.DoubleSide }),
     );
     ring.rotation.x = -Math.PI / 2;
     ring.position.y = 0.04;
     const beam = new THREE.Mesh(
       new THREE.CylinderGeometry(0.35, 0.6, 6, 16, 1, true),
-      new THREE.MeshBasicMaterial({ color: '#ffe8a3', transparent: true, opacity: 0.18, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
+      new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.18, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
     );
     beam.position.y = 3;
     const orb = new THREE.Group();
-    const ball = createBall('#ffd166');
+    const ball = createBall(tint);
     ball.scale.setScalar(1.1);
     orb.add(ball);
     orb.position.y = POINT_HOVER_HEIGHT;
     root.add(ring, beam, orb);
     this.scene.add(root);
     this.points.set(def.id, { def, root, orb, beam, ring, available: true });
-  }
-
-  private buildEnvironment(): void {
-    // Desert sand around the stadium
-    const sand = new THREE.Mesh(new THREE.CircleGeometry(90, 48), new THREE.MeshStandardMaterial({ color: '#c9a16b', roughness: 1 }));
-    sand.rotation.x = -Math.PI / 2;
-    sand.receiveShadow = true;
-    this.scene.add(sand);
-
-    // Pitch with mowing stripes
-    const stripeW = 4;
-    for (let i = -6; i < 6; i++) {
-      const stripe = new THREE.Mesh(
-        new THREE.PlaneGeometry(stripeW, 48),
-        new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? '#2e8b47' : '#36a052', roughness: 0.95 }),
-      );
-      stripe.rotation.x = -Math.PI / 2;
-      stripe.position.set(i * stripeW + stripeW / 2, 0.01, 0);
-      stripe.receiveShadow = true;
-      this.scene.add(stripe);
-    }
-
-    // Field lines
-    const lineMat = new THREE.MeshBasicMaterial({ color: '#f2f2f2' });
-    const addLine = (w: number, d: number, x: number, z: number) => {
-      const l = new THREE.Mesh(new THREE.PlaneGeometry(w, d), lineMat);
-      l.rotation.x = -Math.PI / 2;
-      l.position.set(x, 0.02, z);
-      this.scene.add(l);
-    };
-    addLine(48, 0.2, 0, -24); addLine(48, 0.2, 0, 24);
-    addLine(0.2, 48, -24, 0); addLine(0.2, 48, 24, 0);
-    addLine(48, 0.2, 0, 0);
-    const circle = new THREE.Mesh(new THREE.RingGeometry(5.8, 6, 48), lineMat);
-    circle.rotation.x = -Math.PI / 2;
-    circle.position.y = 0.02;
-    this.scene.add(circle);
-    for (const s of [-1, 1]) {
-      addLine(16, 0.2, 0, s * 17); addLine(0.2, 7, -8, s * 20.5); addLine(0.2, 7, 8, s * 20.5);
-      this.scene.add(this.createGoal(s * 24, s));
-    }
-
-    // Stands (low-poly tiers). The crowd is one InstancedMesh → one draw call for 224 blocks.
-    const standMat = new THREE.MeshStandardMaterial({ color: '#2b3550', roughness: 0.9 });
-    const crowdColors = ['#0f9d58', '#ffffff', '#ffd166', '#1e88e5'].map((c) => new THREE.Color(c));
-    const sides = 4, tiers = 4, perTier = 14;
-    const crowd = new THREE.InstancedMesh(new THREE.BoxGeometry(2.6, 0.7, 0.6), new THREE.MeshStandardMaterial({ roughness: 0.8 }), sides * tiers * perTier);
-    const dummy = new THREE.Object3D();
-    let idx = 0;
-    for (let side = 0; side < sides; side++) {
-      const rot = (side * Math.PI) / 2;
-      for (let tier = 0; tier < tiers; tier++) {
-        const step = new THREE.Mesh(new THREE.BoxGeometry(56, 1.2, 2.5), standMat);
-        step.position.set(0, 0.6 + tier * 1.2, -31 - tier * 2.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot);
-        step.rotation.y = rot;
-        step.receiveShadow = true;
-        this.scene.add(step);
-        for (let c = 0; c < perTier; c++) {
-          dummy.position.set(-26 + c * 4, 1.5 + tier * 1.2, -31 - tier * 2.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot);
-          dummy.rotation.set(0, rot, 0);
-          dummy.updateMatrix();
-          crowd.setMatrixAt(idx, dummy.matrix);
-          crowd.setColorAt(idx, crowdColors[(c + tier + side) % crowdColors.length]!);
-          idx++;
-        }
-      }
-    }
-    this.scene.add(crowd);
-
-    // Floodlights
-    const poleMat = new THREE.MeshStandardMaterial({ color: '#8d99ae', metalness: 0.6, roughness: 0.4 });
-    for (const [x, z] of [[-34, -34], [34, -34], [-34, 34], [34, 34]] as const) {
-      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.45, 22, 8), poleMat);
-      pole.position.set(x, 11, z);
-      const lamp = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 0.6), new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: '#fff6d5', emissiveIntensity: 2 }));
-      lamp.position.set(x, 22.5, z);
-      lamp.lookAt(0, 0, 0);
-      this.scene.add(pole, lamp);
-    }
-
-    // Palm trees in the sand — a nod to the local landscape (instanced: 2 draw calls total)
-    const palms = 10, leavesPerPalm = 7;
-    const trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.35, 0.55, 9, 8), new THREE.MeshStandardMaterial({ color: '#7a5230', roughness: 0.9 }), palms);
-    const leaves = new THREE.InstancedMesh(new THREE.ConeGeometry(0.8, 5, 4, 1, true), new THREE.MeshStandardMaterial({ color: '#2f7d32', roughness: 0.8, side: THREE.DoubleSide }), palms * leavesPerPalm);
-    const d = new THREE.Object3D();
-    for (let i = 0; i < palms; i++) {
-      const a = (i / palms) * Math.PI * 2 + 0.3;
-      const r = 50 + (i % 3) * 6;
-      const px = Math.cos(a) * r, pz = Math.sin(a) * r;
-      d.position.set(px, 4.5, pz);
-      d.rotation.set(0, 0, 0);
-      d.updateMatrix();
-      trunks.setMatrixAt(i, d.matrix);
-      for (let l = 0; l < leavesPerPalm; l++) {
-        d.position.set(px, 9, pz);
-        d.rotation.set(Math.PI / 2.6, (l / leavesPerPalm) * Math.PI * 2, 0, 'YXZ');
-        d.translateY(2.2);
-        d.updateMatrix();
-        leaves.setMatrixAt(i * leavesPerPalm + l, d.matrix);
-      }
-    }
-    this.scene.add(trunks, leaves);
-  }
-
-  private createGoal(z: number, side: number): THREE.Group {
-    const g = new THREE.Group();
-    const postMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.3 });
-    const w = 7.3, h = 2.44;
-    for (const x of [-w / 2, w / 2]) {
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, h, 10), postMat);
-      post.position.set(x, h / 2, 0);
-      post.castShadow = true;
-      g.add(post);
-    }
-    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, w, 10), postMat);
-    bar.rotation.z = Math.PI / 2;
-    bar.position.y = h;
-    g.add(bar);
-    const net = new THREE.Mesh(
-      new THREE.BoxGeometry(w, h, 1.6, 14, 6, 3),
-      new THREE.MeshBasicMaterial({ color: '#ffffff', wireframe: true, transparent: true, opacity: 0.35 }),
-    );
-    net.position.set(0, h / 2, side * 0.8);
-    g.add(net);
-    g.position.z = z;
-    return g;
   }
 }

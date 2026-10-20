@@ -1,4 +1,4 @@
-import type { ItemCategory, ModelKey, Rarity } from '../domain/types';
+import type { ItemKind, Rarity } from '../domain/types';
 
 export const RARITY_LABEL: Readonly<Record<Rarity, string>> = {
   common: 'عادية',
@@ -7,19 +7,11 @@ export const RARITY_LABEL: Readonly<Record<Rarity, string>> = {
   legendary: 'أسطورية',
 };
 
-export const CATEGORY_LABEL: Readonly<Record<ItemCategory, string>> = {
-  ball: 'كرة',
-  boots: 'حذاء',
-  gloves: 'قفازات',
-  kit: 'طقم',
-  gear: 'معدات',
-  trophy: 'كأس',
-  card: 'بطاقة لاعب',
-};
-
-/** Fallback icons when 3D thumbnails can't be generated (no WebGL). */
-export const MODEL_EMOJI: Readonly<Record<ModelKey, string>> = {
-  ball: '⚽', boots: '👟', gloves: '🧤', kit: '👕', scarf: '🧣', cone: '🔺', whistle: '📯', trophy: '🏆', card: '🃏',
+export const KIND_LABEL: Readonly<Record<ItemKind, string>> = {
+  team_badge: 'شارة منتخب',
+  player_card: 'بطاقة لاعب',
+  landmark: 'بطاقة معلم',
+  venue_stamp: 'ختم ملعب',
 };
 
 export const fmt = (n: number): string => Math.round(n).toLocaleString('en-US');
