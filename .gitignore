@@ -1,0 +1,20 @@
+# أسرار محلية — ما تُرفع أبدًا
+.env
+.env.*
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+service-account*.json
+
+# ملفات النظام والمحررات
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# مخرجات محلية
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
