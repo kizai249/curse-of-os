@@ -47,6 +47,19 @@ namespace FootballQuest.Tests.Setup
             Assert.That(PlayerSettings.Android.targetArchitectures, Is.EqualTo(AndroidArchitecture.ARM64));
             Assert.That((int)PlayerSettings.Android.minSdkVersion, Is.GreaterThanOrEqualTo(24));
             Assert.That(PlayerSettings.colorSpace, Is.EqualTo(ColorSpace.Linear));
+            Assert.That(PlayerSettings.iOS.locationUsageDescription, Is.Not.Empty);
+            Assert.That(PlayerSettings.iOS.cameraUsageDescription, Is.Not.Empty);
+        }
+
+        [Test]
+        public void ArabicFontsAndLicensesAreInResources()
+        {
+            foreach (var name in ProjectSetup.FontNames)
+            {
+                Assert.That(Resources.Load<Font>("Fonts/" + name), Is.Not.Null, name);
+            }
+            Assert.That(Resources.Load<TextAsset>("Fonts/OFL"), Is.Not.Null);
+            Assert.That(Resources.Load<TextAsset>("Licenses/RTLTMPro-MIT"), Is.Not.Null);
         }
     }
 }

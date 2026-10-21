@@ -1,0 +1,15 @@
+{
+  "description": "متجهات بوابة العمر (سنة الميلاد فقط). العمر = سنة اليوم بتوقيت الرياض − سنة الميلاد. أقل من 15 مرفوض، و15–18 يُعامل قاصرًا (حماية)، وأكبر بالغ. يقرأها اختبار C# وTypeScript.",
+  "vectors": [
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2012, "band": "15_17" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2013, "band": "under_15" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2009, "band": "15_17" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2008, "band": "18_plus" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 1990, "band": "18_plus" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2027, "band": "under_15" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 2028, "band": "invalid" },
+    { "instant": "2027-01-10T12:00:00Z", "birthYear": 1899, "band": "invalid" },
+    { "instant": "2026-12-31T21:30:00Z", "birthYear": 2012, "band": "15_17" },
+    { "instant": "2026-12-31T20:30:00Z", "birthYear": 2012, "band": "under_15" }
+  ]
+}

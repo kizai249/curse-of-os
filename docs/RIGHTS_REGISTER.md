@@ -63,3 +63,15 @@
 - [ ] الإفصاح ظاهر في الأماكن الثلاثة.
 - [ ] عقود الشركاء النشطين فيها بند ترخيص العلامة وبند عدم الربط بالبطولة.
 - [ ] مراجعة قانونية موقعة قبل R1، تشمل: نظام حماية البيانات الشخصية (PDPL)، والقسائم للقاصرين، ونقل بيانات Auth.
+
+## 6. سجل الأصول المرخّصة في البناء
+
+> يُحدّث مع كل أصل مرخّص يدخل المستودع (الصفوف 14 و15 و16 أعلاه). أضافه المطوّر في Slice 2.
+
+| الأصل | النوع (الصف) | المصدر والنسخة | الرخصة | مكان الملف | الظهور داخل التطبيق |
+|---|---|---|---|---|---|
+| IBM Plex Sans Arabic — Regular وBold | مرخّص (14) | `google/fonts` ‏`ofl/ibmplexsansarabic`، الإصدار 1.101، تاريخ الجلب 21 أكتوبر 2026 | SIL Open Font License 1.1 | `unity/FootballQuest/Assets/_Project/Resources/Fonts/` (مع `OFL.txt`) | نص الرخصة كاملًا في «عن اللعبة ▸ تراخيص مفتوحة المصدر» |
+| RTLTMPro (سكربتات Runtime وEditor فقط) | مرخّص (16) | `pnarimani/RTLTMPro` ‏commit ‏`f480419` | MIT | `unity/FootballQuest/Assets/ThirdParty/RTLTMPro/` | نص الرخصة في «تراخيص مفتوحة المصدر» |
+| TextMeshPro Essential Resources (ومنها خط Liberation Sans الافتراضي) | مرخّص (16) | حزمة `com.unity.ugui` (تُستورد عبر ProjectSetup) | Unity Companion License، وLiberation Sans بـ SIL OFL 1.1 | `unity/FootballQuest/Assets/TextMesh Pro/` | TODO(S10a): إضافة نص OFL لخط Liberation إلى صفحة التراخيص إذا بقي في البناء |
+
+**مستبعد عمدًا:** خطوط Segoe UI المرفقة مع مستودع RTLTMPro (ملك Microsoft وبدون ترخيص للمشروع — ممنوعة حسب القاعدة الحاكمة §1).

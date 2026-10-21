@@ -1,0 +1,25 @@
+{
+    "name": "FootballQuest.Firebase",
+    "rootNamespace": "FootballQuest.FirebaseServices",
+    "references": [
+        "FootballQuest.Core",
+        "FootballQuest.App"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "FQ_FIREBASE"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.google.firebase.functions",
+            "expression": "12.0.0",
+            "define": "FQ_FIREBASE"
+        }
+    ],
+    "noEngineReferences": false
+}

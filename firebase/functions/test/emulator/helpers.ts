@@ -32,3 +32,25 @@ export async function callFunction(
   const body = (await res.json()) as { result?: unknown; error?: { status: string; message: string } };
   return { status: res.status, body };
 }
+
+/** Admin SDK داخل عملية الاختبار، موجّه للمحاكي عبر متغيرات emulators:exec. */
+import { getApps, initializeApp } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
+
+export function admin() {
+  if (getApps().length === 0) initializeApp({ projectId: PROJECT_ID });
+  return { db: getFirestore(), auth: getAuth() };
+}
+
+/** يرمي إذا رجع الاستدعاء خطأ، ويرجع `result`. */
+export async function callOk<T>(name: string, data: unknown, idToken: string): Promise<T> {
+  const res = await callFunction(name, data, idToken);
+  if (res.status !== 200) throw new Error(`${name} failed ${res.status}: ${JSON.stringify(res.body)}`);
+  return res.body.result as T;
+}
+
+export async function clearFirestore(): Promise<void> {
+  const host = process.env.FIRESTORE_EMULATOR_HOST ?? "127.0.0.1:8080";
+  await fetch(`http://${host}/emulator/v1/projects/${PROJECT_ID}/databases/(default)/documents`, { method: "DELETE" });
+}

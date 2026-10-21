@@ -1,0 +1,8 @@
+{
+  "result": {
+    "serverTime": "2027-01-15T18:20:00.000Z",
+    "gameDay": "2027-01-15",
+    "nextRollover": "2027-01-16T01:00:00.000Z",
+    "status": "needs_onboarding"
+  }
+}

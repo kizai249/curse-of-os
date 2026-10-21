@@ -9,11 +9,18 @@
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- تحذيرات الكود المضمّن من طرف ثالث ما نعدّله. -->
+    <NoWarn>$(NoWarn);CS0162;CS0168;CS0219;CS0414;CS0649</NoWarn>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../unity/FootballQuest/Assets/_Project/Scripts/Core/**/*.cs" />
     <Compile Include="../../unity/FootballQuest/Assets/_Project/Tests/EditMode/Core/**/*.cs" />
+    <Compile Include="FontCoverage/**/*.cs" />
+    <Compile Include="../../unity/FootballQuest/Assets/_Project/Scripts/Editor/Build/ManifestPermissions.cs" />
+    <!-- منطق التشكيل في RTLTMPro نقي؛ المكونات المرتبطة بـ TextMeshPro مستبعدة. -->
+    <Compile Include="../../unity/FootballQuest/Assets/ThirdParty/RTLTMPro/Scripts/Runtime/**/*.cs"
+             Exclude="../../unity/FootballQuest/Assets/ThirdParty/RTLTMPro/Scripts/Runtime/RTLTextMeshPro*.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

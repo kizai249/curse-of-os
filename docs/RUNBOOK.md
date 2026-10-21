@@ -1,6 +1,6 @@
 # RUNBOOK — دليل البناء والتشغيل والنشر
 
-**آخر تحديث:** Slice 1 — 21 أكتوبر 2026
+**آخر تحديث:** Slice 2 — 21 أكتوبر 2026
 الأقسام المعلّمة «(Slice N)» تُستكمل عند تنفيذ تلك الشريحة.
 
 ---
@@ -54,9 +54,33 @@ dotnet test tools/core-tests/CoreTests.csproj
 ### 3.3 Unity
 
 1. افتح `unity/FootballQuest` من Unity Hub.
-2. أول مرة فقط: **Football Quest ▸ Apply Project Setup**. هذا ينشئ أصل URP في `Assets/_Project/Settings/` ويضبط PlayerSettings وBuild Settings. بعدها سوّ commit للملفات الناتجة (`Assets/_Project/Settings/*` و`ProjectSettings/*`).
+2. أول مرة فقط: **Football Quest ▸ Apply Project Setup** (مرتين في أول مرة: الأولى تستورد TMP Essentials، والثانية تنشئ Font Assets). هذا:
+   - ينشئ أصل URP في `Assets/_Project/Settings/`.
+   - يضبط PlayerSettings وBuild Settings.
+   - يستورد `Assets/TextMesh Pro/`.
+   - ينشئ `Resources/Fonts/*SDF.asset`.
+
+   بعدها سوّ commit للملفات الناتجة: `Assets/_Project/Settings/*`، و`Assets/TextMesh Pro/*`، و`Assets/_Project/Resources/Fonts/*`، و`ProjectSettings/*`.
 3. الاختبارات: **Window ▸ General ▸ Test Runner ▸ EditMode ▸ Run All**.
 4. البناء: **Football Quest ▸ Build ▸ Android (APK)** أو **iOS (Xcode project)**. الناتج في `unity/FootballQuest/Builds/`.
+
+### 3.4 تشغيل اللعبة على المحاكي (بدون Firebase SDK)
+
+بدون حزم Firebase، العميل يتصل بـ Emulator Suite عبر HTTP (`EmulatorAuthGateway` و`EmulatorFunctionsClient`):
+
+1. شغّل المحاكي (§3.1، الأمر اليدوي).
+2. اضغط Play في Unity من مشهد `Boot`. المضيف الافتراضي `127.0.0.1`، وفي محاكي Android `10.0.2.2`.
+3. جهاز حقيقي على نفس الشبكة: اضبط PlayerPrefs `fq.emulator_host` على IP جهاز التطوير، وشغّل المحاكي بـ `--host 0.0.0.0` أو عدّل `host` في `firebase.json` محليًا.
+4. **محاكاة الأذونات في Editor:** اضبط PlayerPrefs ‏`fq.editor_perm.Location` و`fq.editor_perm.Camera` بالقيم: 0 NotDetermined، و1 Granted، و2 Approximate، و3 Denied، و4 Restricted. هكذا تجرّب كل حالات AT-01.
+5. ربط Apple/Google يحتاج Firebase SDK وأجهزة حقيقية، وأزراره مخفية في وضع المحاكي.
+
+### 3.5 إضافة Firebase Unity SDK (Q7)
+
+1. حمّل Firebase Unity SDK بصيغة `.tgz` من موقع Firebase: الحزم app، وauth، وfunctions، وremote-config، وapp-check (وcrashlytics في S10a). **لا تضف `firebase-analytics`** (AT-10).
+2. حطها في `unity/FootballQuest/Packages/firebase/` وأضفها في `Packages/manifest.json` بصيغة `"com.google.firebase.functions": "file:firebase/com.google.firebase.functions-<ver>.tgz"`. بعد اعتماد Git LFS للمستودع ترفعها عبر LFS.
+3. حط `google-services.json` و`GoogleService-Info.plist` لمشروع `fq-dev` في `Assets/` (مستثناة من git).
+4. التجميعة `FootballQuest.Firebase` تتفعّل تلقائيًا (versionDefine ‏`FQ_FIREBASE`)، والتطبيق يتحول من المحاكي إلى Firebase.
+5. App Check: الـDebug provider في Development builds. سجّل رمز الـdebug من السجل في Firebase Console.
 
 **عند إضافة ملفات من خارج Unity:** شغّل `python3 tools/unity-meta.py unity/FootballQuest/Assets` قبل الـcommit عشان كل ملف يكون له `.meta` ثابت.
 
@@ -124,3 +148,6 @@ functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:ind
 | منفذ 8080 أو 9099 أو 5001 مشغول | أوقف أي محاكي شغّال، أو غيّر المنافذ في `firebase.json` و`test/emulator/helpers.ts` |
 | Unity يعيد توليد GUIDs | شغّل `tools/unity-meta.py` وسوّ commit لملفات `.meta` |
 | مهام Unity في CI «skipped» | أسرار الترخيص غير مضبوطة (§5.1) |
+| مربعات بدل الحروف العربية | Font Assets ما انخلقت: شغّل Apply Project Setup مرة ثانية بعد استيراد TMP Essentials |
+| بناء Android يفشل بـ «ACCESS_BACKGROUND_LOCATION is forbidden» | مكتبة أضافت الإذن الممنوع — أزلها أو استبعد الإذن (MVP_SCOPE: لا Background Location) |
+| العميل في Editor ما يتصل | المحاكي غير شغّال، أو `fq.emulator_host` خطأ (§3.4) |

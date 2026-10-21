@@ -1,12 +1,15 @@
 using System.IO;
 using System.Linq;
 using FootballQuest.App;
+using FootballQuest.Core.Permissions;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.TextCore.LowLevel;
 
 namespace FootballQuest.EditorTools
 {
@@ -27,6 +30,8 @@ namespace FootballQuest.EditorTools
         public const string SettingsFolder = "Assets/_Project/Settings";
         public const string PipelineAssetPath = SettingsFolder + "/URP-Mobile.asset";
         public const string RendererAssetPath = SettingsFolder + "/URP-Mobile-Renderer.asset";
+        public const string FontsFolder = "Assets/_Project/Resources/Fonts";
+        public static readonly string[] FontNames = { "IBMPlexSansArabic-Regular", "IBMPlexSansArabic-Bold" };
 
         [MenuItem("Football Quest/Apply Project Setup")]
         public static void Apply()
@@ -35,6 +40,7 @@ namespace FootballQuest.EditorTools
             var pipeline = EnsurePipelineAsset();
             AssignPipeline(pipeline);
             EnsureScenes();
+            EnsureTextMeshPro();
             AssetDatabase.SaveAssets();
             Debug.Log("[ProjectSetup] applied");
         }
@@ -57,6 +63,54 @@ namespace FootballQuest.EditorTools
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.iOS.targetOSVersionString = IosMinimumVersion;
+            // نصوص النظام (الإنجليزية أساس، والعربية في ar.lproj عبر IosBuildPostProcess).
+            PlayerSettings.iOS.locationUsageDescription = SystemPermissionTexts.LocationWhenInUseEn;
+            PlayerSettings.iOS.cameraUsageDescription = SystemPermissionTexts.CameraEn;
+        }
+
+        /// <summary>
+        /// موارد TMP الأساسية (TMP Settings والـShaders) + Font Assets ديناميكية لخط IBM Plex Sans Arabic.
+        /// الناتج يُرفع للمستودع بعد أول تشغيل محلي (RUNBOOK §3.3).
+        /// </summary>
+        private static void EnsureTextMeshPro()
+        {
+            if (AssetDatabase.FindAssets("t:TMP_Settings").Length == 0)
+            {
+                var info = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMP_FontAsset).Assembly);
+                var package = info == null ? null : Path.Combine(info.resolvedPath, "Package Resources", "TMP Essential Resources.unitypackage");
+                if (package != null && File.Exists(package))
+                {
+                    AssetDatabase.ImportPackage(package, false);
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                }
+                else
+                {
+                    Debug.LogWarning("[ProjectSetup] TMP Essential Resources package not found — import it from Window ▸ TextMeshPro.");
+                }
+            }
+
+            if (Shader.Find("TextMeshPro/Mobile/Distance Field") == null && Shader.Find("TextMeshPro/Distance Field") == null)
+            {
+                Debug.LogWarning("[ProjectSetup] TMP shaders not imported yet — font assets will be created on the next run (runtime falls back to dynamic creation).");
+                return;
+            }
+
+            foreach (var name in FontNames)
+            {
+                var assetPath = $"{FontsFolder}/{name} SDF.asset";
+                if (File.Exists(assetPath)) continue;
+                var font = AssetDatabase.LoadAssetAtPath<Font>($"{FontsFolder}/{name}.ttf");
+                if (font == null) continue;
+                var asset = TMP_FontAsset.CreateFontAsset(font, 90, 9, GlyphRenderMode.SDFAA, 1024, 1024, AtlasPopulationMode.Dynamic, true);
+                if (asset == null) continue;
+                asset.name = name + " SDF";
+                AssetDatabase.CreateAsset(asset, assetPath);
+                asset.atlasTextures[0].name = asset.name + " Atlas";
+                AssetDatabase.AddObjectToAsset(asset.atlasTextures[0], asset);
+                asset.material.name = asset.name + " Material";
+                AssetDatabase.AddObjectToAsset(asset.material, asset);
+                EditorUtility.SetDirty(asset);
+            }
         }
 
         private static UniversalRenderPipelineAsset EnsurePipelineAsset()

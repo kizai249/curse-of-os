@@ -2,7 +2,10 @@
     "name": "FootballQuest.App",
     "rootNamespace": "FootballQuest.App",
     "references": [
-        "FootballQuest.Core"
+        "FootballQuest.Core",
+        "RTLTMPro",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

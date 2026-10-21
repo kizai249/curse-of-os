@@ -1,5 +1,5 @@
+using FootballQuest.App.Flow;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace FootballQuest.App
 {
@@ -21,13 +21,10 @@ namespace FootballQuest.App
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void ContinueFromBoot()
+        private static void Launch()
         {
-            if (SceneManager.GetActiveScene().name == SceneNames.Boot)
-            {
-                // Slice 2 يضيف هنا: Auth، وRemote Config، والـOnboarding قبل الانتقال.
-                SceneManager.LoadScene(SceneNames.Hub);
-            }
+            // AppController يعيش طوال الجلسة: Onboarding ثم Hub (ينقل لمشهد Hub عند الجاهزية).
+            AppController.Launch();
         }
     }
 }

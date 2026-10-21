@@ -32,6 +32,34 @@ namespace FootballQuest.Tests.Core
                 yield return new GameDayVector(m.Groups[1].Value, m.Groups[2].Value, m.Groups[3].Value);
             }
         }
+
+        public static IEnumerable<AgeVector> AgeBand()
+        {
+            var json = File.ReadAllText(Path.Combine(ContractsDir(), "age-band.vectors.json"));
+            var pattern = new Regex("\"instant\":\\s*\"([^\"]+)\",\\s*\"birthYear\":\\s*(\\d+),\\s*\"band\":\\s*\"([^\"]+)\"");
+            foreach (Match m in pattern.Matches(json))
+            {
+                yield return new AgeVector(m.Groups[1].Value, int.Parse(m.Groups[2].Value), m.Groups[3].Value);
+            }
+        }
+
+        public static string Sample(string name) => File.ReadAllText(Path.Combine(ContractsDir(), "samples", name + ".json"));
+    }
+
+    public sealed class AgeVector
+    {
+        public AgeVector(string instant, int birthYear, string band)
+        {
+            Instant = instant;
+            BirthYear = birthYear;
+            Band = band;
+        }
+
+        public string Instant { get; }
+        public int BirthYear { get; }
+        public string Band { get; }
+
+        public override string ToString() => BirthYear + "@" + Instant;
     }
 
     public sealed class GameDayVector

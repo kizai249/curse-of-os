@@ -1,0 +1,10 @@
+{
+  "error": {
+    "message": "CITY_CHANGE_LOCKED",
+    "status": "FAILED_PRECONDITION",
+    "details": {
+      "stateId": "CITY_CHANGE_LOCKED",
+      "unlockAt": "2027-02-06T16:02:30.000Z"
+    }
+  }
+}
