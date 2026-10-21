@@ -13,7 +13,8 @@
     "test": "vitest run --config vitest.config.ts",
     "test:emulator": "npm run build && firebase --config ../firebase.json emulators:exec --project demo-fq --only auth,firestore,functions \"vitest run --config vitest.emulator.config.ts\"",
     "check": "npm run lint && npm run typecheck && npm test && npm run test:emulator",
-    "seed:content": "npm run build && node scripts/seed-content.mjs"
+    "seed:content": "npm run build && node scripts/seed-content.mjs",
+    "zone:add": "npm run build && node scripts/add-zone.mjs"
   },
   "dependencies": {
     "firebase-admin": "^14.5.0",

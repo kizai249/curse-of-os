@@ -1,0 +1,16 @@
+{
+  "description": "شرط القبول — GAME_RULES §6.1: الدقة ≤ 100 م، والمسافة ≤ نصف القطر + الأقل من (الدقة، 50 م). أول ثلاث حالات هي AT-02 (أ، ب، ج).",
+  "maxAccuracyM": 100,
+  "cases": [
+    { "label": "AT-02a weak accuracy next to a branch", "distanceM": 40, "radiusM": 250, "accuracyM": 180, "accepted": false },
+    { "label": "AT-02b outside the branch area", "distanceM": 600, "radiusM": 250, "accuracyM": 20, "accepted": false },
+    { "label": "AT-02c just outside the radius, inside the accuracy slack", "distanceM": 270, "radiusM": 250, "accuracyM": 30, "accepted": true },
+    { "label": "slack edge (250 + 30)", "distanceM": 280, "radiusM": 250, "accuracyM": 30, "accepted": true },
+    { "label": "beyond slack", "distanceM": 281, "radiusM": 250, "accuracyM": 30, "accepted": false },
+    { "label": "slack capped at 50 m", "distanceM": 300, "radiusM": 250, "accuracyM": 100, "accepted": true },
+    { "label": "beyond the 50 m cap", "distanceM": 301, "radiusM": 250, "accuracyM": 100, "accepted": false },
+    { "label": "accuracy exactly 100 is allowed", "distanceM": 10, "radiusM": 2000, "accuracyM": 100, "accepted": true },
+    { "label": "accuracy 101 is rejected", "distanceM": 10, "radiusM": 2000, "accuracyM": 101, "accepted": false },
+    { "label": "stadium zone edge", "distanceM": 2000, "radiusM": 2000, "accuracyM": 0, "accepted": true }
+  ]
+}

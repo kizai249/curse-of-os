@@ -1,0 +1,20 @@
+{
+  "result": {
+    "status": "ok",
+    "accuracyBand": "<=25",
+    "stadiums": [{ "stadiumId": "STD_RUH_KFS", "rewarded": true, "xp": 20, "packs": 1 }],
+    "branches": [
+      {
+        "branchId": "br_hm_jed_tahlia",
+        "brandId": "brand_halfmillion",
+        "name": { "ar": "فرع التحلية", "en": "Tahlia Branch" },
+        "brandName": { "ar": "هاف مليون", "en": "Half Million" },
+        "zoneRadiusM": 250,
+        "activeCampaigns": 2,
+        "rewarded": true,
+        "xp": 10
+      }
+    ],
+    "balances": { "packs": 2, "epicPacks": 0, "legendaryPacks": 0, "fanPoints": 0, "xp": 40, "level": 1, "pityCount": 0 }
+  }
+}

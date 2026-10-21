@@ -14,7 +14,49 @@ static CLLocationManager *FQManager(void) {
     return fqLocationManager;
 }
 
+typedef void (*FQLocationCallback)(const char *json);
+
+/// قراءة وحدة عبر requestLocation (When In Use فقط، بدون تتبع مستمر). علامة المحاكاة من iOS 15.
+@interface FQLocationDelegate : NSObject <CLLocationManagerDelegate>
+@property (nonatomic, assign) FQLocationCallback callback;
+@end
+
+@implementation FQLocationDelegate
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *location = locations.lastObject;
+    if (self.callback == NULL || location == nil) return;
+    BOOL simulated = NO;
+    if (@available(iOS 15.0, *)) {
+        simulated = location.sourceInformation.isSimulatedBySoftware;
+    }
+    NSString *json = [NSString stringWithFormat:@"{\"status\":\"ok\",\"lat\":%.7f,\"lng\":%.7f,\"accuracyM\":%.1f,\"isMock\":%@}",
+                      location.coordinate.latitude, location.coordinate.longitude, location.horizontalAccuracy,
+                      simulated ? @"true" : @"false"];
+    FQLocationCallback cb = self.callback;
+    self.callback = NULL;
+    cb([json UTF8String]);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    if (self.callback == NULL) return;
+    FQLocationCallback cb = self.callback;
+    self.callback = NULL;
+    cb("{\"status\":\"error\"}");
+}
+@end
+
+static FQLocationDelegate *fqDelegate = nil;
+
 extern "C" {
+
+void FQ_ReadLocation(FQLocationCallback callback) {
+    CLLocationManager *manager = FQManager();
+    if (fqDelegate == nil) fqDelegate = [[FQLocationDelegate alloc] init];
+    fqDelegate.callback = callback;
+    manager.delegate = fqDelegate;
+    manager.desiredAccuracy = kCLLocationAccuracyBest;
+    [manager requestLocation];
+}
 
 int FQ_LocationStatus(void) {
     CLLocationManager *manager = FQManager();

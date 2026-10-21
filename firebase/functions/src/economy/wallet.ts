@@ -21,7 +21,8 @@ export interface Wallet extends XpState {
   ownedTeams: string[];
   achievements: string[];
   badges: string[];
-  daily: { day: string; login: boolean; stadiums: string[] };
+  /** stadiums: الزيارة الرقمية. proximity: مناطق القرب المكافأة اليوم («stadium:ID» / «branch:ID»). */
+  daily: { day: string; login: boolean; stadiums: string[]; proximity: string[] };
 }
 
 export function readWallet(data: FirebaseFirestore.DocumentData): Wallet {
@@ -36,13 +37,13 @@ export function readWallet(data: FirebaseFirestore.DocumentData): Wallet {
     ownedTeams: data.ownedTeams ?? [],
     achievements: data.achievements ?? [],
     badges: data.badges ?? [],
-    daily: data.daily ?? { day: "", login: false, stadiums: [] },
+    daily: { day: "", login: false, stadiums: [], ...(data.daily ?? {}), proximity: data.daily?.proximity ?? [] },
   };
 }
 
 /** يعيد ضبط مطالبات اليوم عند بداية يوم لعبة جديد (04:00 الرياض). */
 export function dailyFor(wallet: Wallet, day: string): Wallet["daily"] {
-  return wallet.daily.day === day ? wallet.daily : { day, login: false, stadiums: [] };
+  return wallet.daily.day === day ? wallet.daily : { day, login: false, stadiums: [], proximity: [] };
 }
 
 export function grantXp(wallet: Wallet, amount: number, day: string): Wallet {

@@ -7,6 +7,7 @@ using FootballQuest.Core;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Content;
 using FootballQuest.Core.Economy;
+using FootballQuest.Core.Location;
 using FootballQuest.Core.Map;
 using FootballQuest.Core.Onboarding;
 using FootballQuest.Core.Permissions;
@@ -105,9 +106,8 @@ namespace FootballQuest.App.Flow
             }
             var actions = UiFactory.HStack(card, "FieldActions", Lang);
             UiFactory.Size(actions, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
-            // TODO(S6): verifyPresence بعد جاهزية الإذن (نقاط القرب وبطاقة «أنت قريب من فرع»).
             UiFactory.Button(actions, T(UiStrings.CheckNearby), Lang,
-                () => RequestFieldFeature(PermissionKind.Location, () => Debug.Log("[Hub] location ready — verifyPresence arrives in S6")),
+                () => RequestFieldFeature(PermissionKind.Location, () => Run(CheckPresenceAsync(PresenceTrigger.Manual))),
                 ButtonStyle.Secondary);
             // TODO(S7): ماسح QR (ZXing.Net) ثم scanBranchCode، والإدخال اليدوي.
             UiFactory.Button(actions, T(UiStrings.ScanBranch), Lang,
@@ -255,10 +255,12 @@ namespace FootballQuest.App.Flow
             if (hubVisible && onboarding.Step == OnboardingStep.Ready) RenderHub();
         }
 
-        /// <summary>رجوع من الخلفية: نحدّث حالة الإذن (اللاعب ممكن فعّله من الإعدادات).</summary>
+        /// <summary>رجوع من الخلفية: نحدّث حالة الإذن (اللاعب ممكن فعّله من الإعدادات)، ونتحقق من القرب تلقائيًا.</summary>
         private void OnApplicationFocus(bool hasFocus)
         {
-            if (hasFocus) RefreshHubIfVisible();
+            if (!hasFocus) return;
+            RefreshHubIfVisible();
+            if (onboarding?.Step == FootballQuest.Core.Onboarding.OnboardingStep.Ready) AutoPresence(PresenceTrigger.Resume);
         }
     }
 }

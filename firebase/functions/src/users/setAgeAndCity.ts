@@ -88,7 +88,7 @@ export async function handleSetAgeAndCity(
         ownedTeams: [],
         achievements: [],
         badges: [],
-        daily: { day: "", login: false, stadiums: [] },
+        daily: { day: "", login: false, stadiums: [], proximity: [] },
         // ما تُعرض موافقات تسويق في R1، وللقاصر دائمًا false (PRODUCT_BRIEF ت8).
         marketingConsent: false,
         deletionRequestedAt: null,

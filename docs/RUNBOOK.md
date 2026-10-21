@@ -1,6 +1,6 @@
 # RUNBOOK — دليل البناء والتشغيل والنشر
 
-**آخر تحديث:** Slice 3 — 21 أكتوبر 2026
+**آخر تحديث:** Slice 6 — 21 أكتوبر 2026
 الأقسام المعلّمة «(Slice N)» تُستكمل عند تنفيذ تلك الشريحة.
 
 ---
@@ -55,6 +55,17 @@ npm run seed:content -- --project fq-dev
 
 - المصدر الوحيد للمحتوى: `shared/contracts/content/*.json`. أي تعديل يبدأ هناك، وبعدها حدّث `EmbeddedContent.cs` (اختبار `ContentTests` يكشف أي اختلاف).
 - `content/schedule` يُبنى تلقائيًا من `matchResults` عبر `onMatchResultWritten`.
+
+### 3.1.2 مناطق الملاعب والفروع (للتطوير)
+
+```bash
+cd firebase/functions
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npm run zone:add -- --project demo-fq --type stadium --ref STD_RUH_KFS --lat <lat> --lng <lng> --radius 2000
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npm run zone:add -- --project demo-fq --type branch --ref br_demo --lat <lat> --lng <lng> --brand brand_demo --name "فرع تجريبي" --city JED
+```
+
+- الإحداثيات الحقيقية للملاعب والفروع تُدخل من لوحة الشركاء (S9). وما نخزن أي إحداثيات للاعبين (DATA_CONTRACTS §0).
+- **Editor:** اضبط PlayerPrefs ‏`fq.editor_location` على `lat,lng,accuracy` (أضف `,mock` لتجربة `LOC_MOCK`)، و`fq.editor_perm.Location` على `1`.
 
 ### 3.2 منطق C# بدون Unity
 
@@ -140,6 +151,8 @@ dotnet test tools/core-tests/CoreTests.csproj
 5. **لا تفعّل Google Analytics** عند إنشاء المشروع (`PRODUCT_BRIEF.md` ت6، وAT-10).
 6. تأكد من توفر Cloud Tasks وCloud Scheduler في `me-central2` (سؤال Q5 في الخطة).
 7. تنبيهات الميزانية على `fq-prod`: 50% و80% و100% (ARCHITECTURE §11).
+8. سياسة TTL في Firestore على حقل `expireAt` لمجموعة `events` (13 شهرًا — ARCHITECTURE §10):
+   `gcloud firestore fields ttls update expireAt --collection-group=events --enable-ttl --project=<id>`
 
 ## 7. النشر
 

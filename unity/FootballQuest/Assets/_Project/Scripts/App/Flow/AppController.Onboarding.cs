@@ -28,6 +28,7 @@ namespace FootballQuest.App.Flow
                 case OnboardingStep.Ready:
                     hubVisible = true;
                     RenderHub();
+                    AutoPresence(FootballQuest.Core.Location.PresenceTrigger.AppOpen);
                     break;
                 default: RenderLoading(); break;
             }

@@ -7,6 +7,14 @@ TAIL = "  userData: \n  assetBundleName: \n  assetBundleVariant: \n"
 def meta_for(path, is_dir):
     g = uuid.uuid4().hex
     head = f"fileFormatVersion: 2\nguid: {g}\n"
+    def plugin(platform_key, platform_value, settings="{}"):
+        return ("PluginImporter:\n  externalObjects: {}\n  serializedVersion: 2\n  iconMap: {}\n  executionOrder: {}\n"
+                "  defineConstraints: []\n  isPreloaded: 0\n  isOverridable: 0\n  isExplicitlyReferenced: 0\n"
+                "  validateReferences: 1\n  platformData:\n  - first:\n      Any: \n    second:\n      enabled: 0\n"
+                f"      settings: {{}}\n  - first:\n      {platform_key}: {platform_value}\n    second:\n      enabled: 1\n      settings: {settings}\n") + TAIL
+    if is_dir and path.endswith(".androidlib"):
+        # مكتبة Android (وحدة Gradle) — مفعّلة لـ Android فقط.
+        return head + "folderAsset: yes\n" + plugin("Android", "Android")
     if is_dir:
         return head + "folderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n" + TAIL
     ext = os.path.splitext(path)[1]
@@ -17,6 +25,8 @@ def meta_for(path, is_dir):
                        "  forceTextureCase: -2\n  characterSpacing: 0\n  characterPadding: 1\n  includeFontData: 1\n"
                        "  fontNames: []\n  fallbackFontReferences: []\n  customCharacters: \n  fontRenderingMode: 0\n"
                        "  ascentCalculationMode: 1\n  useLegacyBoundsCalculation: 0\n  shouldRoundAdvanceValue: 1\n") + TAIL
+    if ext == ".java":
+        return head + plugin("Android", "Android")
     if ext in (".mm", ".m"):
         # كود iOS أصلي: مفعّل لـ iOS فقط، مع الأطر المطلوبة للموقع والكاميرا.
         return head + ("PluginImporter:\n  externalObjects: {}\n  serializedVersion: 2\n  iconMap: {}\n  executionOrder: {}\n"
