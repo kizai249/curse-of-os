@@ -1,0 +1,44 @@
+# Football Quest — الخلفية: lint + typecheck + اختبارات الوحدات + اختبارات Emulator Suite (القواعد والدوال).
+name: fq-backend
+
+on:
+  push:
+    paths: ["firebase/**", "shared/contracts/**", ".github/workflows/fq-backend.yml"]
+  pull_request:
+    paths: ["firebase/**", "shared/contracts/**", ".github/workflows/fq-backend.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fq-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  functions:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firebase/functions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: firebase/functions/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Cache Firebase emulators
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ hashFiles('firebase/functions/package-lock.json') }}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:emulator

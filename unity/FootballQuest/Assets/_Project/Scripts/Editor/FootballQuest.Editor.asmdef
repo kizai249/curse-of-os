@@ -1,0 +1,21 @@
+{
+    "name": "FootballQuest.Editor",
+    "rootNamespace": "FootballQuest.EditorTools",
+    "references": [
+        "FootballQuest.Core",
+        "FootballQuest.App",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

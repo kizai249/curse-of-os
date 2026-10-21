@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "fq-dev",
+    "dev": "fq-dev",
+    "prod": "fq-prod"
+  }
+}

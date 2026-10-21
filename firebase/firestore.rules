@@ -1,0 +1,50 @@
+rules_version = '2';
+
+// Firestore Security Rules — ARCHITECTURE.md §9.
+// المبدأ: العميل يقرأ فقط، وكل كتابة اقتصادية عبر Cloud Functions (Admin SDK يتجاوز هذي القواعد).
+// كل شريحة توسّع القواعد للمجموعات اللي تضيفها، مع اختبارات في functions/test/emulator/rules.test.ts.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // المحتوى العام: المنتخبات، والملاعب، والشخصيات — DATA_CONTRACTS.md §8.
+    match /content/{docId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // جدول المباريات ونتائجها — DATA_CONTRACTS.md §7. يكتبها usersx_admin عبر Functions فقط.
+    match /matchResults/{matchId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // ملف اللاعب وبطاقاته: قراءة المالك فقط، وما فيه أي كتابة من العميل (الأرصدة حقول مالية).
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;
+
+      match /teamCards/{cardId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /playerCards/{cardId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+    }
+
+    // كل ما سواه ممنوع افتراضيًا: القسائم، والمخزون، والحملات، والزيارات، والغرف، والأحداث...
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

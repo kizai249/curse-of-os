@@ -1,0 +1,32 @@
+{
+  "name": "football-quest-functions",
+  "private": true,
+  "description": "Football Quest — Cloud Functions (me-central2). كل منطق الاستحقاق والاسترداد.",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run --config vitest.config.ts",
+    "test:emulator": "npm run build && firebase --config ../firebase.json emulators:exec --project demo-fq --only auth,firestore,functions \"vitest run --config vitest.emulator.config.ts\"",
+    "check": "npm run lint && npm run typecheck && npm test && npm run test:emulator"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "firebase-functions": "^7.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.13.0",
+    "firebase": "^12.19.0",
+    "firebase-tools": "^15.34.0",
+    "typescript": "~5.9",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
+  }
+}

@@ -1,0 +1,7 @@
+# Unity YAML: merge نصّي، وثنائيات الأصول عبر LFS لاحقًا (Slice 3)
+*.unity    text merge=unityyamlmerge eol=lf
+*.prefab   text merge=unityyamlmerge eol=lf
+*.asset    text merge=unityyamlmerge eol=lf
+*.mat      text merge=unityyamlmerge eol=lf
+*.meta     text eol=lf
+*.cs       text eol=lf

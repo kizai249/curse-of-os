@@ -1,0 +1,104 @@
+# Football Quest — العميل: اختبارات Core بـ dotnet (بدون ترخيص)، ثم EditMode وبناء Android + iOS عبر GameCI.
+# أسرار مطلوبة لمهام Unity: UNITY_LICENSE و UNITY_EMAIL و UNITY_PASSWORD (التفاصيل في docs/RUNBOOK.md §5).
+name: fq-unity
+
+on:
+  push:
+    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", ".github/workflows/fq-unity.yml"]
+  pull_request:
+    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", ".github/workflows/fq-unity.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: fq-unity-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT_PATH: unity/FootballQuest
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test tools/core-tests/CoreTests.csproj
+
+  license:
+    runs-on: ubuntu-latest
+    outputs:
+      available: ${{ steps.check.outputs.available }}
+    steps:
+      - id: check
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          if [ -n "$UNITY_LICENSE" ]; then echo "available=true" >> "$GITHUB_OUTPUT"; else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::UNITY_LICENSE غير مضبوط — تم تخطي EditMode والبناء. راجع docs/RUNBOOK.md §5."
+          fi
+
+  editmode:
+    needs: [core-tests, license]
+    if: needs.license.outputs.available == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-editmode-${{ hashFiles('unity/FootballQuest/Packages/**', 'unity/FootballQuest/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-editmode-
+      - uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: EditMode results
+
+  build:
+    needs: [editmode]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform: [Android, iOS]
+    steps:
+      - uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # versioning: Semantic يحسب الإصدار من تاريخ git
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('unity/FootballQuest/Packages/**', 'unity/FootballQuest/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-${{ matrix.targetPlatform }}-
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildMethod: FootballQuest.EditorTools.BuildScript.BuildFromCommandLine
+          buildName: FootballQuest
+          versioning: Semantic
+      # iOS هنا يُنتج مشروع Xcode فقط؛ التوقيع ورفع IPA في Slice 10 على macOS runner.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FootballQuest-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 7
