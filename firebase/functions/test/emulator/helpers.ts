@@ -54,3 +54,28 @@ export async function clearFirestore(): Promise<void> {
   const host = process.env.FIRESTORE_EMULATOR_HOST ?? "127.0.0.1:8080";
   await fetch(`http://${host}/emulator/v1/projects/${PROJECT_ID}/databases/(default)/documents`, { method: "DELETE" });
 }
+
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+/** مفتاح رموز الفروع للمحاكي (.secret.local) — نفس اللي تقرأه الدوال. */
+export function devBranchSecret(): string {
+  const line = readFileSync(resolve(__dirname, "../../.secret.local"), "utf8").split("\n").find((l) => l.startsWith("BRANCH_CODE_SECRET="));
+  return line!.slice("BRANCH_CODE_SECRET=".length).trim();
+}
+
+let staffCounter = 0;
+/** حساب موظف (بريد + كلمة مرور) بمطالبات مخصصة، ويرجع رمز دخول يحملها. */
+export async function staffSignIn(claims: Record<string, string>): Promise<{ uid: string; idToken: string }> {
+  const { auth } = admin();
+  const email = `staff${Date.now()}_${staffCounter++}@example.test`;
+  const user = await auth.createUser({ email, password: "test-password-123" });
+  await auth.setCustomUserClaims(user.uid, claims);
+  const res = await fetch(`http://${AUTH_HOST}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=fake-api-key`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password: "test-password-123", returnSecureToken: true }),
+  });
+  const body = (await res.json()) as { idToken: string };
+  return { uid: user.uid, idToken: body.idToken };
+}

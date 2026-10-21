@@ -47,7 +47,13 @@ export async function handleDeleteAccount(
     return { status: "deleted" };
   }
 
-  // TODO(S7): إلغاء القسائم غير المستردة (issued → expired، وreserved → released) داخل نفس الطلب.
+  // القسائم غير المستردة تُلغى فورًا (ARCHITECTURE §5): issued ← expired. (reserved ← released في S8.)
+  const open = await db.collection("coupons").where("uid", "==", uid).where("status", "==", "issued").get();
+  if (!open.empty) {
+    const batch = db.batch();
+    for (const c of open.docs) batch.update(c.ref, { status: "expired", cancelledReason: "account_deleted" });
+    await batch.commit();
+  }
   await getAuth().updateUser(uid, { disabled: true });
   await getAuth().revokeRefreshTokens(uid);
   return { status: "scheduled", purgeBy: new Date(now.getTime() + DELETION_WINDOW_MS).toISOString() };
@@ -58,8 +64,18 @@ export async function purgeDeletedAccounts(): Promise<number> {
   const db = getFirestore();
   const pending = await db.collection("users").where("deletionRequestedAt", "!=", null).get();
   for (const doc of pending.docs) {
-    // TODO(S7/S9): حذف `visits` و`events` المرتبطة بـ uid عند إضافتها.
+    // بيانات اللاعب: الملف ومجموعاته الفرعية، وزياراته، وأحداثه. القسائم تبقى بدون ربط شخصي للتقارير المجمعة.
     await db.recursiveDelete(doc.ref);
+    for (const col of ["visits", "events"]) {
+      const owned = await db.collection(col).where("uid", "==", doc.id).get();
+      const writer = db.bulkWriter();
+      for (const d of owned.docs) writer.delete(d.ref);
+      await writer.close();
+    }
+    const coupons = await db.collection("coupons").where("uid", "==", doc.id).get();
+    const anonymize = db.bulkWriter();
+    for (const c of coupons.docs) anonymize.update(c.ref, { uid: "deleted" });
+    await anonymize.close();
     await deleteAuthUser(doc.id);
   }
   return pending.size;

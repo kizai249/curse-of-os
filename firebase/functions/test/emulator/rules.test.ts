@@ -6,7 +6,7 @@ import {
   initializeTestEnvironment,
   RulesTestEnvironment,
 } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { afterAll, beforeAll, beforeEach, describe, it } from "vitest";
 import { PROJECT_ID } from "./helpers.js";
 
@@ -34,6 +34,7 @@ beforeEach(async () => {
     await setDoc(doc(db, "users/alice/teamCards/KSA_common"), { count: 1 });
     await setDoc(doc(db, "users/bob"), { fanPoints: 5 });
     await setDoc(doc(db, "coupons/c1"), { uid: "alice", status: "issued" });
+    await setDoc(doc(db, "coupons/c3"), { uid: "bob", status: "issued" });
   });
 });
 
@@ -73,11 +74,24 @@ describe("users", () => {
   });
 });
 
+describe("coupons", () => {
+  it("players read only their own coupons, and list them only with a uid filter", async () => {
+    const db = env.authenticatedContext("alice").firestore();
+    await assertSucceeds(getDoc(doc(db, "coupons/c1")));
+    await assertFails(getDoc(doc(db, "coupons/c3")));
+    await assertSucceeds(getDocs(query(collection(db, "coupons"), where("uid", "==", "alice"))));
+    await assertFails(getDocs(collection(db, "coupons")));
+  });
+});
+
 describe("default deny", () => {
   it("financial collections are closed to clients until their slice opens them", async () => {
     const db = env.authenticatedContext("alice").firestore();
-    await assertFails(getDoc(doc(db, "coupons/c1")));
     await assertFails(setDoc(doc(db, "coupons/c2"), { uid: "alice", status: "issued" }));
+    await assertFails(updateDoc(doc(db, "coupons/c1"), { status: "redeemed" }));
+    await assertFails(getDoc(doc(db, "visits/alice_br_2027-01-10")));
+    await assertFails(getDoc(doc(db, "invoiceCodes/x")));
+    await assertFails(getDoc(doc(db, "branches/br/daily/2027-01-10")));
     await assertFails(setDoc(doc(db, "campaigns/x/stock/b1"), { remaining: 100 }));
     await assertFails(getDoc(doc(db, "anything/else")));
     await assertFails(getDoc(doc(db, "users/alice/requests/r1")));

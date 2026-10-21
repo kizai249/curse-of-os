@@ -42,6 +42,13 @@ service cloud.firestore {
       }
     }
 
+    // القسائم: اللاعب يقرأ قسائمه فقط (DATA_CONTRACTS §5). كل الكتابة من الخادم.
+    // الاستعلام لازم يحمل where("uid", "==", uid) عشان القاعدة تنطبق على كل النتائج.
+    match /coupons/{couponId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow write: if false;
+    }
+
     // كل ما سواه ممنوع افتراضيًا: القسائم، والمخزون، والحملات، والزيارات، والغرف، والأحداث...
     match /{document=**} {
       allow read, write: if false;

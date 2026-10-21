@@ -3,3 +3,4 @@ lib/
 coverage/
 *.log
 .env*
+.secret.local
