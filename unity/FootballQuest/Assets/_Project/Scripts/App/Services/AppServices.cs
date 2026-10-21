@@ -4,6 +4,7 @@ using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Coupons;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Location;
 using FootballQuest.Core.Permissions;
@@ -35,6 +36,9 @@ namespace FootballQuest.App.Services
         public IPermissionService Permissions { get; set; }
         public ContentRepository Content { get; set; }
         public ICollectionSource Collection { get; set; }
+        public ICouponsApi Coupons { get; set; }
+        public ICouponSource Wallet { get; set; }
+        public RedeemCodeVault Vault { get; set; }
         public bool UsesEmulator { get; set; }
 
         public Language Language
@@ -66,6 +70,9 @@ namespace FootballQuest.App.Services
                 Permissions = NativePermissionService.Create(),
                 Content = new ContentRepository(new EmulatorContentSource(auth), new FileContentCache()),
                 Collection = new EmulatorCollectionSource(auth),
+                Coupons = new CouponsApi(functions),
+                Wallet = new EmulatorCouponSource(auth),
+                Vault = new RedeemCodeVault(SecureStore.Create()),
                 UsesEmulator = true,
             };
         }

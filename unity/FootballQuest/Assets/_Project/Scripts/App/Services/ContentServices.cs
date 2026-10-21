@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Coupons;
 using UnityEngine;
 
 namespace FootballQuest.App.Services
@@ -47,6 +48,58 @@ namespace FootballQuest.App.Services
             var docs = new List<object>();
             foreach (var d in JsonFields.List(MiniJson.Parse(res.Body), "documents")) docs.Add(FirestoreRest.DecodeDocument(d));
             return Album.ParseCards(docs);
+        }
+    }
+
+    /// <summary>قسائم اللاعب من محاكي Firestore (runQuery بفلتر uid — شرط قاعدة الأمان).</summary>
+    public sealed class EmulatorCouponSource : ICouponSource
+    {
+        private readonly EmulatorAuthGateway auth;
+
+        public EmulatorCouponSource(EmulatorAuthGateway auth)
+        {
+            this.auth = auth;
+        }
+
+        public async Task<List<CouponInfo>> GetMyCouponsAsync(string uid)
+        {
+            var token = await auth.GetIdTokenAsync();
+            var query = MiniJson.Serialize(new Dictionary<string, object>
+            {
+                {
+                    "structuredQuery", new Dictionary<string, object>
+                    {
+                        { "from", new List<object> { new Dictionary<string, object> { { "collectionId", "coupons" } } } },
+                        {
+                            "where", new Dictionary<string, object>
+                            {
+                                {
+                                    "fieldFilter", new Dictionary<string, object>
+                                    {
+                                        { "field", new Dictionary<string, object> { { "fieldPath", "uid" } } },
+                                        { "op", "EQUAL" },
+                                        { "value", new Dictionary<string, object> { { "stringValue", uid } } },
+                                    }
+                                },
+                            }
+                        },
+                    }
+                },
+            });
+            var res = await UnityHttp.PostJsonAsync(BackendSettings.FirestoreRunQueryUrl, query, token);
+            if (res.Status != 200) throw new BackendException("UNAVAILABLE", "firestore " + res.Status);
+            var list = new List<CouponInfo>();
+            if (MiniJson.Parse(res.Body) is IList<object> rows)
+            {
+                foreach (var row in rows)
+                {
+                    var doc = JsonFields.Obj(row, "document");
+                    if (doc == null) continue;
+                    var name = JsonFields.Str(doc, "name") ?? "";
+                    list.Add(CouponInfo.Parse(name.Substring(name.LastIndexOf('/') + 1), FirestoreRest.DecodeDocument(doc)));
+                }
+            }
+            return list;
         }
     }
 

@@ -31,6 +31,9 @@ namespace FootballQuest.App.Services
         public static string FirestoreDocumentUrl(string path) =>
             $"http://{EmulatorHost}:{FirestorePort}/v1/projects/{ProjectId}/databases/(default)/documents/{path}";
 
+        public static string FirestoreRunQueryUrl =>
+            $"http://{EmulatorHost}:{FirestorePort}/v1/projects/{ProjectId}/databases/(default)/documents:runQuery";
+
         public static string FunctionUrl(string name) => $"http://{EmulatorHost}:{FunctionsPort}/{ProjectId}/{Region}/{name}";
     }
 }

@@ -16,6 +16,7 @@ using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Coupons;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Location;
 using UnityEngine;
@@ -64,6 +65,9 @@ namespace FootballQuest.FirebaseServices
                     Permissions = NativePermissionService.Create(),
                     Content = new ContentRepository(new FirestoreContentSource(), new FileContentCache()),
                     Collection = new FirestoreCollectionSource(),
+                    Coupons = new CouponsApi(functions),
+                    Wallet = new FirestoreCouponSource(),
+                    Vault = new RedeemCodeVault(SecureStore.Create()),
                     UsesEmulator = false,
                 };
             };
@@ -196,6 +200,17 @@ namespace FootballQuest.FirebaseServices
             await FirebaseInstaller.Ready;
             var snapshot = await FirebaseFirestore.DefaultInstance.Collection($"users/{uid}/teamCards").GetSnapshotAsync();
             return Album.ParseCards(snapshot.Documents.Select(d => FirebaseFunctionsClient.Normalize(d.ToDictionary())).ToList());
+        }
+    }
+
+    internal sealed class FirestoreCouponSource : ICouponSource
+    {
+        public async Task<List<CouponInfo>> GetMyCouponsAsync(string uid)
+        {
+            await FirebaseInstaller.Ready;
+            // الفلتر على uid شرط قاعدة الأمان (اللاعب يقرأ قسائمه فقط).
+            var snapshot = await FirebaseFirestore.DefaultInstance.Collection("coupons").WhereEqualTo("uid", uid).GetSnapshotAsync();
+            return snapshot.Documents.Select(d => CouponInfo.Parse(d.Id, FirebaseFunctionsClient.Normalize(d.ToDictionary()))).ToList();
         }
     }
 

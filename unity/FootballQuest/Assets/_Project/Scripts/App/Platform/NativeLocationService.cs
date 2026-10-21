@@ -62,7 +62,7 @@ namespace FootballQuest.App.Platform
         {
             private readonly TaskCompletionSource<LocationReading> tcs;
 
-            public Callback(TaskCompletionSource<LocationReading> tcs) : base("com.usersx.footballquest.location.FQLocation$Callback")
+            public Callback(TaskCompletionSource<LocationReading> tcs) : base("com.usersx.footballquest.platform.FQLocation$Callback")
             {
                 this.tcs = tcs;
             }
@@ -76,7 +76,7 @@ namespace FootballQuest.App.Platform
             var tcs = new TaskCompletionSource<LocationReading>();
             using (var unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
             using (var activity = unity.GetStatic<AndroidJavaObject>("currentActivity"))
-            using (var plugin = new AndroidJavaClass("com.usersx.footballquest.location.FQLocation"))
+            using (var plugin = new AndroidJavaClass("com.usersx.footballquest.platform.FQLocation"))
             {
                 plugin.CallStatic("getCurrent", activity, new Callback(tcs), timeoutMs);
             }

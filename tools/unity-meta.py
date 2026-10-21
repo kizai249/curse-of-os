@@ -25,6 +25,14 @@ def meta_for(path, is_dir):
                        "  forceTextureCase: -2\n  characterSpacing: 0\n  characterPadding: 1\n  includeFontData: 1\n"
                        "  fontNames: []\n  fallbackFontReferences: []\n  customCharacters: \n  fontRenderingMode: 0\n"
                        "  ascentCalculationMode: 1\n  useLegacyBoundsCalculation: 0\n  shouldRoundAdvanceValue: 1\n") + TAIL
+    if ext == ".dll":
+        # تجميعة .NET مُدارة: كل المنصات، ومرجع تلقائي (Core يشير لها صراحة).
+        return head + ("PluginImporter:\n  externalObjects: {}\n  serializedVersion: 2\n  iconMap: {}\n  executionOrder: {}\n"
+                       "  defineConstraints: []\n  isPreloaded: 0\n  isOverridable: 0\n  isExplicitlyReferenced: 0\n"
+                       "  validateReferences: 1\n  platformData:\n  - first:\n      Any: \n    second:\n      enabled: 1\n"
+                       "      settings: {}\n") + TAIL
+    if ext == ".xml":
+        return head + "TextScriptImporter:\n  externalObjects: {}\n" + TAIL
     if ext == ".java":
         return head + plugin("Android", "Android")
     if ext in (".mm", ".m"):
@@ -34,7 +42,7 @@ def meta_for(path, is_dir):
                        "  validateReferences: 1\n  platformData:\n  - first:\n      Any: \n    second:\n      enabled: 0\n"
                        "      settings: {}\n  - first:\n      iPhone: iOS\n    second:\n      enabled: 1\n      settings:\n"
                        "        AddToEmbeddedBinaries: false\n        CPU: AnyCPU\n        CompileFlags: \n"
-                       "        FrameworkDependencies: CoreLocation;AVFoundation;\n") + TAIL
+                       "        FrameworkDependencies: CoreLocation;AVFoundation;Security;\n") + TAIL
     if ext in (".txt", ".json", ".md"):
         return head + "TextScriptImporter:\n  externalObjects: {}\n" + TAIL
     if ext == ".asmdef":

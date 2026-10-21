@@ -75,6 +75,44 @@ namespace FootballQuest.App.UI
             return rt;
         }
 
+        /// <summary>
+        /// حقل إدخال للرموز اللاتينية (رمز الفاتورة): أحرف كبيرة، وطول محدد، ومحاذاة وسط في اللغتين.
+        /// </summary>
+        public static TMPro.TMP_InputField CodeInput(Transform parent, string placeholder, int maxLength)
+        {
+            var rt = Panel(parent, "Input", UiTheme.SurfaceRaised);
+            Size(rt, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            var viewport = Rect(rt, "Viewport");
+            Stretch(viewport, 16f);
+            viewport.gameObject.AddComponent<RectMask2D>();
+
+            TMPro.TextMeshProUGUI MakeText(string name, Color color)
+            {
+                var t = Rect(viewport, name).gameObject.AddComponent<TMPro.TextMeshProUGUI>();
+                Stretch(t.rectTransform);
+                t.font = UiFonts.Bold;
+                t.fontSize = UiTheme.TitleSize;
+                t.color = color;
+                t.alignment = TMPro.TextAlignmentOptions.Center;
+                t.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+                return t;
+            }
+
+            var text = MakeText("Text", UiTheme.Text);
+            var hint = MakeText("Placeholder", UiTheme.TextMuted);
+            hint.fontSize = UiTheme.SmallSize;
+            hint.text = placeholder;
+
+            var input = rt.gameObject.AddComponent<TMPro.TMP_InputField>();
+            input.textViewport = viewport;
+            input.textComponent = text;
+            input.placeholder = hint;
+            input.characterLimit = maxLength;
+            input.contentType = TMPro.TMP_InputField.ContentType.Alphanumeric;
+            input.onValidateInput = (s, i, c) => char.IsLetterOrDigit(c) && c < 128 ? char.ToUpperInvariant(c) : '\0';
+            return input;
+        }
+
         /// <summary>صف يوسّط عنصرًا بعرضه المفضل (مثل البطاقة) بدل ما يمده لعرض الشاشة.</summary>
         public static RectTransform Centered(Transform parent, string name, float height)
         {

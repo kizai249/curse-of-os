@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { Timestamp } from "firebase-admin/firestore";
 import { beforeEach, describe, expect, it } from "vitest";
 import { signBranchCode } from "../../src/branch/codes.js";
@@ -282,5 +284,29 @@ describe("account deletion cancels open coupons", () => {
     await callOk("deleteAccount", { confirm: true }, p.idToken);
     const coupon = (await admin().db.doc(`coupons/${scan.coupons[0]!.couponId}`).get()).data()!;
     expect(coupon).toMatchObject({ status: "expired", cancelledReason: "account_deleted" });
+  });
+});
+
+function shape(value: unknown, path = ""): string[] {
+  if (value === null || typeof value !== "object") return [`${path}:${value === null ? "null" : typeof value}`];
+  if (Array.isArray(value)) return value.length === 0 ? [`${path}:[]`] : shape(value[0], `${path}[]`);
+  return Object.entries(value as Record<string, unknown>).flatMap(([k, v]) => shape(v, path ? `${path}.${k}` : k)).sort();
+}
+const sample = (name: string) => JSON.parse(readFileSync(resolve(__dirname, `../../../../shared/contracts/samples/${name}.json`), "utf8"));
+
+describe("contract samples (Unity client)", () => {
+  it("scanBranchCode and submitInvoiceCode match the samples", async () => {
+    await campaign("cmp_visit", "verified_visit", { br_a: 10 });
+    await campaign("cmp_gone", "verified_visit", { br_a: 0 });
+    const p = await player();
+    const scan = await callFunction("scanBranchCode", { code: todayCode(), ...near }, p.idToken);
+    expect(shape(scan.body)).toEqual(shape(sample("scanBranchCode.verified")));
+
+    await campaign("cmp_inv", "invoice_code", { br_a: 5 });
+    const staff = await staffSignIn({ role: "branch_staff", branchId: "br_a", brandId: "brand_a" });
+    const { code } = await callOk<{ code: string }>("issueInvoiceCode", { campaignId: "cmp_inv" }, staff.idToken);
+    const other = await player();
+    const inv = await callFunction("submitInvoiceCode", { code }, other.idToken);
+    expect(shape(inv.body)).toEqual(shape(sample("submitInvoiceCode.issued")));
   });
 });

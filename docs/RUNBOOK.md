@@ -67,6 +67,15 @@ FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npm run zone:add -- --project demo-fq --t
 - الإحداثيات الحقيقية للملاعب والفروع تُدخل من لوحة الشركاء (S9). وما نخزن أي إحداثيات للاعبين (DATA_CONTRACTS §0).
 - **Editor:** اضبط PlayerPrefs ‏`fq.editor_location` على `lat,lng,accuracy` (أضف `,mock` لتجربة `LOC_MOCK`)، و`fq.editor_perm.Location` على `1`.
 
+### 3.1.3 حسابات الموظفين (لوحة الشركاء)
+
+الأدوار مطالبات مخصصة (ARCHITECTURE §8). حتى تجهز اللوحة (S9) تُضبط من Admin SDK:
+
+```js
+await getAuth().setCustomUserClaims(uid, { role: "branch_staff", branchId: "br_x", brandId: "brand_y" });
+// أو { role: "partner_admin", brandId } أو { role: "usersx_admin" }
+```
+
 ### 3.2 منطق C# بدون Unity
 
 ```bash
@@ -115,7 +124,7 @@ dotnet test tools/core-tests/CoreTests.csproj
 | `FUNCTIONS_EMULATOR` | يضبطه المحاكي تلقائيًا | تعطيل فرض App Check محليًا | S1 |
 | `FIREBASE_AUTH_EMULATOR_HOST` / `FIRESTORE_EMULATOR_HOST` | يضبطها `emulators:exec` تلقائيًا | توجيه الاختبارات للمحاكي | S1 |
 | `google-services.json` / `GoogleService-Info.plist` | `unity/FootballQuest/Assets/StreamingAssets/` (مستثناة من git) | ربط التطبيق بـ `fq-dev` أو `fq-prod` | S2 |
-| مفتاح توقيع رموز الفروع (HMAC) | Secret Manager باسم `BRANCH_CODE_SECRET` | `rotateBranchCodes` و`scanBranchCode` | S7 |
+| مفتاح توقيع رموز الفروع (HMAC) | Secret Manager باسم `BRANCH_CODE_SECRET`: `firebase functions:secrets:set BRANCH_CODE_SECRET -P dev` (قيمة عشوائية ≥ 32 بايت). للمحاكي: `firebase/functions/.secret.local` ينشئه `test:emulator` تلقائيًا (مستثنى من git) | `scanBranchCode` و`getBranchScreen` و`rotateBranchCodesDaily` | S7 |
 | مفاتيح متجر Apple وGoogle | أسرار GitHub | الرفع الآلي | S10a |
 
 **قاعدة:** ما يُرفع أي سر للمستودع. ملفات إعداد Firebase للعميل مستثناة في `unity/FootballQuest/.gitignore`.

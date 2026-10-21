@@ -75,6 +75,7 @@ namespace FootballQuest.App.Flow
                 var collection = UiFactory.HStack(screen, "Collection", Lang);
                 UiFactory.Size(collection, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
                 UiFactory.Button(collection, T(UiStrings.Album), Lang, RenderAlbum, ButtonStyle.Secondary);
+                UiFactory.Button(collection, T(UiStrings.Wallet), Lang, () => Run(RenderWalletAsync()), ButtonStyle.Secondary);
                 UiFactory.Button(collection, F(UiStrings.Packs, ("count", profile.Balances.TotalPacks.ToString())), Lang,
                     () => { lastReveal = null; RenderPacks(); }, profile.Balances.TotalPacks > 0 ? ButtonStyle.Primary : ButtonStyle.Secondary);
             }
@@ -109,10 +110,7 @@ namespace FootballQuest.App.Flow
             UiFactory.Button(actions, T(UiStrings.CheckNearby), Lang,
                 () => RequestFieldFeature(PermissionKind.Location, () => Run(CheckPresenceAsync(PresenceTrigger.Manual))),
                 ButtonStyle.Secondary);
-            // TODO(S7): ماسح QR (ZXing.Net) ثم scanBranchCode، والإدخال اليدوي.
-            UiFactory.Button(actions, T(UiStrings.ScanBranch), Lang,
-                () => RequestFieldFeature(PermissionKind.Camera, () => Debug.Log("[Hub] camera ready — scanner arrives in S7")),
-                ButtonStyle.Primary);
+            UiFactory.Button(actions, T(UiStrings.ScanBranch), Lang, StartBranchScan, ButtonStyle.Primary);
         }
 
         private string Fill(string key, string name, string value) =>

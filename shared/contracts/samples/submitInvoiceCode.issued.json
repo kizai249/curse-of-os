@@ -1,0 +1,16 @@
+{
+  "result": {
+    "status": "issued",
+    "coupon": {
+      "couponId": "cp_b7",
+      "campaignId": "cmp_hm_invoice",
+      "brandId": "brand_halfmillion",
+      "title": { "ar": "خصم 20%", "en": "20% off" },
+      "terms": { "ar": "على الطلب التالي.", "en": "On your next order." },
+      "issuedBranchId": "br_hm_jed_tahlia",
+      "expiresAt": "2027-01-22T18:22:41.000Z",
+      "redeemToken": "c2Vjb25kLWV4YW1wbGUtdG9r",
+      "manualCode": "P3RT8KMZ"
+    }
+  }
+}

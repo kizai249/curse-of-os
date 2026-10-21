@@ -1,4 +1,4 @@
-package com.usersx.footballquest.location;
+package com.usersx.footballquest.platform;
 
 import android.app.Activity;
 import android.location.Location;

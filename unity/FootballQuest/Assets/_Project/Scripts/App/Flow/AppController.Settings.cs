@@ -165,6 +165,7 @@ namespace FootballQuest.App.Flow
         {
             ("IBM Plex Sans Arabic — SIL Open Font License 1.1", "Fonts/OFL"),
             ("RTLTMPro — MIT License", "Licenses/RTLTMPro-MIT"),
+            ("ZXing.Net — Apache License 2.0", "Licenses/ZXing.Net-Apache-2.0"),
         };
 
         private string FormatDate(string iso)

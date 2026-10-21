@@ -72,6 +72,8 @@
 |---|---|---|---|---|---|
 | IBM Plex Sans Arabic — Regular وBold | مرخّص (14) | `google/fonts` ‏`ofl/ibmplexsansarabic`، الإصدار 1.101، تاريخ الجلب 21 أكتوبر 2026 | SIL Open Font License 1.1 | `unity/FootballQuest/Assets/_Project/Resources/Fonts/` (مع `OFL.txt`) | نص الرخصة كاملًا في «عن اللعبة ▸ تراخيص مفتوحة المصدر» |
 | RTLTMPro (سكربتات Runtime وEditor فقط) | مرخّص (16) | `pnarimani/RTLTMPro` ‏commit ‏`f480419` | MIT | `unity/FootballQuest/Assets/ThirdParty/RTLTMPro/` | نص الرخصة في «تراخيص مفتوحة المصدر» |
+| ZXing.Net 0.16.10 (`zxing.dll` لـ netstandard2.0) | مرخّص (16) | NuGet `ZXing.Net` | Apache License 2.0 | `unity/FootballQuest/Assets/ThirdParty/ZXing/` | نص الرخصة في «تراخيص مفتوحة المصدر» |
+| Google Play services location 21.3.0، وAndroidX Security Crypto 1.0.0 | مرخّص (16) | Maven (Google) عبر `FQPlatform.androidlib` | Android SDK License / Apache 2.0 | تُحل وقت البناء | TODO(S10a): صفحة التراخيص |
 | TextMeshPro Essential Resources (ومنها خط Liberation Sans الافتراضي) | مرخّص (16) | حزمة `com.unity.ugui` (تُستورد عبر ProjectSetup) | Unity Companion License، وLiberation Sans بـ SIL OFL 1.1 | `unity/FootballQuest/Assets/TextMesh Pro/` | TODO(S10a): إضافة نص OFL لخط Liberation إلى صفحة التراخيص إذا بقي في البناء |
 
 **مستبعد عمدًا:** خطوط Segoe UI المرفقة مع مستودع RTLTMPro (ملك Microsoft وبدون ترخيص للمشروع — ممنوعة حسب القاعدة الحاكمة §1).

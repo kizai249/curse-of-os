@@ -72,6 +72,17 @@ namespace FootballQuest.Core.Ui
         public const string NeedFanPoints = "need_fan_points";
         public const string OwnedTimes = "owned_times";
         public const string NotOwned = "not_owned";
+        public const string Wallet = "wallet";
+        public const string WalletEmpty = "wallet_empty";
+        public const string ScanHint = "scan_hint";
+        public const string InvoiceCode = "invoice_code";
+        public const string InvoiceHint = "invoice_hint";
+        public const string ShowToCashier = "show_to_cashier";
+        public const string ManualCode = "manual_code";
+        public const string ValidUntil = "valid_until";
+        public const string RedeemedOn = "redeemed_on";
+        public const string ReissueCode = "reissue_code";
+        public const string Terms = "terms";
 
         private static readonly Dictionary<string, string[]> Table = new Dictionary<string, string[]>
         {
@@ -147,6 +158,17 @@ namespace FootballQuest.Core.Ui
             { NeedFanPoints, new[] { "تحتاج {cost} FP (عندك {fp})", "Needs {cost} FP (you have {fp})" } },
             { OwnedTimes, new[] { "مملوكة ×{count}", "Owned ×{count}" } },
             { NotOwned, new[] { "غير مملوكة", "Not owned" } },
+            { Wallet, new[] { "المحفظة", "Wallet" } },
+            { WalletEmpty, new[] { "ما عندك قسائم للحين. امسح رمز الفرع أو أدخل رمز فاتورة.", "No coupons yet. Scan a branch code or enter an invoice code." } },
+            { ScanHint, new[] { "وجّه الكاميرا على رمز الفرع", "Point the camera at the branch code" } },
+            { InvoiceCode, new[] { "رمز الفاتورة", "Invoice code" } },
+            { InvoiceHint, new[] { "اكتب الرمز من الفاتورة (6 أحرف)", "Type the code from your receipt (6 characters)" } },
+            { ShowToCashier, new[] { "اعرض الرمز للكاشير", "Show this to the cashier" } },
+            { ManualCode, new[] { "الرمز اليدوي: {code}", "Manual code: {code}" } },
+            { ValidUntil, new[] { "صالحة لين {date}", "Valid until {date}" } },
+            { RedeemedOn, new[] { "استُخدمت في {date}", "Used on {date}" } },
+            { ReissueCode, new[] { "اعرض رمز جديد", "Show a new code" } },
+            { Terms, new[] { "الشروط", "Terms" } },
         };
 
         public static IEnumerable<string> Keys => Table.Keys;
