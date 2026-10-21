@@ -25,6 +25,21 @@ namespace FootballQuest.App.Services
                 timeout = TimeoutSeconds,
             };
             request.SetRequestHeader("Content-Type", "application/json");
+            return SendAsync(request, bearer);
+        }
+
+        public static Task<Response> GetAsync(string url, string bearer = null)
+        {
+            var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET)
+            {
+                downloadHandler = new DownloadHandlerBuffer(),
+                timeout = TimeoutSeconds,
+            };
+            return SendAsync(request, bearer);
+        }
+
+        private static Task<Response> SendAsync(UnityWebRequest request, string bearer)
+        {
             if (!string.IsNullOrEmpty(bearer)) request.SetRequestHeader("Authorization", "Bearer " + bearer);
 
             var tcs = new TaskCompletionSource<Response>();

@@ -2,6 +2,7 @@ using System;
 using FootballQuest.App.Platform;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Content;
 using FootballQuest.Core.Permissions;
 using FootballQuest.Core.Ui;
 
@@ -26,6 +27,7 @@ namespace FootballQuest.App.Services
         public IRemoteConfig RemoteConfig { get; set; }
         public ILocalStore Store { get; set; }
         public IPermissionService Permissions { get; set; }
+        public ContentRepository Content { get; set; }
         public bool UsesEmulator { get; set; }
 
         public Language Language
@@ -52,6 +54,7 @@ namespace FootballQuest.App.Services
                 RemoteConfig = new LocalRemoteConfig(),
                 Store = new PlayerPrefsStore(),
                 Permissions = NativePermissionService.Create(),
+                Content = new ContentRepository(new EmulatorContentSource(auth), new FileContentCache()),
                 UsesEmulator = true,
             };
         }

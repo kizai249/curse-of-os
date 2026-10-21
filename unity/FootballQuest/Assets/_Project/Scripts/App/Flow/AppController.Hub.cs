@@ -1,36 +1,67 @@
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using FootballQuest.App.Map;
 using FootballQuest.App.UI;
+using FootballQuest.Core;
+using FootballQuest.Core.Content;
+using FootballQuest.Core.Map;
 using FootballQuest.Core.Onboarding;
 using FootballQuest.Core.Permissions;
 using FootballQuest.Core.Ui;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FootballQuest.App.Flow
 {
     public sealed partial class AppController
     {
         private bool hubVisible;
+        private MapController map;
+        private ContentSnapshot content = new ContentSnapshot
+        {
+            Teams = EmbeddedContent.Teams(),
+            Stadiums = EmbeddedContent.Stadiums(),
+        };
+        private string currentStadiumId;
+        private bool contentLoading;
+
+        private string MapCity => map != null ? map.City : onboarding.Profile?.City ?? "RUH";
 
         /// <summary>
-        /// الـHub في S2: الملف + بطاقة المكافآت الميدانية (حالات الإذن) + الإعدادات.
-        /// TODO(S3): الخارطة ثلاثية الأبعاد (لوحات المدن والمحطات) خلف هذي الطبقة.
+        /// الـHub: خارطة الملاعب ثلاثية الأبعاد خلف الواجهة، وتبويبات المدن، وبطاقة المكافآت الميدانية.
         /// </summary>
         private void RenderHub()
         {
             hubVisible = true;
+            if (SceneManager.GetActiveScene().name != SceneNames.Hub)
+            {
+                // RenderHub ينادى مرة ثانية من OnSceneLoaded بعد تحميل المشهد.
+                SceneManager.LoadScene(SceneNames.Hub);
+                return;
+            }
+            if (map == null) CreateMap();
+            if (!contentLoading) Run(LoadContentAsync(false));
+
             var profile = onboarding.Profile;
-            var screen = ui.NewScreen("Hub");
+            var screen = ui.NewScreen("Hub", backdrop: false);
 
             var header = UiFactory.HStack(screen, "Header", Lang);
+            header.gameObject.AddComponent<UnityEngine.UI.Image>().color = UiTheme.Surface;
             UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
-            UiFactory.Label(header, profile?.DisplayName ?? string.Empty, Lang, UiTheme.HeadingSize, bold: true);
+            UiFactory.Label(header, profile?.DisplayName ?? string.Empty, Lang, UiTheme.BodySize, bold: true);
             UiFactory.Button(header, T(UiStrings.Settings), Lang, RenderSettings, ButtonStyle.Ghost);
 
-            if (profile != null)
+            // التنقل بين المدن الثلاث (مع السحب الأفقي على الخارطة).
+            var tabs = UiFactory.HStack(screen, "Cities", Lang);
+            UiFactory.Size(tabs, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            foreach (var city in MapController.CityOrder)
             {
-                UiFactory.Label(screen, UiStrings.CityName(profile.City, Lang), Lang, UiTheme.SmallSize, color: UiTheme.TextMuted);
+                var code = city;
+                UiFactory.Button(tabs, UiStrings.CityName(code, Lang), Lang, () => map?.ShowCity(code),
+                    code == MapCity ? ButtonStyle.Primary : ButtonStyle.Secondary);
             }
 
-            UiFactory.Label(screen, T(UiStrings.MapComingSoon), Lang, UiTheme.TitleSize, bold: true, color: UiTheme.Accent, center: true);
             UiFactory.Spacer(screen);
 
             // بطاقة المكافآت الميدانية: حالة الإذن تظهر inline فقط، بدون أي طلب تلقائي.
@@ -46,14 +77,103 @@ namespace FootballQuest.App.Flow
                     UiFactory.Button(card, T(UiStrings.EnableFromSettings), Lang, services.Permissions.OpenAppSettings, ButtonStyle.Secondary);
                 }
             }
+            var actions = UiFactory.HStack(card, "FieldActions", Lang);
+            UiFactory.Size(actions, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
             // TODO(S6): verifyPresence بعد جاهزية الإذن (نقاط القرب وبطاقة «أنت قريب من فرع»).
-            UiFactory.Button(card, T(UiStrings.CheckNearby), Lang,
+            UiFactory.Button(actions, T(UiStrings.CheckNearby), Lang,
                 () => RequestFieldFeature(PermissionKind.Location, () => Debug.Log("[Hub] location ready — verifyPresence arrives in S6")),
                 ButtonStyle.Secondary);
             // TODO(S7): ماسح QR (ZXing.Net) ثم scanBranchCode، والإدخال اليدوي.
-            UiFactory.Button(card, T(UiStrings.ScanBranch), Lang,
+            UiFactory.Button(actions, T(UiStrings.ScanBranch), Lang,
                 () => RequestFieldFeature(PermissionKind.Camera, () => Debug.Log("[Hub] camera ready — scanner arrives in S7")),
                 ButtonStyle.Primary);
+        }
+
+        private void CreateMap()
+        {
+            map = MapController.Create(onboarding.Profile?.City ?? "RUH");
+            map.StationTapped += OpenStation;
+            map.CityChanged += _ =>
+            {
+                if (hubVisible) RenderHub();
+            };
+        }
+
+        private async Task LoadContentAsync(bool force)
+        {
+            contentLoading = true;
+            try
+            {
+                content = await services.Content.LoadAsync(force);
+            }
+            finally
+            {
+                contentLoading = false;
+            }
+        }
+
+        /// <summary>لوحة المحطة: الاسم (نص فقط)، ومباريات اليوم، والنتائج — GAME_RULES §2.2.</summary>
+        private void OpenStation(string stadiumId)
+        {
+            currentStadiumId = stadiumId;
+            var stadium = content.Stadium(stadiumId);
+            ui.Sheet(stadium?.Name(Lang) ?? stadiumId, ScheduleText(stadiumId), Lang,
+                new SheetButton(T(UiStrings.EnterStadium), () => EnterStadium(stadiumId)),
+                new SheetButton(T(UiStrings.Close), null, ButtonStyle.Ghost));
+            // TODO(S4): زر «زيارة رقمية» (+5 XP مرة يوميًا لكل ملعب) عبر stadiumVisit.
+        }
+
+        private string ScheduleText(string stadiumId)
+        {
+            var schedule = StationSchedule.For(stadiumId, GameDay.IdFor(System.DateTimeOffset.UtcNow), content.Matches);
+            var sb = new StringBuilder();
+            sb.Append("<b>").Append(T(UiStrings.TodayMatches)).Append("</b>\n");
+            if (schedule.Today.Count == 0) sb.Append(T(UiStrings.NoMatchesToday)).Append('\n');
+            foreach (var m in schedule.Today) sb.Append(StationSchedule.Line(m, content, Lang)).Append('\n');
+            if (schedule.Results.Count > 0)
+            {
+                sb.Append("\n<b>").Append(T(UiStrings.Results)).Append("</b>\n");
+                foreach (var m in schedule.Results) sb.Append(StationSchedule.Line(m, content, Lang)).Append('\n');
+            }
+            return sb.ToString().TrimEnd('\n');
+        }
+
+        private void EnterStadium(string stadiumId)
+        {
+            hubVisible = false;
+            currentStadiumId = stadiumId;
+            map = null; // يُدمّر مع مشهد Hub
+            SceneManager.LoadScene(SceneNames.Stadium);
+        }
+
+        private void RenderStadium()
+        {
+            var spec = StationLibrary.Find(currentStadiumId);
+            if (spec == null)
+            {
+                RenderHub();
+                return;
+            }
+            StadiumSceneController.Create(spec);
+
+            var screen = ui.NewScreen("Stadium", backdrop: false);
+            var header = UiFactory.HStack(screen, "Header", Lang);
+            header.gameObject.AddComponent<UnityEngine.UI.Image>().color = UiTheme.Surface;
+            UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            UiFactory.Label(header, content.Stadium(spec.StadiumId)?.Name(Lang) ?? spec.StadiumId, Lang, UiTheme.BodySize, bold: true);
+            UiFactory.Button(header, T(UiStrings.BackToMap), Lang, RenderHub, ButtonStyle.Ghost);
+
+            UiFactory.Spacer(screen);
+            var card = UiFactory.VStack(screen, "Schedule", padding: 32);
+            card.gameObject.AddComponent<UnityEngine.UI.Image>().color = UiTheme.Surface;
+            UiFactory.Label(card, ScheduleText(spec.StadiumId), Lang, UiTheme.SmallSize);
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (onboarding == null || onboarding.Step != OnboardingStep.Ready) return;
+            if (scene.name == SceneNames.Hub && hubVisible) RenderHub();
+            else if (scene.name == SceneNames.Stadium) RenderStadium();
         }
 
         private void RefreshHubIfVisible()

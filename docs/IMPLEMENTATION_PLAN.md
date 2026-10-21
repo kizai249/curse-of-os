@@ -32,7 +32,7 @@
 |---|---|---|---|---|---|---|
 | S1 | هيكل المشروع + CI + URP + هيكل Firebase (قواعد deny-all، والمحاكي، و`health`) | R1 | 3 | ⚠️ | ARCHITECTURE §2، §4، §9 | — |
 | S2 | نظام واجهة RTL والتوطين (ع/En)، والإفصاح، وبوابة العمر والمدينة، وAuth (ضيف ثم ربط Apple/Google)، وحذف الحساب، والأذونات بحالاتها، والحالات العامة (`NET_OFFLINE`، و`FORCE_UPDATE`، و`APP_INTEGRITY`) | R1 | 6 | ⚠️ | GAME_RULES §9.4–9.5، PERMISSION_AND_ERROR_STATES §1، §6، §7 | AT-01 (جزء الإذن)، AT-11 |
-| S3 | خارطة الملاعب: 3 لوحات مدن، و8 محطات من عُدّة ملعب واحدة (ScriptableObject لكل محطة)، والمحتوى من `content/*` و`matchResults`، ومفاتيح Remote Config | R1 | 7 | ⬜ | GAME_RULES §2، ARCHITECTURE §3، §7 | AT-09 (جزء) |
+| S3 | خارطة الملاعب: 3 لوحات مدن، و8 محطات من عُدّة ملعب واحدة (ScriptableObject لكل محطة)، والمحتوى من `content/*` و`matchResults`، ومفاتيح Remote Config | R1 | 7 | ⚠️ | GAME_RULES §2، ARCHITECTURE §3، §7 | AT-09 (جزء) |
 | S4 | اقتصاد الخادم: `bootstrap` (الدخول اليومي)، و`stadiumVisit`، و`openPack` (الاحتمالات، ووزن يوم المباراة، وحماية سوء الحظ، والمكرر ← FP)، و`exchangeFanPoints`، وإنجازات المجموعة، وXP والحد اليومي والمستويات | R1 | 3 | ⬜ | GAME_RULES §3، §9.1–9.2، §10 | — |
 | S5 | واجهة التجميع: ألبوم 24 × 4، وفتح الحزم، وعرض الاحتمالات المعلنة، والاستبدال | R1 | 2 | ⬜ | GAME_RULES §3 | AT-11 (احتمالات معلنة) |
 | S6 | الموقع (Foreground): إضافة Native لـ iOS/Android، و`verifyPresence`، ونقاط القرب، وبطاقة «أنت قريب من فرع» | R1 | 4 | ⬜ | GAME_RULES §6.1–6.2، ARCHITECTURE §2.1 | AT-01، AT-02، AT-10 |
@@ -85,6 +85,9 @@
 | Q8 | بوابة العمر بسنة الميلاد فقط: من يبلغ 15 هذي السنة يُقبل (ممكن يكون 14)، ومن يبلغ 18 يُعامل قاصرًا (حماية) | R1 (مراجعة قانونية) | المطبّق الحالي، ومتجهاته في `shared/contracts/age-band.vectors.json`. التغيير = تعديل المتجهات والدالتين |
 | Q9 | ربط Google عبر `FederatedOAuthProvider` في Firebase Unity SDK غير مضمون على الأجهزة | S2 على أجهزة | Apple عبر FederatedOAuthProvider. إذا فشل Google نضيف Google Sign-In plugin (يحتاج تسجيل في RIGHTS_REGISTER) |
 | Q10 | Firebase Unity SDK ما يكشف `details` لأخطاء Callable، فتاريخ فتح `CITY_CHANGE_LOCKED` ما يوصل للعميل في الإنتاج | S2 | الرسالة تظهر بدون التاريخ. الحل المقترح: إرجاع `unlockAt` ضمن نتيجة ناجحة بحالة `locked` بدل خطأ |
+| Q12 | مستند مشتق `content/schedule`: كل المباريات في مستند واحد يبنيه الخادم من `matchResults` (قراءة وحدة بدل 51 — ARCHITECTURE §11). ما هو مذكور في DATA_CONTRACTS §8 | اعتماد | مُطبّق في S3. TODO(owner): إضافته لـ DATA_CONTRACTS §8 أو رفضه (البديل: قراءة `matchResults` مباشرة) |
+| Q13 | الأسماء الإنجليزية للمنتخبات والملاعب: الوثائق فيها العربية فقط | R1 | مسودة في `shared/contracts/content/*.json` (RIGHTS_REGISTER الصف 7: «اعتماد قائمة الأسماء») |
+| Q14 | صيغة `season_content` في Remote Config ما هي محددة | S10a | ما تُستخدم للحين |
 | Q11 | الرموز 🎉 (CPN_ISSUED) و🏆 (ROUND_WON) خارج الخط | S7، S8 | Sprite Asset أصلي في TMP قبل استخدام الحالتين |
 
 ## 6. سجل الشرائح
@@ -141,3 +144,35 @@
 - فحص صياغة لكل كود Unity عبر Roslyn: بدون أخطاء.
 
 **ينتظر:** تجميع Unity وEditMode والبناء في CI (أسرار الترخيص)، وتجربة على أجهزة حقيقية. وطبقة Firebase تنتظر Q7.
+
+### S3 — خارطة الملاعب ومشهد الملعب ⚠️
+
+**الخادم:**
+- المحتوى العام من مصدر وحيد `shared/contracts/content/` (24 منتخبًا و8 ملاعب بأسماء العرض العامة ونصف القطر — GAME_RULES §2.1).
+- `npm run seed:content` يكتب `content/teams` و`content/stadiums` (و`--dev-sample-match` لمثال DATA_CONTRACTS فقط). الجدول الحقيقي يُدخل من اللوحة في S9.
+- `onMatchResultWritten` (Firestore trigger) يبني `content/schedule` من `matchResults`: يتحقق من كل مستند، ويحذف `updatedBy`، ويتجاهل غير الصالح (Q12).
+
+**العميل** (`FootballQuest.Core`، ومختبر بـ dotnet):
+- `ContentRepository`: كاش 24 ساعة للمحتوى و15 دقيقة للجدول، وبدون اتصال يرجع للمحفوظ ثم للكتالوج المدمج.
+- `FirestoreRest` لفك قيم REST، و`ContentParser`.
+- `StationCatalog`: المحطات الثمانية بتركيبات (طبقات، سقف) فريدة وألوان إبراز.
+- `StationSchedule`: مباريات اليوم والنتائج المنتهية لكل ملعب.
+- `StadiumMeshBuilder`: عُدّة ملعب Low-poly مولّدة (أرضية، ومدرج 1–3 طبقات، و3 أنواع سقف، وأعمدة، وأبراج إضاءة).
+- `CityBoardBuilder`: لوحات المدن الثلاث بعناصر عامة (نخيل، وأبراج، وبحر جدة والخبر، وكثبان الرياض) ببذرة ثابتة.
+
+**العميل** (Unity):
+- `MapController`: لوحة مدينة، وسحب للتحريك، وسحبة سريعة لتغيير المدينة، ونقرة على المحطة. ومعه تبويبات المدن.
+- لوحة المحطة: الاسم نصًا، ومباريات اليوم، والنتائج، و«ادخل الملعب».
+- `StadiumSceneController`: نفس العُدّة بتفاصيل أعلى، وظل ديناميكي واحد، وكاميرا تدور.
+- `StationDefinition` ScriptableObject (ينشئها ProjectSetup)، ومادة `FQ_Lit` (URP Simple Lit) بلون لكل جزء.
+- مصادر المحتوى: Firestore SDK (`FQ_FIREBASE`) أو REST للمحاكي، وكاش ملفات.
+
+**الاختبارات:**
+- dotnet: 68 ✅ (العقود مقابل JSON المشترك، والكاش، وفك REST، والجدول، وميزانية المثلثات، واتجاه الأوجه، وتباعد المحطات، وحتمية اللوحات).
+- وحدات TS: 37 ✅
+- Emulator: 25، منها 24 ✅ هنا، واختبار الـtrigger يتحقق منه CI فقط. السبب: البروكسي في بيئة التطوير السحابية يحجب تسجيل Firestore triggers في المحاكي، لأن `firebase-tools` يتجاهل `NO_PROXY` (RUNBOOK §8).
+
+**ينتظر:**
+- تجميع Unity وتجربة الأداء على جهاز (AT-09).
+- زر «زيارة رقمية» في S4.
+- الفروع الشريكة على الخارطة في S7.

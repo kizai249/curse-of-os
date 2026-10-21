@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using Firebase;
 using Firebase.AppCheck;
 using Firebase.Auth;
+using Firebase.Firestore;
 using Firebase.Functions;
 using Firebase.RemoteConfig;
 using FootballQuest.App.Platform;
 using FootballQuest.App.Services;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Content;
 using UnityEngine;
 
 namespace FootballQuest.FirebaseServices
@@ -54,6 +56,7 @@ namespace FootballQuest.FirebaseServices
                     RemoteConfig = new FirebaseRemoteConfigGateway(),
                     Store = new PlayerPrefsStore(),
                     Permissions = NativePermissionService.Create(),
+                    Content = new ContentRepository(new FirestoreContentSource(), new FileContentCache()),
                     UsesEmulator = false,
                 };
             };
@@ -132,7 +135,7 @@ namespace FootballQuest.FirebaseServices
         }
 
         /// <summary>Firebase يرجع Dictionary&lt;object, object&gt; وأرقام long — نوحّدها لشكل MiniJson.</summary>
-        private static object Normalize(object value)
+        internal static object Normalize(object value)
         {
             switch (value)
             {
@@ -144,6 +147,8 @@ namespace FootballQuest.FirebaseServices
                     return s;
                 case IEnumerable list:
                     return list.Cast<object>().Select(Normalize).ToList();
+                case Timestamp ts:
+                    return ts.ToDateTime().ToUniversalTime().ToString("o");
                 case long l:
                     return (double)l;
                 case int i:
@@ -163,6 +168,17 @@ namespace FootballQuest.FirebaseServices
                 sb.Append(char.ToUpperInvariant(pascal[i]));
             }
             return sb.ToString();
+        }
+    }
+
+    /// <summary>المحتوى العام من Firestore (القواعد: قراءة للمسجلين). الكاش المحلي يقلل القراءات (ARCHITECTURE §11).</summary>
+    internal sealed class FirestoreContentSource : IContentSource
+    {
+        public async Task<object> GetDocumentAsync(string path)
+        {
+            await FirebaseInstaller.Ready;
+            var snapshot = await FirebaseFirestore.DefaultInstance.Document(path).GetSnapshotAsync(Source.Server);
+            return snapshot.Exists ? FirebaseFunctionsClient.Normalize(snapshot.ToDictionary()) : null;
         }
     }
 

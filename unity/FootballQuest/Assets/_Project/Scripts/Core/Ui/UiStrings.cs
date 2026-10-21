@@ -41,6 +41,12 @@ namespace FootballQuest.Core.Ui
         public const string ChangeCity = "change_city";
         public const string OpenSourceLicenses = "open_source_licenses";
         public const string Back = "back";
+        public const string TodayMatches = "today_matches";
+        public const string NoMatchesToday = "no_matches_today";
+        public const string Results = "results";
+        public const string EnterStadium = "enter_stadium";
+        public const string Close = "close";
+        public const string BackToMap = "back_to_map";
 
         private static readonly Dictionary<string, string[]> Table = new Dictionary<string, string[]>
         {
@@ -85,6 +91,12 @@ namespace FootballQuest.Core.Ui
             { ChangeCity, new[] { "تغيير المدينة", "Change city" } },
             { OpenSourceLicenses, new[] { "تراخيص مفتوحة المصدر", "Open-source licenses" } },
             { Back, new[] { "رجوع", "Back" } },
+            { TodayMatches, new[] { "مباريات اليوم هنا", "Today's matches here" } },
+            { NoMatchesToday, new[] { "ما فيه مباريات في هذا الملعب اليوم.", "No matches at this stadium today." } },
+            { Results, new[] { "النتائج", "Results" } },
+            { EnterStadium, new[] { "ادخل الملعب", "Enter stadium" } },
+            { Close, new[] { "إغلاق", "Close" } },
+            { BackToMap, new[] { "الخارطة", "Map" } },
         };
 
         public static IEnumerable<string> Keys => Table.Keys;

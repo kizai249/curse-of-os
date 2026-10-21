@@ -1,6 +1,6 @@
 # RUNBOOK — دليل البناء والتشغيل والنشر
 
-**آخر تحديث:** Slice 2 — 21 أكتوبر 2026
+**آخر تحديث:** Slice 3 — 21 أكتوبر 2026
 الأقسام المعلّمة «(Slice N)» تُستكمل عند تنفيذ تلك الشريحة.
 
 ---
@@ -43,6 +43,19 @@ npm run check            # كل اللي فوق بالترتيب
   cd firebase/functions && npm run build && npx firebase --config ../firebase.json emulators:start --project demo-fq --only auth,firestore,functions
   ```
 
+### 3.1.1 المحتوى العام (المنتخبات، والملاعب، والجدول)
+
+```bash
+cd firebase/functions
+# المحاكي شغّال (الأمر اليدوي في §3.1):
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npm run seed:content -- --project demo-fq --dev-sample-match
+# مشروع حقيقي (بصلاحيات gcloud auth application-default login):
+npm run seed:content -- --project fq-dev
+```
+
+- المصدر الوحيد للمحتوى: `shared/contracts/content/*.json`. أي تعديل يبدأ هناك، وبعدها حدّث `EmbeddedContent.cs` (اختبار `ContentTests` يكشف أي اختلاف).
+- `content/schedule` يُبنى تلقائيًا من `matchResults` عبر `onMatchResultWritten`.
+
 ### 3.2 منطق C# بدون Unity
 
 ```bash
@@ -76,7 +89,7 @@ dotnet test tools/core-tests/CoreTests.csproj
 
 ### 3.5 إضافة Firebase Unity SDK (Q7)
 
-1. حمّل Firebase Unity SDK بصيغة `.tgz` من موقع Firebase: الحزم app، وauth، وfunctions، وremote-config، وapp-check (وcrashlytics في S10a). **لا تضف `firebase-analytics`** (AT-10).
+1. حمّل Firebase Unity SDK بصيغة `.tgz` من موقع Firebase: الحزم app، وauth، وfunctions، وfirestore، وremote-config، وapp-check (وcrashlytics في S10a). **لا تضف `firebase-analytics`** (AT-10).
 2. حطها في `unity/FootballQuest/Packages/firebase/` وأضفها في `Packages/manifest.json` بصيغة `"com.google.firebase.functions": "file:firebase/com.google.firebase.functions-<ver>.tgz"`. بعد اعتماد Git LFS للمستودع ترفعها عبر LFS.
 3. حط `google-services.json` و`GoogleService-Info.plist` لمشروع `fq-dev` في `Assets/` (مستثناة من git).
 4. التجميعة `FootballQuest.Firebase` تتفعّل تلقائيًا (versionDefine ‏`FQ_FIREBASE`)، والتطبيق يتحول من المحاكي إلى Firebase.
@@ -150,4 +163,6 @@ functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:ind
 | مهام Unity في CI «skipped» | أسرار الترخيص غير مضبوطة (§5.1) |
 | مربعات بدل الحروف العربية | Font Assets ما انخلقت: شغّل Apply Project Setup مرة ثانية بعد استيراد TMP Essentials |
 | بناء Android يفشل بـ «ACCESS_BACKGROUND_LOCATION is forbidden» | مكتبة أضافت الإذن الممنوع — أزلها أو استبعد الإذن (MVP_SCOPE: لا Background Location) |
+| `Error adding firestore function ... "request blocked"` عند تشغيل المحاكي | بيئة فيها `HTTPS_PROXY` بدون استثناء لـ 127.0.0.1: نسخة `firebase-tools` الحالية تتجاهل `NO_PROXY` لطلبات المحاكي الداخلية. شغّل المحاكي في بيئة بدون بروكسي (جهازك أو CI) |
+| الخارطة تظهر خلف الواجهة بلون واحد | `FQ_Lit.mat` ما انخلق: شغّل Apply Project Setup |
 | العميل في Editor ما يتصل | المحاكي غير شغّال، أو `fq.emulator_host` خطأ (§3.4) |

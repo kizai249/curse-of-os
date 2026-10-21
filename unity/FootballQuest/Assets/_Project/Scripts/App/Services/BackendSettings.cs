@@ -13,6 +13,7 @@ namespace FootballQuest.App.Services
         public const string Region = "me-central2";
         public const int AuthPort = 9099;
         public const int FunctionsPort = 5001;
+        public const int FirestorePort = 8080;
         public const string HostPrefKey = "fq.emulator_host";
 
         public static string EmulatorHost
@@ -26,6 +27,9 @@ namespace FootballQuest.App.Services
         }
 
         public static string AuthBaseUrl => $"http://{EmulatorHost}:{AuthPort}";
+
+        public static string FirestoreDocumentUrl(string path) =>
+            $"http://{EmulatorHost}:{FirestorePort}/v1/projects/{ProjectId}/databases/(default)/documents/{path}";
 
         public static string FunctionUrl(string name) => $"http://{EmulatorHost}:{FunctionsPort}/{ProjectId}/{Region}/{name}";
     }

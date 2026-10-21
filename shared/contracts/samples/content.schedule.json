@@ -1,0 +1,29 @@
+{
+  "matches": [
+    {
+      "matchId": "m01",
+      "matchNo": 1,
+      "stage": "group",
+      "group": "A",
+      "day": "2027-01-07",
+      "stadiumId": "STD_RUH_KFS",
+      "home": "KSA",
+      "away": "PLE",
+      "status": "scheduled",
+      "score": null
+    },
+    {
+      "matchId": "m37",
+      "matchNo": 37,
+      "stage": "r16",
+      "group": null,
+      "day": "2027-01-24",
+      "stadiumId": null,
+      "home": "1A",
+      "away": "3C",
+      "status": "scheduled",
+      "score": null
+    }
+  ],
+  "updatedAt": "2027-01-07T16:00:00.000Z"
+}

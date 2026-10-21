@@ -1,0 +1,13 @@
+{
+  "description": "الملاعب الثمانية — GAME_RULES §2.1: المعرّف، والمدينة، واسم العرض (الاسم العام نصًا فقط — RIGHTS_REGISTER الصف 8 وPRODUCT_BRIEF ت3)، ونصف القطر. السعات ما تُعرض فما تُخزن. الإنجليزية مسودة: TODO(owner).",
+  "stadiums": [
+    { "id": "STD_RUH_KFS", "city": "RUH", "ar": "ستاد مدينة الملك فهد الرياضية", "en": "King Fahd Sports City Stadium", "radiusM": 2000 },
+    { "id": "STD_RUH_KSU", "city": "RUH", "ar": "ستاد جامعة الملك سعود", "en": "King Saud University Stadium", "radiusM": 1500 },
+    { "id": "STD_RUH_KAR", "city": "RUH", "ar": "المملكة أرينا", "en": "Kingdom Arena", "radiusM": 1500 },
+    { "id": "STD_RUH_IMS", "city": "RUH", "ar": "ستاد جامعة الإمام محمد بن سعود", "en": "Imam Mohammad Ibn Saud University Stadium", "radiusM": 1500 },
+    { "id": "STD_RUH_SHB", "city": "RUH", "ar": "ستاد نادي الشباب", "en": "Al Shabab Club Stadium", "radiusM": 1000 },
+    { "id": "STD_JED_KAS", "city": "JED", "ar": "ستاد مدينة الملك عبدالله الرياضية", "en": "King Abdullah Sports City Stadium", "radiusM": 2000 },
+    { "id": "STD_JED_PAF", "city": "JED", "ar": "ستاد مدينة الأمير عبدالله الفيصل الرياضية", "en": "Prince Abdullah Al Faisal Sports City Stadium", "radiusM": 1500 },
+    { "id": "STD_KHB_ARM", "city": "KHB", "ar": "استاد أرامكو", "en": "Aramco Stadium", "radiusM": 2000 }
+  ]
+}

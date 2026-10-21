@@ -46,6 +46,7 @@ namespace FootballQuest.App.Flow
             locationFlow = new PermissionFlow(PermissionKind.Location);
             cameraFlow = new PermissionFlow(PermissionKind.Camera);
             NewOnboarding();
+            SceneManager.sceneLoaded += OnSceneLoaded;
             InvokeRepeating(nameof(PollReachability), 0f, ReachabilityPollSeconds);
         }
 
@@ -116,9 +117,6 @@ namespace FootballQuest.App.Flow
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private void EnsureHubScene()
-        {
-            if (SceneManager.GetActiveScene().name != SceneNames.Hub) SceneManager.LoadScene(SceneNames.Hub);
-        }
+        private void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

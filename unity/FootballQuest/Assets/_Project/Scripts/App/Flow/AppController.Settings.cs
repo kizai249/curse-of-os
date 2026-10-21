@@ -23,7 +23,7 @@ namespace FootballQuest.App.Flow
             var header = UiFactory.HStack(screen, "Header", Lang);
             UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
             UiFactory.Label(header, T(UiStrings.Settings), Lang, UiTheme.HeadingSize, bold: true);
-            UiFactory.Button(header, T(UiStrings.Back), Lang, () => { settingsInlineState = null; RenderHub(); }, ButtonStyle.Ghost);
+            UiFactory.Button(header, T(UiStrings.Back), Lang, () => { settingsInlineState = null; hubVisible = true; RenderHub(); }, ButtonStyle.Ghost);
 
             var body = UiFactory.Scroll(screen, "Body");
             var profile = onboarding.Profile;

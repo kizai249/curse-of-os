@@ -1,6 +1,8 @@
 using System.IO;
 using System.Linq;
 using FootballQuest.App;
+using FootballQuest.App.Map;
+using FootballQuest.Core.Map;
 using FootballQuest.Core.Permissions;
 using TMPro;
 using UnityEditor;
@@ -32,6 +34,9 @@ namespace FootballQuest.EditorTools
         public const string RendererAssetPath = SettingsFolder + "/URP-Mobile-Renderer.asset";
         public const string FontsFolder = "Assets/_Project/Resources/Fonts";
         public static readonly string[] FontNames = { "IBMPlexSansArabic-Regular", "IBMPlexSansArabic-Bold" };
+        public const string StationsFolder = "Assets/_Project/Resources/Stations";
+        public const string MaterialsFolder = "Assets/_Project/Resources/Materials";
+        public const string LitMaterialPath = MaterialsFolder + "/FQ_Lit.mat";
 
         [MenuItem("Football Quest/Apply Project Setup")]
         public static void Apply()
@@ -41,6 +46,8 @@ namespace FootballQuest.EditorTools
             AssignPipeline(pipeline);
             EnsureScenes();
             EnsureTextMeshPro();
+            EnsureStations();
+            EnsureLitMaterial();
             AssetDatabase.SaveAssets();
             Debug.Log("[ProjectSetup] applied");
         }
@@ -66,6 +73,35 @@ namespace FootballQuest.EditorTools
             // نصوص النظام (الإنجليزية أساس، والعربية في ar.lproj عبر IosBuildPostProcess).
             PlayerSettings.iOS.locationUsageDescription = SystemPermissionTexts.LocationWhenInUseEn;
             PlayerSettings.iOS.cameraUsageDescription = SystemPermissionTexts.CameraEn;
+        }
+
+        /// <summary>تعريفات المحطات الثمانية كـ ScriptableObjects (ARCHITECTURE §3). الموجود ما يُستبدل (تعديلات المصمم تبقى).</summary>
+        private static void EnsureStations()
+        {
+            Directory.CreateDirectory(StationsFolder);
+            foreach (var spec in StationCatalog.Defaults)
+            {
+                var path = $"{StationsFolder}/{spec.StadiumId}.asset";
+                if (File.Exists(path)) continue;
+                var definition = ScriptableObject.CreateInstance<StationDefinition>();
+                definition.CopyFrom(spec);
+                AssetDatabase.CreateAsset(definition, path);
+            }
+        }
+
+        /// <summary>مادة Simple Lit في Resources تضمن دخول الـShader في البناء؛ الألوان نسخ منها وقت التشغيل.</summary>
+        private static void EnsureLitMaterial()
+        {
+            if (File.Exists(LitMaterialPath)) return;
+            var shader = Shader.Find("Universal Render Pipeline/Simple Lit");
+            if (shader == null)
+            {
+                Debug.LogWarning("[ProjectSetup] URP Simple Lit shader not found.");
+                return;
+            }
+            Directory.CreateDirectory(MaterialsFolder);
+            var material = new Material(shader) { name = "FQ_Lit", enableInstancing = true };
+            AssetDatabase.CreateAsset(material, LitMaterialPath);
         }
 
         /// <summary>

@@ -27,6 +27,7 @@ namespace FootballQuest.App.UI
     /// </summary>
     public sealed class UiRoot : MonoBehaviour
     {
+        private GameObject backdrop;
         private RectTransform safeArea;
         private RectTransform screenLayer;
         private RectTransform bannerLayer;
@@ -65,6 +66,7 @@ namespace FootballQuest.App.UI
         {
             var bg = UiFactory.Panel(transform, "Background", UiTheme.Background);
             UiFactory.Stretch(bg);
+            backdrop = bg.gameObject;
             safeArea = UiFactory.Rect(transform, "SafeArea");
             ApplySafeArea();
             screenLayer = UiFactory.Rect(safeArea, "Screens");
@@ -96,9 +98,13 @@ namespace FootballQuest.App.UI
             safeArea.offsetMax = Vector2.zero;
         }
 
-        /// <summary>يمسح الشاشة الحالية ويرجع عمودًا جديدًا يملأ الشاشة.</summary>
-        public RectTransform NewScreen(string name)
+        /// <summary>
+        /// يمسح الشاشة الحالية ويرجع عمودًا جديدًا يملأ الشاشة. `backdrop = false` يخلي المشهد ثلاثي الأبعاد ظاهرًا خلف الواجهة
+        /// (الخارطة ومشهد الملعب)؛ العمود نفسه بدون Image فما يحجب اللمس إلا عناصره.
+        /// </summary>
+        public RectTransform NewScreen(string name, bool backdrop = true)
         {
+            this.backdrop.SetActive(backdrop);
             Clear(screenLayer);
             var column = UiFactory.VStack(screenLayer, name);
             UiFactory.Stretch(column);

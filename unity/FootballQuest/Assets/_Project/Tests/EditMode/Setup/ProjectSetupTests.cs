@@ -52,6 +52,15 @@ namespace FootballQuest.Tests.Setup
         }
 
         [Test]
+        public void EightStationDefinitionsAndTheLitMaterialExist()
+        {
+            var stations = Resources.LoadAll<FootballQuest.App.Map.StationDefinition>("Stations");
+            Assert.That(stations.Length, Is.EqualTo(8));
+            Assert.That(Resources.Load<Material>("Materials/FQ_Lit"), Is.Not.Null);
+            Assert.That(FootballQuest.App.Map.StationLibrary.All.Count, Is.EqualTo(8));
+        }
+
+        [Test]
         public void ArabicFontsAndLicensesAreInResources()
         {
             foreach (var name in ProjectSetup.FontNames)

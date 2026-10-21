@@ -26,7 +26,7 @@ namespace FootballQuest.App.Flow
                 case OnboardingStep.DeletionPending: RenderDeletionPending(); break;
                 case OnboardingStep.Error: RenderError(); break;
                 case OnboardingStep.Ready:
-                    EnsureHubScene();
+                    hubVisible = true;
                     RenderHub();
                     break;
                 default: RenderLoading(); break;

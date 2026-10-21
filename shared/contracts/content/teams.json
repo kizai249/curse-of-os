@@ -1,0 +1,29 @@
+{
+  "description": "المنتخبات الـ24 — PRODUCT_BRIEF §2 (العربية) وDATA_CONTRACTS §0 (الرموز). أسماء نصية فقط كمعلومة عامة (RIGHTS_REGISTER الصف 7). الإنجليزية مسودة: TODO(owner) اعتماد القائمة.",
+  "teams": [
+    { "code": "KSA", "ar": "السعودية", "en": "Saudi Arabia", "host": true },
+    { "code": "AUS", "ar": "أستراليا", "en": "Australia" },
+    { "code": "BHR", "ar": "البحرين", "en": "Bahrain" },
+    { "code": "CHN", "ar": "الصين", "en": "China" },
+    { "code": "IDN", "ar": "إندونيسيا", "en": "Indonesia" },
+    { "code": "IRN", "ar": "إيران", "en": "Iran" },
+    { "code": "IRQ", "ar": "العراق", "en": "Iraq" },
+    { "code": "JPN", "ar": "اليابان", "en": "Japan" },
+    { "code": "JOR", "ar": "الأردن", "en": "Jordan" },
+    { "code": "KUW", "ar": "الكويت", "en": "Kuwait" },
+    { "code": "KGZ", "ar": "قيرغيزستان", "en": "Kyrgyzstan" },
+    { "code": "PRK", "ar": "كوريا الشمالية", "en": "North Korea" },
+    { "code": "OMA", "ar": "عُمان", "en": "Oman" },
+    { "code": "PLE", "ar": "فلسطين", "en": "Palestine" },
+    { "code": "QAT", "ar": "قطر", "en": "Qatar" },
+    { "code": "SGP", "ar": "سنغافورة", "en": "Singapore" },
+    { "code": "KOR", "ar": "كوريا الجنوبية", "en": "South Korea" },
+    { "code": "SYR", "ar": "سوريا", "en": "Syria" },
+    { "code": "TJK", "ar": "طاجيكستان", "en": "Tajikistan" },
+    { "code": "THA", "ar": "تايلاند", "en": "Thailand" },
+    { "code": "UAE", "ar": "الإمارات", "en": "United Arab Emirates" },
+    { "code": "UZB", "ar": "أوزبكستان", "en": "Uzbekistan" },
+    { "code": "VIE", "ar": "فيتنام", "en": "Vietnam" },
+    { "code": "YEM", "ar": "اليمن", "en": "Yemen" }
+  ]
+}

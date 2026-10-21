@@ -28,6 +28,7 @@ beforeEach(async () => {
   await env.withSecurityRulesDisabled(async (ctx) => {
     const db = ctx.firestore();
     await setDoc(doc(db, "content/teams"), { list: ["KSA"] });
+    await setDoc(doc(db, "content/schedule"), { matches: [] });
     await setDoc(doc(db, "matchResults/m1"), { matchNo: 1, status: "scheduled" });
     await setDoc(doc(db, "users/alice"), { fanPoints: 10, packs: 1 });
     await setDoc(doc(db, "users/alice/teamCards/KSA_common"), { count: 1 });
@@ -41,6 +42,7 @@ describe("public content", () => {
     const db = env.authenticatedContext("alice").firestore();
     await assertSucceeds(getDoc(doc(db, "content/teams")));
     await assertSucceeds(getDoc(doc(db, "matchResults/m1")));
+    await assertSucceeds(getDoc(doc(db, "content/schedule")));
   });
 
   it("unauthenticated clients cannot read content", async () => {
@@ -52,6 +54,7 @@ describe("public content", () => {
     const db = env.authenticatedContext("alice").firestore();
     await assertFails(setDoc(doc(db, "content/teams"), { list: [] }));
     await assertFails(updateDoc(doc(db, "matchResults/m1"), { status: "finished" }));
+    await assertFails(setDoc(doc(db, "content/schedule"), { matches: [{ home: "KSA" }] }));
   });
 });
 
