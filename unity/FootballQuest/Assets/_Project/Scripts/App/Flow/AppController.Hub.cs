@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using FootballQuest.App.Map;
 using FootballQuest.App.UI;
 using FootballQuest.Core;
+using FootballQuest.Core.Backend;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Economy;
 using FootballQuest.Core.Map;
 using FootballQuest.Core.Onboarding;
 using FootballQuest.Core.Permissions;
@@ -25,6 +27,7 @@ namespace FootballQuest.App.Flow
         };
         private string currentStadiumId;
         private bool contentLoading;
+        private bool dailyLoginShown;
 
         private string MapCity => map != null ? map.City : onboarding.Profile?.City ?? "RUH";
 
@@ -51,6 +54,20 @@ namespace FootballQuest.App.Flow
             UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
             UiFactory.Label(header, profile?.DisplayName ?? string.Empty, Lang, UiTheme.BodySize, bold: true);
             UiFactory.Button(header, T(UiStrings.Settings), Lang, RenderSettings, ButtonStyle.Ghost);
+
+            // الأرصدة من الخادم فقط (العميل يعرض).
+            if (profile != null)
+            {
+                var b = profile.Balances;
+                var hud = UiFactory.HStack(screen, "Hud", Lang);
+                hud.gameObject.AddComponent<UnityEngine.UI.Image>().color = UiTheme.SurfaceRaised;
+                UiFactory.Size(hud, 72f, 72f);
+                UiFactory.Label(hud, Fill(UiStrings.HudLevel, "level", b.Level.ToString()), Lang, UiTheme.SmallSize, center: true);
+                UiFactory.Label(hud, b.Xp + " XP", Lang, UiTheme.SmallSize, center: true);
+                UiFactory.Label(hud, Fill(UiStrings.HudPacks, "packs", b.TotalPacks.ToString()), Lang, UiTheme.SmallSize, center: true);
+                UiFactory.Label(hud, Fill(UiStrings.HudFanPoints, "fp", b.FanPoints.ToString()), Lang, UiTheme.SmallSize, center: true);
+            }
+            ShowDailyLoginOnce();
 
             // التنقل بين المدن الثلاث (مع السحب الأفقي على الخارطة).
             var tabs = UiFactory.HStack(screen, "Cities", Lang);
@@ -89,6 +106,51 @@ namespace FootballQuest.App.Flow
                 ButtonStyle.Primary);
         }
 
+        private string Fill(string key, string name, string value) =>
+            UiState.Fill(T(key), new Dictionary<string, string> { { name, value } });
+
+        /// <summary>مكافأة الدخول اليومي يمنحها `bootstrap` في الخادم؛ هنا نعرضها مرة وحدة فقط.</summary>
+        private void ShowDailyLoginOnce()
+        {
+            var daily = onboarding.LastBootstrap?.DailyLogin;
+            if (dailyLoginShown || daily == null || !daily.Granted) return;
+            dailyLoginShown = true;
+            ui.Toast(UiState.Fill(T(UiStrings.DailyLoginReward), new Dictionary<string, string>
+            {
+                { "xp", daily.Xp.ToString() },
+                { "packs", daily.Packs.ToString() },
+            }), Lang);
+        }
+
+        private void ApplyBalances(Balances balances)
+        {
+            if (onboarding.Profile == null || balances == null) return;
+            onboarding.Profile.Balances = balances;
+            onboarding.Profile.Xp = balances.Xp;
+            onboarding.Profile.Level = balances.Level;
+            onboarding.Profile.FanPoints = balances.FanPoints;
+            onboarding.Profile.Packs = balances.Packs;
+        }
+
+        /// <summary>stadiumVisit — +5 XP مرة يوميًا لكل ملعب (GAME_RULES §2.2). الخادم يقرر.</summary>
+        private async Task DigitalVisitAsync(string stadiumId)
+        {
+            try
+            {
+                var result = await Retry.RunAsync(_ => services.Economy.StadiumVisitAsync(stadiumId));
+                ApplyBalances(result.Balances);
+                if (onboarding.Profile != null) onboarding.Profile.VisitedToday = result.VisitedToday;
+                ui.Toast(result.AlreadyVisited
+                    ? T(UiStrings.VisitedToday)
+                    : UiState.Fill(T(UiStrings.XpGained), new Dictionary<string, string> { { "xp", result.XpGained.ToString() } }), Lang);
+                if (hubVisible) RenderHub();
+            }
+            catch (System.Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
         private void CreateMap()
         {
             map = MapController.Create(onboarding.Profile?.City ?? "RUH");
@@ -117,10 +179,13 @@ namespace FootballQuest.App.Flow
         {
             currentStadiumId = stadiumId;
             var stadium = content.Stadium(stadiumId);
-            ui.Sheet(stadium?.Name(Lang) ?? stadiumId, ScheduleText(stadiumId), Lang,
-                new SheetButton(T(UiStrings.EnterStadium), () => EnterStadium(stadiumId)),
-                new SheetButton(T(UiStrings.Close), null, ButtonStyle.Ghost));
-            // TODO(S4): زر «زيارة رقمية» (+5 XP مرة يوميًا لكل ملعب) عبر stadiumVisit.
+            var visited = onboarding.Profile?.VisitedToday?.Contains(stadiumId) == true;
+            var buttons = new List<SheetButton> { new SheetButton(T(UiStrings.EnterStadium), () => EnterStadium(stadiumId)) };
+            buttons.Add(visited
+                ? new SheetButton(T(UiStrings.VisitedToday), null, ButtonStyle.Secondary)
+                : new SheetButton(T(UiStrings.DigitalVisit), () => Run(DigitalVisitAsync(stadiumId)), ButtonStyle.Secondary));
+            buttons.Add(new SheetButton(T(UiStrings.Close), null, ButtonStyle.Ghost));
+            ui.Sheet(stadium?.Name(Lang) ?? stadiumId, ScheduleText(stadiumId), Lang, buttons.ToArray());
         }
 
         private string ScheduleText(string stadiumId)

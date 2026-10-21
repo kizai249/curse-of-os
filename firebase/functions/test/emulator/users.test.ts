@@ -152,7 +152,8 @@ describe("bootstrap", () => {
     await callOk("setAgeAndCity", { birthYear: ADULT, city: "JED" }, idToken);
     const after = await callOk<{ status: string; profile: Record<string, unknown> }>("bootstrap", null, idToken);
     expect(after.status).toBe("ok");
-    expect(after.profile).toMatchObject({ city: "JED", ageBand: "18_plus", level: 1, xp: 0, packs: 0, fanPoints: 0 });
+    // أول bootstrap بعد الإنشاء يمنح الدخول اليومي (+10 XP وحزمة — GAME_RULES §10).
+    expect(after.profile).toMatchObject({ city: "JED", ageBand: "18_plus", level: 1, xp: 10, packs: 1, fanPoints: 0 });
   });
 
   it("reports a pending deletion instead of the profile", async () => {

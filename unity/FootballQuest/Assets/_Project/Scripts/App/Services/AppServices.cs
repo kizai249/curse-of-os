@@ -3,6 +3,7 @@ using FootballQuest.App.Platform;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Economy;
 using FootballQuest.Core.Permissions;
 using FootballQuest.Core.Ui;
 
@@ -24,6 +25,7 @@ namespace FootballQuest.App.Services
         public IAuthGateway Auth { get; set; }
         public IFunctionsClient Functions { get; set; }
         public IAccountApi Accounts { get; set; }
+        public IEconomyApi Economy { get; set; }
         public IRemoteConfig RemoteConfig { get; set; }
         public ILocalStore Store { get; set; }
         public IPermissionService Permissions { get; set; }
@@ -51,6 +53,7 @@ namespace FootballQuest.App.Services
                 Auth = auth,
                 Functions = functions,
                 Accounts = new AccountApi(functions),
+                Economy = new EconomyApi(functions),
                 RemoteConfig = new LocalRemoteConfig(),
                 Store = new PlayerPrefsStore(),
                 Permissions = NativePermissionService.Create(),

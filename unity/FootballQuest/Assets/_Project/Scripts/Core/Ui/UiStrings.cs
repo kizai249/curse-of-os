@@ -47,6 +47,13 @@ namespace FootballQuest.Core.Ui
         public const string EnterStadium = "enter_stadium";
         public const string Close = "close";
         public const string BackToMap = "back_to_map";
+        public const string DigitalVisit = "digital_visit";
+        public const string VisitedToday = "visited_today";
+        public const string XpGained = "xp_gained";
+        public const string DailyLoginReward = "daily_login_reward";
+        public const string HudLevel = "hud_level";
+        public const string HudPacks = "hud_packs";
+        public const string HudFanPoints = "hud_fan_points";
 
         private static readonly Dictionary<string, string[]> Table = new Dictionary<string, string[]>
         {
@@ -97,6 +104,13 @@ namespace FootballQuest.Core.Ui
             { EnterStadium, new[] { "ادخل الملعب", "Enter stadium" } },
             { Close, new[] { "إغلاق", "Close" } },
             { BackToMap, new[] { "الخارطة", "Map" } },
+            { DigitalVisit, new[] { "زيارة رقمية (+5 XP)", "Digital visit (+5 XP)" } },
+            { VisitedToday, new[] { "زرت هذا الملعب اليوم ✓", "Visited this stadium today ✓" } },
+            { XpGained, new[] { "+{xp} XP", "+{xp} XP" } },
+            { DailyLoginReward, new[] { "مكافأة الدخول اليومي: +{xp} XP و{packs} حزمة منتخب", "Daily login: +{xp} XP and {packs} team pack" } },
+            { HudLevel, new[] { "مستوى {level}", "Level {level}" } },
+            { HudPacks, new[] { "حزم {packs}", "Packs {packs}" } },
+            { HudFanPoints, new[] { "FP {fp}", "FP {fp}" } },
         };
 
         public static IEnumerable<string> Keys => Table.Keys;

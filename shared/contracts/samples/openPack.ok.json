@@ -1,0 +1,9 @@
+{
+  "result": {
+    "status": "ok",
+    "card": { "teamCode": "KSA", "variant": "rare", "duplicate": false, "fanPointsGained": 0, "newTeam": true },
+    "pityTriggered": false,
+    "achievements": [{ "id": "teams_6", "packs": 2, "epicPacks": 0, "xp": 0 }],
+    "balances": { "packs": 2, "epicPacks": 0, "legendaryPacks": 0, "fanPoints": 0, "xp": 10, "level": 1, "pityCount": 1 }
+  }
+}

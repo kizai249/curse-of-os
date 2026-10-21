@@ -1,0 +1,8 @@
+{
+  "result": {
+    "status": "ok",
+    "xpGained": 5,
+    "visitedToday": ["STD_RUH_KFS"],
+    "balances": { "packs": 1, "epicPacks": 0, "legendaryPacks": 0, "fanPoints": 0, "xp": 15, "level": 1, "pityCount": 0 }
+  }
+}

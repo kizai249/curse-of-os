@@ -69,6 +69,9 @@ namespace FootballQuest.Core.Onboarding
         public string ErrorStateId { get; private set; }
         public PlayerProfile Profile { get; private set; }
 
+        /// <summary>آخر نتيجة `bootstrap` (ومنها الدخول اليومي) — null قبل أول نجاح.</summary>
+        public BootstrapResult LastBootstrap { get; private set; }
+
         /// <summary>يُستدعى عند الإقلاع.</summary>
         public async Task StartAsync()
         {
@@ -140,7 +143,8 @@ namespace FootballQuest.Core.Onboarding
                     return;
                 }
                 Profile = result.Profile;
-                Go(OnboardingStep.Ready);
+                // بعد إنشاء الملف: bootstrap يعطي الأرصدة والدخول اليومي الأول.
+                await ResumeAsync();
             }
             catch (BackendException ex)
             {
@@ -171,6 +175,7 @@ namespace FootballQuest.Core.Onboarding
             try
             {
                 var result = await Retry.RunAsync(_ => api.BootstrapAsync(), retryDelay);
+                LastBootstrap = result;
                 switch (result.Status)
                 {
                     case BootstrapStatus.Ok:

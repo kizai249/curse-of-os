@@ -66,6 +66,7 @@ namespace FootballQuest.Tests.Core
             Assert.That(h.Api.LastBirthYear, Is.EqualTo(2000));
             Assert.That(h.Api.LastCity, Is.EqualTo("JED"));
             Assert.That(h.Flow.Profile.City, Is.EqualTo("JED"));
+            Assert.That(h.Flow.LastBootstrap.DailyLogin.Granted, Is.True, "first bootstrap after onboarding grants the daily login");
         }
 
         [Test]
@@ -207,7 +208,10 @@ namespace FootballQuest.Tests.Core
                 LastBirthYear = birthYear;
                 LastCity = city;
                 if (SetError != null) throw SetError;
-                return Task.FromResult(SetResult ?? new SetAgeAndCityResult { Profile = new PlayerProfile { City = city, AgeBand = "18_plus" } });
+                var result = SetResult ?? new SetAgeAndCityResult { Profile = new PlayerProfile { City = city, AgeBand = "18_plus" } };
+                // بعد الإنشاء الخادم يرجع الملف في bootstrap (مع الدخول اليومي).
+                if (!result.Under15) Bootstrap = new BootstrapResult { Status = BootstrapStatus.Ok, Profile = result.Profile, DailyLogin = new FootballQuest.Core.Economy.DailyLogin { Granted = true, Xp = 10, Packs = 1 } };
+                return Task.FromResult(result);
             }
 
             public Task<bool> DeleteAccountAsync() => Task.FromResult(false);

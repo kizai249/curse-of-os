@@ -83,6 +83,12 @@ export async function handleSetAgeAndCity(
         packs: 0,
         pityCount: 0,
         streaks: {},
+        // إضافات S4 على DATA_CONTRACTS §1 (Q15).
+        packsGuaranteed: { epic: 0, legendary: 0 },
+        ownedTeams: [],
+        achievements: [],
+        badges: [],
+        daily: { day: "", login: false, stadiums: [] },
         // ما تُعرض موافقات تسويق في R1، وللقاصر دائمًا false (PRODUCT_BRIEF ت8).
         marketingConsent: false,
         deletionRequestedAt: null,

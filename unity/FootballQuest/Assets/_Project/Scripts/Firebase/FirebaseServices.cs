@@ -15,6 +15,7 @@ using FootballQuest.App.Services;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Economy;
 using UnityEngine;
 
 namespace FootballQuest.FirebaseServices
@@ -53,6 +54,7 @@ namespace FootballQuest.FirebaseServices
                     Auth = new FirebaseAuthGateway(),
                     Functions = functions,
                     Accounts = new AccountApi(functions),
+                    Economy = new EconomyApi(functions),
                     RemoteConfig = new FirebaseRemoteConfigGateway(),
                     Store = new PlayerPrefsStore(),
                     Permissions = NativePermissionService.Create(),

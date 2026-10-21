@@ -80,5 +80,7 @@ describe("default deny", () => {
     await assertFails(setDoc(doc(db, "coupons/c2"), { uid: "alice", status: "issued" }));
     await assertFails(setDoc(doc(db, "campaigns/x/stock/b1"), { remaining: 100 }));
     await assertFails(getDoc(doc(db, "anything/else")));
+    await assertFails(getDoc(doc(db, "users/alice/requests/r1")));
+    await assertFails(updateDoc(doc(db, "users/alice"), { packsGuaranteed: { epic: 99 } }));
   });
 });

@@ -4,6 +4,7 @@
     "gameDay": "2027-01-15",
     "nextRollover": "2027-01-16T01:00:00.000Z",
     "status": "ok",
+    "dailyLogin": { "granted": true, "xp": 10, "packs": 1 },
     "profile": {
       "ageBand": "18_plus",
       "city": "JED",
@@ -13,7 +14,12 @@
       "level": 6,
       "xp": 1820,
       "fanPoints": 85,
-      "packs": 2
+      "packs": 2,
+      "balances": { "packs": 2, "epicPacks": 1, "legendaryPacks": 0, "fanPoints": 85, "xp": 1820, "level": 6, "pityCount": 9 },
+      "ownedTeams": ["JPN", "KSA"],
+      "achievements": ["teams_6"],
+      "badges": ["asia_collector"],
+      "visitedToday": ["STD_JED_KAS"]
     }
   }
 }

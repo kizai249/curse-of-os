@@ -22,6 +22,12 @@ namespace FootballQuest.Core.Backend
         public static string Str(object value, string key) =>
             value is IDictionary<string, object> d && d.TryGetValue(key, out var v) ? v as string : null;
 
+        public static bool Bool(object value, string key) =>
+            value is IDictionary<string, object> d && d.TryGetValue(key, out var v) && v is bool b && b;
+
+        public static IList<object> List(object value, string key) =>
+            value is IDictionary<string, object> d && d.TryGetValue(key, out var v) && v is IList<object> list ? list : new List<object>();
+
         public static int Int(object value, string key)
         {
             if (!(value is IDictionary<string, object> d) || !d.TryGetValue(key, out var v) || v == null) return 0;

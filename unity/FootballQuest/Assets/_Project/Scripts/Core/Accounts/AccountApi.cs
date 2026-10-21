@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Economy;
 
 namespace FootballQuest.Core.Accounts
 {
@@ -48,6 +49,12 @@ namespace FootballQuest.Core.Accounts
                 Profile = ParseProfile(JsonFields.Obj(result, "profile")),
                 ServerTime = JsonFields.Str(result, "serverTime"),
                 GameDay = JsonFields.Str(result, "gameDay"),
+                DailyLogin = new DailyLogin
+                {
+                    Granted = JsonFields.Bool(JsonFields.Obj(result, "dailyLogin"), "granted"),
+                    Xp = JsonFields.Int(JsonFields.Obj(result, "dailyLogin"), "xp"),
+                    Packs = JsonFields.Int(JsonFields.Obj(result, "dailyLogin"), "packs"),
+                },
             };
         }
 
@@ -60,7 +67,7 @@ namespace FootballQuest.Core.Accounts
         public static PlayerProfile ParseProfile(IDictionary<string, object> p)
         {
             if (p == null) return null;
-            return new PlayerProfile
+            var profile = new PlayerProfile
             {
                 AgeBand = JsonFields.Str(p, "ageBand"),
                 City = JsonFields.Str(p, "city"),
@@ -72,6 +79,22 @@ namespace FootballQuest.Core.Accounts
                 FanPoints = JsonFields.Int(p, "fanPoints"),
                 Packs = JsonFields.Int(p, "packs"),
             };
+            var balances = JsonFields.Obj(p, "balances");
+            profile.Balances = balances != null
+                ? Balances.Parse(balances)
+                : new Balances { Packs = profile.Packs, FanPoints = profile.FanPoints, Xp = profile.Xp, Level = System.Math.Max(1, profile.Level) };
+            profile.OwnedTeams = Strings(p, "ownedTeams");
+            profile.Achievements = Strings(p, "achievements");
+            profile.Badges = Strings(p, "badges");
+            profile.VisitedToday = Strings(p, "visitedToday");
+            return profile;
+        }
+
+        private static List<string> Strings(object o, string key)
+        {
+            var list = new List<string>();
+            foreach (var item in JsonFields.List(o, key)) if (item is string s) list.Add(s);
+            return list;
         }
 
         /// <summary>يحوّل غلاف خطأ Callable ({status, message, details}) إلى BackendException.</summary>
