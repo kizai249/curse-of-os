@@ -14,6 +14,7 @@ using FootballQuest.App.Platform;
 using FootballQuest.App.Services;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
 using FootballQuest.Core.Economy;
 using UnityEngine;
@@ -59,6 +60,7 @@ namespace FootballQuest.FirebaseServices
                     Store = new PlayerPrefsStore(),
                     Permissions = NativePermissionService.Create(),
                     Content = new ContentRepository(new FirestoreContentSource(), new FileContentCache()),
+                    Collection = new FirestoreCollectionSource(),
                     UsesEmulator = false,
                 };
             };
@@ -181,6 +183,16 @@ namespace FootballQuest.FirebaseServices
             await FirebaseInstaller.Ready;
             var snapshot = await FirebaseFirestore.DefaultInstance.Document(path).GetSnapshotAsync(Source.Server);
             return snapshot.Exists ? FirebaseFunctionsClient.Normalize(snapshot.ToDictionary()) : null;
+        }
+    }
+
+    internal sealed class FirestoreCollectionSource : ICollectionSource
+    {
+        public async Task<List<OwnedCard>> GetTeamCardsAsync(string uid)
+        {
+            await FirebaseInstaller.Ready;
+            var snapshot = await FirebaseFirestore.DefaultInstance.Collection($"users/{uid}/teamCards").GetSnapshotAsync();
+            return Album.ParseCards(snapshot.Documents.Select(d => FirebaseFunctionsClient.Normalize(d.ToDictionary())).ToList());
         }
     }
 

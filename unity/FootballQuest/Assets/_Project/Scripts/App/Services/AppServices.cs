@@ -2,6 +2,7 @@ using System;
 using FootballQuest.App.Platform;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Permissions;
@@ -30,6 +31,7 @@ namespace FootballQuest.App.Services
         public ILocalStore Store { get; set; }
         public IPermissionService Permissions { get; set; }
         public ContentRepository Content { get; set; }
+        public ICollectionSource Collection { get; set; }
         public bool UsesEmulator { get; set; }
 
         public Language Language
@@ -58,6 +60,7 @@ namespace FootballQuest.App.Services
                 Store = new PlayerPrefsStore(),
                 Permissions = NativePermissionService.Create(),
                 Content = new ContentRepository(new EmulatorContentSource(auth), new FileContentCache()),
+                Collection = new EmulatorCollectionSource(auth),
                 UsesEmulator = true,
             };
         }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FootballQuest.Core.Collection;
+using FootballQuest.Core.Economy;
 using FootballQuest.Core.Ui;
 using FootballQuest.Tests.Core;
 using NUnit.Framework;
@@ -52,6 +54,12 @@ namespace FootballQuest.Tools.FontCoverage
                 {
                     if (!string.IsNullOrEmpty(t)) yield return t;
                 }
+            }
+            foreach (var lang in new[] { Language.Arabic, Language.English })
+            {
+                var odds = OddsDisclosure.Text(EconomyRules.PackOdds, lang);
+                yield return odds;
+                if (lang == Language.Arabic) yield return Shape(odds);
             }
             foreach (var key in UiStrings.Keys)
             {

@@ -69,6 +69,15 @@ namespace FootballQuest.App.Flow
             }
             ShowDailyLoginOnce();
 
+            if (profile != null)
+            {
+                var collection = UiFactory.HStack(screen, "Collection", Lang);
+                UiFactory.Size(collection, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+                UiFactory.Button(collection, T(UiStrings.Album), Lang, RenderAlbum, ButtonStyle.Secondary);
+                UiFactory.Button(collection, F(UiStrings.Packs, ("count", profile.Balances.TotalPacks.ToString())), Lang,
+                    () => { lastReveal = null; RenderPacks(); }, profile.Balances.TotalPacks > 0 ? ButtonStyle.Primary : ButtonStyle.Secondary);
+            }
+
             // التنقل بين المدن الثلاث (مع السحب الأفقي على الخارطة).
             var tabs = UiFactory.HStack(screen, "Cities", Lang);
             UiFactory.Size(tabs, UiTheme.ButtonHeight, UiTheme.ButtonHeight);

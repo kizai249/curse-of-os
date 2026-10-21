@@ -139,6 +139,7 @@ namespace FootballQuest.App.Flow
                 return;
             }
             hubVisible = false;
+            album = null;
             ui.Dialog(State(StateCatalog.AccDeleteDone), Lang, new SheetButton(T(UiStrings.Ok), () =>
             {
                 Run(onboarding.AcknowledgeDeletionAsync());

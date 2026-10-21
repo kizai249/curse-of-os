@@ -54,6 +54,24 @@ namespace FootballQuest.Core.Ui
         public const string HudLevel = "hud_level";
         public const string HudPacks = "hud_packs";
         public const string HudFanPoints = "hud_fan_points";
+        public const string Album = "album";
+        public const string AlbumProgress = "album_progress";
+        public const string Packs = "packs";
+        public const string OpenPack = "open_pack";
+        public const string PackStandard = "pack_standard";
+        public const string PackEpic = "pack_epic";
+        public const string PackLegendary = "pack_legendary";
+        public const string NoPacks = "no_packs";
+        public const string PackOdds = "pack_odds";
+        public const string NewCard = "new_card";
+        public const string DuplicateCard = "duplicate_card";
+        public const string PityTriggered = "pity_triggered";
+        public const string AchievementUnlocked = "achievement_unlocked";
+        public const string ExchangeFor = "exchange_for";
+        public const string NotExchangeable = "not_exchangeable";
+        public const string NeedFanPoints = "need_fan_points";
+        public const string OwnedTimes = "owned_times";
+        public const string NotOwned = "not_owned";
 
         private static readonly Dictionary<string, string[]> Table = new Dictionary<string, string[]>
         {
@@ -111,6 +129,24 @@ namespace FootballQuest.Core.Ui
             { HudLevel, new[] { "مستوى {level}", "Level {level}" } },
             { HudPacks, new[] { "حزم {packs}", "Packs {packs}" } },
             { HudFanPoints, new[] { "FP {fp}", "FP {fp}" } },
+            { Album, new[] { "الألبوم", "Album" } },
+            { AlbumProgress, new[] { "{teams}/24 منتخب • {variants}/96 نسخة", "{teams}/24 teams • {variants}/96 editions" } },
+            { Packs, new[] { "الحزم ({count})", "Packs ({count})" } },
+            { OpenPack, new[] { "افتح", "Open" } },
+            { PackStandard, new[] { "حزمة منتخب ×{count}", "Team pack ×{count}" } },
+            { PackEpic, new[] { "حزمة ملحمية مضمونة ×{count}", "Guaranteed Epic pack ×{count}" } },
+            { PackLegendary, new[] { "حزمة أسطورية مضمونة ×{count}", "Guaranteed Legendary pack ×{count}" } },
+            { NoPacks, new[] { "ما عندك حزم الحين. ادخل بكرة أو زر الملاعب والفروع عشان تجمع حزم.", "No packs right now. Come back tomorrow or visit stadiums and branches to earn more." } },
+            { PackOdds, new[] { "احتمالات الحزم", "Pack odds" } },
+            { NewCard, new[] { "بطاقة جديدة!", "New card!" } },
+            { DuplicateCard, new[] { "مكررة: +{fp} نقطة مشجع", "Duplicate: +{fp} fan points" } },
+            { PityTriggered, new[] { "حماية سوء الحظ اشتغلت — ملحمية مضمونة!", "Bad-luck protection kicked in — guaranteed Epic!" } },
+            { AchievementUnlocked, new[] { "إنجاز جديد: {name}", "Achievement: {name}" } },
+            { ExchangeFor, new[] { "استبدلها بـ {cost} FP", "Get it for {cost} FP" } },
+            { NotExchangeable, new[] { "هذي النسخة ما تُستبدل — تطلع من الحزم بس.", "This edition can't be exchanged — packs only." } },
+            { NeedFanPoints, new[] { "تحتاج {cost} FP (عندك {fp})", "Needs {cost} FP (you have {fp})" } },
+            { OwnedTimes, new[] { "مملوكة ×{count}", "Owned ×{count}" } },
+            { NotOwned, new[] { "غير مملوكة", "Not owned" } },
         };
 
         public static IEnumerable<string> Keys => Table.Keys;
@@ -122,5 +158,21 @@ namespace FootballQuest.Core.Ui
         }
 
         public static string CityName(string cityCode, Ui.Language language) => Get("city_" + cityCode, language);
+
+        /// <summary>أسماء الإنجازات — GAME_RULES §3.5 (شارة «جامع آسيا»).</summary>
+        public static string AchievementName(string id, Ui.Language language)
+        {
+            var ar = language == Ui.Language.Arabic;
+            switch (id)
+            {
+                case "teams_6": return ar ? "6 منتخبات" : "6 teams";
+                case "teams_12": return ar ? "12 منتخبًا" : "12 teams";
+                case "teams_24": return ar ? "جامع آسيا" : "Asia Collector";
+                default:
+                    if (id != null && id.StartsWith("group_"))
+                        return (ar ? "المجموعة " : "Group ") + id.Substring(6) + (ar ? " كاملة" : " complete");
+                    return id;
+            }
+        }
     }
 }

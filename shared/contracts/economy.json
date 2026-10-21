@@ -1,0 +1,12 @@
+{
+  "description": "أرقام GAME_RULES v1.0 المشتركة بين الخادم (economy/rules.ts) والعميل (EconomyRules.cs). الاختباران يتأكدان من التطابق؛ أي تعديل يبدأ من GAME_RULES ثم هنا ثم الطرفين.",
+  "packOdds": { "common": 70, "rare": 22, "epic": 7, "legendary": 1 },
+  "pityThreshold": 14,
+  "matchdayWeight": 3,
+  "duplicateFp": { "common": 10, "rare": 25, "epic": 60, "legendary": 150 },
+  "exchangeCost": { "common": 100, "rare": 300 },
+  "maxLevel": 30,
+  "dailyXpCap": 600,
+  "dailyLogin": { "xp": 10, "packs": 1 },
+  "digitalVisitXp": 5
+}

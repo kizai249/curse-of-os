@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
 using UnityEngine;
 
@@ -24,6 +26,27 @@ namespace FootballQuest.App.Services
             if (res.Status == 404) return null;
             if (res.Status != 200) throw new BackendException(res.Status == 403 ? "PERMISSION_DENIED" : "UNAVAILABLE", "firestore " + res.Status);
             return FirestoreRest.DecodeDocument(MiniJson.Parse(res.Body));
+        }
+    }
+
+    /// <summary>بطاقات اللاعب من محاكي Firestore (القواعد: المالك يقرأ فقط).</summary>
+    public sealed class EmulatorCollectionSource : ICollectionSource
+    {
+        private readonly EmulatorAuthGateway auth;
+
+        public EmulatorCollectionSource(EmulatorAuthGateway auth)
+        {
+            this.auth = auth;
+        }
+
+        public async Task<List<OwnedCard>> GetTeamCardsAsync(string uid)
+        {
+            var token = await auth.GetIdTokenAsync();
+            var res = await UnityHttp.GetAsync(BackendSettings.FirestoreDocumentUrl($"users/{uid}/teamCards?pageSize=200"), token);
+            if (res.Status != 200) throw new BackendException("UNAVAILABLE", "firestore " + res.Status);
+            var docs = new List<object>();
+            foreach (var d in JsonFields.List(MiniJson.Parse(res.Body), "documents")) docs.Add(FirestoreRest.DecodeDocument(d));
+            return Album.ParseCards(docs);
         }
     }
 

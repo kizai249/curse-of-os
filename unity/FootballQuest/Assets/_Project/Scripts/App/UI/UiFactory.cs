@@ -75,6 +75,20 @@ namespace FootballQuest.App.UI
             return rt;
         }
 
+        /// <summary>صف يوسّط عنصرًا بعرضه المفضل (مثل البطاقة) بدل ما يمده لعرض الشاشة.</summary>
+        public static RectTransform Centered(Transform parent, string name, float height)
+        {
+            var rt = Rect(parent, name);
+            var layout = rt.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+            Size(rt, height, height);
+            return rt;
+        }
+
         public static void Fit(RectTransform rt)
         {
             var fitter = rt.gameObject.AddComponent<ContentSizeFitter>();
