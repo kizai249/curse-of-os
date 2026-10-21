@@ -47,6 +47,10 @@ namespace FootballQuest.App.Flow
                 var result = await services.Presence.VerifyAsync(reading, Platform);
                 if (result.Balances != null) ApplyBalances(result.Balances);
                 ShowPresenceFeedback(PresencePolicy.Feedback(result, trigger, id => content.Stadium(id)?.Name(Lang) ?? id, Lang));
+                foreach (var b in result.Branches)
+                {
+                    services.Events.BranchNearbyShown(b.BranchId, b.BrandId, b.ZoneRadiusM, result.AccuracyBand, b.ActiveCampaigns);
+                }
                 if (hubVisible) RenderHub();
             }
             catch (Exception ex)
@@ -81,7 +85,6 @@ namespace FootballQuest.App.Flow
             if (sheet != null)
             {
                 ShowState(sheet.StateId, sheet.Values);
-                // TODO(S9): حدث branch_nearby_shown عبر logEvents (branchId، وbrandId، وzoneRadiusM، وaccuracyBand، وactiveCampaigns).
             }
         }
     }

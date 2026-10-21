@@ -48,6 +48,7 @@ namespace FootballQuest.App.Flow
             NewOnboarding();
             SceneManager.sceneLoaded += OnSceneLoaded;
             InvokeRepeating(nameof(PollReachability), 0f, ReachabilityPollSeconds);
+            InvokeRepeating(nameof(FlushEvents), 30f, (float)FootballQuest.Core.Analytics.EventQueue.FlushInterval.TotalSeconds);
         }
 
         private void Start() => Run(onboarding.StartAsync());
@@ -118,5 +119,13 @@ namespace FootballQuest.App.Flow
         }
 
         private void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        /// <summary>الأحداث كل 30 ثانية أو عند الخروج للخلفية (ARCHITECTURE §10).</summary>
+        private void FlushEvents() => Run(services.Events.FlushAsync());
+
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused) FlushEvents();
+        }
     }
 }

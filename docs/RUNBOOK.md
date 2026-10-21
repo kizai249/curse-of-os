@@ -1,6 +1,6 @@
 # RUNBOOK — دليل البناء والتشغيل والنشر
 
-**آخر تحديث:** Slice 6 — 21 أكتوبر 2026
+**آخر تحديث:** Slice 9 — 21 أكتوبر 2026
 الأقسام المعلّمة «(Slice N)» تُستكمل عند تنفيذ تلك الشريحة.
 
 ---
@@ -76,6 +76,24 @@ await getAuth().setCustomUserClaims(uid, { role: "branch_staff", branchId: "br_x
 // أو { role: "partner_admin", brandId } أو { role: "usersx_admin" }
 ```
 
+### 3.1.4 لوحة الشركاء (`admin-web/`)
+
+```bash
+cd admin-web
+npm ci
+cp .env.example .env.local        # إعداد مشروع Firebase للوحة (مستثنى من git)
+npm run dev                       # http://localhost:5173
+npm test && npm run build         # وحدات + بناء dist/
+npm run e2e                       # يبني الدوال واللوحة، ويشغّل Emulator Suite، ويقود Chromium (Playwright)
+```
+
+- **مع المحاكي:** `VITE_USE_EMULATOR=true` في `.env.local`، والمحاكي شغّال (§3.1).
+- **الدخول:** أول حساب `usersx_admin` يُنشأ بـ Admin SDK (§3.1.3)، وبعدها من صفحة «الحسابات».
+- **الصفحات حسب الدور:**
+  - الموظف: شاشة الفرع ووضع الموظف.
+  - الشريك: + الحملات والفروع والتقارير والحسابات.
+  - usersx_admin: + المباريات والعلامات.
+
 ### 3.2 منطق C# بدون Unity
 
 ```bash
@@ -134,6 +152,7 @@ dotnet test tools/core-tests/CoreTests.csproj
 | Workflow | يشتغل عند | المهام |
 |---|---|---|
 | `fq-backend.yml` | تغيّر `firebase/**` أو `shared/contracts/**` | lint، وtypecheck، والوحدات، والمحاكي |
+| `fq-admin-web.yml` | تغيّر `admin-web/**` أو `firebase/**` | typecheck، والوحدات، والبناء، وe2e بـ Playwright على المحاكي (لقطات الشاشة artifact) |
 | `fq-unity.yml` | تغيّر `unity/**` أو `shared/contracts/**` أو `tools/core-tests/**` | `core-tests` (dotnet)، ثم EditMode (GameCI)، ثم بناء Android وiOS |
 
 ### 5.1 ترخيص Unity لـ GameCI (مرة وحدة)
@@ -172,7 +191,15 @@ functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:ind
 functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:indexes,functions -P prod   # fq-prod (بعد اجتياز AT على dev)
 ```
 
-- لوحة الشركاء على Hosting (Slice 9).
+- لوحة الشركاء على Hosting:
+  ```bash
+  functions/node_modules/.bin/firebase deploy --only hosting -P dev
+  ```
+  الـpredeploy يبني `admin-web/dist`.
+- قبل النشر:
+  - `.env.local` للوحة: مفاتيح مشروع الويب ومفتاح reCAPTCHA Enterprise.
+  - App Check للويب مفعّل في Console.
+- `ADMIN_MFA_REQUIRED=true` في `firebase/functions/.env.fq-prod` بعد تفعيل TOTP (Q27).
 - الرفع للمتاجر (Slice 10a).
 
 ## 8. استكشاف الأخطاء

@@ -1,0 +1,49 @@
+# Football Quest — لوحة الشركاء: typecheck + وحدات + بناء + e2e (Playwright) على Emulator Suite.
+name: fq-admin-web
+
+on:
+  push:
+    paths: ["admin-web/**", "firebase/**", "shared/contracts/**", ".github/workflows/fq-admin-web.yml"]
+  pull_request:
+    paths: ["admin-web/**", "firebase/**", "shared/contracts/**", ".github/workflows/fq-admin-web.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fq-admin-web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            admin-web/package-lock.json
+            firebase/functions/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+        working-directory: firebase/functions
+      - run: npm ci
+        working-directory: admin-web
+      - run: npm run typecheck && npm test && npm run build
+        working-directory: admin-web
+      - run: npx playwright install --with-deps chromium
+        working-directory: admin-web
+      - run: npm run e2e
+        working-directory: admin-web
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: panel-e2e-screenshots
+          path: admin-web/e2e/screenshots
+          retention-days: 7

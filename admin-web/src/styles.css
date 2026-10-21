@@ -1,0 +1,42 @@
+/* لوحة الشركاء: عربية RTL، وألوان أصلية بدون أي هوية للبطولة. الخط من النظام (بدون تحميل خارجي). */
+:root {
+  --bg: #0b142a;
+  --surface: #162240;
+  --raised: #1f2e55;
+  --accent: #2ed18c;
+  --text: #f4f6fb;
+  --muted: #a9b4cc;
+  --danger: #e54b4b;
+  --warn: #f2b23a;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header.top { display: flex; gap: 12px; align-items: center; padding: 12px 20px; background: var(--surface); flex-wrap: wrap; }
+header.top nav { display: flex; gap: 8px; flex-wrap: wrap; }
+header.top .spacer { flex: 1; }
+main { padding: 20px; max-width: 1100px; margin: 0 auto; }
+a, button.link { color: var(--accent); background: none; border: 0; cursor: pointer; font: inherit; text-decoration: none; }
+nav a.active { text-decoration: underline; }
+button { font: inherit; padding: 10px 16px; border-radius: 10px; border: 0; background: var(--accent); color: #061a10; cursor: pointer; font-weight: 700; }
+button.secondary { background: var(--raised); color: var(--text); }
+button.danger { background: var(--danger); color: white; }
+button:disabled { opacity: 0.5; cursor: default; }
+input, select, textarea { font: inherit; padding: 10px; border-radius: 8px; border: 1px solid var(--raised); background: var(--surface); color: var(--text); width: 100%; }
+label { display: grid; gap: 6px; color: var(--muted); }
+form.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: end; }
+.card { background: var(--surface); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px; text-align: start; border-bottom: 1px solid var(--raised); }
+.ltr { direction: ltr; unicode-bidi: isolate; }
+.muted { color: var(--muted); }
+.ok { color: var(--accent); font-size: 1.6rem; font-weight: 800; }
+.bad { color: var(--danger); font-size: 1.6rem; font-weight: 800; }
+.warn { color: var(--warn); }
+.screen { text-align: center; }
+.screen canvas { background: white; padding: 16px; border-radius: 16px; width: min(80vmin, 520px); height: auto; }
+.screen .code { font-size: 1.2rem; }
+video { width: 100%; max-width: 480px; border-radius: 12px; background: black; }
+.disclaimer { font-size: 0.85rem; color: var(--muted); margin-top: 24px; }

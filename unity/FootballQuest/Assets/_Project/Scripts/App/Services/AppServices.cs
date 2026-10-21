@@ -1,6 +1,7 @@
 using System;
 using FootballQuest.App.Platform;
 using FootballQuest.Core.Accounts;
+using FootballQuest.Core.Analytics;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
@@ -39,6 +40,7 @@ namespace FootballQuest.App.Services
         public ICouponsApi Coupons { get; set; }
         public ICouponSource Wallet { get; set; }
         public RedeemCodeVault Vault { get; set; }
+        public EventQueue Events { get; set; }
         public bool UsesEmulator { get; set; }
 
         public Language Language
@@ -50,6 +52,8 @@ namespace FootballQuest.App.Services
         public static AppServices Create()
         {
             Current = FirebaseFactory != null ? FirebaseFactory() : CreateEmulator();
+            var platform = UnityEngine.Application.platform == UnityEngine.RuntimePlatform.IPhonePlayer ? "ios" : "android";
+            Current.Events = new EventQueue(Current.Functions, platform, UnityEngine.Application.version);
             return Current;
         }
 
