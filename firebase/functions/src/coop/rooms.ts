@@ -7,7 +7,7 @@ import { normalizeManual, randomCode, randomToken128, sha256 } from "../shared/c
 import { fail } from "../shared/errors.js";
 import { ClientMeta, writeEvent } from "../shared/events.js";
 import { gameDayId } from "../shared/gameDay.js";
-import { drawPlayerCard } from "./playerCards.js";
+import { grantPlayerCard } from "./playerCards.js";
 import { correctCount, generatePuzzleFromSeed, Puzzle, slotsCountFor } from "./puzzle.js";
 import { assignInfo, assignSlots, COOP, CouponMode, endsAtMs, Member, nextHost, planReservation, redistribute, viewFor } from "./rounds.js";
 
@@ -589,7 +589,6 @@ async function finishWin(
   const stock = reservedIds.length > 0 && priv.campaign ? await readStock(tx, priv.campaign.id, room.branchId) : null;
 
   const day = gameDayId(now);
-  const { content } = players();
   let mine: PlayerRoundResult & { codes: { redeemToken: string; manualCode: string } | null } = { ...leftResult(), outcome: "won", codes: null };
   const capped: string[] = [];
   let couponsIssued = 0;
@@ -612,15 +611,9 @@ async function finishWin(
       wallet = grantXp(wallet, COOP.winReward.xp, day);
       result.xp = wallet.xp - xpBefore;
 
-      const owned = new Set<string>((data.ownedPlayers as string[] | undefined) ?? []);
-      const card = drawPlayerCard(content.players, owned, rng);
+      const card = grantPlayerCard(tx, u, data.ownedPlayers as string[] | undefined, rng, now);
       result.playerCardId = card.playerId;
-      const character = players().byId.get(card.playerId)!;
-      result.playerCardName = { ar: character.ar, en: character.en };
-      const cardRef = db().doc(`users/${u}/playerCards/${card.playerId}`);
-      if (card.duplicate) tx.update(cardRef, { count: FieldValue.increment(1), lastAt: Timestamp.fromDate(now) });
-      else tx.set(cardRef, { playerId: card.playerId, count: 1, firstAt: Timestamp.fromDate(now) });
-      owned.add(card.playerId);
+      result.playerCardName = card.name;
 
       const couponId = priv.reservations[u];
       if (couponId && stock && priv.campaign) {
@@ -645,7 +638,7 @@ async function finishWin(
         result.packs = COOP.winReward.packs;
         wallet = { ...wallet, packs: wallet.packs + COOP.winReward.packs };
       }
-      tx.update(snap.ref, { ...walletPatch(wallet), ownedPlayers: [...owned].sort(), coopWins: { day, count: count + 1 } });
+      tx.update(snap.ref, { ...walletPatch(wallet), ownedPlayers: card.ownedPlayers, coopWins: { day, count: count + 1 } });
     }
     tx.update(viewRef(id, u), { result });
     if (u === submitter) mine = { ...result, codes };

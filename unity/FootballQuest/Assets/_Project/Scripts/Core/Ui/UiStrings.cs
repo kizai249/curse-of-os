@@ -82,6 +82,12 @@ namespace FootballQuest.Core.Ui
         public const string ValidUntil = "valid_until";
         public const string RedeemedOn = "redeemed_on";
         public const string ReissueCode = "reissue_code";
+        public const string StreakDays = "streak_days";
+        public const string StreakPacks = "streak_packs";
+        public const string AlbumTeams = "album_teams";
+        public const string AlbumPlayers = "album_players";
+        public const string PlayerAlbumProgress = "player_album_progress";
+        public const string PlayerAlbumHint = "player_album_hint";
         public const string CoopTitle = "coop_title";
         public const string CoopIntro = "coop_intro";
         public const string CoopAtBranch = "coop_at_branch";
@@ -196,6 +202,14 @@ namespace FootballQuest.Core.Ui
             { RedeemedOn, new[] { "استُخدمت في {date}", "Used on {date}" } },
             { ReissueCode, new[] { "اعرض رمز جديد", "Show a new code" } },
             { Terms, new[] { "الشروط", "Terms" } },
+            // سلسلة الزيارات — GAME_RULES §6.4 (S6b). الوثائق ما فيها نص؛ مسودة (Q40).
+            { StreakDays, new[] { "سلسلة {brand}: {count} يوم ورا بعض", "{brand} streak: {count} days in a row" } },
+            { StreakPacks, new[] { "مكافأة السلسلة: +{count} حزمة منتخب", "Streak reward: +{count} team packs" } },
+            // بطاقات اللاعبين — GAME_RULES §4 (S5b).
+            { AlbumTeams, new[] { "المنتخبات", "Teams" } },
+            { AlbumPlayers, new[] { "اللاعبين", "Players" } },
+            { PlayerAlbumProgress, new[] { "{owned}/{total} لاعب", "{owned}/{total} players" } },
+            { PlayerAlbumHint, new[] { "تجيك بطاقة لاعب مع كل فوز في «منتخبنا يجمعنا» وفي اليوم 5 من سلسلة الزيارات. للتجميع فقط، وما تعطي أفضلية.", "You get a player card with every Team Up win and on day 5 of a visit streak. For collecting only — no gameplay advantage." } },
             // «منتخبنا يجمعنا» — GAME_RULES §7. الإنجليزية مسودة (TODO(owner) AT-11).
             { CoopTitle, new[] { "منتخبنا يجمعنا", "Team Up" } },
             { CoopIntro, new[] { "لغز جماعي داخل الفرع: كل واحد يشوف جزء من التشكيلة، وتتكلمون مع بعض عشان تكملونها قبل 3 دقائق. تفوزون كلكم أو ما يفوز أحد.", "A team puzzle at the branch: each of you sees part of the lineup — talk to each other and finish it within 3 minutes. Everyone wins or no one does." } },

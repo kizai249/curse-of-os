@@ -67,6 +67,8 @@ namespace FootballQuest.App.Services
             // المحاكي بيئة تطوير: ميزات R2 ظاهرة (في fq-prod تتفعل من Remote Config وقت إصدارها).
             var remoteConfig = new LocalRemoteConfig();
             remoteConfig.Override(RemoteConfigKeys.FeatureCoop, "true");
+            remoteConfig.Override(RemoteConfigKeys.FeaturePlayerCards, "true");
+            remoteConfig.Override(RemoteConfigKeys.FeatureStreak, "true");
             return new AppServices
             {
                 Auth = auth,

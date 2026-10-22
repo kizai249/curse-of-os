@@ -240,6 +240,7 @@ functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:ind
   - `.env.local` للوحة: مفاتيح مشروع الويب ومفتاح reCAPTCHA Enterprise.
   - App Check للويب مفعّل في Console.
 - `ADMIN_MFA_REQUIRED=true` في `firebase/functions/.env.fq-prod` بعد تفعيل TOTP (Q27).
+- **يوم إصدار R2:** `STREAK_REWARDS=true` في `firebase/functions/.env.fq-prod` (Q41)، ثم في Remote Config: `feature_coop` و`feature_player_cards` و`feature_streak` = true.
 - الرفع للمتاجر: §5.3.
 
 ## 8. استكشاف الأخطاء

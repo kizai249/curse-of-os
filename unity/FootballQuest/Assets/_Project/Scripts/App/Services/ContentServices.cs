@@ -49,6 +49,16 @@ namespace FootballQuest.App.Services
             foreach (var d in JsonFields.List(MiniJson.Parse(res.Body), "documents")) docs.Add(FirestoreRest.DecodeDocument(d));
             return Album.ParseCards(docs);
         }
+
+        public async Task<Dictionary<string, int>> GetPlayerCardsAsync(string uid)
+        {
+            var token = await auth.GetIdTokenAsync();
+            var res = await UnityHttp.GetAsync(BackendSettings.FirestoreDocumentUrl($"users/{uid}/playerCards?pageSize=100"), token);
+            if (res.Status != 200) throw new BackendException("UNAVAILABLE", "firestore " + res.Status);
+            var docs = new List<object>();
+            foreach (var d in JsonFields.List(MiniJson.Parse(res.Body), "documents")) docs.Add(FirestoreRest.DecodeDocument(d));
+            return PlayerAlbum.ParseOwned(docs);
+        }
     }
 
     /// <summary>قسائم اللاعب من محاكي Firestore (runQuery بفلتر uid — شرط قاعدة الأمان).</summary>

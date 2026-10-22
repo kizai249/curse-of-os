@@ -9,6 +9,10 @@ import { balancesOf, Balances, grantXp, readWallet, walletPatch } from "../econo
 import { accuracyBand, distanceM, isInside, isValidCoordinate } from "../location/geo.js";
 import { checkIssue, IssueBlock, IssuedCoupon, liveCampaigns, writeIssue } from "../coupons/issue.js";
 import { verifyBranchCode } from "./codes.js";
+import { streakReward, streakRewardsOn } from "./streak.js";
+import { cryptoRng } from "../economy/wallet.js";
+import { grantPlayerCard } from "../coop/playerCards.js";
+import type { Rng } from "../economy/packs.js";
 
 export const BRANCH_CODE_SECRET = defineSecret("BRANCH_CODE_SECRET");
 
@@ -29,6 +33,20 @@ export interface CampaignNote {
   reason: IssueBlock | "need_location";
 }
 
+export interface StreakResult {
+  brandId: string;
+  count: number;
+  /** null إذا ما وصلت السلسلة يوم مكافأة اليوم. */
+  reward: {
+    day: number;
+    packs: number;
+    epicPacks: number;
+    playerCardId: string | null;
+    playerCardName: { ar: string; en: string } | null;
+    couponIssued: boolean;
+  } | null;
+}
+
 export interface ScanResult {
   status: "verified" | "checked_in" | "already";
   visitId: string;
@@ -37,6 +55,8 @@ export interface ScanResult {
   rewards: { xp: number; packs: number };
   coupons: IssuedCoupon[];
   campaignNotes: CampaignNote[];
+  /** سلسلة الزيارات للعلامة (الزيارة المحققة فقط) — GAME_RULES §6.4. */
+  streak: StreakResult | null;
   balances: Balances;
 }
 
@@ -54,7 +74,7 @@ function dayBefore(day: string): string {
  * - النتيجة مخزنة بمفتاح uid_branchId_day: إعادة المسح ترجع نفس النتيجة بدون مكافأة ولا حدث إضافي.
  * - الإحداثيات تُستخدم للمقارنة فقط وما تُخزن.
  */
-export async function handleScan(uid: string, input: ScanInput, secret: string, now: Date = new Date()): Promise<ScanResult> {
+export async function handleScan(uid: string, input: ScanInput, secret: string, now: Date = new Date(), rng: Rng = cryptoRng): Promise<ScanResult> {
   const day = gameDayId(now);
   const check = verifyBranchCode(secret, input?.code, day);
   if (!check.ok) fail("failed-precondition", "QR_INVALID");
@@ -80,6 +100,7 @@ export async function handleScan(uid: string, input: ScanInput, secret: string, 
 
   const campaigns = verified ? await liveCampaigns(branchId, "verified_visit", now) : [];
   const pendingNotes = verified ? [] : await liveCampaigns(branchId, "verified_visit", now);
+  const streakCampaigns = verified && streakRewardsOn() ? await liveCampaigns(branchId, "visit_streak", now) : [];
   const visitId = `${uid}_${branchId}_${day}`;
 
   return db.runTransaction(async (tx) => {
@@ -102,17 +123,45 @@ export async function handleScan(uid: string, input: ScanInput, secret: string, 
     const rewards = { xp: 0, packs: 0 };
     let streakCount = 0;
     let firstVisitToBrand = false;
+    let streak: StreakResult | null = null;
     const streaks = { ...(user.streaks ?? {}) } as Record<string, { count: number; lastDay: string }>;
+    let previousCount = 0;
     if (verified) {
-      wallet = grantXp({ ...wallet, packs: wallet.packs + VERIFIED_VISIT_REWARD.packs }, VERIFIED_VISIT_REWARD.xp, day);
-      rewards.xp = VERIFIED_VISIT_REWARD.xp;
-      rewards.packs = VERIFIED_VISIT_REWARD.packs;
-      // سلسلة الزيارات لكل علامة (GAME_RULES §6.4): العدّ هنا، ومكافآت الأيام 3/5/7 في S6b (R2).
+      // سلسلة الزيارات لكل علامة (GAME_RULES §6.4): أيام متتالية بزيارة محققة لأي فرع من نفس العلامة.
       const previous = streaks[branch.brandId];
       firstVisitToBrand = !previous;
       if (previous?.lastDay === day) streakCount = previous.count;
       else streakCount = previous?.lastDay === dayBefore(day) ? previous.count + 1 : 1;
+      previousCount = previous?.lastDay === day ? previous.count : streakCount - 1;
       streaks[branch.brandId] = { count: streakCount, lastDay: day };
+    }
+    const reward = verified && streakRewardsOn() ? streakReward(previousCount, streakCount) : null;
+    // قسيمة اليوم 7: قراءات المخزون والحد قبل أي كتابة في المعاملة.
+    const streakChecks = reward?.coupon ? await Promise.all(streakCampaigns.map((c) => checkIssue(tx, c, branchId, uid))) : [];
+
+    if (verified) {
+      wallet = grantXp({ ...wallet, packs: wallet.packs + VERIFIED_VISIT_REWARD.packs }, VERIFIED_VISIT_REWARD.xp, day);
+      rewards.xp = VERIFIED_VISIT_REWARD.xp;
+      rewards.packs = VERIFIED_VISIT_REWARD.packs;
+      streak = { brandId: branch.brandId, count: streakCount, reward: null };
+    }
+    let ownedPlayers = user.ownedPlayers as string[] | undefined;
+    if (reward && streak) {
+      wallet = {
+        ...wallet,
+        packs: wallet.packs + reward.packs,
+        packsGuaranteed: { ...wallet.packsGuaranteed, epic: wallet.packsGuaranteed.epic + reward.epicPacks },
+      };
+      const card = reward.playerCard ? grantPlayerCard(tx, uid, ownedPlayers, rng, now, "rare") : null;
+      if (card) ownedPlayers = card.ownedPlayers;
+      streak.reward = {
+        day: reward.day,
+        packs: reward.packs,
+        epicPacks: reward.epicPacks,
+        playerCardId: card?.playerId ?? null,
+        playerCardName: card?.name ?? null,
+        couponIssued: false,
+      };
     }
 
     const coupons: IssuedCoupon[] = [];
@@ -120,6 +169,13 @@ export async function handleScan(uid: string, input: ScanInput, secret: string, 
     for (const ic of issueChecks) {
       if (ic.block) notes.push({ campaignId: ic.campaign.id, title: ic.campaign.data.title, reason: ic.block });
       else coupons.push(writeIssue(tx, ic, uid, branchId, { trigger: "verified_visit", visitId }, now));
+    }
+    for (const ic of streakChecks) {
+      if (ic.block) notes.push({ campaignId: ic.campaign.id, title: ic.campaign.data.title, reason: ic.block });
+      else {
+        coupons.push(writeIssue(tx, ic, uid, branchId, { trigger: "visit_streak", visitId, streakCount }, now));
+        if (streak?.reward) streak.reward.couponIssued = true;
+      }
     }
 
     const result: ScanResult = {
@@ -131,6 +187,7 @@ export async function handleScan(uid: string, input: ScanInput, secret: string, 
       // الرموز الصريحة ما تُخزن في مستند الزيارة.
       coupons: [],
       campaignNotes: notes,
+      streak,
       balances: balancesOf(wallet),
     };
     tx.create(visitRef, {
@@ -143,7 +200,7 @@ export async function handleScan(uid: string, input: ScanInput, secret: string, 
       scannedAt: Timestamp.fromDate(now),
       result,
     });
-    tx.update(userRef, { ...walletPatch(wallet), streaks });
+    tx.update(userRef, { ...walletPatch(wallet), streaks, ...(ownedPlayers ? { ownedPlayers } : {}) });
     if (verified) {
       writeEvent(tx, "branch_visit_verified", uid, user.city ?? null, input, {
         branchId,

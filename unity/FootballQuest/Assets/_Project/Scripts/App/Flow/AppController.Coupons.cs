@@ -78,7 +78,12 @@ namespace FootballQuest.App.Flow
                 foreach (var c in result.Coupons) services.Vault.Save(c.CouponId, new RedeemCodes { Token = c.RedeemToken, Manual = c.ManualCode });
                 // تسجيل الحضور اليوم يفتح غرف «منتخبنا يجمعنا» في هذا الفرع (S8).
                 RememberCheckIn(result);
-                ShowFeedback(ScanFlow.ForScan(result, reading, Lang), result.Coupons.Count > 0);
+                // سلسلة الزيارات (S6b — خلف feature_streak).
+                var streakLines = result.Streak != null && services.RemoteConfig.GetBool(RemoteConfigKeys.FeatureStreak)
+                    ? result.Streak.Lines(result.BrandName.Get(Lang), Lang)
+                    : null;
+                if (result.Streak?.PlayerCardName != null) playerAlbum = null;
+                ShowFeedback(ScanFlow.ForScan(result, reading, Lang), result.Coupons.Count > 0, streakLines);
             }
             catch (BackendException ex) when (ex.StateId == StateCatalog.QrInvalid || ex.StateId == StateCatalog.QrBranchInactive)
             {
@@ -97,7 +102,7 @@ namespace FootballQuest.App.Flow
         }
 
         /// <summary>الحالات النصية في Sheet واحد بالترتيب، ثم ACC_GUEST_LINK بعد أول قسيمة للضيف.</summary>
-        private void ShowFeedback(List<Feedback> feedback, bool gotCoupon)
+        private void ShowFeedback(List<Feedback> feedback, bool gotCoupon, List<string> extraLines = null)
         {
             var title = (string)null;
             var body = new StringBuilder();
@@ -108,6 +113,12 @@ namespace FootballQuest.App.Flow
                 if (body.Length > 0) body.Append("\n\n");
                 body.Append(state.Format(Lang, f.Values));
                 title = title ?? state.Title(Lang);
+                // سطور السلسلة بعد حالة الزيارة المحققة مباشرة.
+                if (extraLines != null && f.StateId == StateCatalog.QrCheckinVerified)
+                {
+                    foreach (var line in extraLines) body.Append("\n").Append(line);
+                    extraLines = null;
+                }
             }
             var buttons = new List<SheetButton>();
             if (gotCoupon) buttons.Add(new SheetButton(T(UiStrings.Wallet), () => Run(RenderWalletAsync())));

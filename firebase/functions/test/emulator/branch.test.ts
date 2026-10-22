@@ -287,6 +287,68 @@ describe("account deletion cancels open coupons", () => {
   });
 });
 
+interface StreakScan extends Scan {
+  streak: { brandId: string; count: number; reward: null | { day: number; packs: number; epicPacks: number; playerCardId: string | null; couponIssued: boolean } };
+}
+
+describe("visit streak (GAME_RULES §6.4, S6b)", () => {
+  const today = () => gameDayId(new Date());
+  const daysAgo = (n: number) => {
+    const d = new Date(`${today()}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() - n);
+    return d.toISOString().slice(0, 10);
+  };
+  async function withStreak(count: number, lastDay: string) {
+    const p = await player();
+    await admin().db.doc(`users/${p.uid}`).update({ streaks: { brand_a: { count, lastDay } } });
+    return p;
+  }
+
+  it("day 3 gives two packs on top of the visit reward", async () => {
+    const p = await withStreak(2, daysAgo(1));
+    const r = await callOk<StreakScan>("scanBranchCode", { code: todayCode(), ...near }, p.idToken);
+    expect(r.streak).toMatchObject({ brandId: "brand_a", count: 3, reward: { day: 3, packs: 2, epicPacks: 0, playerCardId: null } });
+    expect(r.balances.packs).toBe(1 + 2);
+    // فرع ثاني لنفس العلامة في نفس اليوم: نفس العدد وبدون مكافأة ثانية.
+    const again = await callOk<StreakScan>("scanBranchCode", { code: todayCode("br_b"), ...near }, p.idToken);
+    expect(again.streak).toMatchObject({ count: 3, reward: null });
+  });
+
+  it("day 5 gives a rare-or-higher player card", async () => {
+    const p = await withStreak(4, daysAgo(1));
+    const r = await callOk<StreakScan>("scanBranchCode", { code: todayCode(), ...near }, p.idToken);
+    expect(r.streak.reward).toMatchObject({ day: 5, packs: 0 });
+    const id = r.streak.reward!.playerCardId!;
+    const user = (await admin().db.doc(`users/${p.uid}`).get()).data()!;
+    expect(user.ownedPlayers).toEqual([id]);
+    expect((await admin().db.doc(`users/${p.uid}/playerCards/${id}`).get()).get("count")).toBe(1);
+    const { loadPlayers } = await import("../../src/content/catalog.js");
+    expect(["rare", "epic", "legendary"]).toContain(loadPlayers().players.find((x) => x.id === id)!.rarity);
+  });
+
+  it("day 7 gives a guaranteed epic pack and the brand's visit_streak coupon", async () => {
+    await campaign("cmp_streak", "visit_streak", { br_a: 5 });
+    const p = await withStreak(6, daysAgo(1));
+    const r = await callOk<StreakScan>("scanBranchCode", { code: todayCode(), ...near }, p.idToken);
+    expect(r.streak.reward).toMatchObject({ day: 7, epicPacks: 1, couponIssued: true });
+    expect(r.balances).toMatchObject({ epicPacks: 1 });
+    expect(r.coupons).toHaveLength(1);
+    const coupon = (await admin().db.doc(`coupons/${r.coupons[0]!.couponId}`).get()).data()!;
+    expect(coupon).toMatchObject({ campaignId: "cmp_streak", status: "issued", source: { trigger: "visit_streak", streakCount: 7 } });
+    expect((await admin().db.doc("campaigns/cmp_streak/stock/br_a").get()).data()).toMatchObject({ issued: 1, remaining: 4 });
+  });
+
+  it("a missed day resets the streak to 1 with no reward; check-ins without location do not count", async () => {
+    const p = await withStreak(6, daysAgo(2));
+    const r = await callOk<StreakScan>("scanBranchCode", { code: todayCode(), ...near }, p.idToken);
+    expect(r.streak).toMatchObject({ count: 1, reward: null });
+    const q = await withStreak(2, daysAgo(1));
+    const unverified = await callOk<StreakScan>("scanBranchCode", { code: todayCode() }, q.idToken);
+    expect(unverified.streak).toBeNull();
+    expect((await admin().db.doc(`users/${q.uid}`).get()).get("streaks.brand_a.count")).toBe(2);
+  });
+});
+
 function shape(value: unknown, path = ""): string[] {
   if (value === null || typeof value !== "object") return [`${path}:${value === null ? "null" : typeof value}`];
   if (Array.isArray(value)) return value.length === 0 ? [`${path}:[]`] : shape(value[0], `${path}[]`);

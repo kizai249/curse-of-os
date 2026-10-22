@@ -5,25 +5,62 @@
     "branch": {
       "branchId": "br_hm_jed_tahlia",
       "brandId": "brand_halfmillion",
-      "name": { "ar": "فرع التحلية", "en": "Tahlia Branch" },
-      "brandName": { "ar": "هاف مليون", "en": "Half Million" }
+      "name": {
+        "ar": "فرع التحلية",
+        "en": "Tahlia Branch"
+      },
+      "brandName": {
+        "ar": "هاف مليون",
+        "en": "Half Million"
+      }
     },
     "verified": true,
-    "rewards": { "xp": 30, "packs": 1 },
+    "rewards": {
+      "xp": 30,
+      "packs": 1
+    },
     "coupons": [
       {
         "couponId": "cp_a1",
         "campaignId": "cmp_hm_visit_jan",
         "brandId": "brand_halfmillion",
-        "title": { "ar": "قهوة اليوم", "en": "Coffee of the day" },
-        "terms": { "ar": "مشروب واحد مقاس وسط.", "en": "One medium drink." },
+        "title": {
+          "ar": "قهوة اليوم",
+          "en": "Coffee of the day"
+        },
+        "terms": {
+          "ar": "مشروب واحد مقاس وسط.",
+          "en": "One medium drink."
+        },
         "issuedBranchId": "br_hm_jed_tahlia",
         "expiresAt": "2027-01-22T18:22:41.000Z",
         "redeemToken": "q2l0aW5nLWV4YW1wbGUtdG9r",
         "manualCode": "K7M2QX9P"
       }
     ],
-    "campaignNotes": [{ "campaignId": "cmp_hm_visit_feb", "title": { "ar": "حلى مجاني", "en": "Free dessert" }, "reason": "sold_out" }],
-    "balances": { "packs": 2, "epicPacks": 0, "legendaryPacks": 0, "fanPoints": 0, "xp": 40, "level": 1, "pityCount": 0 }
+    "campaignNotes": [
+      {
+        "campaignId": "cmp_hm_visit_feb",
+        "title": {
+          "ar": "حلى مجاني",
+          "en": "Free dessert"
+        },
+        "reason": "sold_out"
+      }
+    ],
+    "balances": {
+      "packs": 2,
+      "epicPacks": 0,
+      "legendaryPacks": 0,
+      "fanPoints": 0,
+      "xp": 40,
+      "level": 1,
+      "pityCount": 0
+    },
+    "streak": {
+      "brandId": "brand_halfmillion",
+      "count": 1,
+      "reward": null
+    }
   }
 }

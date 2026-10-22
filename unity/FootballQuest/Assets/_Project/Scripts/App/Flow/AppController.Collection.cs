@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FootballQuest.App.UI;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
+using FootballQuest.Core.Coop;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Ui;
 using UnityEngine;
@@ -138,6 +140,7 @@ namespace FootballQuest.App.Flow
             UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
             UiFactory.Label(header, T(UiStrings.Album), Lang, UiTheme.HeadingSize, bold: true);
             UiFactory.Button(header, T(UiStrings.BackToMap), Lang, BackToHub, ButtonStyle.Ghost);
+            AlbumTabs(screen, players: false);
 
             if (album == null)
             {
@@ -167,6 +170,97 @@ namespace FootballQuest.App.Flow
                     le.preferredWidth = 120f;
                     le.flexibleWidth = 1f;
                 }
+            }
+        }
+
+        // ── بطاقات اللاعبين (S5b) ───────────────────────────────
+
+        private PlayerAlbum playerAlbum;
+
+        private bool PlayerCardsEnabled => services.RemoteConfig.GetBool(RemoteConfigKeys.FeaturePlayerCards);
+
+        /// <summary>تبويبا الألبوم: المنتخبات واللاعبين (اللاعبين خلف feature_player_cards — R2).</summary>
+        private void AlbumTabs(RectTransform screen, bool players)
+        {
+            if (!PlayerCardsEnabled) return;
+            var tabs = UiFactory.HStack(screen, "AlbumTabs", Lang);
+            UiFactory.Size(tabs, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            UiFactory.Button(tabs, T(UiStrings.AlbumTeams), Lang, RenderAlbum, players ? ButtonStyle.Secondary : ButtonStyle.Primary);
+            UiFactory.Button(tabs, T(UiStrings.AlbumPlayers), Lang, RenderPlayerAlbum, players ? ButtonStyle.Primary : ButtonStyle.Secondary);
+        }
+
+        private void RenderPlayerAlbum()
+        {
+            hubVisible = false;
+            var screen = ui.NewScreen("PlayerAlbum");
+            var header = UiFactory.HStack(screen, "Header", Lang);
+            UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            UiFactory.Label(header, T(UiStrings.Album), Lang, UiTheme.HeadingSize, bold: true);
+            UiFactory.Button(header, T(UiStrings.BackToMap), Lang, BackToHub, ButtonStyle.Ghost);
+            AlbumTabs(screen, players: true);
+
+            if (playerAlbum == null)
+            {
+                UiFactory.Label(screen, "…", Lang, UiTheme.TitleSize, center: true);
+                Run(LoadPlayerAlbumThenRender());
+                return;
+            }
+            UiFactory.Label(screen, F(UiStrings.PlayerAlbumProgress, ("owned", playerAlbum.OwnedCount.ToString()), ("total", playerAlbum.Total.ToString())),
+                Lang, UiTheme.SmallSize, color: UiTheme.TextMuted);
+            UiFactory.Label(screen, T(UiStrings.PlayerAlbumHint), Lang, UiTheme.SmallSize, color: UiTheme.TextMuted);
+
+            var list = UiFactory.Scroll(screen, "Players");
+            foreach (var position in PlayerAlbum.PositionOrder)
+            {
+                UiFactory.Label(list, CoopText.Position(position, Lang), Lang, UiTheme.BodySize, bold: true);
+                foreach (var entry in playerAlbum.Entries.Where(e => e.Character.Position == position))
+                {
+                    var e = entry;
+                    var label = e.Owned
+                        ? e.Character.Name.Get(Lang) + "  ×" + e.Count + "\n" + Variants.RarityName(e.Character.Rarity, Lang)
+                        : "?\n" + Variants.RarityName(e.Character.Rarity, Lang);
+                    var tile = UiFactory.Button(list, label, Lang, () => RenderPlayerCard(e), e.Owned ? ButtonStyle.Secondary : ButtonStyle.Ghost);
+                    tile.GetComponent<UnityEngine.UI.Image>().color = e.Owned ? CardView.Frame(e.Character.Rarity) : new Color(1f, 1f, 1f, 0.06f);
+                }
+            }
+        }
+
+        private async Task LoadPlayerAlbumThenRender()
+        {
+            try
+            {
+                var contentDoc = await services.Content.LoadPlayersAsync();
+                var owned = await services.Collection.GetPlayerCardsAsync(services.Auth.Uid);
+                playerAlbum = new PlayerAlbum(PlayerCharacter.ParseContent(contentDoc), owned);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+                BackToHub();
+                return;
+            }
+            RenderPlayerAlbum();
+        }
+
+        /// <summary>البطاقة: الاسم والمركز والندرة، والإحصاءات للمملوكة فقط.</summary>
+        private void RenderPlayerCard(PlayerAlbumEntry entry)
+        {
+            var screen = ui.NewScreen("PlayerCard");
+            var header = UiFactory.HStack(screen, "Header", Lang);
+            UiFactory.Size(header, UiTheme.ButtonHeight, UiTheme.ButtonHeight);
+            UiFactory.Label(header, entry.Owned ? entry.Character.Name.Get(Lang) : "?", Lang, UiTheme.HeadingSize, bold: true);
+            UiFactory.Button(header, T(UiStrings.Album), Lang, RenderPlayerAlbum, ButtonStyle.Ghost);
+            UiFactory.Label(screen, CoopText.Position(entry.Character.Position, Lang) + " — " + Variants.RarityName(entry.Character.Rarity, Lang),
+                Lang, UiTheme.BodySize, center: true, color: UiTheme.TextMuted);
+            if (entry.Owned)
+            {
+                foreach (var key in RoomView.StatKeys)
+                    UiFactory.Label(screen, CoopText.Stat(key, Lang) + ": " + entry.Character.Stats[key], Lang, UiTheme.BodySize, center: true);
+                UiFactory.Label(screen, F(UiStrings.OwnedTimes, ("count", entry.Count.ToString())), Lang, UiTheme.SmallSize, center: true, color: UiTheme.TextMuted);
+            }
+            else
+            {
+                UiFactory.Label(screen, T(UiStrings.NotOwned), Lang, UiTheme.BodySize, center: true);
             }
         }
 

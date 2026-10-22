@@ -86,6 +86,8 @@ namespace FootballQuest.Core.Coupons
         public int RewardPacks;
         public List<IssuedCoupon> Coupons = new List<IssuedCoupon>();
         public List<CampaignNote> Notes = new List<CampaignNote>();
+        /// <summary>سلسلة الزيارات للعلامة (الزيارة المحققة فقط) — GAME_RULES §6.4.</summary>
+        public StreakInfo Streak;
         public Balances Balances;
 
         public static ScanResult Parse(object r)
@@ -104,6 +106,7 @@ namespace FootballQuest.Core.Coupons
                 Balances = Balances.Parse(JsonFields.Obj(r, "balances")),
             };
             foreach (var c in JsonFields.List(r, "coupons")) parsed.Coupons.Add(IssuedCoupon.Parse(c));
+            parsed.Streak = StreakInfo.Parse(JsonFields.Obj(r, "streak"));
             foreach (var n in JsonFields.List(r, "campaignNotes"))
             {
                 parsed.Notes.Add(new CampaignNote
@@ -114,6 +117,53 @@ namespace FootballQuest.Core.Coupons
                 });
             }
             return parsed;
+        }
+    }
+
+    /// <summary>عدد أيام السلسلة ومكافأة اليوم 3/5/7 إن وجدت (S6b).</summary>
+    public sealed class StreakInfo
+    {
+        public string BrandId;
+        public int Count;
+        public int RewardDay;
+        public int Packs;
+        public int EpicPacks;
+        public Localized PlayerCardName;
+        public bool CouponIssued;
+
+        public bool HasReward => RewardDay > 0;
+
+        public static StreakInfo Parse(object o)
+        {
+            if (o == null) return null;
+            var reward = JsonFields.Obj(o, "reward");
+            var card = JsonFields.Obj(reward, "playerCardName");
+            return new StreakInfo
+            {
+                BrandId = JsonFields.Str(o, "brandId"),
+                Count = JsonFields.Int(o, "count"),
+                RewardDay = JsonFields.Int(reward, "day"),
+                Packs = JsonFields.Int(reward, "packs"),
+                EpicPacks = JsonFields.Int(reward, "epicPacks"),
+                PlayerCardName = card == null ? null : Localized.Parse(card),
+                CouponIssued = JsonFields.Bool(reward, "couponIssued"),
+            };
+        }
+
+        /// <summary>
+        /// سطور العرض بعد المسح: عدد الأيام دائمًا، ومكافأة اليوم إن وجدت. القسيمة نفسها تظهر بنص CPN_ISSUED.
+        /// </summary>
+        public List<string> Lines(string brandName, Language language)
+        {
+            var lines = new List<string>
+            {
+                UiState.Fill(UiStrings.Get(UiStrings.StreakDays, language), new Dictionary<string, string> { { "brand", brandName }, { "count", Count.ToString(CultureInfo.InvariantCulture) } }),
+            };
+            if (!HasReward) return lines;
+            if (Packs > 0) lines.Add(UiState.Fill(UiStrings.Get(UiStrings.StreakPacks, language), new Dictionary<string, string> { { "count", Packs.ToString(CultureInfo.InvariantCulture) } }));
+            if (EpicPacks > 0) lines.Add(UiStrings.Get(UiStrings.RewardEpicPack, language));
+            if (PlayerCardName != null) lines.Add(UiState.Fill(UiStrings.Get(UiStrings.RewardPlayerCard, language), new Dictionary<string, string> { { "name", PlayerCardName.Get(language) } }));
+            return lines;
         }
     }
 

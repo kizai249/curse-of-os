@@ -218,6 +218,13 @@ namespace FootballQuest.FirebaseServices
             var snapshot = await FirebaseFirestore.DefaultInstance.Collection($"users/{uid}/teamCards").GetSnapshotAsync();
             return Album.ParseCards(snapshot.Documents.Select(d => FirebaseFunctionsClient.Normalize(d.ToDictionary())).ToList());
         }
+
+        public async Task<Dictionary<string, int>> GetPlayerCardsAsync(string uid)
+        {
+            await FirebaseInstaller.Ready;
+            var snapshot = await FirebaseFirestore.DefaultInstance.Collection($"users/{uid}/playerCards").GetSnapshotAsync();
+            return PlayerAlbum.ParseOwned(snapshot.Documents.Select(d => FirebaseFunctionsClient.Normalize(d.ToDictionary())).ToList());
+        }
     }
 
     internal sealed class FirestoreCouponSource : ICouponSource

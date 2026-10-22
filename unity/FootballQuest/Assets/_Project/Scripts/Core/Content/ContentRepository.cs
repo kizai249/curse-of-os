@@ -26,6 +26,7 @@ namespace FootballQuest.Core.Content
         public const string TeamsPath = "content/teams";
         public const string StadiumsPath = "content/stadiums";
         public const string SchedulePath = "content/schedule";
+        public const string PlayersPath = "content/players";
 
         public static readonly TimeSpan StaticTtl = TimeSpan.FromHours(24);
         public static readonly TimeSpan ScheduleTtl = TimeSpan.FromMinutes(15);
@@ -53,6 +54,9 @@ namespace FootballQuest.Core.Content
                 Matches = matches,
             };
         }
+
+        /// <summary>الشخصيات الثلاثين (S5b) — محتوى ثابت بنفس تخزين 24 ساعة. null بدون اتصال ولا نسخة محفوظة.</summary>
+        public Task<object> LoadPlayersAsync(bool forceRefresh = false) => GetAsync(PlayersPath, StaticTtl, forceRefresh);
 
         private async Task<object> GetAsync(string path, TimeSpan ttl, bool forceRefresh)
         {

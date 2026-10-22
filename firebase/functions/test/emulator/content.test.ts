@@ -31,6 +31,7 @@ describe("content seeding and schedule", () => {
     const { db } = admin();
     expect(((await db.doc("content/teams").get()).get("teams") as unknown[]).length).toBe(24);
     expect(((await db.doc("content/stadiums").get()).get("stadiums") as unknown[]).length).toBe(8);
+    expect(((await db.doc("content/players").get()).get("players") as unknown[]).length).toBe(30);
   });
 
   it("rebuilds content/schedule with public fields only, matching the client sample shape", async () => {

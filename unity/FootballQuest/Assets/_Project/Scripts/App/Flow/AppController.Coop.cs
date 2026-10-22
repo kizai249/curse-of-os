@@ -503,6 +503,7 @@ namespace FootballQuest.App.Flow
             StopCoopPolling();
             RenderCoopResult(coopRoom, result);
             if (result?.CouponId != null) Run(EnsureCouponCodeAsync(result.CouponId));
+            if (result?.PlayerCardId != null) playerAlbum = null; // البطاقة الجديدة تظهر في الألبوم مع التحميل الجاي.
             Run(RefreshProfileAsync());
         }
 

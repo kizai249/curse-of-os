@@ -19,6 +19,9 @@ namespace FootballQuest.Core.Collection
     public interface ICollectionSource
     {
         Task<List<OwnedCard>> GetTeamCardsAsync(string uid);
+
+        /// <summary>بطاقات اللاعبين الافتراضيين: playerId ← عدد النسخ (S5b).</summary>
+        Task<Dictionary<string, int>> GetPlayerCardsAsync(string uid);
     }
 
     public sealed class AlbumSlot
