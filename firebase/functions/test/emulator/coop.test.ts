@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { Timestamp } from "firebase-admin/firestore";
 import { beforeEach, describe, expect, it } from "vitest";
 import { signBranchCode } from "../../src/branch/codes.js";
@@ -356,4 +358,45 @@ describe("daily win-reward cap (GAME_RULES §7.8)", () => {
     expect((await db.doc(`rooms/${roomId}/views/${players[1]!.uid}`).get()).get("result")).toMatchObject({ capped: true, xp: 0, playerCardId: null });
     expect((await db.doc(`users/${players[1]!.uid}`).get()).get("coopWins.count")).toBe(5);
   });
+});
+
+function plain(value: unknown): unknown {
+  if (value instanceof Timestamp) return value.toDate().toISOString();
+  if (Array.isArray(value)) return value.map(plain);
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, plain(v)]));
+  return value;
+}
+function shape(value: unknown, path = ""): string[] {
+  if (value === null || typeof value !== "object") return [`${path}:${value === null ? "null" : typeof value}`];
+  if (Array.isArray(value)) return value.length === 0 ? [`${path}:[]`] : shape(value[0], `${path}[]`);
+  return Object.entries(value as Record<string, unknown>).flatMap(([k, v]) => shape(v, path ? `${path}.${k}` : k)).sort();
+}
+const sample = (name: string) => JSON.parse(readFileSync(resolve(__dirname, `../../../../shared/contracts/samples/${name}.json`), "utf8"));
+
+describe("contract samples (Unity client)", () => {
+  it("startRound, room, view and a winning submitLineup match the samples", async () => {
+    await coopCampaign(10);
+    const { players, roomId } = await team(2);
+    const start = await callFunction("startRound", { roomId, requestId: requestId() }, players[0]!.idToken);
+    expect(shape(start.body)).toEqual(shape(sample("startRound.ok")));
+    await skipCountdown(roomId);
+    const { db } = admin();
+    const solution = (await db.doc(`rooms/${roomId}/private/solution`).get()).get("puzzle.solution") as Record<string, string>;
+    const wrongSlot = Object.keys(solution)[0]!;
+    const r = await room(roomId);
+    const owner = (r.slots as { slotId: string; ownerUid: string }[]).find((s) => s.slotId === wrongSlot)!.ownerUid;
+    const decoy = (r.pieces as { playerId: string }[]).map((p) => p.playerId).find((p) => !Object.values(solution).includes(p))!;
+    await placeAll(roomId, players);
+    await callOk("placePiece", { roomId, slotId: wrongSlot, playerId: decoy }, players.find((p) => p.uid === owner)!.idToken);
+    await callOk("submitLineup", { roomId, requestId: requestId() }, players[0]!.idToken);
+    // placements خريطة بمفاتيح متغيرة (s1..sN): نقارن شكل مدخل واحد.
+    const live = plain(await room(roomId)) as Record<string, unknown>;
+    live.placements = { s1: "p01" };
+    expect(shape(live)).toEqual(shape(sample("room.playing")));
+    expect(shape(plain((await db.doc(`rooms/${roomId}/views/${players[0]!.uid}`).get()).data()))).toEqual(shape(sample("room.view")));
+
+    await callOk("placePiece", { roomId, slotId: wrongSlot, playerId: solution[wrongSlot] }, players.find((p) => p.uid === owner)!.idToken);
+    const won = await callFunction("submitLineup", { roomId, requestId: requestId() }, players[1]!.idToken);
+    expect(shape(won.body)).toEqual(shape(sample("submitLineup.won")));
+  }, 60_000);
 });

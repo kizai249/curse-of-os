@@ -5,6 +5,7 @@ using FootballQuest.Core.Analytics;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Coop;
 using FootballQuest.Core.Coupons;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Location;
@@ -41,6 +42,8 @@ namespace FootballQuest.App.Services
         public ICouponSource Wallet { get; set; }
         public RedeemCodeVault Vault { get; set; }
         public EventQueue Events { get; set; }
+        public ICoopApi Coop { get; set; }
+        public IRoomFeed Rooms { get; set; }
         public bool UsesEmulator { get; set; }
 
         public Language Language
@@ -61,6 +64,9 @@ namespace FootballQuest.App.Services
         {
             var auth = new EmulatorAuthGateway();
             var functions = new EmulatorFunctionsClient(auth);
+            // المحاكي بيئة تطوير: ميزات R2 ظاهرة (في fq-prod تتفعل من Remote Config وقت إصدارها).
+            var remoteConfig = new LocalRemoteConfig();
+            remoteConfig.Override(RemoteConfigKeys.FeatureCoop, "true");
             return new AppServices
             {
                 Auth = auth,
@@ -69,7 +75,7 @@ namespace FootballQuest.App.Services
                 Economy = new EconomyApi(functions),
                 Presence = new PresenceApi(functions),
                 Location = NativeLocationService.Create(),
-                RemoteConfig = new LocalRemoteConfig(),
+                RemoteConfig = remoteConfig,
                 Store = new PlayerPrefsStore(),
                 Permissions = NativePermissionService.Create(),
                 Content = new ContentRepository(new EmulatorContentSource(auth), new FileContentCache()),
@@ -77,6 +83,8 @@ namespace FootballQuest.App.Services
                 Coupons = new CouponsApi(functions),
                 Wallet = new EmulatorCouponSource(auth),
                 Vault = new RedeemCodeVault(SecureStore.Create()),
+                Coop = new CoopApi(functions),
+                Rooms = new EmulatorRoomFeed(auth),
                 UsesEmulator = true,
             };
         }

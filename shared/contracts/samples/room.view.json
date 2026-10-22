@@ -1,0 +1,10 @@
+{
+  "slots": [
+    { "slotId": "s1", "position": "GK", "requirement": { "ar": "حارس: الذكاء 70 أو أكثر", "en": "Goalkeeper with IQ 70+" } }
+  ],
+  "infoCards": [
+    { "playerId": "p14", "stats": { "spd": 61, "sho": 52, "pas": 68, "def": 80, "iq": 69 } }
+  ],
+  "notEligible": null,
+  "result": null
+}

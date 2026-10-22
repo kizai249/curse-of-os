@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
+using FootballQuest.Core.Coop;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Ui;
 using FootballQuest.Tests.Core;
@@ -60,6 +62,22 @@ namespace FootballQuest.Tools.FontCoverage
                 var odds = OddsDisclosure.Text(EconomyRules.PackOdds, lang);
                 yield return odds;
                 if (lang == Language.Arabic) yield return Shape(odds);
+            }
+            // أسماء الشخصيات وشروط اللغز (تُبنى من أسماء المراكز والإحصاءات) — «منتخبنا يجمعنا».
+            var players = MiniJson.Parse(File.ReadAllText(Path.Combine(SharedVectors.ContractsDir(), "content", "players.json")));
+            foreach (var p in JsonFields.List(players, "players"))
+            {
+                var ar = JsonFields.Str(p, "ar");
+                yield return ar;
+                yield return Shape(ar);
+                yield return JsonFields.Str(p, "en");
+            }
+            foreach (var lang in new[] { Language.Arabic, Language.English })
+            {
+                var words = string.Join("، ", RoomView.StatKeys.Select(k => CoopText.Stat(k, lang)).Concat(new[] { "GK", "DEF", "MID", "FWD" }.Select(c => CoopText.Position(c, lang))))
+                    + ": 90 أو أكثر أو أقل أعلى من الأعلى في الأقل في بين المدافعين الحراس لاعبي الوسط المهاجمين أعلى إحصائية عنده";
+                yield return words;
+                if (lang == Language.Arabic) yield return Shape(words);
             }
             foreach (var key in UiStrings.Keys)
             {

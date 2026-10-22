@@ -16,6 +16,7 @@ using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
 using FootballQuest.Core.Collection;
 using FootballQuest.Core.Content;
+using FootballQuest.Core.Coop;
 using FootballQuest.Core.Coupons;
 using FootballQuest.Core.Economy;
 using FootballQuest.Core.Location;
@@ -70,6 +71,8 @@ namespace FootballQuest.FirebaseServices
                     Coupons = new CouponsApi(functions),
                     Wallet = new FirestoreCouponSource(),
                     Vault = new RedeemCodeVault(SecureStore.Create()),
+                    Coop = new CoopApi(functions),
+                    Rooms = new FirestoreRoomFeed(),
                     UsesEmulator = false,
                 };
             };
@@ -225,6 +228,62 @@ namespace FootballQuest.FirebaseServices
             // الفلتر على uid شرط قاعدة الأمان (اللاعب يقرأ قسائمه فقط).
             var snapshot = await FirebaseFirestore.DefaultInstance.Collection("coupons").WhereEqualTo("uid", uid).GetSnapshotAsync();
             return snapshot.Documents.Select(d => CouponInfo.Parse(d.Id, FirebaseFunctionsClient.Normalize(d.ToDictionary()))).ToList();
+        }
+    }
+
+    /// <summary>
+    /// الغرفة عبر مستمعين (Snapshot listeners): أول طلب يفتح المستمع، والطلبات بعده ترجع آخر نسخة بدون قراءة إضافية
+    /// (ARCHITECTURE §11: تقليل القراءات). الشاشة تسأل كل ثانية مثل وضع المحاكي.
+    /// </summary>
+    internal sealed class FirestoreRoomFeed : IRoomFeed
+    {
+        private string roomId;
+        private string viewKey;
+        private ListenerRegistration roomListener;
+        private ListenerRegistration viewListener;
+        private RoomState room;
+        private RoomView view;
+
+        public async Task<RoomState> GetRoomAsync(string id)
+        {
+            await FirebaseInstaller.Ready;
+            if (roomId != id || roomListener == null)
+            {
+                roomListener?.Stop();
+                roomId = id;
+                var reference = FirebaseFirestore.DefaultInstance.Document($"rooms/{id}");
+                var first = await reference.GetSnapshotAsync(Source.Server);
+                room = first.Exists ? RoomState.Parse(id, FirebaseFunctionsClient.Normalize(first.ToDictionary())) : null;
+                roomListener = reference.Listen(snap => room = snap.Exists ? RoomState.Parse(id, FirebaseFunctionsClient.Normalize(snap.ToDictionary())) : null);
+            }
+            return room;
+        }
+
+        public async Task<RoomView> GetViewAsync(string id, string user)
+        {
+            await FirebaseInstaller.Ready;
+            if (viewKey != id + "/" + user || viewListener == null)
+            {
+                viewListener?.Stop();
+                viewKey = id + "/" + user;
+                var reference = FirebaseFirestore.DefaultInstance.Document($"rooms/{id}/views/{user}");
+                var first = await reference.GetSnapshotAsync(Source.Server);
+                view = first.Exists ? RoomView.Parse(FirebaseFunctionsClient.Normalize(first.ToDictionary())) : null;
+                viewListener = reference.Listen(snap => view = snap.Exists ? RoomView.Parse(FirebaseFunctionsClient.Normalize(snap.ToDictionary())) : null);
+            }
+            return view;
+        }
+
+        public void Stop()
+        {
+            roomListener?.Stop();
+            viewListener?.Stop();
+            roomListener = null;
+            viewListener = null;
+            room = null;
+            view = null;
+            roomId = null;
+            viewKey = null;
         }
     }
 

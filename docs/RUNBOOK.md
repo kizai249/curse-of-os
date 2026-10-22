@@ -124,6 +124,9 @@ dotnet test tools/core-tests/CoreTests.csproj
 3. جهاز حقيقي على نفس الشبكة: اضبط PlayerPrefs `fq.emulator_host` على IP جهاز التطوير، وشغّل المحاكي بـ `--host 0.0.0.0` أو عدّل `host` في `firebase.json` محليًا.
 4. **محاكاة الأذونات في Editor:** اضبط PlayerPrefs ‏`fq.editor_perm.Location` و`fq.editor_perm.Camera` بالقيم: 0 NotDetermined، و1 Granted، و2 Approximate، و3 Denied، و4 Restricted. هكذا تجرّب كل حالات AT-01.
 5. ربط Apple/Google يحتاج Firebase SDK وأجهزة حقيقية، وأزراره مخفية في وضع المحاكي.
+6. **«منتخبنا يجمعنا» محليًا (S8):** ظاهر دائمًا في وضع المحاكي (`feature_coop` = true). تحتاج عميلين أو أكثر (Editor + جهاز أو محاكي Android)، وكل لاعب يمسح رمز الفرع اليوم في نفس الفرع: افتح «شاشة الفرع» في لوحة الشركاء (§3.1.4) وامسح الـQR. الحملة `co_op_win` ومخزونها من صفحة «الحملات» في اللوحة.
+   - القطع: `content/players` (يكتبها `npm run seed:content`).
+   - إغلاق الجولات عند `endsAt`: Cloud Task ‏`closeRound`، والاحتياط `sweepRoomsEveryMinute` (المحاكي يشغّل المجدولة يدويًا من واجهة Emulator UI، وأي نبض بعد الوقت ينهيها أيضًا).
 
 ### 3.5 إضافة Firebase Unity SDK (Q7)
 
@@ -206,7 +209,8 @@ dotnet test tools/core-tests/CoreTests.csproj
 4. App Check: Play Integrity لـ Android، وApp Attest لـ iOS.
 5. **لا تفعّل Google Analytics** عند إنشاء المشروع (`PRODUCT_BRIEF.md` ت6، وAT-10).
 6. تأكد من توفر Cloud Tasks وCloud Scheduler في `me-central2` (سؤال Q5 في الخطة).
-7. **TOTP للوحة (Q27):** رقّ Authentication إلى Identity Platform، ثم فعّل TOTP:
+7. **Cloud Tasks (S8):** فعّل Cloud Tasks API في المشروع. الطابور `closeRound` ينشئه النشر تلقائيًا في `me-central2` (Q5). إذا ما توفر، الدالة المجدولة كل دقيقة تكفي (AT-07: ≤ 60 ث).
+8. **TOTP للوحة (Q27):** رقّ Authentication إلى Identity Platform، ثم فعّل TOTP:
    ```bash
    curl -X PATCH "https://identitytoolkit.googleapis.com/admin/v2/projects/<id>/config?updateMask=mfa" \
      -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "X-Goog-User-Project: <id>" \
@@ -214,8 +218,8 @@ dotnet test tools/core-tests/CoreTests.csproj
      -d '{"mfa":{"providerConfigs":[{"state":"ENABLED","totpProviderConfig":{"adjacentIntervals":5}}]}}'
    ```
    بعدها `ADMIN_MFA_REQUIRED=true` في `.env.fq-prod`: أول دخول لكل مسؤول يعرض QR للتسجيل، وبعده يطلب الرمز في كل دخول. موظف الفرع مستثنى.
-8. تنبيهات الميزانية على `fq-prod`: 50% و80% و100% (ARCHITECTURE §11).
-9. سياسة TTL في Firestore على حقل `expireAt` لمجموعة `events` (13 شهرًا — ARCHITECTURE §10):
+9. تنبيهات الميزانية على `fq-prod`: 50% و80% و100% (ARCHITECTURE §11).
+10. سياسة TTL في Firestore على حقل `expireAt` لمجموعة `events` (13 شهرًا — ARCHITECTURE §10):
    `gcloud firestore fields ttls update expireAt --collection-group=events --enable-ttl --project=<id>`
 
 ## 7. النشر

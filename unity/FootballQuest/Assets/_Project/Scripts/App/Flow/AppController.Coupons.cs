@@ -76,7 +76,8 @@ namespace FootballQuest.App.Flow
                 var result = await Retry.RunAsync(_ => services.Coupons.ScanBranchCodeAsync(code, reading, Platform, Application.version));
                 ApplyBalances(result.Balances);
                 foreach (var c in result.Coupons) services.Vault.Save(c.CouponId, new RedeemCodes { Token = c.RedeemToken, Manual = c.ManualCode });
-                // TODO(S8): تسجيل الحضور اليوم يفتح غرف «منتخبنا يجمعنا» في هذا الفرع.
+                // تسجيل الحضور اليوم يفتح غرف «منتخبنا يجمعنا» في هذا الفرع (S8).
+                RememberCheckIn(result);
                 ShowFeedback(ScanFlow.ForScan(result, reading, Lang), result.Coupons.Count > 0);
             }
             catch (BackendException ex) when (ex.StateId == StateCatalog.QrInvalid || ex.StateId == StateCatalog.QrBranchInactive)
@@ -191,6 +192,7 @@ namespace FootballQuest.App.Flow
             try
             {
                 walletCoupons = (await services.Wallet.GetMyCouponsAsync(services.Auth.Uid))
+                    .Where(c => c.IsInWallet)
                     .OrderByDescending(c => c.IsUsable(DateTimeOffset.UtcNow)).ThenBy(c => c.ExpiresAt).ToList();
             }
             catch (Exception ex)

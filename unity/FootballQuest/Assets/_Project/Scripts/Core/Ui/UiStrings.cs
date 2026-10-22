@@ -82,6 +82,33 @@ namespace FootballQuest.Core.Ui
         public const string ValidUntil = "valid_until";
         public const string RedeemedOn = "redeemed_on";
         public const string ReissueCode = "reissue_code";
+        public const string CoopTitle = "coop_title";
+        public const string CoopIntro = "coop_intro";
+        public const string CoopAtBranch = "coop_at_branch";
+        public const string OpenRoom = "open_room";
+        public const string JoinRoom = "join_room";
+        public const string RoomCodeHint = "room_code_hint";
+        public const string RoomCode = "room_code";
+        public const string RoomPlayers = "room_players";
+        public const string RoomHost = "room_host";
+        public const string StartRound = "start_round";
+        public const string LeaveRoom = "leave_room";
+        public const string WaitingForHost = "waiting_for_host";
+        public const string RoundStartsIn = "round_starts_in";
+        public const string YourSlots = "your_slots";
+        public const string YourInfoCards = "your_info_cards";
+        public const string Lineup = "lineup";
+        public const string EmptySlot = "empty_slot";
+        public const string ChoosePiece = "choose_piece";
+        public const string LiftPiece = "lift_piece";
+        public const string ConfirmLineup = "confirm_lineup";
+        public const string TalkHint = "talk_hint";
+        public const string RewardXp = "reward_xp";
+        public const string RewardPack = "reward_pack";
+        public const string RewardEpicPack = "reward_epic_pack";
+        public const string RewardPlayerCard = "reward_player_card";
+        public const string RewardCoupon = "reward_coupon";
+        public const string LeftRound = "left_round";
         public const string Terms = "terms";
 
         private static readonly Dictionary<string, string[]> Table = new Dictionary<string, string[]>
@@ -169,6 +196,34 @@ namespace FootballQuest.Core.Ui
             { RedeemedOn, new[] { "استُخدمت في {date}", "Used on {date}" } },
             { ReissueCode, new[] { "اعرض رمز جديد", "Show a new code" } },
             { Terms, new[] { "الشروط", "Terms" } },
+            // «منتخبنا يجمعنا» — GAME_RULES §7. الإنجليزية مسودة (TODO(owner) AT-11).
+            { CoopTitle, new[] { "منتخبنا يجمعنا", "Team Up" } },
+            { CoopIntro, new[] { "لغز جماعي داخل الفرع: كل واحد يشوف جزء من التشكيلة، وتتكلمون مع بعض عشان تكملونها قبل 3 دقائق. تفوزون كلكم أو ما يفوز أحد.", "A team puzzle at the branch: each of you sees part of the lineup — talk to each other and finish it within 3 minutes. Everyone wins or no one does." } },
+            { CoopAtBranch, new[] { "في {branch}", "At {branch}" } },
+            { OpenRoom, new[] { "افتح غرفة", "Open a room" } },
+            { JoinRoom, new[] { "انضم برمز", "Join with a code" } },
+            { RoomCodeHint, new[] { "اكتب رمز الغرفة (4 أرقام)", "Enter the room code (4 digits)" } },
+            { RoomCode, new[] { "رمز الغرفة: {code}", "Room code: {code}" } },
+            { RoomPlayers, new[] { "اللاعبين ({count} من 6)", "Players ({count} of 6)" } },
+            { RoomHost, new[] { "{name} (المضيف)", "{name} (host)" } },
+            { StartRound, new[] { "ابدأ الجولة", "Start the round" } },
+            { LeaveRoom, new[] { "اطلع من الغرفة", "Leave the room" } },
+            { WaitingForHost, new[] { "ننتظر المضيف يبدأ…", "Waiting for the host to start…" } },
+            { RoundStartsIn, new[] { "تبدأ بعد {seconds}", "Starts in {seconds}" } },
+            { YourSlots, new[] { "خاناتك", "Your slots" } },
+            { YourInfoCards, new[] { "بطاقات المعلومات عندك — قولها لأصحابك", "Your info cards — tell your friends" } },
+            { Lineup, new[] { "التشكيلة", "Lineup" } },
+            { EmptySlot, new[] { "فاضية", "Empty" } },
+            { ChoosePiece, new[] { "اختر لاعب", "Choose a player" } },
+            { LiftPiece, new[] { "شيل اللاعب", "Remove player" } },
+            { ConfirmLineup, new[] { "أكّد التشكيلة", "Confirm lineup" } },
+            { TalkHint, new[] { "تكلموا مع بعض — ما فيه دردشة داخل اللعبة.", "Talk to each other — there's no in-game chat." } },
+            { RewardXp, new[] { "+{xp} XP", "+{xp} XP" } },
+            { RewardPack, new[] { "+حزمة منتخب", "+1 team pack" } },
+            { RewardEpicPack, new[] { "+حزمة ملحمية مضمونة", "+1 guaranteed Epic pack" } },
+            { RewardPlayerCard, new[] { "بطاقة لاعب جديدة: {name}", "New player card: {name}" } },
+            { RewardCoupon, new[] { "قسيمتك في المحفظة", "Your coupon is in the wallet" } },
+            { LeftRound, new[] { "طلعت من الجولة قبل نهايتها.", "You left before the round ended." } },
         };
 
         public static IEnumerable<string> Keys => Table.Keys;

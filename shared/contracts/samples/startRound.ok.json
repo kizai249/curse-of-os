@@ -1,0 +1,17 @@
+{
+  "result": {
+    "roomId": "room_4471_20270115_ab3cd",
+    "code": "4471",
+    "status": "playing",
+    "hostUid": "u_8f2c",
+    "members": [
+      { "uid": "u_8f2c", "alias": "صقر_جدة_27" },
+      { "uid": "u_19aa", "alias": "نجم_جدة_14" }
+    ],
+    "lobbyExpiresAt": "2027-01-15T18:27:40.000Z",
+    "startAt": "2027-01-15T18:20:07.000Z",
+    "endsAt": "2027-01-15T18:23:07.000Z",
+    "couponMode": "with_coupons",
+    "serverNow": "2027-01-15T18:20:02.000Z"
+  }
+}

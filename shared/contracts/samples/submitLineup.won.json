@@ -1,0 +1,29 @@
+{
+  "result": {
+    "roomId": "room_4471_20270115_ab3cd",
+    "code": "4471",
+    "status": "won",
+    "hostUid": "u_8f2c",
+    "members": [
+      { "uid": "u_8f2c", "alias": "صقر_جدة_27" }
+    ],
+    "lobbyExpiresAt": "2027-01-15T18:27:40.000Z",
+    "startAt": "2027-01-15T18:20:07.000Z",
+    "endsAt": "2027-01-15T18:22:52.000Z",
+    "couponMode": "with_coupons",
+    "serverNow": "2027-01-15T18:22:41.000Z",
+    "correct": 8,
+    "total": 8,
+    "result": {
+      "outcome": "won",
+      "xp": 50,
+      "packs": 1,
+      "epicPacks": 0,
+      "playerCardId": "p12",
+      "playerCardName": { "ar": "صخرة الوادي", "en": "Valley Rock" },
+      "couponId": "cp_a1",
+      "capped": false,
+      "codes": { "redeemToken": "q0Zr3b1yYJp0x1Qe2kQn3g", "manualCode": "K7MP3QXA" }
+    }
+  }
+}

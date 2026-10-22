@@ -31,6 +31,9 @@ namespace FootballQuest.Core.Coupons
 
         public bool IsUsable(DateTimeOffset now) => Status == "issued" && ExpiresAt > now;
 
+        /// <summary>الحجز المؤقت في «منتخبنا يجمعنا» (reserved/released) ما يظهر في المحفظة (§8.4).</summary>
+        public bool IsInWallet => Status == "issued" || Status == "redeemed" || Status == "expired";
+
         public static CouponInfo Parse(string id, object doc) => new CouponInfo
         {
             CouponId = id,

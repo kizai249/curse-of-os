@@ -66,6 +66,8 @@ export interface PlayerRoundResult {
   packs: number;
   epicPacks: number;
   playerCardId: string | null;
+  /** اسم الشخصية للعرض (العميل ما يحمل قائمة الشخصيات). */
+  playerCardName: { ar: string; en: string } | null;
   couponId: string | null;
   /** daily_cap: فاز بدون مكافآت (§7.8). */
   capped: boolean;
@@ -499,7 +501,7 @@ async function depart(tx: Transaction, id: string, room: RoomDoc, privSnap: Docu
   return { ...room, members, hostUid, slots, reservedCouponIds: Object.values(reservations) };
 }
 
-const leftResult = (): PlayerRoundResult => ({ outcome: "left", xp: 0, packs: 0, epicPacks: 0, playerCardId: null, couponId: null, capped: false });
+const leftResult = (): PlayerRoundResult => ({ outcome: "left", xp: 0, packs: 0, epicPacks: 0, playerCardId: null, playerCardName: null, couponId: null, capped: false });
 
 function expireLobby(tx: Transaction, id: string, room: RoomDoc, now: Date): RoomDoc {
   tx.update(roomRef(id), { status: "closed", closedAt: Timestamp.fromDate(now), members: room.members, memberUids: room.memberUids });
@@ -598,7 +600,7 @@ async function finishWin(
     const data = snap.data()!;
     const wins = data.coopWins as { day: string; count: number } | undefined;
     const count = wins?.day === day ? wins.count : 0;
-    const result: PlayerRoundResult = { outcome: "won", xp: 0, packs: 0, epicPacks: 0, playerCardId: null, couponId: null, capped: false };
+    const result: PlayerRoundResult = { ...leftResult(), outcome: "won" };
     let codes: { redeemToken: string; manualCode: string } | null = null;
 
     if (count >= COOP.dailyWinRewards) {
@@ -613,6 +615,8 @@ async function finishWin(
       const owned = new Set<string>((data.ownedPlayers as string[] | undefined) ?? []);
       const card = drawPlayerCard(content.players, owned, rng);
       result.playerCardId = card.playerId;
+      const character = players().byId.get(card.playerId)!;
+      result.playerCardName = { ar: character.ar, en: character.en };
       const cardRef = db().doc(`users/${u}/playerCards/${card.playerId}`);
       if (card.duplicate) tx.update(cardRef, { count: FieldValue.increment(1), lastAt: Timestamp.fromDate(now) });
       else tx.set(cardRef, { playerId: card.playerId, count: 1, firstAt: Timestamp.fromDate(now) });

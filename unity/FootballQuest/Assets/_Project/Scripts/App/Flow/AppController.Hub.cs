@@ -111,6 +111,8 @@ namespace FootballQuest.App.Flow
                 () => RequestFieldFeature(PermissionKind.Location, () => Run(CheckPresenceAsync(PresenceTrigger.Manual))),
                 ButtonStyle.Secondary);
             UiFactory.Button(actions, T(UiStrings.ScanBranch), Lang, StartBranchScan, ButtonStyle.Primary);
+            // «منتخبنا يجمعنا» — R2 خلف feature_coop (ARCHITECTURE §7).
+            if (CoopEnabled) UiFactory.Button(card, T(UiStrings.CoopTitle), Lang, RenderCoopEntry, ButtonStyle.Secondary);
         }
 
         private string Fill(string key, string name, string value) =>
