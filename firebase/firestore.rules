@@ -49,6 +49,18 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // غرف «منتخبنا يجمعنا» (DATA_CONTRACTS §6): الأعضاء يقرأون الحالة المشتركة، وكل لاعب منظوره فقط.
+    // الحل والحجوزات في private (خادم فقط)، والنبض عبر roomHeartbeat (Q33). كل الكتابة من الخادم.
+    match /rooms/{roomId} {
+      allow read: if signedIn() && request.auth.uid in resource.data.memberUids;
+      allow write: if false;
+
+      match /views/{uid} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+    }
+
     // كل ما سواه ممنوع افتراضيًا: القسائم، والمخزون، والحملات، والزيارات، والغرف، والأحداث...
     match /{document=**} {
       allow read, write: if false;

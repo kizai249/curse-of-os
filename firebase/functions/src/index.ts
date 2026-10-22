@@ -21,3 +21,14 @@ export { createStaffAccount } from "./admin/staffAccounts.js";
 export { logEvents } from "./analytics/logEvents.js";
 export { aggregateDaily } from "./analytics/aggregate.js";
 export { getReport } from "./analytics/report.js";
+export {
+  closeRound,
+  createRoom,
+  joinRoom,
+  leaveRoom,
+  placePiece,
+  roomHeartbeat,
+  startRound,
+  submitLineup,
+  sweepRoomsEveryMinute,
+} from "./coop/callables.js";

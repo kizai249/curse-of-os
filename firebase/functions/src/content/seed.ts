@@ -1,8 +1,8 @@
 import { getFirestore, Timestamp } from "firebase-admin/firestore";
-import { loadStadiums, loadTeams } from "./catalog.js";
+import { loadPlayers, loadStadiums, loadTeams } from "./catalog.js";
 
 /**
- * يكتب المحتوى العام (`content/teams` و`content/stadiums`) من shared/contracts/content.
+ * يكتب المحتوى العام (`content/teams` و`content/stadiums` و`content/players`) من shared/contracts/content.
  * Idempotent. `devSampleMatch` يضيف مثال DATA_CONTRACTS §7 فقط (للمحاكي و fq-dev)، ومعلّم devSample.
  * جدول البطولة الحقيقي يُدخله usersx_admin من لوحة الشركاء (S9) من مصادر منشورة.
  */
@@ -11,6 +11,8 @@ export async function seedContent(options: { devSampleMatch?: boolean; now?: Dat
   const now = Timestamp.fromDate(options.now ?? new Date());
   await db.doc("content/teams").set({ teams: loadTeams(), updatedAt: now });
   await db.doc("content/stadiums").set({ stadiums: loadStadiums(), updatedAt: now });
+  const { players, stats, positions } = loadPlayers();
+  await db.doc("content/players").set({ players, stats, positions, updatedAt: now });
   if (options.devSampleMatch) {
     await db.doc("matchResults/m01").set({
       matchNo: 1,

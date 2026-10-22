@@ -14,7 +14,23 @@ export function authedCallable<Req, Res>(handler: (request: AuthedRequest<Req>) 
       if (!request.auth) {
         throw new HttpsError("unauthenticated", "AUTH_REQUIRED");
       }
-      return handler(request as AuthedRequest<Req>);
+      try {
+        return await handler(request as AuthedRequest<Req>);
+      } catch (err) {
+        throw asBusy(err);
+      }
     },
   );
+}
+
+/**
+ * تعارض المعاملات (ABORTED بعد استنفاد المحاولات، مثل ضغطات متزامنة على نفس الغرفة) ← SRV_BUSY،
+ * والعميل يعيد بنفس requestId (Retry في FootballQuest.Core). أي خطأ ثاني يمر كما هو.
+ */
+export function asBusy(err: unknown): unknown {
+  const code = (err as { code?: unknown })?.code;
+  if (!(err instanceof HttpsError) && (code === 10 || code === "aborted")) {
+    return new HttpsError("unavailable", "SRV_BUSY", { stateId: "SRV_BUSY" });
+  }
+  return err;
 }

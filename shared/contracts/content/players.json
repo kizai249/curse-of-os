@@ -1,0 +1,465 @@
+{
+  "description": "30 شخصية افتراضية أصلية — GAME_RULES §4 وRIGHTS_REGISTER الصف 10. ألقاب مخترعة ما ترتبط بأي منتخب أو لاعب حقيقي. TODO(owner) RIGHTS_REGISTER الصف 10: بحث تشابه الأسماء قبل R2. الإحصاءات 40–90، ومجموعها حسب الندرة 300/330/360/390.",
+  "stats": {
+    "spd": {
+      "ar": "السرعة",
+      "en": "Speed"
+    },
+    "sho": {
+      "ar": "التسديد",
+      "en": "Shooting"
+    },
+    "pas": {
+      "ar": "التمرير",
+      "en": "Passing"
+    },
+    "def": {
+      "ar": "الدفاع",
+      "en": "Defending"
+    },
+    "iq": {
+      "ar": "الذكاء",
+      "en": "IQ"
+    }
+  },
+  "positions": {
+    "GK": {
+      "ar": "حارس",
+      "en": "Goalkeeper"
+    },
+    "DEF": {
+      "ar": "مدافع",
+      "en": "Defender"
+    },
+    "MID": {
+      "ar": "وسط",
+      "en": "Midfielder"
+    },
+    "FWD": {
+      "ar": "مهاجم",
+      "en": "Forward"
+    }
+  },
+  "players": [
+    {
+      "id": "p01",
+      "ar": "الجدار الأزرق",
+      "en": "Blue Wall",
+      "position": "GK",
+      "rarity": "epic",
+      "stats": {
+        "spd": 56,
+        "sho": 45,
+        "pas": 85,
+        "def": 89,
+        "iq": 85
+      }
+    },
+    {
+      "id": "p02",
+      "ar": "قفاز الرمال",
+      "en": "Sand Glove",
+      "position": "GK",
+      "rarity": "rare",
+      "stats": {
+        "spd": 42,
+        "sho": 41,
+        "pas": 78,
+        "def": 88,
+        "iq": 81
+      }
+    },
+    {
+      "id": "p03",
+      "ar": "حارس الفجر",
+      "en": "Dawn Keeper",
+      "position": "GK",
+      "rarity": "common",
+      "stats": {
+        "spd": 42,
+        "sho": 40,
+        "pas": 58,
+        "def": 87,
+        "iq": 73
+      }
+    },
+    {
+      "id": "p04",
+      "ar": "صخرة الوادي",
+      "en": "Valley Rock",
+      "position": "DEF",
+      "rarity": "epic",
+      "stats": {
+        "spd": 80,
+        "sho": 54,
+        "pas": 72,
+        "def": 85,
+        "iq": 69
+      }
+    },
+    {
+      "id": "p05",
+      "ar": "درع النخيل",
+      "en": "Palm Shield",
+      "position": "DEF",
+      "rarity": "rare",
+      "stats": {
+        "spd": 77,
+        "sho": 46,
+        "pas": 53,
+        "def": 85,
+        "iq": 69
+      }
+    },
+    {
+      "id": "p06",
+      "ar": "سور المدينة",
+      "en": "City Rampart",
+      "position": "DEF",
+      "rarity": "rare",
+      "stats": {
+        "spd": 59,
+        "sho": 45,
+        "pas": 63,
+        "def": 83,
+        "iq": 80
+      }
+    },
+    {
+      "id": "p07",
+      "ar": "ريح الشمال",
+      "en": "North Wind",
+      "position": "DEF",
+      "rarity": "rare",
+      "stats": {
+        "spd": 76,
+        "sho": 43,
+        "pas": 57,
+        "def": 75,
+        "iq": 79
+      }
+    },
+    {
+      "id": "p08",
+      "ar": "ظل الكثبان",
+      "en": "Dune Shadow",
+      "position": "DEF",
+      "rarity": "common",
+      "stats": {
+        "spd": 69,
+        "sho": 40,
+        "pas": 49,
+        "def": 72,
+        "iq": 70
+      }
+    },
+    {
+      "id": "p09",
+      "ar": "قلعة البحر",
+      "en": "Sea Fort",
+      "position": "DEF",
+      "rarity": "common",
+      "stats": {
+        "spd": 42,
+        "sho": 41,
+        "pas": 58,
+        "def": 87,
+        "iq": 72
+      }
+    },
+    {
+      "id": "p10",
+      "ar": "حصن الجبل",
+      "en": "Mountain Keep",
+      "position": "DEF",
+      "rarity": "common",
+      "stats": {
+        "spd": 51,
+        "sho": 42,
+        "pas": 69,
+        "def": 81,
+        "iq": 57
+      }
+    },
+    {
+      "id": "p11",
+      "ar": "سيف الحد",
+      "en": "Edge Blade",
+      "position": "DEF",
+      "rarity": "common",
+      "stats": {
+        "spd": 60,
+        "sho": 43,
+        "pas": 61,
+        "def": 84,
+        "iq": 52
+      }
+    },
+    {
+      "id": "p12",
+      "ar": "مرساة الميناء",
+      "en": "Harbor Anchor",
+      "position": "DEF",
+      "rarity": "common",
+      "stats": {
+        "spd": 67,
+        "sho": 49,
+        "pas": 49,
+        "def": 75,
+        "iq": 60
+      }
+    },
+    {
+      "id": "p13",
+      "ar": "مايسترو الواحة",
+      "en": "Oasis Maestro",
+      "position": "MID",
+      "rarity": "legendary",
+      "stats": {
+        "spd": 78,
+        "sho": 73,
+        "pas": 90,
+        "def": 75,
+        "iq": 74
+      }
+    },
+    {
+      "id": "p14",
+      "ar": "بوصلة الملعب",
+      "en": "Pitch Compass",
+      "position": "MID",
+      "rarity": "epic",
+      "stats": {
+        "spd": 66,
+        "sho": 71,
+        "pas": 88,
+        "def": 49,
+        "iq": 86
+      }
+    },
+    {
+      "id": "p15",
+      "ar": "نسيم الكورنيش",
+      "en": "Corniche Breeze",
+      "position": "MID",
+      "rarity": "rare",
+      "stats": {
+        "spd": 55,
+        "sho": 65,
+        "pas": 84,
+        "def": 61,
+        "iq": 65
+      }
+    },
+    {
+      "id": "p16",
+      "ar": "قمر الوسط",
+      "en": "Midfield Moon",
+      "position": "MID",
+      "rarity": "rare",
+      "stats": {
+        "spd": 59,
+        "sho": 60,
+        "pas": 81,
+        "def": 46,
+        "iq": 84
+      }
+    },
+    {
+      "id": "p17",
+      "ar": "ساعة الرمل",
+      "en": "Hourglass",
+      "position": "MID",
+      "rarity": "rare",
+      "stats": {
+        "spd": 52,
+        "sho": 61,
+        "pas": 71,
+        "def": 57,
+        "iq": 89
+      }
+    },
+    {
+      "id": "p18",
+      "ar": "جسر الذهب",
+      "en": "Golden Bridge",
+      "position": "MID",
+      "rarity": "common",
+      "stats": {
+        "spd": 64,
+        "sho": 62,
+        "pas": 70,
+        "def": 40,
+        "iq": 64
+      }
+    },
+    {
+      "id": "p19",
+      "ar": "فنار الخليج",
+      "en": "Gulf Lighthouse",
+      "position": "MID",
+      "rarity": "common",
+      "stats": {
+        "spd": 48,
+        "sho": 46,
+        "pas": 79,
+        "def": 44,
+        "iq": 83
+      }
+    },
+    {
+      "id": "p20",
+      "ar": "نبض الفريق",
+      "en": "Team Pulse",
+      "position": "MID",
+      "rarity": "common",
+      "stats": {
+        "spd": 56,
+        "sho": 40,
+        "pas": 76,
+        "def": 52,
+        "iq": 76
+      }
+    },
+    {
+      "id": "p21",
+      "ar": "رسام التمريرات",
+      "en": "Pass Painter",
+      "position": "MID",
+      "rarity": "common",
+      "stats": {
+        "spd": 57,
+        "sho": 60,
+        "pas": 86,
+        "def": 42,
+        "iq": 55
+      }
+    },
+    {
+      "id": "p22",
+      "ar": "برق الصحراء",
+      "en": "Desert Lightning",
+      "position": "FWD",
+      "rarity": "legendary",
+      "stats": {
+        "spd": 87,
+        "sho": 89,
+        "pas": 83,
+        "def": 47,
+        "iq": 84
+      }
+    },
+    {
+      "id": "p23",
+      "ar": "سهم الشمال",
+      "en": "North Arrow",
+      "position": "FWD",
+      "rarity": "epic",
+      "stats": {
+        "spd": 81,
+        "sho": 88,
+        "pas": 84,
+        "def": 43,
+        "iq": 64
+      }
+    },
+    {
+      "id": "p24",
+      "ar": "شهاب الليل",
+      "en": "Night Meteor",
+      "position": "FWD",
+      "rarity": "epic",
+      "stats": {
+        "spd": 80,
+        "sho": 88,
+        "pas": 78,
+        "def": 44,
+        "iq": 70
+      }
+    },
+    {
+      "id": "p25",
+      "ar": "إعصار الساحل",
+      "en": "Coast Storm",
+      "position": "FWD",
+      "rarity": "rare",
+      "stats": {
+        "spd": 84,
+        "sho": 80,
+        "pas": 74,
+        "def": 40,
+        "iq": 52
+      }
+    },
+    {
+      "id": "p26",
+      "ar": "نمر الرمال",
+      "en": "Sand Tiger",
+      "position": "FWD",
+      "rarity": "rare",
+      "stats": {
+        "spd": 82,
+        "sho": 80,
+        "pas": 71,
+        "def": 42,
+        "iq": 55
+      }
+    },
+    {
+      "id": "p27",
+      "ar": "ريشة الهدف",
+      "en": "Goal Feather",
+      "position": "FWD",
+      "rarity": "common",
+      "stats": {
+        "spd": 74,
+        "sho": 81,
+        "pas": 49,
+        "def": 40,
+        "iq": 56
+      }
+    },
+    {
+      "id": "p28",
+      "ar": "صاروخ الحي",
+      "en": "Block Rocket",
+      "position": "FWD",
+      "rarity": "common",
+      "stats": {
+        "spd": 71,
+        "sho": 82,
+        "pas": 57,
+        "def": 42,
+        "iq": 48
+      }
+    },
+    {
+      "id": "p29",
+      "ar": "ظل الشبكة",
+      "en": "Net Shadow",
+      "position": "FWD",
+      "rarity": "common",
+      "stats": {
+        "spd": 73,
+        "sho": 74,
+        "pas": 51,
+        "def": 42,
+        "iq": 60
+      }
+    },
+    {
+      "id": "p30",
+      "ar": "لهب المدرج",
+      "en": "Stand Flame",
+      "position": "FWD",
+      "rarity": "common",
+      "stats": {
+        "spd": 86,
+        "sho": 71,
+        "pas": 47,
+        "def": 40,
+        "iq": 56
+      }
+    }
+  ]
+}

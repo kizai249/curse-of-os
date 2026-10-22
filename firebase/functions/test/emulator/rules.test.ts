@@ -98,3 +98,40 @@ describe("default deny", () => {
     await assertFails(updateDoc(doc(db, "users/alice"), { packsGuaranteed: { epic: 99 } }));
   });
 });
+
+describe("co-op rooms (DATA_CONTRACTS §6)", () => {
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(doc(db, "rooms/r1"), { memberUids: ["alice", "bob"], status: "playing", placements: {} });
+      await setDoc(doc(db, "rooms/r1/views/alice"), { slots: [], infoCards: [] });
+      await setDoc(doc(db, "rooms/r1/views/bob"), { slots: [], infoCards: [] });
+      await setDoc(doc(db, "rooms/r1/private/solution"), { solution: { s1: "p01" } });
+      await setDoc(doc(db, "rooms/r1/presence/alice"), { lastSeen: 1 });
+      await setDoc(doc(db, "roomCodes/br_a_1234"), { roomId: "r1" });
+    });
+  });
+
+  it("members read the shared room, outsiders cannot", async () => {
+    await assertSucceeds(getDoc(doc(env.authenticatedContext("alice").firestore(), "rooms/r1")));
+    await assertFails(getDoc(doc(env.authenticatedContext("carol").firestore(), "rooms/r1")));
+    await assertFails(getDoc(doc(env.unauthenticatedContext().firestore(), "rooms/r1")));
+  });
+
+  it("each player reads only their own view; the solution and codes are server-only", async () => {
+    const alice = env.authenticatedContext("alice").firestore();
+    await assertSucceeds(getDoc(doc(alice, "rooms/r1/views/alice")));
+    await assertFails(getDoc(doc(alice, "rooms/r1/views/bob")));
+    await assertFails(getDoc(doc(alice, "rooms/r1/private/solution")));
+    await assertFails(getDoc(doc(alice, "rooms/r1/presence/alice")));
+    await assertFails(getDoc(doc(alice, "roomCodes/br_a_1234")));
+  });
+
+  it("clients cannot write rooms, placements, views or presence", async () => {
+    const alice = env.authenticatedContext("alice").firestore();
+    await assertFails(updateDoc(doc(alice, "rooms/r1"), { placements: { s1: "p01" } }));
+    await assertFails(setDoc(doc(alice, "rooms/r2"), { memberUids: ["alice"] }));
+    await assertFails(setDoc(doc(alice, "rooms/r1/views/alice"), { slots: [] }));
+    await assertFails(setDoc(doc(alice, "rooms/r1/presence/alice"), { lastSeen: 2 }));
+  });
+});
