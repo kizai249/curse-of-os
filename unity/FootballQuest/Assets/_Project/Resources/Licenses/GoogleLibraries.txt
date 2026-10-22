@@ -1,0 +1,11 @@
+Firebase Unity SDK (Auth, Firestore, Functions, Remote Config, App Check, Crashlytics)
+Copyright Google LLC.
+Licensed under the Apache License, Version 2.0 (full text under "Apache License 2.0").
+
+AndroidX Security Crypto 1.0.0
+Copyright The Android Open Source Project.
+Licensed under the Apache License, Version 2.0 (full text under "Apache License 2.0").
+
+Google Play services Location 21.3.0
+Copyright Google LLC.
+Android Software Development Kit License — https://developer.android.com/studio/terms

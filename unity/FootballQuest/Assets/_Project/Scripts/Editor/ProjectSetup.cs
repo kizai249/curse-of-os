@@ -69,6 +69,15 @@ namespace FootballQuest.EditorTools
             // Firebase Unity SDK يحتاج Android 7.0 (API 24) فأعلى، وARM64 شرط Google Play.
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            // Google Play يشترط استهداف API 35 للتطبيقات الجديدة (قيمة رقمية لأن اسم الثابت يختلف بين نسخ المحرر).
+            PlayerSettings.Android.targetSdkVersion = (AndroidSdkVersions)35;
+
+            // ميزانية الأداء والحجم (ARCHITECTURE §2.2، AT-09): Frame Pacing يثبت 30 إطار ويقلل استهلاك البطارية،
+            // وتجريد المحرك يصغّر الحجم. التجريد المُدار «منخفض» لأن Firebase يعتمد على Reflection.
+            PlayerSettings.Android.optimizedFramePacing = true;
+            PlayerSettings.stripEngineCode = true;
+            PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.Android, ManagedStrippingLevel.Low);
+            PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.iOS, ManagedStrippingLevel.Low);
             PlayerSettings.iOS.targetOSVersionString = IosMinimumVersion;
             // نصوص النظام (الإنجليزية أساس، والعربية في ar.lproj عبر IosBuildPostProcess).
             PlayerSettings.iOS.locationUsageDescription = SystemPermissionTexts.LocationWhenInUseEn;

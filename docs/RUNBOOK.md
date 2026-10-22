@@ -127,7 +127,7 @@ dotnet test tools/core-tests/CoreTests.csproj
 
 ### 3.5 إضافة Firebase Unity SDK (Q7)
 
-1. حمّل Firebase Unity SDK بصيغة `.tgz` من موقع Firebase: الحزم app، وauth، وfunctions، وfirestore، وremote-config، وapp-check (وcrashlytics في S10a). **لا تضف `firebase-analytics`** (AT-10).
+1. حمّل Firebase Unity SDK بصيغة `.tgz` من موقع Firebase: الحزم app، وauth، وfunctions، وfirestore، وremote-config، وapp-check وcrashlytics. **لا تضف `firebase-analytics`** (AT-10).
 2. حطها في `unity/FootballQuest/Packages/firebase/` وأضفها في `Packages/manifest.json` بصيغة `"com.google.firebase.functions": "file:firebase/com.google.firebase.functions-<ver>.tgz"`. بعد اعتماد Git LFS للمستودع ترفعها عبر LFS.
 3. حط `google-services.json` و`GoogleService-Info.plist` لمشروع `fq-dev` في `Assets/` (مستثناة من git).
 4. التجميعة `FootballQuest.Firebase` تتفعّل تلقائيًا (versionDefine ‏`FQ_FIREBASE`)، والتطبيق يتحول من المحاكي إلى Firebase.
@@ -141,9 +141,9 @@ dotnet test tools/core-tests/CoreTests.csproj
 |---|---|---|---|
 | `FUNCTIONS_EMULATOR` | يضبطه المحاكي تلقائيًا | تعطيل فرض App Check محليًا | S1 |
 | `FIREBASE_AUTH_EMULATOR_HOST` / `FIRESTORE_EMULATOR_HOST` | يضبطها `emulators:exec` تلقائيًا | توجيه الاختبارات للمحاكي | S1 |
-| `google-services.json` / `GoogleService-Info.plist` | `unity/FootballQuest/Assets/StreamingAssets/` (مستثناة من git) | ربط التطبيق بـ `fq-dev` أو `fq-prod` | S2 |
+| `google-services.json` / `GoogleService-Info.plist` | `unity/FootballQuest/Assets/` (مستثناة من git). في CI يكتبها `fq-release.yml` من أسرار البيئة | ربط التطبيق بـ `fq-dev` أو `fq-prod` | S2 |
 | مفتاح توقيع رموز الفروع (HMAC) | Secret Manager باسم `BRANCH_CODE_SECRET`: `firebase functions:secrets:set BRANCH_CODE_SECRET -P dev` (قيمة عشوائية ≥ 32 بايت). للمحاكي: `firebase/functions/.secret.local` ينشئه `test:emulator` تلقائيًا (مستثنى من git) | `scanBranchCode` و`getBranchScreen` و`rotateBranchCodesDaily` | S7 |
-| مفاتيح متجر Apple وGoogle | أسرار GitHub | الرفع الآلي | S10a |
+| مفاتيح التوقيع والمتجرين | أسرار GitHub Environments (§5.3) | `fq-release.yml` | S10a |
 
 **قاعدة:** ما يُرفع أي سر للمستودع. ملفات إعداد Firebase للعميل مستثناة في `unity/FootballQuest/.gitignore`.
 
@@ -153,7 +153,8 @@ dotnet test tools/core-tests/CoreTests.csproj
 |---|---|---|
 | `fq-backend.yml` | تغيّر `firebase/**` أو `shared/contracts/**` | lint، وtypecheck، والوحدات، والمحاكي |
 | `fq-admin-web.yml` | تغيّر `admin-web/**` أو `firebase/**` | typecheck، والوحدات، والبناء، وe2e بـ Playwright على المحاكي (لقطات الشاشة artifact) |
-| `fq-unity.yml` | تغيّر `unity/**` أو `shared/contracts/**` أو `tools/core-tests/**` | `core-tests` (dotnet)، ثم EditMode (GameCI)، ثم بناء Android وiOS |
+| `fq-unity.yml` | تغيّر `unity/**` أو `shared/contracts/**` أو `tools/core-tests/**` | `core-tests` (dotnet، ومنها تدقيق الخصوصية والمتجر `ReleaseAuditTests`)، ثم EditMode (GameCI)، ثم بناء Android وiOS |
+| `fq-release.yml` | يدوي (Actions ▸ fq-release ▸ Run workflow) | فحوص، ثم AAB موقّع ورفع Google Play Internal (لـ `fq-prod`)، وiOS ← TestFlight (§5.3) |
 
 ### 5.1 ترخيص Unity لـ GameCI (مرة وحدة)
 
@@ -168,7 +169,34 @@ dotnet test tools/core-tests/CoreTests.csproj
 ### 5.2 مخرجات البناء
 
 - **Android:** ملف `FootballQuest.apk` كـ artifact لمدة 7 أيام.
-- **iOS:** مشروع Xcode فقط. التوقيع وIPA على macOS runner في Slice 10a.
+- **iOS:** مشروع Xcode فقط. التوقيع والرفع في `fq-release.yml` (§5.3).
+
+### 5.3 الإصدار الموقّع والرفع (S10a)
+
+**مرة وحدة عند المالك:**
+1. GitHub ▸ Settings ▸ Environments: أنشئ `fq-dev` و`fq-prod`، وحط فيها الأسرار تحت (أسرار Unity تبقى على مستوى المستودع).
+2. **Android:** أنشئ مفتاح الرفع (Upload key):
+   `keytool -genkeypair -v -keystore upload.keystore -alias fq-upload -keyalg RSA -keysize 4096 -validity 10000`
+   فعّل Play App Signing. وارفع أول AAB **يدويًا** من Play Console على مسار Internal testing (Google ما تسمح بأول رفع عبر API)، ثم اربط حساب خدمة (Service account) بصلاحية «Release to testing tracks».
+3. **iOS:** أنشئ التطبيق في App Store Connect بنفس `com.usersx.footballquest`، وفعّل قدرة Sign in with Apple للمعرّف، وأنشئ مفتاح API بدور App Manager.
+
+| السر (في البيئة) | القيمة |
+|---|---|
+| `GOOGLE_SERVICES_JSON_B64` | `base64 -w0 google-services.json` لمشروع البيئة |
+| `GOOGLE_SERVICE_INFO_PLIST_B64` | `base64 -w0 GoogleService-Info.plist` |
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 upload.keystore` |
+| `ANDROID_KEYSTORE_PASS` / `ANDROID_KEYALIAS_NAME` / `ANDROID_KEYALIAS_PASS` | كلمات مرور المفتاح والاسم المستعار |
+| `PLAY_SERVICE_ACCOUNT_JSON` | ملف JSON لحساب الخدمة (نص كامل) — `fq-prod` فقط |
+| `APPLE_TEAM_ID` | معرّف الفريق (10 أحرف) |
+| `ASC_KEY_ID` / `ASC_ISSUER_ID` / `ASC_KEY_P8_B64` | مفتاح App Store Connect API (`base64 -w0 AuthKey_XXXX.p8`) |
+
+**التشغيل:** Actions ▸ `fq-release` ▸ Run workflow ▸ اختر البيئة والمنصة.
+- `-releaseBuild` يفشل البناء إذا Firebase SDK (functions وcrashlytics) أو ملف الإعداد ناقص، عشان ما ينرفع إصدار على وضع المحاكي.
+- رقم البناء = رقم تشغيل الـworkflow (يزيد دائمًا في المنصتين).
+- الحجم: يفشل إذا AAB أكبر من 150 MB (ARCHITECTURE §2.2).
+- `fq-dev` يبني ويحفظ AAB كـ artifact بدون رفع لـ Play. وTestFlight يستقبل البيئتين (اختبار داخلي).
+
+**بعد الرفع:** اتبع `docs/store/RELEASE_CHECKLIST.md` (AT-09 وAT-10 وAT-11 وفحص الحقوق).
 
 ## 6. إعداد مشاريع Firebase (مرة وحدة، قبل Slice 2)
 
@@ -178,8 +206,16 @@ dotnet test tools/core-tests/CoreTests.csproj
 4. App Check: Play Integrity لـ Android، وApp Attest لـ iOS.
 5. **لا تفعّل Google Analytics** عند إنشاء المشروع (`PRODUCT_BRIEF.md` ت6، وAT-10).
 6. تأكد من توفر Cloud Tasks وCloud Scheduler في `me-central2` (سؤال Q5 في الخطة).
-7. تنبيهات الميزانية على `fq-prod`: 50% و80% و100% (ARCHITECTURE §11).
-8. سياسة TTL في Firestore على حقل `expireAt` لمجموعة `events` (13 شهرًا — ARCHITECTURE §10):
+7. **TOTP للوحة (Q27):** رقّ Authentication إلى Identity Platform، ثم فعّل TOTP:
+   ```bash
+   curl -X PATCH "https://identitytoolkit.googleapis.com/admin/v2/projects/<id>/config?updateMask=mfa" \
+     -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "X-Goog-User-Project: <id>" \
+     -H "Content-Type: application/json" \
+     -d '{"mfa":{"providerConfigs":[{"state":"ENABLED","totpProviderConfig":{"adjacentIntervals":5}}]}}'
+   ```
+   بعدها `ADMIN_MFA_REQUIRED=true` في `.env.fq-prod`: أول دخول لكل مسؤول يعرض QR للتسجيل، وبعده يطلب الرمز في كل دخول. موظف الفرع مستثنى.
+8. تنبيهات الميزانية على `fq-prod`: 50% و80% و100% (ARCHITECTURE §11).
+9. سياسة TTL في Firestore على حقل `expireAt` لمجموعة `events` (13 شهرًا — ARCHITECTURE §10):
    `gcloud firestore fields ttls update expireAt --collection-group=events --enable-ttl --project=<id>`
 
 ## 7. النشر
@@ -200,7 +236,7 @@ functions/node_modules/.bin/firebase deploy --only firestore:rules,firestore:ind
   - `.env.local` للوحة: مفاتيح مشروع الويب ومفتاح reCAPTCHA Enterprise.
   - App Check للويب مفعّل في Console.
 - `ADMIN_MFA_REQUIRED=true` في `firebase/functions/.env.fq-prod` بعد تفعيل TOTP (Q27).
-- الرفع للمتاجر (Slice 10a).
+- الرفع للمتاجر: §5.3.
 
 ## 8. استكشاف الأخطاء
 

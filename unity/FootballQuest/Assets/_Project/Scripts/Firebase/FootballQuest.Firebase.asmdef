@@ -19,6 +19,11 @@
             "name": "com.google.firebase.functions",
             "expression": "12.0.0",
             "define": "FQ_FIREBASE"
+        },
+        {
+            "name": "com.google.firebase.crashlytics",
+            "expression": "12.0.0",
+            "define": "FQ_CRASHLYTICS"
         }
     ],
     "noEngineReferences": false

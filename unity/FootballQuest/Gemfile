@@ -1,0 +1,4 @@
+# أدوات رفع iOS لـ TestFlight (fq-release.yml). ما تدخل في بناء Unity.
+source "https://rubygems.org"
+
+gem "fastlane", "~> 2.225"

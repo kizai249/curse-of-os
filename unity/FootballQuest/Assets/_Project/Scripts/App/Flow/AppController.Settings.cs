@@ -164,8 +164,10 @@ namespace FootballQuest.App.Flow
         private static readonly (string Title, string Resource)[] Licenses =
         {
             ("IBM Plex Sans Arabic — SIL Open Font License 1.1", "Fonts/OFL"),
+            ("Liberation Sans — SIL Open Font License 1.1", "Licenses/LiberationSans-OFL"),
             ("RTLTMPro — MIT License", "Licenses/RTLTMPro-MIT"),
-            ("ZXing.Net — Apache License 2.0", "Licenses/ZXing.Net-Apache-2.0"),
+            ("Firebase, AndroidX, Google Play services", "Licenses/GoogleLibraries"),
+            ("ZXing.Net, Firebase, AndroidX — Apache License 2.0", "Licenses/Apache-2.0"),
         };
 
         private string FormatDate(string iso)

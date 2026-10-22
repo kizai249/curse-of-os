@@ -1,0 +1,171 @@
+# Football Quest — بناء الإصدار الموقّع ورفعه: Google Play (Internal testing) و TestFlight.
+# يدوي فقط (workflow_dispatch). الأسرار في GitHub Environments «fq-dev» و«fq-prod» — docs/RUNBOOK.md §5.2.
+name: fq-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Firebase project"
+        type: choice
+        options: [fq-dev, fq-prod]
+        default: fq-dev
+      platforms:
+        description: "Platforms"
+        type: choice
+        options: [both, android, ios]
+        default: both
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fq-release-${{ inputs.environment }}
+  cancel-in-progress: false
+
+env:
+  PROJECT_PATH: unity/FootballQuest
+  APP_ID: com.usersx.footballquest
+
+jobs:
+  # نفس فحوص fq-unity قبل أي بناء موقّع: منطق Core وتدقيق الخصوصية والمتجر (AT-10، AT-11).
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test tools/core-tests/CoreTests.csproj
+
+  android:
+    needs: checks
+    if: inputs.platforms != 'ios'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Firebase config (google-services.json)
+        env:
+          GOOGLE_SERVICES_JSON_B64: ${{ secrets.GOOGLE_SERVICES_JSON_B64 }}
+        run: |
+          if [ -z "$GOOGLE_SERVICES_JSON_B64" ]; then echo "::error::GOOGLE_SERVICES_JSON_B64 غير مضبوط في بيئة ${{ inputs.environment }}"; exit 1; fi
+          echo "$GOOGLE_SERVICES_JSON_B64" | base64 -d > "$PROJECT_PATH/Assets/google-services.json"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-Android-${{ hashFiles('unity/FootballQuest/Packages/**', 'unity/FootballQuest/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-Android-
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: Android
+          buildMethod: FootballQuest.EditorTools.BuildScript.BuildFromCommandLine
+          buildName: FootballQuest
+          versioning: Semantic
+          androidVersionCode: ${{ github.run_number }}
+          customParameters: -releaseBuild
+          androidExportType: androidAppBundle
+          androidKeystoreName: upload.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+      - name: Size budget (≤ 150 MB — ARCHITECTURE §2.2)
+        run: |
+          aab=$(find build/Android -name '*.aab' | head -1)
+          size=$(stat -c %s "$aab"); echo "AAB: $aab $((size / 1048576)) MB"
+          if [ "$size" -gt $((150 * 1048576)) ]; then echo "::error::حجم الحزمة يتجاوز 150 MB"; exit 1; fi
+          echo "AAB_PATH=$aab" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FootballQuest-aab-${{ inputs.environment }}-${{ github.run_number }}
+          path: ${{ env.AAB_PATH }}
+          retention-days: 30
+      # أول رفع للتطبيق لازم يكون يدوي من Play Console (Google ما تسمح بإنشاء التطبيق عبر API).
+      - uses: r0adkll/upload-google-play@v1.1.3
+        if: inputs.environment == 'fq-prod'
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.APP_ID }}
+          releaseFiles: ${{ env.AAB_PATH }}
+          track: internal
+          status: completed
+
+  ios-xcode:
+    needs: checks
+    if: inputs.platforms != 'android'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Firebase config (GoogleService-Info.plist)
+        env:
+          GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 }}
+        run: |
+          if [ -z "$GOOGLE_SERVICE_INFO_PLIST_B64" ]; then echo "::error::GOOGLE_SERVICE_INFO_PLIST_B64 غير مضبوط في بيئة ${{ inputs.environment }}"; exit 1; fi
+          echo "$GOOGLE_SERVICE_INFO_PLIST_B64" | base64 -d > "$PROJECT_PATH/Assets/GoogleService-Info.plist"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-iOS-${{ hashFiles('unity/FootballQuest/Packages/**', 'unity/FootballQuest/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-iOS-
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: iOS
+          buildMethod: FootballQuest.EditorTools.BuildScript.BuildFromCommandLine
+          buildName: FootballQuest
+          versioning: Semantic
+          customParameters: -releaseBuild -appleTeamId ${{ secrets.APPLE_TEAM_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FootballQuest-xcode-${{ inputs.environment }}
+          path: build/iOS
+          retention-days: 3
+
+  ios-testflight:
+    needs: ios-xcode
+    runs-on: macos-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: FootballQuest-xcode-${{ inputs.environment }}
+          path: build/iOS
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: ${{ env.PROJECT_PATH }}
+      - name: fastlane ios beta
+        working-directory: ${{ env.PROJECT_PATH }}
+        env:
+          XCODE_PROJECT_DIR: ${{ github.workspace }}/build/iOS/FootballQuest
+          BUILD_NUMBER: ${{ github.run_number }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_B64: ${{ secrets.ASC_KEY_P8_B64 }}
+        run: |
+          chmod -R +x "$XCODE_PROJECT_DIR" # upload-artifact ما يحفظ صلاحيات سكربتات Xcode
+          bundle exec fastlane ios beta

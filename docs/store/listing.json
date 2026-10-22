@@ -1,0 +1,75 @@
+{
+  "_note": "قائمة المتجرين (App Store و Google Play) لـ R1. يفحصها tools/core-tests (ReleaseAuditTests): الإفصاح أول فقرة، وحدود الطول، وما فيه علامات البطولة في الاسم والعنوان الفرعي والكلمات المفتاحية (RIGHTS_REGISTER الصف 19، AT-11).",
+  "appName": "Football Quest",
+  "bundleId": "com.usersx.footballquest",
+  "category": {
+    "appStore": "Games / Sports",
+    "googlePlay": "Game / Sports"
+  },
+  "contentRating": {
+    "targetAge": "15+",
+    "gambling": false,
+    "lootBoxesForMoney": false,
+    "inAppPurchases": false,
+    "ads": false,
+    "chat": false,
+    "userGeneratedContent": false,
+    "locationSharing": "foreground_only_not_shared_with_users"
+  },
+  "ar": {
+    "subtitle": "اجمع المنتخبات واكسب من فروعك",
+    "shortDescription": "اجمع 24 منتخب، واستكشف 8 ملاعب، واكسب قسائم حقيقية من فروعك المفضلة.",
+    "keywords": [
+      "كرة قدم",
+      "ملاعب",
+      "بطاقات",
+      "تجميع",
+      "منتخبات",
+      "قسائم",
+      "تحدي",
+      "مغامرة",
+      "الرياض",
+      "جدة",
+      "الخبر"
+    ],
+    "description": "Football Quest لعبة مستقلة وغير رسمية، وغير معتمدة من الاتحاد الآسيوي لكرة القدم (AFC) أو أي اتحاد وطني أو منظم للبطولة. أسماء المنتخبات والملاعب مستخدمة كمعلومات عامة فقط.\n\nاجمع المنتخبات، والعب مع شلتك، واكسب من فروعك المفضلة.\n\n• خارطة ملاعب: 8 ملاعب في الرياض وجدة والخبر، تستكشفها من أي مكان.\n• تجميع: 24 منتخب بأربع نسخ لكل منتخب، وحزم احتمالاتها معلنة داخل اللعبة.\n• مكافآت القرب: نقاط إضافية لما تكون قريب من ملعب أو فرع شريك — الموقع يُستخدم أثناء اللعب فقط.\n• فروع الشركاء: امسح رمز الفرع، وسجّل زيارتك، واحصل على قسائم تستخدمها في نفس الفرع.\n\nبدون مشتريات داخل اللعبة وبدون إعلانات. تقدر تحذف حسابك من داخل اللعبة في أي وقت.",
+    "whatsNew": "الإصدار الأول."
+  },
+  "en": {
+    "subtitle": "Collect teams, earn real perks",
+    "shortDescription": "Collect 24 teams, explore 8 stadiums and earn real coupons at partner branches.",
+    "keywords": [
+      "football",
+      "soccer",
+      "stadiums",
+      "cards",
+      "collect",
+      "teams",
+      "coupons",
+      "challenge",
+      "Riyadh",
+      "Jeddah",
+      "Khobar"
+    ],
+    "description": "Football Quest is an independent, unofficial game, not endorsed by the Asian Football Confederation (AFC), any national federation or the tournament organisers. Team and stadium names are used as general information only.\n\nCollect the teams, play with your friends and earn at your favourite branches.\n\n• Stadium map: 8 stadiums across Riyadh, Jeddah and Khobar to explore from anywhere.\n• Collection: 24 teams with four variants each; pack odds are disclosed in the game.\n• Proximity bonus: extra points when you are near a stadium or a partner branch — location is used only while you play.\n• Partner branches: scan the branch code, check in and get coupons you redeem at the same branch.\n\nNo in-app purchases and no ads. You can delete your account from inside the game at any time.",
+    "whatsNew": "First release."
+  },
+  "bannedTerms": [
+    "AFC",
+    "Asian Cup",
+    "AFC Asian Cup",
+    "كأس آسيا",
+    "كاس اسيا",
+    "الاتحاد الآسيوي",
+    "FIFA",
+    "فيفا",
+    "official",
+    "رسمي",
+    "رسمية",
+    "2027"
+  ],
+  "urls": {
+    "privacyPolicy": "TODO(owner): رابط سياسة الخصوصية المنشورة",
+    "support": "TODO(owner): بريد أو صفحة الدعم"
+  }
+}

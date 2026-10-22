@@ -1,6 +1,8 @@
+using FootballQuest.App.Diagnostics;
 using FootballQuest.App.UI;
 using FootballQuest.Core.Accounts;
 using FootballQuest.Core.Backend;
+using FootballQuest.Core.Diagnostics;
 using FootballQuest.Core.Onboarding;
 using FootballQuest.Core.Ui;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace FootballQuest.App.Flow
 
         private void RenderOnboarding(OnboardingStep step)
         {
+            if (PerformanceBudget.IsInteractive(step)) PerfProbe.MarkInteractive(step.ToString());
             switch (step)
             {
                 case OnboardingStep.ForceUpdate: RenderForceUpdate(); break;

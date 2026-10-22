@@ -38,7 +38,7 @@
 | S6 | الموقع (Foreground): إضافة Native لـ iOS/Android، و`verifyPresence`، ونقاط القرب، وبطاقة «أنت قريب من فرع» | R1 | 4 | ⚠️ | GAME_RULES §6.1–6.2، ARCHITECTURE §2.1 | AT-01، AT-02، AT-10 |
 | S7 | رمز الفرع اليومي (`rotateBranchCodes`، و`scanBranchCode`)، والحملات والمخزون، والقسائم (`verified_visit`، و`invoice_code`)، و`redeemCoupon` الذري، والمحفظة، و`expireCoupons` | R1 | 9 | ⚠️ | GAME_RULES §6.3، §8، ARCHITECTURE §6، DATA_CONTRACTS §4–5 | AT-03، AT-04، AT-05 |
 | S9 | لوحة الشركاء (ويب): الحملات، والفروع، والمناطق، وشاشة الفرع، ووضع الموظف، والتقارير المجمعة + `logEvents` و`aggregateDaily` | R1 | 7 | ✅ | ARCHITECTURE §8، §10، DATA_CONTRACTS §8–9 | AT-04، AT-10 |
-| S10a | تجهيز R1: الأداء (إقلاع < 5 ث)، والبطارية، وCrashlytics، وتوقيع ورفع TestFlight/Play Internal، وقائمة المتاجر | R1 | 4 | ⬜ | ARCHITECTURE §2.2، RIGHTS_REGISTER §5 | AT-09، AT-10، AT-11 |
+| S10a | تجهيز R1: الأداء (إقلاع < 5 ث)، والبطارية، وCrashlytics، وتوقيع ورفع TestFlight/Play Internal، وقائمة المتاجر | R1 | 4 | ⚠️ | ARCHITECTURE §2.2، RIGHTS_REGISTER §5 | AT-09، AT-10، AT-11 |
 | | **مجموع R1** | | **45** | | | |
 | S5b | بطاقات اللاعبين الافتراضية (30) | R2 | 2 | ⬜ | GAME_RULES §4 | — |
 | S6b | سلسلة الزيارات وقسائم `visit_streak` | R2 | 1 | ⬜ | GAME_RULES §6.4 | — |
@@ -80,7 +80,7 @@
 | Q3 | نص الإفصاح: `PRODUCT_BRIEF.md` §7 (أقصر) أو `RIGHTS_REGISTER.md` §4 (فيه «أو منظم للبطولة» وجملة الأسماء) | S2 | نص RIGHTS_REGISTER §4 لأنه موصوف «النص المعتمد» ويشمل الأقصر. يُقدَّم عبر `disclaimer_text` فيتعدل بدون إصدار |
 | Q4 | الخط العربي (OFL) | — | **مُطبّق في S2:** IBM Plex Sans Arabic 1.101 (يغطي كل نصوص الواجهة بعد التشكيل — اختبار FontCoverage). التبديل لاحقًا = استبدال ملفي TTF |
 | Q5 | توفر Cloud Tasks وCloud Scheduler في `me-central2` | S7، S8 | يُتحقق عند إنشاء `fq-dev`. البديل المؤقت المقترح Scheduler كل دقيقة لإغلاق الجولات المنتهية |
-| Q6 | Crashlytics في Unity: نتأكد إن الحزمة ما تسحب Firebase Analytics (AT-10 يمنع GA) | S10a | ما نضمّن `FirebaseAnalytics` أبدًا، ونفحص الحزم في AT-10 |
+| Q6 | Crashlytics في Unity: نتأكد إن الحزمة ما تسحب Firebase Analytics (AT-10 يمنع GA) | S10a | **مُطبّق:** `ReleaseAuditTests` يُفشل CI لو دخلت حزمة Analytics أو إعلانات، والبناء يطفي Analytics ويشيل `AD_ID` احتياطًا (Android وiOS). Crashlytics بدون `SetUserId` |
 | Q7 | طريقة توزيع Firebase Unity SDK (حزم `.tgz`) | تجربة S2 على أجهزة | تحميل `dl.google.com` محجوب في بيئة التطوير السحابية. الكود جاهز في تجميعة `FootballQuest.Firebase` ويتفعّل تلقائيًا (`FQ_FIREBASE`) أول ما تُضاف الحزم (RUNBOOK §3.5). وبدونها التطبيق يشتغل على المحاكي |
 | Q8 | بوابة العمر بسنة الميلاد فقط: من يبلغ 15 هذي السنة يُقبل (ممكن يكون 14)، ومن يبلغ 18 يُعامل قاصرًا (حماية) | R1 (مراجعة قانونية) | المطبّق الحالي، ومتجهاته في `shared/contracts/age-band.vectors.json`. التغيير = تعديل المتجهات والدالتين |
 | Q9 | ربط Google عبر `FederatedOAuthProvider` في Firebase Unity SDK غير مضمون على الأجهزة | S2 على أجهزة | Apple عبر FederatedOAuthProvider. إذا فشل Google نضيف Google Sign-In plugin (يحتاج تسجيل في RIGHTS_REGISTER) |
@@ -100,8 +100,12 @@
 | Q24 | «إدخال يدوي» في CAM_DENIED: رمز الفرع طويل (QR فقط)، فالإدخال اليدوي المتاح هو رمز الفاتورة. هل تبي رمزًا يدويًا قصيرًا لشاشة الفرع؟ | S9 | الإدخال اليدوي يفتح شاشة رمز الفاتورة |
 | Q25 | إعادة عرض رمز الاسترداد تولّد رمزين جديدين وتعطّل القديمين (لأن الخادم يخزن البصمة فقط) | اعتماد | مُطبّق (`reissueRedeemCode`) |
 | Q26 | مجموعة `brands/{brandId}` (اسم العلامة) — DATA_CONTRACTS تذكر brandId وbrandName في الفروع بس | اعتماد | مُطبّق: usersx_admin ينشئ العلامات، والاسم يُنسخ في الفروع |
-| Q27 | التحقق الثنائي للمسؤولين (ARCHITECTURE §8) يحتاج ترقية Identity Platform وتفعيل TOTP | قبل R1 | الدوال جاهزة: `ADMIN_MFA_REQUIRED=true` في `.env.fq-prod` يرفض حسابات المسؤولين بدون عامل ثانٍ. واجهة تسجيل TOTP في اللوحة ما انبنت للحين |
+| Q27 | التحقق الثنائي للمسؤولين (ARCHITECTURE §8) يحتاج ترقية Identity Platform وتفعيل TOTP | قبل R1 | الدوال جاهزة: `ADMIN_MFA_REQUIRED=true` في `.env.fq-prod` يرفض حسابات المسؤولين بدون عامل ثانٍ. **S10a:** اللوحة تسجّل TOTP وتطلب الرمز عند الدخول. باقي على المالك تفعيل TOTP في المشروع (RUNBOOK §6) |
 | Q28 | اللوحة بالعربية فقط (B2B داخل المملكة) | — | الحقول ثنائية اللغة للمحتوى (العناوين والشروط)، والواجهة عربية |
+| Q29 | الجهاز المرجعي لـ AT-09 (Android متوسط 4GB) ما هو محدد | AT-09 | TODO(owner): تحديد الطراز. السكربت `tools/perf/at09-android.sh` يشتغل على أي جهاز |
+| Q30 | إعلانات الخصوصية: الموقع الدقيق «معالجة لحظية» في Google Play وغير معلن في Apple، والموقع التقريبي والبريد معلنين احتياطًا | الرفع | مسودة في `docs/store/PRIVACY_LABELS.md` تنتظر المراجعة القانونية (RIGHTS_REGISTER §5) |
+| Q31 | رابط سياسة الخصوصية، ورابط الدعم، ومعرّف التطبيق في App Store (لزر `FORCE_UPDATE`) | الرفع | TODO(owner) في `docs/store/listing.json` و`AppController.Onboarding.cs` |
+| Q32 | رفع Google Play من CI يشتغل لـ `fq-prod` فقط، وأول رفع يدوي من Play Console | — | `fq-dev` يبني AAB كـ artifact فقط |
 | Q11 | الرموز 🎉 (CPN_ISSUED) و🏆 (ROUND_WON) خارج الخط | S7، S8 | Sprite Asset أصلي في TMP قبل استخدام الحالتين |
 
 ## 6. سجل الشرائح
@@ -341,3 +345,41 @@
 - dotnet: 90 ✅
 
 **CI:** `fq-admin-web.yml` يشغّل typecheck والوحدات والبناء والـe2e، ويحفظ لقطات الشاشة.
+
+### S10a — تجهيز R1 ⚠️
+
+**الأداء والبطارية (AT-09):**
+- `PerformanceBudget` (Core): حدود ARCHITECTURE §2.2، ومعيار «9 من 10 تحت 5 ث»، وصيغة سطور `FQ-BOOT` و`FQ-PERF`.
+- `PerfProbe` (App): زمن أول شاشة تفاعلية من بدء العملية في Android، ومتوسط الإطارات والذاكرة كل دقيقة لكل مشهد. والسجل ما فيه بيانات لاعب.
+- `tools/perf/at09-android.sh`: 10 تشغيلات باردة عبر adb ويحكم بالمعيار، ووضع `--watch` للتنقل اليدوي مع PSS.
+- البناء: `targetSdk 35`، وFrame Pacing، وتجريد المحرك، وتجريد مُدار «منخفض» (Firebase يعتمد على Reflection). والإطارات 30 (من S1).
+- البطارية: الموقع قراءة وحدة فقط (`getCurrentLocation` و`requestLocation`) بدون تحديثات مستمرة، وما فيه موقع خلفي.
+
+**Crashlytics:** في `FirebaseServices` خلف `FQ_CRASHLYTICS` (حزمة `com.google.firebase.crashlytics`)، بدون `SetUserId`، ومطفي في بنيات التطوير.
+
+**الخصوصية (AT-10):**
+- Android: `ManifestPermissions.ApplyPrivacy`: إطفاء Firebase Analytics، ومعرّف الإعلان، وإشارات تخصيص الإعلانات، وحذف إذن `AD_ID` من الدمج.
+- iOS: نفس القيم في Info.plist، و`ITSAppUsesNonExemptEncryption=false`، و`PrivacyInfo.xcprivacy` (بدون تتبع).
+- `ReleaseAuditTests` (dotnet، في CI): ما فيه SDK تحليلات أو إعلانات في الحزم أو مكتبات Android أو الملفات، والـPrivacy Manifest يطابق `PRIVACY_LABELS.md`.
+
+**المتاجر (AT-11):**
+- `docs/store/listing.json` (عربي وإنجليزي): الإفصاح أول فقرة، وما فيه علامات البطولة في الاسم والعنوان والكلمات (يُفحص في CI مع حدود الطول)، واستبيان العمر 15+.
+- `docs/store/PRIVACY_LABELS.md` و`docs/store/RELEASE_CHECKLIST.md`.
+- صفحة التراخيص: أُضيفت Liberation Sans، وFirebase، وAndroidX، وGoogle Play services. واللوحة صار فيها صفحة «التراخيص».
+
+**التوقيع والرفع:**
+- `BuildScript`: توقيع Android من وسائط GameCI، وAAB، و`-appleTeamId` للتوقيع التلقائي، و`-releaseBuild` يرفض البناء بدون Firebase SDK وملف الإعداد.
+- `fq-release.yml` (يدوي): فحوص، ثم AAB موقّع (حد 150 MB) ورفع Internal testing، ثم Xcode ← macOS ← fastlane ← TestFlight.
+
+**التحقق الثنائي للوحة (Q27):** تسجيل TOTP بـ QR، وخطوة الرمز عند الدخول، و`requireSecondFactor` في الخادم.
+
+**الاختبارات:**
+- dotnet: 101 ✅ (+11: الأداء، والـManifest، والتدقيق).
+- TS: 76 ✅ (+2 لبوابة MFA).
+- Emulator: 62 ✅.
+- اللوحة: 8 وحدات ✅، وe2e ✅.
+
+**باقي على أجهزة وحسابات المالك (سبب ⚠️):**
+- تشغيل AT-09 وAT-10 وAT-11 على أجهزة حقيقية حسب `docs/store/RELEASE_CHECKLIST.md`.
+- حسابات المتجرين، والأسرار، وFirebase SDK (Q7).
+- المراجعة القانونية (Q30).

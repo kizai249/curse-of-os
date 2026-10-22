@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace FootballQuest.EditorTools.Build
 {
-    /// <summary>بعد توليد مشروع Gradle: يضيف أذونات الموقع والكاميرا ويُفشل البناء لو ظهر إذن الموقع الخلفي.</summary>
+    /// <summary>بعد توليد مشروع Gradle: يضيف أذونات الموقع والكاميرا وقيم الخصوصية (AT-10)، ويُفشل البناء لو ظهر إذن الموقع الخلفي.</summary>
     public sealed class AndroidManifestGuard : IPostGenerateGradleAndroidProject
     {
         public int callbackOrder => 100;
@@ -20,6 +20,7 @@ namespace FootballQuest.EditorTools.Build
             try
             {
                 var added = ManifestPermissions.Apply(doc);
+                ManifestPermissions.ApplyPrivacy(doc);
                 if (added.Count > 0) Debug.Log("[AndroidManifestGuard] added " + string.Join(", ", added));
             }
             catch (System.InvalidOperationException ex)

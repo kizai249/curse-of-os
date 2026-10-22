@@ -18,3 +18,8 @@ Thumbs.db
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+*.jks
+*.p8
+*.mobileprovision
+unity/FootballQuest/fastlane/report.xml
+unity/FootballQuest/fastlane/README.md

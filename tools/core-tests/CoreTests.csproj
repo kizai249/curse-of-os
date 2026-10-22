@@ -17,6 +17,7 @@
     <Compile Include="../../unity/FootballQuest/Assets/_Project/Scripts/Core/**/*.cs" />
     <Compile Include="../../unity/FootballQuest/Assets/_Project/Tests/EditMode/Core/**/*.cs" />
     <Compile Include="FontCoverage/**/*.cs" />
+    <Compile Include="ReleaseAudit/**/*.cs" />
     <Compile Include="../../unity/FootballQuest/Assets/_Project/Scripts/Editor/Build/ManifestPermissions.cs" />
     <!-- منطق التشكيل في RTLTMPro نقي؛ المكونات المرتبطة بـ TextMeshPro مستبعدة. -->
     <Compile Include="../../unity/FootballQuest/Assets/ThirdParty/RTLTMPro/Scripts/Runtime/**/*.cs"

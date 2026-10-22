@@ -38,6 +38,30 @@ namespace FootballQuest.Tests.Core
         }
 
         [Test]
+        public void TurnsOffAnalyticsAndRemovesAdvertisingId()
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(Unity);
+            ManifestPermissions.ApplyPrivacy(doc);
+            ManifestPermissions.ApplyPrivacy(doc);
+
+            var meta = doc.GetElementsByTagName("meta-data").Cast<XmlElement>().ToList();
+            Assert.That(meta, Has.Count.EqualTo(ManifestPermissions.PrivacyMetaData.Length), "idempotent");
+            var deactivated = meta.Single(e => e.GetAttribute("name", ManifestPermissions.AndroidNs) == "firebase_analytics_collection_deactivated");
+            Assert.That(deactivated.GetAttribute("value", ManifestPermissions.AndroidNs), Is.EqualTo("true"));
+            Assert.That(deactivated.ParentNode.Name, Is.EqualTo("application"));
+
+            var adId = doc.GetElementsByTagName("uses-permission").Cast<XmlElement>()
+                .Single(e => e.GetAttribute("name", ManifestPermissions.AndroidNs) == ManifestPermissions.AdIdPermission);
+            Assert.That(adId.GetAttribute("node", ManifestPermissions.ToolsNs), Is.EqualTo("remove"));
+
+            // المستند المحفوظ يبقى XML صالح بالبادئات المعروفة.
+            var reparsed = new XmlDocument();
+            reparsed.LoadXml(doc.OuterXml);
+            Assert.That(doc.OuterXml, Does.Contain("tools:node=\"remove\"").And.Contain("android:value=\"false\""));
+        }
+
+        [Test]
         public void SystemTextsMatchTheDesignDocument()
         {
             Assert.That(SystemPermissionTexts.LocationWhenInUseAr,

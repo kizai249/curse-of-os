@@ -4,9 +4,9 @@ name: fq-unity
 
 on:
   push:
-    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", ".github/workflows/fq-unity.yml"]
+    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", "docs/store/**", ".github/workflows/fq-unity.yml"]
   pull_request:
-    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", ".github/workflows/fq-unity.yml"]
+    paths: ["unity/**", "shared/contracts/**", "tools/core-tests/**", "docs/store/**", ".github/workflows/fq-unity.yml"]
   workflow_dispatch:
 
 permissions:
@@ -96,7 +96,7 @@ jobs:
           buildMethod: FootballQuest.EditorTools.BuildScript.BuildFromCommandLine
           buildName: FootballQuest
           versioning: Semantic
-      # iOS هنا يُنتج مشروع Xcode فقط؛ التوقيع ورفع IPA في Slice 10 على macOS runner.
+      # iOS هنا يُنتج مشروع Xcode فقط؛ التوقيع والرفع في fq-release.yml.
       - uses: actions/upload-artifact@v4
         with:
           name: FootballQuest-${{ matrix.targetPlatform }}

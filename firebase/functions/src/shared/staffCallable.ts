@@ -10,11 +10,17 @@ import { requireRole, Role, StaffClaims } from "./roles.js";
  */
 export const ADMIN_MFA_REQUIRED = defineBoolean("ADMIN_MFA_REQUIRED", { default: false });
 
+/** المسؤولون (غير موظف الفرع) يحتاجون عاملًا ثانيًا في التوكن لما يكون الشرط مفعّل. */
+export function requireSecondFactor(staff: StaffClaims, token: Record<string, unknown> | undefined, required: boolean): void {
+  if (!required || staff.role === "branch_staff") return;
+  const secondFactor = (token?.firebase as { sign_in_second_factor?: string } | undefined)?.sign_in_second_factor;
+  if (!secondFactor) fail("permission-denied", "MFA_REQUIRED");
+}
+
 export function staffCallable<Req, Res>(roles: Role[], handler: (staff: StaffClaims, data: Req, request: CallableRequest<Req>) => Promise<Res>) {
   return onCall<Req, Promise<Res>>({ region: REGION, enforceAppCheck: !isEmulator() }, async (request) => {
     const staff = requireRole(request as CallableRequest<unknown>, roles);
-    const secondFactor = (request.auth?.token.firebase as { sign_in_second_factor?: string } | undefined)?.sign_in_second_factor;
-    if (staff.role !== "branch_staff" && ADMIN_MFA_REQUIRED.value() && !secondFactor) fail("permission-denied", "MFA_REQUIRED");
+    requireSecondFactor(staff, request.auth?.token, ADMIN_MFA_REQUIRED.value());
     return handler(staff, request.data, request);
   });
 }

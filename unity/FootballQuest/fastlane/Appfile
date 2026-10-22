@@ -1,0 +1,2 @@
+app_identifier("com.usersx.footballquest") # TODO(Q2): يتأكد المالك من معرّف الحزمة قبل إنشاء التطبيق في المتجرين.
+team_id(ENV["APPLE_TEAM_ID"])

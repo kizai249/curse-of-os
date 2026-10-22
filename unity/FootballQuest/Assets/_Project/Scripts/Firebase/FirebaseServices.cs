@@ -46,7 +46,9 @@ namespace FootballQuest.FirebaseServices
             Ready = FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(t =>
             {
                 if (t.Result != DependencyStatus.Available) throw new InvalidOperationException("Firebase unavailable: " + t.Result);
-                return FirebaseApp.DefaultInstance;
+                var app = FirebaseApp.DefaultInstance;
+                EnableCrashlytics();
+                return app;
             });
 
             AppServices.FirebaseFactory = () =>
@@ -71,6 +73,18 @@ namespace FootballQuest.FirebaseServices
                     UsesEmulator = false,
                 };
             };
+        }
+
+        /// <summary>
+        /// Crashlytics (ARCHITECTURE §4): تقارير أعطال بدون معرّف مستخدم — ما نستدعي SetUserId أبدًا،
+        /// وما نضمّن Firebase Analytics (Q6، AT-10). مطفي في بنيات التطوير عشان ما تختلط بتقارير الإنتاج.
+        /// </summary>
+        private static void EnableCrashlytics()
+        {
+#if FQ_CRASHLYTICS
+            Firebase.Crashlytics.Crashlytics.IsCrashlyticsCollectionEnabled = !Debug.isDebugBuild;
+            Firebase.Crashlytics.Crashlytics.ReportUncaughtExceptionsAsFatal = true;
+#endif
         }
     }
 
