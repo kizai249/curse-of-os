@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 20" shape-rendering="crispEdges" role="img" aria-label="آخر من يصمد — أعمدة تسقط ويبقى عمود واحد مضيء">
+  <title>آخر من يصمد</title>
+  <rect width="32" height="20" fill="#0B0B0F"/>
+  <path fill="#2B2C3A" d="M2 6h2v12H2zM6 9h2v9H6zM10 12h2v6h-2zM14 5h2v13h-2zM22 10h2v8h-2zM26 13h2v5h-2z"/>
+  <rect x="18" y="2" width="2" height="16" fill="#F4F4F1"/>
+  <rect x="18" y="2" width="2" height="1" fill="#F54BF7"/>
+  <rect x="0" y="18" width="32" height="1" fill="#33354C"/>
+  <path fill="#00DEE6" d="M21 3h1v1h-1zM16 3h1v1h-1z"/>
+</svg>

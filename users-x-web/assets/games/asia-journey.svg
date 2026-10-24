@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 20" shape-rendering="crispEdges" role="img" aria-label="مشوار آسيا — ملعب بخطوط سيان وفي الوسط رمز X">
+  <title>مشوار آسيا</title>
+  <rect width="32" height="20" fill="#0B0B0F"/>
+  <path fill="#00DEE6" opacity=".7" d="M1 1h30v1H1zM1 18h30v1H1zM1 2h1v16H1zM30 2h1v16h-1zM15 2h2v16h-2zM1 6h4v1H1zM1 13h4v1H1zM4 7h1v6H4zM27 6h4v1h-4zM27 13h4v1h-4zM27 7h1v6h-1z"/>
+  <path fill="#00DEE6" opacity=".7" d="M13 6h6v1h-6zM13 13h6v1h-6zM12 7h1v6h-1zM19 7h1v6h-1z"/>
+  <rect x="14" y="8" width="4" height="4" fill="#0B0B0F"/>
+  <path fill="#F4F4F1" d="M14 8h1v1h-1zM17 8h1v1h-1zM15 9h2v2h-2zM14 11h1v1h-1zM17 11h1v1h-1z"/>
+  <rect x="15" y="9" width="2" height="2" fill="#F54BF7"/>
+</svg>
