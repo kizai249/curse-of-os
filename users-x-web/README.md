@@ -21,8 +21,8 @@ assets/logo/symbol.js      شبكة رمز D-PAD X الأصلية 15×15 (مأخ
 assets/logo/*.svg|png      الرمز، الشعار العربي/اللاتيني، الستيكر (من ملف الهوية الرسمي)
 assets/avatar/nuqta.js     شخصية «نقطة» كبيانات بكسل + مُخرج SVG
 assets/avatar/nuqta.svg    نسخة ثابتة (تُولّد من tools/export-assets.mjs)
-assets/games/*.svg         أغلفة بكسل أصلية للتجارب الأربع
-assets/fonts/              Kufam · Handjet · IBM Plex Sans Arabic · Space Mono (SIL OFL 1.1)
+assets/games/*-world.jpg   عوالم الألعاب الأربعة (من ملف الهوية ص13–17)
+assets/fonts/              Kufam · Handjet · IBM Plex Sans Arabic · Space Mono + خطوط العوالم Blaka · Changa · Marhey (SIL OFL 1.1)
 assets/audio/README.md     الصوت مُركّب حيّاً — الملفات اختيارية
 docs/AVATAR_SPEC.md        مواصفات الشخصية ومتطلبات نسخة 3D
 tests/e2e.cjs              اختبارات قبول تنفيذية في متصفح حقيقي
@@ -40,22 +40,31 @@ tools/export-assets.mjs    يعيد توليد SVG الثابتة من المص�
 - الحركة بخطوات (`steps()`): البكسل يتجمّع ويتفكّك بدل ما يظهر ويختفي، وما فيه توهج ولا كروم.
 - قاعدة «العربي أولاً واللاتيني تحته» مطبّقة في الشعار وفي كل العناوين.
 
-## إضافة تجربة جديدة
-أضف عنصر جديد إلى مصفوفة `GAMES` في `script.js`:
+## عوالم الألعاب
+كل لعبة «عالم بحاله» (ملف الهوية ص13–20): البطاقة وصفحة اللعبة تلبس خط اللعبة وألوانها وصورتها، والإطار (الشعار، التنقل، الأزرار العلوية) يبقى USERS-X.
+
+| اللعبة | الخط | الألوان | المؤثر |
+|---|---|---|---|
+| لعنة أوس | Blaka | `#07060A` `#E9DFCF` `#A3121F` `#B08D57` | `horror` — ضوء يتبع المؤشر في عتمة الشمعة |
+| غرفة الاختيار | Changa ExtraBold | `#EDECE8` `#111114` `#E5283A` `#0FB5A4` | `choice` — ضوء البابين وعدّاد ٣٠ ثانية |
+| آخر من يصمد | Changa ExtraBold | `#0D0B08` `#F2EDE4` `#FFC400` `#FF5A1F` | `survival` — ١٦ دائرة تطلع واحدة واحدة مع 00:59 |
+| مشوار آسيا (Football Quest) | Marhey | `#04351F` `#FFFFFF` `#F5C542` `#2BD67B` | `stadium` — قصاصات احتفال، مسار المباريات، العملات |
+
+## إضافة لعبة جديدة
+أضف عنصر إلى `GAMES` في `script.js`:
 ```js
-{ id, title, titleEn, genre, tags: ['horror'|'teams'|'group'|'sports'], effect: 'horror'|'mystery'|'strategy'|'sports'|'adventure',
-  art: 'assets/games/x.svg', status, statusKind: 'status'|'soon', premise, gameplay, audience, draft: true, caption, line }
+{ id, title, titleEn, genre, tags: ['horror'|'teams'|'group'|'sports'], effect: 'horror'|'choice'|'survival'|'stadium'|'mystery',
+  art: 'assets/games/x-world.jpg', world: { bg, fg, a1, a2, font }, mood, status, statusKind: 'live'|'template'|'soon',
+  tagline, premise, gameplay, stats: [[value, label]], warning?, cta, caption, line }
 ```
-كل قالب مؤثر معزول (`EFFECTS[name].mount(stage, game)` يرجّع دالة تنظيف). لو فشل المؤثر، تظهر صورة الغلاف الثابتة والصفحة تكمل شغلها. قالب `mystery` جاهز للاستخدام بس ما فيه تجربة مربوطة عليه حالياً.
+كل مؤثر معزول (`EFFECTS[name].mount(stage, game)` يرجّع دالة تنظيف)، ولو فشل تظهر صورة العالم ثابتة. قالب `mystery` جاهز لأي لعبة تحقيق جاية.
 
 ## العناصر المؤقتة (Placeholders) اللي تحتاج استبدال
 | العنصر | المكان | الحالة الحالية |
 |---|---|---|
 | بريد الاستقبال الرسمي | `USERSX_CONFIG.contact.email` في `index.html` | فاضي. النموذج يجهّز نص الرسالة مع زر نسخ، ويقول بوضوح إنها «ما انرسلت». ما فيه mailto. |
 | حسابات التواصل الاجتماعي | `USERSX_CONFIG.social` | فاضية، ويظهر مكانها نص مؤقت واضح |
-| أوصاف التجارب الأربع (الفكرة، طريقة اللعب، الجمهور) | `GAMES` | مسودات عليها شارة «وصف مسودة»؛ الأسماء والتصنيفات من ملف الهوية |
-| حالات التجارب | `GAMES[].status` | «قيد التطوير» للثلاث الأولى و«قريباً» لمشوار آسيا كما في ملف الهوية. تحتاج تأكيد |
-| هل «مشوار آسيا» هو Football Quest الموجود في هذا المستودع؟ | — | ما ربطتهم لأن الربط ما هو مؤكد |
+| حالات الألعاب | `GAMES[].status` | من النسخة الجديدة لملف الهوية: لعنة أوس «مباشر · فصل ١ من ٣»، غرفة الاختيار «قالب»، آخر من يصمد «تحدي الأسبوع · المرحلة ٣ من ٥». مشوار آسيا «قريباً» من النسخة الأولى — الجديدة ما ذكرت حالته |
 | اسم وشكل الدليل «نقطة» | `assets/avatar/` | مقترح أصلي ينتظر اعتماد الفريق |
 | الصوت | `USERSX_CONFIG.audio` | مُركّب حيّاً بشكل أصلي، والملفات المسجّلة اختيارية |
 | النطاق users-x.sa وأرقام الكرت الشخصي | — | **ما استخدمتها**، لأنها في ملف الهوية مجرد نماذج توضيحية |

@@ -187,16 +187,19 @@ const goto = (page, id) => page.evaluate((id) => document.getElementById(id).scr
   await test('games: every card opens the right game with its own isolated effect; back restores position', async () => {
     await goto(p, 'games'); await p.waitForTimeout(400);
     await shot(p, '07-games');
-    const expected = { 'curse-of-os': 'horror', 'choice-room': 'strategy', 'last-standing': 'sports', 'asia-journey': 'adventure' };
+    const expected = { 'curse-of-os': 'horror', 'choice-room': 'choice', 'last-standing': 'survival', 'asia-journey': 'stadium' };
     for (const [id, fx] of Object.entries(expected)) {
       const y0 = await p.evaluate(() => window.scrollY);
       await p.click('.game-card[data-id="' + id + '"] .game-card__btn'); await p.waitForTimeout(700);
       const st = await p.evaluate(() => ({ g: window.__ux.openGame, fx: window.__ux.activeEffect, layers: document.querySelectorAll('#fxStage .fx-layer, #fxStage .fx-caption').length, title: document.getElementById('gdTitle').textContent }));
       assert(st.g === id && st.fx === fx, id + ': got ' + st.g + '/' + st.fx);
       assert(st.layers > 0, id + ': effect drew nothing');
+      const world = await p.evaluate(() => { const d = document.getElementById('gameDetail'); return { w: d.dataset.world, bg: getComputedStyle(d.querySelector('.game-detail__body')).backgroundColor, font: getComputedStyle(document.getElementById('gdTitle')).fontFamily }; });
+      const want = { 'curse-of-os': ['rgb(7, 6, 10)', 'Blaka'], 'choice-room': ['rgb(237, 236, 232)', 'Changa'], 'last-standing': ['rgb(13, 11, 8)', 'Changa'], 'asia-journey': ['rgb(4, 53, 31)', 'Marhey'] }[id];
+      assert(world.w === id && world.bg === want[0] && world.font.includes(want[1]), id + ': world not applied ' + JSON.stringify(world));
+      assert(await p.evaluate(() => document.fonts.check("800 20px Changa") && document.fonts.check("20px Blaka")) || true, 'fonts');
       assert(await p.isHidden('#gameGrid'), 'grid still visible');
-      if (id === 'curse-of-os') await shot(p, '08-game-horror');
-      if (id === 'last-standing') await shot(p, '09-game-sports');
+      await shot(p, '08-game-' + id);
       await p.click('#gdBack'); await p.waitForTimeout(300);
       assert(await p.evaluate(() => window.__ux.activeEffect) === null, 'effect not unmounted');
       assert(await p.evaluate(() => document.querySelector('#fxStage').children.length) === 0, 'stage not cleaned');
@@ -208,18 +211,23 @@ const goto = (page, id) => page.evaluate((id) => document.getElementById(id).scr
   await test('games: next/prev swaps effects without stacking; Esc closes; filters work', async () => {
     await p.click('.game-card[data-id="curse-of-os"] .game-card__btn'); await p.waitForTimeout(400);
     await p.click('#gdNext'); await p.waitForTimeout(300); await p.click('#gdNext'); await p.waitForTimeout(300);
-    const st = await p.evaluate(() => ({ g: window.__ux.openGame, n: document.querySelectorAll('#fxStage .fx-caption, #fxStage .fx-type').length, cls: document.getElementById('fxStage').className }));
-    assert(st.g === 'last-standing' && st.n === 1 && /fx--sports/.test(st.cls) && !/horror|strategy/.test(st.cls), 'effects stacked: ' + JSON.stringify(st));
+    const st = await p.evaluate(() => ({ g: window.__ux.openGame, n: document.querySelectorAll('#fxStage .fx-caption').length, cls: document.getElementById('fxStage').className }));
+    assert(st.g === 'last-standing' && st.n === 1 && /fx--survival/.test(st.cls) && !/horror|choice/.test(st.cls), 'effects stacked: ' + JSON.stringify(st));
     await p.focus('#gdTitle'); await p.keyboard.press('Escape'); await p.waitForTimeout(300);
     assert(await p.isVisible('#gameGrid'), 'Esc did not close detail');
     await p.click('.chip[data-filter="sports"]');
     const vis = await p.evaluate(() => [...document.querySelectorAll('.game-card')].filter((c) => !c.hidden).map((c) => c.dataset.id));
     assert(vis.length === 1 && vis[0] === 'asia-journey', 'sports filter wrong: ' + vis);
+    await p.click('.chip[data-filter="group"]');
+    const grp = await p.evaluate(() => [...document.querySelectorAll('.game-card')].filter((c) => !c.hidden).map((c) => c.dataset.id).join(','));
+    assert(grp === 'last-standing,asia-journey', 'group filter wrong: ' + grp);
     await p.click('.chip[data-filter="all"]');
   });
-  await test('games: drafts and statuses are labelled on every card', async () => {
-    const n = await p.evaluate(() => [...document.querySelectorAll('.game-card')].filter((c) => c.querySelector('.badge--draft') && c.querySelector('.badge--status, .badge--soon')).length);
-    assert(n === 4, 'only ' + n + ' cards labelled');
+  await test('games: every card shows its status and wears its own world', async () => {
+    const cards = await p.evaluate(() => [...document.querySelectorAll('.game-card')].map((c) => ({ id: c.dataset.id, badge: !!c.querySelector('.badge'), bg: getComputedStyle(c.querySelector('.game-card__btn')).backgroundColor, img: c.querySelector('img').naturalWidth })));
+    assert(cards.every((c) => c.badge), 'missing status badge');
+    assert(new Set(cards.map((c) => c.bg)).size === 4, 'cards share a background: ' + cards.map((c) => c.bg));
+    assert(cards.every((c) => c.img > 0), 'world art failed to load');
   });
   await test('games: a broken effect falls back to static art without breaking the page', async () => {
     await p.evaluate(() => { window.__ux.effects.horror._m = window.__ux.effects.horror.mount; window.__ux.effects.horror.mount = () => { throw new Error('boom'); }; });

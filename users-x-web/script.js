@@ -740,52 +740,72 @@
    * 06 · Game universe — data, cards, detail, isolated effects
    * Add a game: push an object to GAMES (see README › Adding a game).
    * ------------------------------------------------------------------ */
+  // Every game is its own world (Brand Presentation 2026 · pp.13–20): own palette,
+  // font, mood and art. The frame around it (logo, nav, HUD) stays USERS-X.
   var GAMES = [
     {
       id: 'curse-of-os', title: 'لعنة أوس', titleEn: 'CURSE OF OS',
-      genre: 'رعب نفسي · هجين', tags: ['horror', 'teams'], effect: 'horror',
-      art: 'assets/games/curse-of-os.svg',
-      status: 'قيد التطوير', statusKind: 'status',
-      premise: 'رعب نفسي تعيشه بجوالك وفي المكان بنفس اللحظة — وكل قرار تاخذه يغيّر اللي بعده.',
-      gameplay: 'جولات حيّة بعدّاد، وفي كل جولة تختار باب واحد… والباب الثاني ينقفل للأبد.',
-      audience: 'جيل زد — أفراد وشِلل وفرق',
-      draft: true, caption: 'الباب الثاني ينقفل للأبد.', line: 'لعنة أوس… فكّر زين قبل تختار الباب.'
+      genre: 'رعب نفسي · غموض · هجين 70/30', tags: ['horror', 'teams'], effect: 'horror',
+      art: 'assets/games/curse-of-os-world.jpg',
+      world: { bg: '#07060A', fg: '#E9DFCF', a1: '#A3121F', a2: '#B08D57', font: 'Blaka' },
+      mood: 'غموض · إثارة · تشويق',
+      status: 'مباشر · فصل ١ من ٣', statusKind: 'live',
+      tagline: '«اللغز ما ينحل... يتورث.»',
+      premise: 'طفل محبوس في نظام عمره أجيال تراك لكم فخ. ٩٠ دقيقة، ستة لاعبين، وباب واحد يطلعكم.',
+      gameplay: 'فكّوا الشيفرة قبل ما تنطفي الشمعة — «اسمي مكتوب على الباب... بس ناقصه حرف». ٣ فصول، وتلميح واحد للفريق.',
+      stats: [['90', 'دقيقة'], ['6–4', 'لاعبين'], ['+18', 'العمر']],
+      warning: 'تنبيه: أجواء رعب نفسي وأصوات مفاجئة',
+      cta: 'ادخل إن تجرأت', caption: '«اللغز ما ينحل... يتورث.»', line: 'لعنة أوس… ادخل إن تجرأت.'
     },
     {
       id: 'choice-room', title: 'غرفة الاختيار', titleEn: 'THE CHOICE ROOM',
-      genre: 'قرارات · فرق', tags: ['teams'], effect: 'strategy',
-      art: 'assets/games/choice-room.svg',
-      status: 'قيد التطوير', statusKind: 'status',
-      premise: 'غرفة واحدة، فريق واحد، وقرارات لازم تتفقون عليها قبل ما يخلص الوقت.',
-      gameplay: 'كل فريق يبني طريقه خطوة بخطوة؛ كل اختيار يفتح مسار ويقفل غيره.',
-      audience: 'فرق العمل والفعاليات الجماعية',
-      draft: true, caption: 'اختاروا مع بعض.', line: 'غرفة الاختيار؟ هنا الفريق كله يقرّر.'
+      genre: 'قرارات · فرق', tags: ['teams'], effect: 'choice',
+      art: 'assets/games/choice-room-world.jpg',
+      world: { bg: '#EDECE8', fg: '#111114', a1: '#E5283A', a2: '#0FB5A4', font: 'Changa' },
+      mood: 'سريري · متماثل · توتر بارد',
+      status: 'قالب', statusKind: 'template',
+      tagline: 'بابين. قرار واحد.',
+      premise: 'فريقين، بابين، وقرار واحد يتاخذ خلال ٣٠ ثانية. اللي يختار غلط... يطلع.',
+      gameplay: 'كل جولة ١٢ قرار، ولكل قرار ٣٠ ثانية: الباب 01 أو الباب 02.',
+      stats: [['12', 'قرار في الجولة'], ['30ث', 'لكل قرار']],
+      cta: 'اطلب هالتجربة لفعاليتك', caption: 'الباب 01 أو الباب 02؟', line: 'غرفة الاختيار؟ ٣٠ ثانية وتقرّر.'
     },
     {
       id: 'last-standing', title: 'آخر من يصمد', titleEn: 'LAST ONE STANDING',
-      genre: 'تحدي · جماعي', tags: ['group'], effect: 'sports',
-      art: 'assets/games/last-standing.svg',
-      status: 'قيد التطوير', statusKind: 'status',
-      premise: 'تحدي جماعي بمراحل تتصاعد — واللي يصمد للآخر يفوز.',
-      gameplay: 'مراحل أسبوعية على الجوال وفي المكان، والصعوبة تزيد مع كل مرحلة.',
-      audience: 'جمهور الفعاليات الكبيرة',
-      draft: true, caption: 'STAGE 3/5', line: 'آخر من يصمد… خلك آخر واحد واقف.'
+      genre: 'تحدي · جماعي', tags: ['group'], effect: 'survival',
+      art: 'assets/games/last-standing-world.jpg',
+      world: { bg: '#0D0B08', fg: '#F2EDE4', a1: '#FFC400', a2: '#FF5A1F', font: 'Changa' },
+      mood: 'خشن · صناعي · عرق وغبار',
+      status: 'تحدي الأسبوع · المرحلة ٣ من ٥', statusKind: 'live',
+      tagline: 'كل دقيقة تطلع لاعب.',
+      premise: 'كل دقيقة تطلع لاعب. ١٦ لاعب على الأرض… واحد بس يصمد للآخر.',
+      gameplay: 'اضغط وثبّت — إذا رفعت إصبعك عن الشاشة... تطلع. خمس مراحل، والعدّاد ما يرحم.',
+      stats: [['16', 'لاعب'], ['5', 'مراحل'], ['00:59', 'كل جولة']],
+      cta: 'اطلب هالتجربة لفعاليتك', caption: 'كل دقيقة تطلع لاعب.', line: 'آخر من يصمد… لا ترفع إصبعك.'
     },
     {
-      id: 'asia-journey', title: 'مشوار آسيا', titleEn: 'THE ASIA RUN',
-      genre: 'كورة · جولات', tags: ['sports'], effect: 'adventure',
-      art: 'assets/games/asia-journey.svg',
+      id: 'asia-journey', title: 'مشوار آسيا', titleEn: 'FOOTBALL QUEST',
+      genre: 'كورة · جولات · جماعي', tags: ['sports', 'group'], effect: 'stadium',
+      art: 'assets/games/asia-journey-world.jpg',
+      world: { bg: '#04351F', fg: '#FFFFFF', a1: '#F5C542', a2: '#2BD67B', font: 'Marhey' },
+      mood: 'فرح · طاقة ملعب · جماعي',
       status: 'قريباً', statusKind: 'soon',
-      premise: 'مشوار كروي بالجولات تمشيه مع شلّتك، جولة بعد جولة.',
-      gameplay: 'جولات مرتبطة بأيام المباريات، وتقدّم تبنيه خطوة بخطوة.',
-      audience: 'جمهور الكورة من جيل زد',
-      draft: true, caption: 'جولة بعد جولة →', line: 'مشوار آسيا قريب. جهّز شلّتك.'
+      tagline: 'منتخبنا يجمعنا.',
+      premise: 'منتخبنا يجمعنا. امشِ خريطة المباريات مع شلّتك، مباراة بعد مباراة.',
+      gameplay: 'العب المباراة، اجمع العملات، وافتح كوبونات تنصرف في فروع الشركاء.',
+      stats: [['1,240', 'عملة'], ['مباراة ٤', 'جدة']],
+      cta: 'اطلب هالتجربة لفعاليتك', caption: 'منتخبنا يجمعنا.', line: 'مشوار آسيا… جهّز شلّتك.'
     }
   ];
   UX.games = GAMES;
 
-  // Isolated effect templates. mount(stage, game) must return a cleanup function.
+  function worldStyle(w) {
+    return '--w-bg:' + w.bg + ';--w-fg:' + w.fg + ';--w-a1:' + w.a1 + ';--w-a2:' + w.a2 + ";--w-font:'" + w.font + "'";
+  }
+
+  // Isolated effect templates — one per world. mount(stage, game) returns a cleanup function.
   var EFFECTS = {
+    // لعنة أوس: candle-lit dark, a light that follows you, restrained (no flashing)
     horror: {
       sound: 'horror',
       mount: function (stage, game) {
@@ -806,6 +826,62 @@
         return function () { stage.removeEventListener('pointermove', move); if (raf) cancelAnimationFrame(raf); };
       }
     },
+    // غرفة الاختيار: cold, symmetric — two door lights and a 30s decision clock
+    choice: {
+      sound: 'strategy',
+      mount: function (stage, game) {
+        layer(stage, 'fx-beam fx-beam--a'); layer(stage, 'fx-beam fx-beam--b');
+        var clock = layer(stage, 'fx-clock'); caption(stage, game.caption);
+        var left = 30, id = null;
+        function tick() { clock.textContent = left + 'ث'; clock.classList.toggle('is-low', left <= 5); }
+        tick();
+        if (!reduced()) id = setInterval(function () { left = left <= 0 ? 30 : left - 1; tick(); }, 1000);
+        return function () { clearInterval(id); };
+      }
+    },
+    // آخر من يصمد: 16 numbered spots, one goes dark at a time, a 00:59 clock
+    survival: {
+      sound: 'sports',
+      mount: function (stage, game) {
+        var grid = layer(stage, 'fx-spots'), timer = layer(stage, 'fx-timer');
+        layer(stage, 'fx-hazard'); caption(stage, game.caption);
+        var html = '';
+        for (var n = 1; n <= 16; n++) html += '<i>' + String(n).padStart(2, '0') + '</i>';
+        grid.innerHTML = html;
+        var spots = $$('i', grid), out = [], sec = 59, id = null;
+        function tick() {
+          timer.textContent = '00:' + String(sec).padStart(2, '0');
+          if (sec % 4 === 0 && out.length < 15) {
+            var alive = spots.filter(function (s) { return !s.classList.contains('is-out'); });
+            var pick = alive[(Math.random() * alive.length) | 0]; pick.classList.add('is-out'); out.push(pick);
+          }
+          sec = sec <= 0 ? 59 : sec - 1;
+          if (sec === 59) { out.forEach(function (s) { s.classList.remove('is-out'); }); out = []; }
+        }
+        tick();
+        if (!reduced()) id = setInterval(tick, 1000);
+        return function () { clearInterval(id); };
+      }
+    },
+    // مشوار آسيا: stadium joy — confetti, a match path, the coin counter
+    stadium: {
+      sound: 'adventure',
+      mount: function (stage, game) {
+        var conf = layer(stage, 'fx-confetti'), html = '';
+        var colours = ['#F5C542', '#2BD67B', '#FFFFFF'];
+        for (var i = 0; i < 28; i++) {
+          html += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;background:' + colours[i % 3] +
+            ';animation-delay:-' + (Math.random() * 4).toFixed(2) + 's;animation-duration:' + (3 + Math.random() * 3).toFixed(2) + 's"></i>';
+        }
+        conf.innerHTML = html;
+        var path = layer(stage, 'fx-path');
+        path.innerHTML = '<b>★</b><b>★</b><b>★</b><b class="is-now">مباراة ٤ · جدة</b><b>?</b>';
+        var coins = layer(stage, 'fx-coins'); coins.textContent = '1,240';
+        caption(stage, game.caption);
+        return function () {};
+      }
+    },
+    // spare template for a future investigation game
     mystery: {
       sound: 'mystery',
       mount: function (stage, game) {
@@ -817,55 +893,6 @@
         });
         caption(stage, game.caption);
         return function () {};
-      }
-    },
-    strategy: {
-      sound: 'strategy',
-      mount: function (stage, game) {
-        var pts = [[10, 50], [25, 25], [25, 75], [45, 40], [45, 62], [62, 28], [62, 52], [62, 76], [80, 40], [80, 64], [92, 50]];
-        var links = [[0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [3, 6], [4, 6], [4, 7], [6, 8], [6, 9], [8, 10]];
-        var svg = '<svg class="fx-net" viewBox="0 0 100 100" preserveAspectRatio="none" shape-rendering="crispEdges">';
-        links.forEach(function (l, i) {
-          var a = pts[l[0]], b = pts[l[1]];
-          svg += '<line class="fx-link" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" style="--d:' + (500 + i * 140) + 'ms"/>';
-        });
-        pts.forEach(function (p, i) {
-          svg += '<rect class="fx-node' + (i === 10 || i === 6 || i === 3 ? ' fx-node--pick' : '') + '" x="' + (p[0] - 2) + '" y="' + (p[1] - 3) + '" width="4" height="6" style="--d:' + (i * 50) + 'ms"/>';
-        });
-        var l = layer(stage, 'fx-netwrap'); l.innerHTML = svg + '</svg>';
-        caption(stage, game.caption);
-        return function () {};
-      }
-    },
-    sports: {
-      sound: 'sports',
-      mount: function (stage, game) {
-        layer(stage, 'fx-speed');
-        var t = layer(stage, 'fx-type'); t.innerHTML = '<span>' + game.caption + '</span><span>' + game.caption + '</span><span>' + game.caption + '</span>';
-        var bars = layer(stage, 'fx-bars');
-        bars.innerHTML = '<i style="--w:78%"></i><i style="--w:54%"></i><i style="--w:31%"></i>';
-        return function () {};
-      }
-    },
-    adventure: {
-      sound: 'adventure',
-      mount: function (stage, game) {
-        var far = layer(stage, 'fx-depth fx-depth--far'), mid = layer(stage, 'fx-depth fx-depth--mid');
-        layer(stage, 'fx-depth fx-depth--near');
-        var a = document.createElement('span'); a.className = 'fx-arrow'; a.textContent = '←'; a.setAttribute('aria-hidden', 'true'); stage.appendChild(a);
-        caption(stage, game.caption);
-        var raf = null;
-        function move(e) {
-          if (raf || reduced()) return;
-          raf = requestAnimationFrame(function () {
-            raf = null;
-            var r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5;
-            far.style.transform = 'translateX(' + (x * -6).toFixed(1) + 'px)';
-            mid.style.transform = 'translateX(' + (x * -16).toFixed(1) + 'px)';
-          });
-        }
-        stage.addEventListener('pointermove', move);
-        return function () { stage.removeEventListener('pointermove', move); if (raf) cancelAnimationFrame(raf); };
       }
     }
   };
@@ -906,18 +933,19 @@
     render: function () {
       var html = '';
       GAMES.forEach(function (g, i) {
-        html += '<li class="game-card game-card--' + g.effect + '" data-tags="' + g.tags.join(' ') + '" data-id="' + g.id + '">' +
+        html += '<li class="game-card game-card--' + g.id + '" style="' + worldStyle(g.world) + '" data-tags="' + g.tags.join(' ') + '" data-id="' + g.id + '">' +
           '<button type="button" class="game-card__btn" data-index="' + i + '" aria-describedby="gc-' + g.id + '">' +
-          '<span class="game-card__art"><img src="' + g.art + '" alt="" loading="lazy" width="320" height="200"></span>' +
+          '<span class="game-card__art"><img src="' + g.art + '" alt="" loading="lazy" width="640" height="360">' +
+          '<span class="badge badge--' + g.statusKind + '">' + g.status + '</span></span>' +
           '<span class="game-card__body">' +
-          '<span class="label" lang="en" dir="ltr">' + g.titleEn + '</span>' +
+          '<span class="game-card__en" lang="en" dir="ltr">' + g.titleEn + '</span>' +
           '<span class="game-card__title">' + g.title + '</span>' +
-          '<span class="game-card__genre">' + g.genre + '</span>' +
+          '<span class="game-card__tagline">' + g.tagline + '</span>' +
+          '<span class="game-card__genre">' + g.mood + '</span>' +
           '<span class="game-card__premise" id="gc-' + g.id + '">' + g.premise + '</span>' +
           '<span class="game-card__foot">' +
-          '<span class="badge badge--' + g.statusKind + '">' + g.status + '</span>' +
-          (g.draft ? '<span class="badge badge--draft">وصف مسودة</span>' : '') +
-          '<span class="game-card__open" aria-hidden="true">افتح الملف ←</span>' +
+          '<span class="game-card__chips">' + g.genre.split(' · ').map(function (t) { return '<span class="game-chip">' + t + '</span>'; }).join('') + '</span>' +
+          '<span class="game-card__open" aria-hidden="true">ادخل العالم ←</span>' +
           '</span></span></button></li>';
       });
       this.grid.innerHTML = html;
@@ -938,14 +966,18 @@
       this.current = i;
       this.grid.hidden = true; $('#gameFilters').hidden = true;
       this.detail.hidden = false;
+      this.detail.setAttribute('style', worldStyle(g.world));
+      this.detail.setAttribute('data-world', g.id);
       this.detail.classList.remove('is-entering'); void this.detail.offsetWidth; this.detail.classList.add('is-entering');
-      $('#gdGenre').textContent = g.titleEn + ' · ' + g.genre;
+      $('#gdGenre').textContent = g.titleEn + ' · ' + g.mood;
       $('#gdTitle').textContent = g.title;
-      $('#gdPremise').textContent = g.premise;
+      $('#gdPremise').innerHTML = '<span class="game-detail__tagline">' + g.tagline + '</span>' + g.premise;
       $('#gdIndex').textContent = (i + 1) + '/' + GAMES.length;
-      var facts = [['التصنيف', g.genre], ['طريقة اللعب', g.gameplay], ['الفئة المستهدفة', g.audience], ['الحالة', g.status]];
-      if (g.draft) facts.push(['ملاحظة', 'وصف مبدئي — بانتظار اعتماد فريق يوزرز إكس.']);
+      var facts = [['التصنيف', g.genre], ['طريقة اللعب', g.gameplay], ['الحالة', g.status]];
+      $('#gdStats').innerHTML = g.stats.map(function (s) { return '<span><b>' + s[0] + '</b><small>' + s[1] + '</small></span>'; }).join('');
       $('#gdFacts').innerHTML = facts.map(function (f) { return '<div><dt>' + f[0] + '</dt><dd>' + f[1] + '</dd></div>'; }).join('');
+      var warn = $('#gdWarn'); warn.textContent = g.warning || ''; warn.hidden = !g.warning;
+      $('#gdCta').textContent = g.cta;
       this.mountEffect(g);
       Sound.play(EFFECTS[g.effect] ? EFFECTS[g.effect].sound : 'select');
       Dock.say(g.line);
