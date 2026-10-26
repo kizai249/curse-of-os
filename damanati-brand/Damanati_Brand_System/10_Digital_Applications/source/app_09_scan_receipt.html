@@ -1,0 +1,201 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>Damanati - app_09_scan_receipt</title><style>@font-face{font-family:'Tajawal';font-weight:200;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-ExtraLight.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:300;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-Light.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:400;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-Regular.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:500;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-Medium.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:700;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-Bold.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:800;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-ExtraBold.ttf') format('truetype');}
+@font-face{font-family:'Tajawal';font-weight:900;font-style:normal;src:url('file:///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-Black.ttf') format('truetype');}
+:root {
+  --dm-color-green-600: #2F7D6B;
+  --dm-color-white: #FFFFFF;
+  --dm-color-stone: #6B675F;
+  --dm-color-ink: #231F20;
+  --dm-color-green-50: #F0F7F5;
+  --dm-color-green-100: #E2EFEC;
+  --dm-color-green-200: #C3E0D9;
+  --dm-color-green-300: #8FCBBE;
+  --dm-color-green-400: #54BAA3;
+  --dm-color-green-500: #3D9F88;
+  --dm-color-green-700: #2A5F53;
+  --dm-color-green-800: #21453D;
+  --dm-color-green-900: #162C27;
+  --dm-color-paper: #F7F5F0;
+  --dm-color-sand: #ECE8DF;
+  --dm-color-night: #141716;
+  --dm-color-night-raised: #1F2422;
+  --dm-color-mint: #7FD1B9;
+  --dm-color-success: #2F7D6B;
+  --dm-color-warning: #94600F;
+  --dm-color-danger: #B4382F;
+  --dm-color-warning-on-dark: #E0A526;
+  --dm-color-danger-on-dark: #E07A70;
+  --dm-color-info: #2D6A8F;
+  --dm-font-ar: 'Tajawal', 'Noto Kufi Arabic', system-ui, sans-serif;
+  --dm-font-en: 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+  --dm-type-display-size: 3.5rem;
+  --dm-type-display-line: 1.1;
+  --dm-type-display-weight: 800;
+  --dm-type-display-tracking: -0.01em;
+  --dm-type-h1-size: 2.5rem;
+  --dm-type-h1-line: 1.2;
+  --dm-type-h1-weight: 800;
+  --dm-type-h1-tracking: -0.005em;
+  --dm-type-h2-size: 1.875rem;
+  --dm-type-h2-line: 1.25;
+  --dm-type-h2-weight: 700;
+  --dm-type-h2-tracking: 0em;
+  --dm-type-h3-size: 1.375rem;
+  --dm-type-h3-line: 1.35;
+  --dm-type-h3-weight: 700;
+  --dm-type-h3-tracking: 0em;
+  --dm-type-body-lg-size: 1.125rem;
+  --dm-type-body-lg-line: 1.7;
+  --dm-type-body-lg-weight: 400;
+  --dm-type-body-lg-tracking: 0em;
+  --dm-type-body-size: 1rem;
+  --dm-type-body-line: 1.7;
+  --dm-type-body-weight: 400;
+  --dm-type-body-tracking: 0em;
+  --dm-type-label-size: 0.875rem;
+  --dm-type-label-line: 1.4;
+  --dm-type-label-weight: 500;
+  --dm-type-label-tracking: 0em;
+  --dm-type-caption-size: 0.75rem;
+  --dm-type-caption-line: 1.5;
+  --dm-type-caption-weight: 400;
+  --dm-type-caption-tracking: 0.01em;
+  --dm-type-figure-size: 2rem;
+  --dm-type-figure-line: 1.0;
+  --dm-type-figure-weight: 800;
+  --dm-type-figure-tracking: 0em;
+  --dm-space-0: 0px;
+  --dm-space-1: 4px;
+  --dm-space-2: 8px;
+  --dm-space-3: 12px;
+  --dm-space-4: 16px;
+  --dm-space-5: 20px;
+  --dm-space-6: 24px;
+  --dm-space-7: 32px;
+  --dm-space-8: 40px;
+  --dm-space-9: 48px;
+  --dm-space-10: 64px;
+  --dm-space-11: 80px;
+  --dm-space-12: 96px;
+  --dm-radius-xs: 4px;
+  --dm-radius-sm: 8px;
+  --dm-radius-md: 12px;
+  --dm-radius-lg: 16px;
+  --dm-radius-xl: 24px;
+  --dm-radius-tile: 22.4%;
+  --dm-radius-pill: 999px;
+  --dm-shadow-1: 0 1px 2px rgba(35,31,32,.06), 0 1px 1px rgba(35,31,32,.04);
+  --dm-shadow-2: 0 4px 12px rgba(35,31,32,.08);
+  --dm-shadow-3: 0 12px 32px rgba(35,31,32,.12);
+  --dm-shadow-4: 0 24px 60px rgba(20,23,22,.20);
+  --dm-motion-duration-fast: 120ms;
+  --dm-motion-duration-base: 220ms;
+  --dm-motion-duration-slow: 420ms;
+  --dm-motion-duration-reveal: 900ms;
+  --dm-motion-ease-standard: cubic-bezier(.2,0,0,1);
+  --dm-motion-ease-enter: cubic-bezier(0,0,.2,1);
+  --dm-motion-ease-exit: cubic-bezier(.4,0,1,1);
+  --dm-motion-ease-seal: cubic-bezier(.7,0,.2,1);
+}
+
+/* Semantic aliases - light theme */
+:root, [data-theme="light"] {
+  --dm-bg: var(--dm-color-white);
+  --dm-bg-subtle: var(--dm-color-paper);
+  --dm-surface: var(--dm-color-white);
+  --dm-text: var(--dm-color-ink);
+  --dm-text-muted: var(--dm-color-stone);
+  --dm-brand: var(--dm-color-green-600);
+  --dm-brand-strong: var(--dm-color-green-700);
+  --dm-on-brand: var(--dm-color-white);
+  --dm-border: var(--dm-color-sand);
+  --dm-focus: var(--dm-color-green-700);
+}
+[data-theme="dark"] {
+  --dm-bg: var(--dm-color-night);
+  --dm-bg-subtle: var(--dm-color-night-raised);
+  --dm-surface: var(--dm-color-night-raised);
+  --dm-text: #F2F1EE;
+  --dm-text-muted: #A8A39A;
+  --dm-brand: var(--dm-color-green-500);
+  --dm-brand-strong: var(--dm-color-mint);
+  --dm-on-brand: var(--dm-color-white);
+  --dm-border: #2C3330;
+  --dm-focus: var(--dm-color-mint);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:'Tajawal',sans-serif;color:var(--dm-color-ink);background:#fff;
+  font-feature-settings:'kern' 1;text-rendering:geometricPrecision}
+.en{font-family:'Tajawal',sans-serif;direction:ltr;unicode-bidi:isolate}
+.num{font-variant-numeric:tabular-nums}
+html,body{width:390px;height:844px;overflow:hidden;background:#0E1110}
+.scr{position:relative;width:390px;height:844px;overflow:hidden;background:#fff;direction:rtl}
+.scr.dark{background:#141716;color:#F2F1EE}
+.sb{height:47px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:600 15px 'Tajawal';direction:ltr}
+.sb .r{display:flex;gap:6px;align-items:center}
+.sb i{display:inline-block;width:17px;height:10px;border-radius:2px;background:currentColor;opacity:.9}
+.sb b{display:inline-block;width:24px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative}
+.sb b:after{content:'';position:absolute;inset:1.5px;right:5px;background:currentColor;border-radius:1px}
+.chip{display:inline-flex;align-items:center;gap:5px;font:500 12px/1 'Tajawal';padding:6px 9px 5px;border-radius:999px;white-space:nowrap}
+.chip svg{width:14px;height:14px}
+.wcard{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #ECE8DF;border-radius:18px;padding:14px;position:relative;overflow:hidden}
+.dark .wcard{background:#1F2422;border-color:#2C3330}
+.wcard .th{width:52px;height:52px;flex:none;border-radius:14px;display:grid;place-items:center;background:#F0F7F5;color:#2F7D6B}
+.dark .wcard .th{background:#26302C;color:#7FD1B9}
+.wcard .th svg{width:26px;height:26px}
+.wcard h4{font:700 15px/1.3 'Tajawal';margin-bottom:2px}
+.wcard p{font:400 12px/1.4 'Tajawal';color:#6B675F}
+.dark .wcard p{color:#A8A39A}
+.wcard .bar{height:4px;border-radius:4px;background:#ECE8DF;margin-top:9px;overflow:hidden}
+.dark .wcard .bar{background:#2C3330}
+.wcard .bar span{display:block;height:100%;border-radius:4px}
+.wcard .edge{position:absolute;right:0;top:14px;bottom:14px;width:3px;border-radius:3px 0 0 3px}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:84px;background:#fff;border-top:1px solid #ECE8DF;display:flex;justify-content:space-around;padding-top:10px}
+.dark .tabbar{background:#1F2422;border-color:#2C3330}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font:500 11px 'Tajawal';color:#6B675F;width:70px}
+.dark .tab{color:#8C877E}
+.tab svg{width:24px;height:24px}
+.tab.on{color:#2F7D6B}
+.dark .tab.on{color:#7FD1B9}
+.fab{width:56px;height:56px;border-radius:18px;background:#2F7D6B;color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px rgba(47,125,107,.35)}
+.fab svg{width:26px;height:26px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:54px;border-radius:16px;font:700 16px 'Tajawal';background:#2F7D6B;color:#fff}
+.btn.ghost{background:transparent;color:#2F7D6B;border:1.5px solid #C3E0D9}
+.input{height:56px;border-radius:16px;border:1.5px solid #ECE8DF;display:flex;align-items:center;padding:0 16px;gap:10px;font:500 16px 'Tajawal';color:#231F20;background:#F7F5F0}
+.input.focus{border-color:#2F7D6B;background:#fff;box-shadow:0 0 0 4px #E2EFEC}
+.h-title{font:800 28px/1.2 'Tajawal'}
+.muted{color:#6B675F}
+.dark .muted{color:#A8A39A}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:5px;background:#231F20;opacity:.9}
+.dark .home-ind{background:#fff}
+</style></head><body>
+<div class="scr" style="background:#0E1110;color:#fff">
+  <div class="sb"><span>9:41</span><span class="r"><i></i><i style="width:15px"></i><b></b></span></div>
+  <div style="text-align:center;font:700 17px Tajawal;margin-top:6px">تصوير الفاتورة</div>
+  <div style="position:absolute;top:130px;left:44px;right:44px;height:430px">
+    <div style="position:absolute;inset:26px 30px;background:#F4F1EA;border-radius:6px;color:#231F20;padding:22px 18px;font:400 11px/1.9 Tajawal;transform:rotate(-1.5deg)">
+      <div style="font:800 14px Tajawal;text-align:center;margin-bottom:8px">فاتورة ضريبية مبسطة</div>
+      <div style="display:flex;justify-content:space-between"><span>غسالة أمامية 9 كجم</span><span class="num">1,899.00</span></div>
+      <div style="display:flex;justify-content:space-between"><span>ضمان الوكيل</span><span>سنتان</span></div>
+      <div style="display:flex;justify-content:space-between"><span>التاريخ</span><span class="num">24/11/2024</span></div>
+      <div style="border-top:1px dashed #bbb;margin:8px 0"></div>
+      <div style="display:flex;justify-content:space-between;font-weight:800"><span>الإجمالي</span><span class="num">1,899.00 ر.س</span></div>
+      <div style="height:46px;margin-top:14px;background:repeating-linear-gradient(90deg,#231F20 0 2px,transparent 2px 4px,#231F20 4px 5px,transparent 5px 8px)"></div>
+    </div>
+    <i style="position:absolute;top:0;left:0;width:36px;height:36px;border-top:4px solid #fff;border-left:4px solid #fff;border-top-left-radius:16px"></i><i style="position:absolute;top:0;right:0;width:36px;height:36px;border-top:4px solid #fff;border-right:4px solid #fff;border-top-right-radius:16px"></i><i style="position:absolute;bottom:0;left:0;width:36px;height:36px;border-bottom:4px solid #fff;border-left:4px solid #fff;border-bottom-left-radius:16px"></i><i style="position:absolute;bottom:0;right:0;width:36px;height:36px;border-bottom:4px solid #fff;border-right:4px solid #fff;border-bottom-right-radius:16px"></i>
+    <div style="position:absolute;left:12px;right:12px;top:46%;height:2px;background:#7FD1B9;box-shadow:0 0 18px 4px rgba(127,209,185,.6)"></div>
+  </div>
+  <div style="position:absolute;top:590px;left:0;right:0;text-align:center"><span class="chip" style="color:#8FCBBE;background:rgba(127,209,185,.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8FCBBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>تم التعرف على تاريخ الشراء ومدة الضمان</span></div>
+  <div style="position:absolute;bottom:60px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:56px">
+    <span style="width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.12);display:grid;place-items:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5A2.5 2.5 0 0 1 6 5h3.5l2 2.2H18a2.5 2.5 0 0 1 2.5 2.5v7.8A2.5 2.5 0 0 1 18 20H6a2.5 2.5 0 0 1-2.5-2.5z"/></svg></span>
+    <span style="width:76px;height:76px;border-radius:50%;border:4px solid #fff;display:grid;place-items:center"><i style="width:60px;height:60px;border-radius:50%;background:#fff"></i></span>
+    <span style="width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.12);display:grid;place-items:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+  </div>
+  <div class="home-ind" style="background:#fff"></div>
+</div></body></html>

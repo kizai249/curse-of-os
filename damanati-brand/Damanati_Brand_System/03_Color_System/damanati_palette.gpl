@@ -1,0 +1,28 @@
+GIMP Palette
+Name: Damanati
+Columns: 4
+#
+ 47 125 107	Damanati Green (approved)
+255 255 255	White (approved)
+107 103  95	Dark Stone (approved)
+ 35  31  32	Ink Black (approved)
+240 247 245	Green 50 (proposed)
+226 239 236	Green 100 (proposed)
+195 224 217	Green 200 (proposed)
+143 203 190	Green 300 (proposed)
+ 84 186 163	Green 400 (proposed)
+ 61 159 136	Green 500 (proposed)
+ 42  95  83	Green 700 (proposed)
+ 33  69  61	Green 800 (proposed)
+ 22  44  39	Green 900 (proposed)
+247 245 240	Paper (measured)
+236 232 223	Sand (proposed)
+ 20  23  22	Night (proposed)
+ 31  36  34	Night Raised (proposed)
+127 209 185	Mint Signal (proposed)
+ 47 125 107	Valid (proposed)
+148  96  15	Expiring (proposed)
+180  56  47	Expired (proposed)
+224 165  38	Expiring (dark) (proposed)
+224 122 112	Expired (dark) (proposed)
+ 45 106 143	Info (proposed)

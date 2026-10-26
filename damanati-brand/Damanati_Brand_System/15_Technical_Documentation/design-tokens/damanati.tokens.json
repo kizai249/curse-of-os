@@ -1,0 +1,502 @@
+{
+  "$description": "Damanati design tokens. status: approved | measured | proposed.",
+  "color": {
+    "green-600": {
+      "$value": "#2F7D6B",
+      "$type": "color",
+      "name": "Damanati Green",
+      "nameAr": "الأخضر الرئيسي",
+      "status": "approved",
+      "usage": "Primary brand colour: logo tile, primary actions, headers, brand surfaces (~60%)."
+    },
+    "white": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "name": "White",
+      "nameAr": "الأبيض",
+      "status": "approved",
+      "usage": "Breathing space, cards, reversed logo (~30%)."
+    },
+    "stone": {
+      "$value": "#6B675F",
+      "$type": "color",
+      "name": "Dark Stone",
+      "nameAr": "الرمادي الداكن",
+      "status": "approved",
+      "usage": "Secondary text, metadata, dividers on light surfaces (~5%)."
+    },
+    "ink": {
+      "$value": "#231F20",
+      "$type": "color",
+      "name": "Ink Black",
+      "nameAr": "الأسود",
+      "status": "approved",
+      "usage": "Wordmark, headlines, body text, dark surfaces (~5%)."
+    },
+    "green-50": {
+      "$value": "#F0F7F5",
+      "$type": "color",
+      "name": "Green 50",
+      "nameAr": "أخضر 50",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-100": {
+      "$value": "#E2EFEC",
+      "$type": "color",
+      "name": "Green 100",
+      "nameAr": "أخضر 100",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-200": {
+      "$value": "#C3E0D9",
+      "$type": "color",
+      "name": "Green 200",
+      "nameAr": "أخضر 200",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-300": {
+      "$value": "#8FCBBE",
+      "$type": "color",
+      "name": "Green 300",
+      "nameAr": "أخضر 300",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-400": {
+      "$value": "#54BAA3",
+      "$type": "color",
+      "name": "Green 400",
+      "nameAr": "أخضر 400",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-500": {
+      "$value": "#3D9F88",
+      "$type": "color",
+      "name": "Green 500",
+      "nameAr": "أخضر 500",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-700": {
+      "$value": "#2A5F53",
+      "$type": "color",
+      "name": "Green 700",
+      "nameAr": "أخضر 700",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-800": {
+      "$value": "#21453D",
+      "$type": "color",
+      "name": "Green 800",
+      "nameAr": "أخضر 800",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "green-900": {
+      "$value": "#162C27",
+      "$type": "color",
+      "name": "Green 900",
+      "nameAr": "أخضر 900",
+      "status": "proposed",
+      "usage": "Tint/shade of Damanati Green for UI states, charts and depth."
+    },
+    "paper": {
+      "$value": "#F7F5F0",
+      "$type": "color",
+      "name": "Paper",
+      "nameAr": "ورقي",
+      "status": "measured",
+      "usage": "Warm light background (measured from the light-background panel, ref. p.10)."
+    },
+    "sand": {
+      "$value": "#ECE8DF",
+      "$type": "color",
+      "name": "Sand",
+      "nameAr": "رملي",
+      "status": "proposed",
+      "usage": "Secondary light surface, table stripes, input fills."
+    },
+    "night": {
+      "$value": "#141716",
+      "$type": "color",
+      "name": "Night",
+      "nameAr": "ليلي",
+      "status": "proposed",
+      "usage": "Dark-theme background (from the dark app screen, ref. p.21)."
+    },
+    "night-raised": {
+      "$value": "#1F2422",
+      "$type": "color",
+      "name": "Night Raised",
+      "nameAr": "ليلي مرتفع",
+      "status": "proposed",
+      "usage": "Dark-theme cards."
+    },
+    "mint": {
+      "$value": "#7FD1B9",
+      "$type": "color",
+      "name": "Mint Signal",
+      "nameAr": "نعناعي",
+      "status": "proposed",
+      "usage": "Accent on dark surfaces only: active states, highlights, chart emphasis."
+    },
+    "success": {
+      "$value": "#2F7D6B",
+      "$type": "color",
+      "name": "Valid",
+      "nameAr": "ساري",
+      "status": "proposed",
+      "usage": "Warranty active / valid (reuses brand green)."
+    },
+    "warning": {
+      "$value": "#94600F",
+      "$type": "color",
+      "name": "Expiring",
+      "nameAr": "ينتهي قريبًا",
+      "status": "proposed",
+      "usage": "Warranty expiring soon (≤30 days)."
+    },
+    "danger": {
+      "$value": "#B4382F",
+      "$type": "color",
+      "name": "Expired",
+      "nameAr": "منتهي",
+      "status": "proposed",
+      "usage": "Warranty expired, destructive actions, errors."
+    },
+    "warning-on-dark": {
+      "$value": "#E0A526",
+      "$type": "color",
+      "name": "Expiring (dark)",
+      "nameAr": "ينتهي قريبًا - داكن",
+      "status": "proposed",
+      "usage": "Expiring status on dark surfaces."
+    },
+    "danger-on-dark": {
+      "$value": "#E07A70",
+      "$type": "color",
+      "name": "Expired (dark)",
+      "nameAr": "منتهي - داكن",
+      "status": "proposed",
+      "usage": "Expired status on dark surfaces."
+    },
+    "info": {
+      "$value": "#2D6A8F",
+      "$type": "color",
+      "name": "Info",
+      "nameAr": "معلومة",
+      "status": "proposed",
+      "usage": "Neutral information, links in long text."
+    }
+  },
+  "font": {
+    "arabic": {
+      "$value": "Tajawal",
+      "status": "approved"
+    },
+    "latin": {
+      "$value": "Tajawal",
+      "status": "proposed",
+      "note": "Reference guide names Tajawal; the English wordmark is Myriad Pro Bold (outlined in logo files only)."
+    }
+  },
+  "type": {
+    "display": {
+      "size": {
+        "$value": "56px"
+      },
+      "lineHeight": {
+        "$value": 1.1
+      },
+      "weight": {
+        "$value": 800
+      },
+      "letterSpacing": {
+        "$value": "-0.01em"
+      },
+      "usage": "Covers, campaign headlines",
+      "status": "proposed"
+    },
+    "h1": {
+      "size": {
+        "$value": "40px"
+      },
+      "lineHeight": {
+        "$value": 1.2
+      },
+      "weight": {
+        "$value": 800
+      },
+      "letterSpacing": {
+        "$value": "-0.005em"
+      },
+      "usage": "Page titles",
+      "status": "proposed"
+    },
+    "h2": {
+      "size": {
+        "$value": "30px"
+      },
+      "lineHeight": {
+        "$value": 1.25
+      },
+      "weight": {
+        "$value": 700
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Section titles",
+      "status": "proposed"
+    },
+    "h3": {
+      "size": {
+        "$value": "22px"
+      },
+      "lineHeight": {
+        "$value": 1.35
+      },
+      "weight": {
+        "$value": 700
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Card titles, sub-sections",
+      "status": "proposed"
+    },
+    "body-lg": {
+      "size": {
+        "$value": "18px"
+      },
+      "lineHeight": {
+        "$value": 1.7
+      },
+      "weight": {
+        "$value": 400
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Lead paragraphs",
+      "status": "proposed"
+    },
+    "body": {
+      "size": {
+        "$value": "16px"
+      },
+      "lineHeight": {
+        "$value": 1.7
+      },
+      "weight": {
+        "$value": 400
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Running text (Arabic needs the taller line-height)",
+      "status": "proposed"
+    },
+    "label": {
+      "size": {
+        "$value": "14px"
+      },
+      "lineHeight": {
+        "$value": 1.4
+      },
+      "weight": {
+        "$value": 500
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Buttons, inputs, tabs",
+      "status": "proposed"
+    },
+    "caption": {
+      "size": {
+        "$value": "12px"
+      },
+      "lineHeight": {
+        "$value": 1.5
+      },
+      "weight": {
+        "$value": 400
+      },
+      "letterSpacing": {
+        "$value": "0.01em"
+      },
+      "usage": "Metadata, timestamps, footnotes",
+      "status": "proposed"
+    },
+    "figure": {
+      "size": {
+        "$value": "32px"
+      },
+      "lineHeight": {
+        "$value": 1.0
+      },
+      "weight": {
+        "$value": 800
+      },
+      "letterSpacing": {
+        "$value": "0em"
+      },
+      "usage": "Numbers: days remaining, totals",
+      "status": "proposed"
+    }
+  },
+  "space": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "7": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "9": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "11": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "12": {
+      "$value": "96px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "xs": {
+      "$value": "4px"
+    },
+    "sm": {
+      "$value": "8px"
+    },
+    "md": {
+      "$value": "12px"
+    },
+    "lg": {
+      "$value": "16px"
+    },
+    "xl": {
+      "$value": "24px"
+    },
+    "tile": {
+      "$value": "22.4%"
+    },
+    "pill": {
+      "$value": "999px"
+    }
+  },
+  "shadow": {
+    "1": {
+      "$value": "0 1px 2px rgba(35,31,32,.06), 0 1px 1px rgba(35,31,32,.04)"
+    },
+    "2": {
+      "$value": "0 4px 12px rgba(35,31,32,.08)"
+    },
+    "3": {
+      "$value": "0 12px 32px rgba(35,31,32,.12)"
+    },
+    "4": {
+      "$value": "0 24px 60px rgba(20,23,22,.20)"
+    }
+  },
+  "motion": {
+    "duration-fast": {
+      "$value": "120ms"
+    },
+    "duration-base": {
+      "$value": "220ms"
+    },
+    "duration-slow": {
+      "$value": "420ms"
+    },
+    "duration-reveal": {
+      "$value": "900ms"
+    },
+    "ease-standard": {
+      "$value": "cubic-bezier(.2,0,0,1)"
+    },
+    "ease-enter": {
+      "$value": "cubic-bezier(0,0,.2,1)"
+    },
+    "ease-exit": {
+      "$value": "cubic-bezier(.4,0,1,1)"
+    },
+    "ease-seal": {
+      "$value": "cubic-bezier(.7,0,.2,1)"
+    }
+  },
+  "iconSize": {
+    "16": {
+      "$value": "16px"
+    },
+    "20": {
+      "$value": "20px"
+    },
+    "24": {
+      "$value": "24px"
+    },
+    "32": {
+      "$value": "32px"
+    },
+    "48": {
+      "$value": "48px"
+    }
+  },
+  "breakpoint": {
+    "sm": {
+      "$value": "360px"
+    },
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1440px"
+    }
+  }
+}
