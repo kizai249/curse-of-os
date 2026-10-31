@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}</style></head><body>
+<title>يوزرز إكس للشركاء</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kufam:wght@700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Handjet:wght@600;800&family=Space+Mono:wght@400;700&family=Blaka&family=Changa:wght@800&family=Marhey:wght@700&display=swap">
+<style>
+/* Layout: one arcade cabinet — a scene stage above, «نقطة» the host in the corner, a d-pad nav below */
+:root {
+  --void: #0B0B0F; --bone: #F4F4F1; --cyan: #00DEE6; --magenta: #F54BF7;
+  --surface: #15161C; --surface2: #1E1F28; --shade: #33354C; --muted: #A9A9B6; --line: #2A2B37;
+  --good: #2BD67B; --warn: #FFC400;
+  --f-display: 'Kufam', 'IBM Plex Sans Arabic', Tahoma, sans-serif;
+  --f-body: 'IBM Plex Sans Arabic', Tahoma, 'Segoe UI', sans-serif;
+  --f-num: 'Handjet', 'Space Mono', monospace;
+  --f-label: 'Space Mono', 'Courier New', monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--void); color: var(--bone); font-family: var(--f-body); font-size: 17px; line-height: 1.7; overflow: hidden; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+[tabindex="-1"]:focus { outline: none; }
+em { font-style: normal; color: var(--magenta); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+#app { position: relative; height: 100%; display: grid; grid-template-rows: auto 1fr auto; isolation: isolate; }
+#app::before { /* starfield + haze, painted once */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(1px 1px at 12% 18%, #F4F4F1 99%, transparent), radial-gradient(1px 1px at 72% 12%, #00DEE6 99%, transparent),
+    radial-gradient(2px 2px at 88% 34%, #F4F4F1 99%, transparent), radial-gradient(1px 1px at 34% 8%, #F54BF7 99%, transparent),
+    radial-gradient(2px 2px at 54% 26%, #33354C 99%, transparent), radial-gradient(1px 1px at 6% 52%, #F4F4F1 99%, transparent),
+    radial-gradient(120% 60% at 50% 0%, rgba(245, 75, 247, .10), transparent 60%), var(--void);
+}
+
+/* ---------- top bar ---------- */
+.bar { display: flex; align-items: center; gap: 10px; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); background: rgba(11, 11, 15, .85); }
+.brand { display: flex; align-items: center; gap: 10px; margin-inline-end: auto; }
+.brand svg { width: 28px; height: 28px; }
+.brand img { height: 26px; width: auto; }
+.brand b { font-family: var(--f-label); font-size: 11px; letter-spacing: .24em; color: var(--cyan); font-weight: 400; }
+.chip-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 12px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); font-size: 14px; font-weight: 700; }
+.chip-btn[aria-pressed="true"] { border-color: var(--magenta); color: var(--magenta); }
+.counter { font-family: var(--f-num); font-weight: 800; font-size: 22px; color: var(--cyan); min-width: 3.6ch; text-align: center; }
+
+/* ---------- stage ---------- */
+.stage { position: relative; overflow: hidden; }
+.scene { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding-block: 28px 220px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.scene[hidden] { display: none !important; }
+.scene.is-in { animation: scene-in 420ms steps(6); }
+@keyframes scene-in { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+.wrap { max-width: 1080px; margin-inline: auto; display: grid; gap: 22px; }
+.eyebrow { font-family: var(--f-label); font-size: 12px; letter-spacing: .28em; color: var(--cyan); margin: 0; }
+h1, h2 { font-family: var(--f-display); font-weight: 800; margin: 0; line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(2.4rem, 7vw, 5rem); }
+h2 { font-size: clamp(1.8rem, 4.6vw, 3.2rem); }
+h3 { font-family: var(--f-display); font-size: 1.3rem; margin: 0; }
+p { margin: 0; }
+.lead { font-size: clamp(1.02rem, 1.5vw, 1.2rem); color: #D9D9E0; max-width: 62ch; }
+.note { font-size: .86rem; color: var(--muted); border-inline-start: 3px solid var(--shade); padding-inline-start: 10px; }
+.card { background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 8px 20px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--bone); font-weight: 700; font-size: 1rem; transition: transform 120ms, box-shadow 120ms; }
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 2px 2px 0 var(--magenta), 4px 4px 0 var(--cyan); }
+.btn:active { transform: none; box-shadow: none; }
+.btn--x { background: var(--magenta); border-color: var(--magenta); color: var(--void); }
+.btn:disabled { opacity: .45; transform: none; box-shadow: none; cursor: default; }
+.kbd { display: inline-grid; place-items: center; width: 1.7em; height: 1.7em; border-radius: 6px; background: var(--void); color: var(--bone); font-family: var(--f-num); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.num { font-family: var(--f-num); font-weight: 800; }
+.tag { display: inline-flex; padding: 2px 10px; border-radius: 6px; font-size: .8rem; font-weight: 700; border: 1px solid currentColor; }
+
+/* ---------- start screen ---------- */
+.start { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; text-align: center; background: var(--void); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.start__x { width: min(44vw, 200px); margin-inline: auto; animation: bob 2.4s steps(2) infinite; }
+@keyframes bob { 50% { translate: 0 -6px; } }
+.start p { color: var(--muted); }
+.start .btn { margin-top: 10px; font-size: 1.15rem; min-height: 58px; }
+
+/* ---------- host: نقطة ---------- */
+.host { position: absolute; z-index: 20; bottom: 10px; left: max(10px, env(safe-area-inset-left, 0px)); width: min(560px, calc(100% - 20px)); display: flex; align-items: end; gap: 10px; pointer-events: none; }
+.host__avatar { pointer-events: auto; flex: none; width: 104px; border: 0; padding: 0; background: none; }
+.host__avatar svg { width: 100%; height: auto; display: block; }
+.bubble { pointer-events: auto; flex: 1; min-width: 0; position: relative; background: var(--bone); color: var(--void); border-radius: 14px; padding: 12px 14px 10px; box-shadow: 4px 4px 0 var(--magenta), 7px 7px 0 var(--cyan); margin-bottom: 26px; }
+.bubble::after { content: ""; position: absolute; left: -9px; bottom: 16px; width: 14px; height: 14px; background: var(--bone); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.bubble__text { font-weight: 700; font-size: 1rem; line-height: 1.6; min-height: 1.6em; }
+.bubble__tools { display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
+.bubble__tools button { min-height: 32px; padding: 2px 10px; border-radius: 8px; border: 1px solid #C9C9D2; background: transparent; color: var(--void); font-size: .8rem; font-weight: 700; }
+.bubble.is-idle .bubble__text { color: #55576B; }
+
+/* avatar rig */
+.nq .nq-g { transition: transform 120ms steps(1); }
+.nq[data-arm="down"] .nq-g--arm-up, .nq[data-arm="up"] .nq-g--arm-r { display: none; }
+.nq[data-eyes="open"] .nq-g--eyes-shut, .nq[data-eyes="shut"] .nq-g--eyes { display: none; }
+.nq[data-mouth="closed"] .nq-g--mouth-open, .nq[data-mouth="open"] .nq-g--mouth { display: none; }
+.nq .nq-g--eyes, .nq .nq-g--eyes-shut { transform: translate(calc(var(--ex, 0) * 1px), calc(var(--ey, 0) * 1px)); }
+.nq .nq-g--arm-up { transform: translateX(calc(var(--wave, 0) * 1px)); }
+.nq .nq-g--head, .nq .nq-g--eyes, .nq .nq-g--eyes-shut, .nq .nq-g--mouth, .nq .nq-g--mouth-open { animation: nq-bob 2.4s steps(1) infinite; }
+.nq.is-talking .nq-g--head, .nq.is-talking .nq-g--eyes, .nq.is-talking .nq-g--eyes-shut, .nq.is-talking .nq-g--mouth, .nq.is-talking .nq-g--mouth-open { animation-duration: .5s; }
+@keyframes nq-bob { 0%, 55% { translate: 0 0; } 56%, 100% { translate: 0 1px; } }
+.host__avatar.is-hop svg { animation: hop 380ms steps(3); }
+@keyframes hop { 40% { translate: 0 -10px; } }
+.host__avatar.is-shake svg { animation: shake 360ms steps(4); }
+@keyframes shake { 25% { translate: -3px 0; } 75% { translate: 3px 0; } }
+
+/* ---------- nav ---------- */
+.nav { display: flex; align-items: center; gap: 10px; padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-top: 1px solid var(--line); background: rgba(11, 11, 15, .92); }
+.dots { flex: 1; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; min-width: 0; }
+.dots button { width: 26px; height: 32px; border: 0; background: none; display: grid; place-items: center; padding: 0; }
+.dots button span { width: 10px; height: 10px; background: var(--shade); }
+.dots button[aria-current="step"] span { background: var(--magenta); transform: scale(1.35); }
+.dots button.is-seen span { background: var(--cyan); }
+.nav .btn { min-height: 44px; padding: 6px 14px; }
+
+/* ---------- scene bits ---------- */
+.hero-x { width: min(40vw, 220px); }
+.split { display: grid; gap: 22px; grid-template-columns: 1.1fr .9fr; align-items: center; }
+.big-num { font-family: var(--f-num); font-weight: 800; font-size: clamp(2.6rem, 6vw, 4.4rem); line-height: 1; color: var(--magenta); }
+.world { position: relative; border-radius: 16px; overflow: hidden; border: 2px solid var(--line); background: var(--w-bg); color: var(--w-fg); }
+.world__art { position: relative; aspect-ratio: 16 / 8; max-width: 100%; overflow: hidden; }
+.world__art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.world__body { padding: 16px 18px 18px; display: grid; gap: 12px; }
+.world__title { font-family: var(--w-font), var(--f-display); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.2; }
+.world__tag { color: var(--w-a2); font-weight: 700; }
+.world .btn { background: var(--w-a1); border-color: var(--w-a1); color: var(--w-bg); }
+.world .btn.alt { background: transparent; color: var(--w-fg); border-color: color-mix(in srgb, var(--w-fg) 30%, transparent); }
+.hud { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; font-family: var(--f-num); font-size: 1.4rem; font-weight: 800; }
+.result { min-height: 1.7em; font-weight: 700; }
+
+/* game A — attention */
+.seats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 420px; margin-inline: auto; width: 100%; }
+.seat { aspect-ratio: 1; border-radius: 12px; border: 2px solid var(--line); background: var(--surface2); display: grid; place-items: center; position: relative; padding: 0; }
+.seat i { width: 34%; aspect-ratio: 1; background: var(--bone); border-radius: 4px; position: relative; }
+.seat i::after { content: ""; position: absolute; left: 22%; right: 22%; top: 38%; height: 18%; background: var(--void); }
+.seat.is-phone { border-color: #3D7BFF; background: #121A33; }
+.seat.is-phone i { translate: 0 18%; }
+.seat.is-phone::after { content: ""; position: absolute; width: 22%; height: 30%; bottom: 14%; border-radius: 3px; background: #3D7BFF; box-shadow: 0 0 0 2px #121A33; }
+.seat.is-watch { border-color: var(--good); }
+.meter { height: 14px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.meter span { display: block; height: 100%; background: var(--magenta); width: 100%; transition: width 200ms steps(4); }
+
+/* game B — doors */
+.doors { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.door { min-height: 170px; border-radius: 6px; border: 3px solid; background: #111114; color: #EDECE8; display: grid; place-items: center; font-family: 'Changa', var(--f-display); font-weight: 800; font-size: clamp(2.4rem, 7vw, 3.6rem); }
+.door--a { border-color: #E5283A; color: #E5283A; }
+.door--b { border-color: #0FB5A4; color: #0FB5A4; }
+.door:disabled { opacity: .35; }
+.door.is-pick { opacity: 1; outline: 3px solid #111114; outline-offset: 3px; }
+
+/* game C — hold */
+.spots { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.spots i { aspect-ratio: 1; border-radius: 50%; background: #FFC400; color: #0D0B08; font: 800 clamp(.6rem, 1.6vw, .85rem) 'Changa', sans-serif; display: grid; place-items: center; font-style: normal; transition: background 200ms steps(2); }
+.spots i.is-out { background: rgba(242, 237, 228, .08); color: rgba(242, 237, 228, .25); }
+.spots i.is-me { outline: 3px solid #FF5A1F; outline-offset: 2px; }
+.hold { width: min(200px, 60vw); aspect-ratio: 1; border-radius: 50%; margin-inline: auto; border: 6px solid #FFC400; background: #0D0B08; color: #FFC400; font: 800 1.3rem 'Changa', sans-serif; user-select: none; -webkit-user-select: none; touch-action: none; }
+.hold.is-held { background: #FFC400; color: #0D0B08; }
+.hazard { height: 10px; background: repeating-linear-gradient(135deg, #FFC400 0 12px, #0D0B08 12px 24px); border-radius: 4px; }
+
+/* game D — cipher */
+.cipher { display: flex; gap: 10px; justify-content: center; direction: rtl; }
+.cipher span { width: 64px; height: 72px; display: grid; place-items: center; border: 2px solid #B08D57; color: #E9DFCF; font-family: var(--f-body); font-weight: 700; font-size: 2.2rem; border-radius: 4px; background: rgba(7, 6, 10, .7); }
+.cipher span.blank { border-style: dashed; color: #A3121F; }
+.letters { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.letters button { width: 58px; height: 58px; border-radius: 8px; border: 2px solid #B08D57; background: #07060A; color: #E9DFCF; font-family: var(--f-body); font-weight: 700; font-size: 1.8rem; }
+.letters button.is-wrong { border-color: #A3121F; color: #A3121F; }
+.candle { height: 8px; border-radius: 4px; background: #2a2018; overflow: hidden; }
+.candle span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #A3121F, #B08D57); transition: width 1s linear; }
+.os-light { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle 26% at var(--lx, 50%) var(--ly, 40%), transparent 0 55%, rgba(5, 5, 8, .9) 100%); }
+
+/* game E — penalty */
+.pitch { position: relative; aspect-ratio: 16 / 8; max-width: 100%; border-radius: 12px; overflow: hidden; background: linear-gradient(#0B4A2C, #04351F); border: 2px solid #2BD67B; }
+.goal { position: absolute; left: 12%; right: 12%; top: 10%; height: 52%; border: 4px solid #FFFFFF; border-bottom: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 2px, transparent 2px 14px), repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 2px, transparent 2px 14px); }
+.keeper { position: absolute; top: 34%; width: 13%; height: 26%; left: calc(50% - 6.5%); background: #F5C542; border-radius: 6px 6px 2px 2px; transition: left 260ms steps(3); }
+.aim { position: absolute; top: 18%; width: 6%; aspect-ratio: 1; border-radius: 50%; border: 3px solid #FFFFFF; translate: -50% 0; }
+.ball { position: absolute; bottom: 8%; width: 6%; aspect-ratio: 1; border-radius: 50%; background: #FFFFFF; left: 50%; translate: -50% 0; transition: left 300ms steps(4), bottom 300ms steps(4); }
+.coins { color: #F5C542; }
+
+/* journey */
+.journey { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.step { border: 2px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface); opacity: .35; transition: opacity 240ms steps(3), border-color 240ms; min-width: 0; }
+.step.is-on { opacity: 1; border-color: var(--cyan); }
+.step b { display: block; font-family: var(--f-num); font-size: 1.6rem; color: var(--cyan); line-height: 1; }
+
+/* packages, status, contact */
+.pkg { display: grid; gap: 10px; align-content: start; }
+.pkg ul { margin: 0; padding-inline-start: 18px; color: #D2D2DA; }
+.pkg .price { font-weight: 700; color: var(--cyan); }
+.status-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.status-row:last-child { border-bottom: 0; }
+.score-board { display: grid; gap: 8px; }
+.score-board div { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; background: var(--surface2); border-radius: 8px; }
+.placeholder { display: inline-block; padding: 2px 10px; border: 1px dashed #E8C35A; color: #E8C35A; border-radius: 6px; }
+.final-x { font-family: var(--f-display); font-size: clamp(2.2rem, 6vw, 4rem); color: var(--magenta); }
+
+@media (max-width: 760px) {
+  body { font-size: 16px; }
+  .split { grid-template-columns: 1fr; }
+  .host__avatar { width: 72px; }
+  .bubble { margin-bottom: 14px; }
+  .bubble__text { font-size: .92rem; }
+  .scene { padding-bottom: 240px; }
+  .brand img, .brand b { display: none; }
+  .spots { grid-template-columns: repeat(8, 1fr); gap: 4px; }
+  .nav .btn span.lbl { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}
+</style>
+
+<div id="app" dir="rtl" lang="ar">
+  <header class="bar">
+    <div class="brand"><span id="brandX"></span><img src="assets/usersx-wordmark-sm.png" alt="يوزرز إكس" width="98" height="32"><b lang="en" dir="ltr">PARTNERS</b></div>
+    <span class="counter" id="counter" aria-hidden="true">01/13</span>
+    <button class="chip-btn" type="button" id="voiceBtn" aria-pressed="true">صوت: <span id="voiceLabel">—</span></button>
+  </header>
+
+  <main class="stage" id="stage" aria-live="off">
+  <div class="host" id="host">
+      <button class="host__avatar" type="button" id="avatar" aria-label="كلّم نقطة"></button>
+      <div class="bubble is-idle" id="bubble">
+        <p class="bubble__text" id="bubbleText" aria-hidden="true">…</p>
+        <div class="bubble__tools">
+          <button type="button" id="skipLine">تخطَّ الكلام</button>
+          <button type="button" id="replayLine">أعد</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <p class="sr" id="sayLive" role="status" aria-live="polite"></p>
+
+  <nav class="nav" aria-label="التنقل بين المشاهد">
+    <button class="btn" type="button" id="prevBtn" aria-label="المشهد السابق">→ <span class="lbl">السابق</span></button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn--x" type="button" id="nextBtn" aria-label="المشهد التالي"><span class="lbl">التالي</span> ←</button>
+  </nav>
+
+  <section class="start" id="start" aria-labelledby="startTitle">
+    <div style="display:grid;gap:14px;justify-items:center">
+      <div class="start__x" id="startX"></div>
+      <p class="eyebrow" lang="en" dir="ltr">USERS-X · PARTNER DECK 2026</p>
+      <h1 id="startTitle">عرض يوزرز إكس <em>للشركاء</em></h1>
+      <p>عرض فيه ألعاب، ومقدّم ساخر اسمه نقطة. الصوت يشتغل بعد ما تضغط</p>
+      <button class="btn btn--x" type="button" id="startBtn">اضغط <span class="kbd">X</span> عشان تبدأ</button>
+      <button class="btn" type="button" id="startMuted">ابدأ بدون صوت</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ===== Contact details — fill only with confirmed USERS-X details ===== */
+  var CONTACT = { email: '', phone: '' }; // [PLACEHOLDER] empty = shows a clear placeholder, never a fake address
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var store = { get: function (k, d) { try { var v = localStorage.getItem('uxp.' + k); return v === null ? d : v; } catch (e) { return d; } },
+                set: function (k, v) { try { localStorage.setItem('uxp.' + k, v); } catch (e) {} } };
+  var UXP = window.__uxp = { scores: {}, log: [] };
+
+  /* ===== Brand symbol (exact 15×15 grid from the identity file) ===== */
+  var GRID = ['WWW.........WWW','WWWW.......WWWW','WWDDW.....WDDWW','.WDWWW...WWWDW.','..WWWWW.WWWWW..','...WWWWWWWWW...','....WWWMWWW....','.....WMMMW.....','....WWWMWWW....','...WWWWWWWWW...','..WWWWW.WWWWW..','.WDWWW...WWWDW.','WWDDW.....WDDWW','WWWW.......WWWW','WWW.........WWW'];
+  function symbolSVG(depth) {
+    var col = { W: '#F4F4F1', D: '#33354C', M: '#F54BF7' }, out = '';
+    function layer(fill, dx, only) {
+      var s = '';
+      GRID.forEach(function (row, y) { row.split('').forEach(function (c, x) { if (c !== '.') s += '<rect x="' + (x + dx) + '" y="' + (y + dx) + '" width="1" height="1" fill="' + (only || col[c]) + '"/>'; }); });
+      return s;
+    }
+    if (depth) out += layer('', .8, '#00DEE6') + layer('', .4, '#F54BF7');
+    return '<svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">' + out + layer('', 0) + '</svg>';
+  }
+  $('#brandX').innerHTML = symbolSVG(false);
+  $('#startX').innerHTML = symbolSVG(true);
+
+  /* ===== «نقطة» avatar (same pixel source as the website) ===== */
+  var NQ = (function () {
+    var C = { bone: '#F4F4F1', void: '#0B0B0F', cyan: '#00DEE6', magenta: '#F54BF7', shade: '#33354C', hood: '#1B1C25', hood2: '#2B2C3A' };
+    var P = {
+      armL: [1, [[2,16,3,8,'hood'],[2,24,3,2,'bone']]], armR: [1, [[20,16,3,8,'hood'],[20,24,3,2,'bone']]],
+      armUp: [1, [[20,16,3,2,'hood'],[22,9,3,9,'hood'],[22,7,3,2,'bone']]],
+      legs: [1, [[7,26,3,3,'shade'],[15,26,3,3,'shade'],[6,29,4,2,'bone'],[15,29,4,2,'bone']]],
+      neck: [1, [[10,13,5,3,'shade']]],
+      body: [1, [[5,16,15,10,'hood'],[7,16,11,1,'hood2'],[9,17,1,3,'bone'],[15,17,1,3,'bone'],[9,20,1,1,'magenta'],[15,20,1,1,'magenta'],[8,23,9,2,'hood2']]],
+      core: [0, [[11,18,3,3,'magenta']]], head: [1, [[4,4,17,9,'bone']]],
+      face: [0, [[5,5,2,1,'shade'],[5,6,1,1,'shade'],[18,5,2,1,'shade'],[19,6,1,1,'shade'],[6,6,13,4,'void']]],
+      eyes: [0, [[8,7,2,2,'cyan'],[15,7,2,2,'cyan']]], eyesShut: [0, [[8,8,2,1,'cyan'],[15,8,2,1,'cyan']]],
+      mouth: [0, [[11,11,3,1,'magenta']]], mouthOpen: [0, [[11,10,3,2,'magenta']]],
+      spark: [0, [[12,-4,1,3,'cyan'],[11,-3,3,1,'cyan'],[12,-1,1,3,'shade']]]
+    };
+    var G = { armL:'arm-l', armR:'arm-r', armUp:'arm-up', legs:'base', neck:'base', body:'base', core:'core', head:'head', face:'head', eyes:'eyes', eyesShut:'eyes-shut', mouth:'mouth', mouthOpen:'mouth-open', spark:'head' };
+    var ORDER = ['armL','armR','armUp','legs','neck','body','core','head','face','eyes','eyesShut','mouth','mouthOpen','spark'];
+    function layer(grow, d, fixed) {
+      var o = '<g>';
+      ORDER.forEach(function (k) {
+        var part = P[k]; if (grow && !part[0]) return; if (!grow && fixed) return;
+        o += '<g class="nq-g nq-g--' + G[k] + '">';
+        part[1].forEach(function (r) { o += '<rect x="' + (r[0] - grow + d) + '" y="' + (r[1] - grow + d) + '" width="' + (r[2] + grow * 2) + '" height="' + (r[3] + grow * 2) + '" fill="' + (fixed || C[r[4]]) + '"/>'; });
+        o += '</g>';
+      });
+      return o + '</g>';
+    }
+    return '<svg class="nq" viewBox="-1 -5 31 41" shape-rendering="crispEdges" aria-hidden="true" data-arm="down" data-mouth="closed" data-eyes="open">' +
+      layer(2, 2, C.cyan) + layer(2, 1, C.magenta) + layer(2, 0, C.bone) + layer(1, 0, C.void) + layer(0, 0, null) + '</svg>';
+  })();
+  var avBtn = $('#avatar'); avBtn.innerHTML = NQ;
+  var nq = $('svg', avBtn);
+  var Av = {
+    set: function (a, v) { nq.setAttribute('data-' + a, v); },
+    look: function (x, y) { nq.style.setProperty('--ex', x); nq.style.setProperty('--ey', y); },
+    fx: function (cls) { avBtn.classList.remove('is-hop', 'is-shake'); void avBtn.offsetWidth; avBtn.classList.add(cls); },
+    blink: function () { Av.set('eyes', 'shut'); setTimeout(function () { Av.set('eyes', 'open'); }, 140); },
+    wave: function () {
+      Av.set('arm', 'up');
+      for (var i = 0; i < 6; i++) (function (n) { setTimeout(function () { nq.style.setProperty('--wave', n % 2); }, n * 170); })(i);
+      setTimeout(function () { Av.set('arm', 'down'); nq.style.setProperty('--wave', 0); }, 1300);
+    }
+  };
+  (function blinkLoop() { setTimeout(function () { Av.blink(); blinkLoop(); }, 2400 + Math.random() * 3000); })();
+  var pend = null;
+  window.addEventListener('pointermove', function (e) {
+    if (pend) return;
+    pend = requestAnimationFrame(function () {
+      pend = null;
+      var r = nq.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height * .3);
+      Av.look(Math.abs(dx) < 60 ? 0 : (dx > 0 ? 1 : -1), Math.abs(dy) < 50 ? 0 : (dy > 0 ? 1 : -1));
+    });
+  }, { passive: true });
+
+  /* ===== Sound effects (original synth, after a click only) ===== */
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null;
+  function sfxReady() { if (!AC) return false; if (!ctx) ctx = new AC(); if (ctx.state === 'suspended') ctx.resume(); return true; }
+  function tone(f, d, type, g, when, to) {
+    if (!ctx || Voice.mode === 'off') return;
+    var t = ctx.currentTime + (when || 0), o = ctx.createOscillator(), gn = ctx.createGain();
+    o.type = type || 'square'; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + d);
+    gn.gain.setValueAtTime(.0001, t); gn.gain.exponentialRampToValueAtTime(g || .08, t + .01); gn.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(gn); gn.connect(ctx.destination); o.start(t); o.stop(t + d + .05);
+  }
+  var SFX = {
+    blip: function () { tone(880, .05); },
+    good: function () { [659, 784, 1046].forEach(function (f, i) { tone(f, .08, 'square', .08, i * .08); }); },
+    bad: function () { tone(300, .35, 'sawtooth', .06, 0, 110); },
+    tick: function () { tone(1200, .03, 'square', .04); },
+    door: function () { tone(180, .4, 'triangle', .1, 0, 90); },
+    kick: function () { tone(140, .12, 'triangle', .15, 0, 60); }
+  };
+
+  /* ===== Voice: device Arabic TTS when available, else «رطانة نقطة» chiptune babble, else silent captions ===== */
+  var Voice = {
+    mode: store.get('voice', 'auto'), ar: null, token: 0, current: null,
+    init: function () {
+      if (!('speechSynthesis' in window)) return this.label();
+      var self = this;
+      function pick() {
+        var vs = speechSynthesis.getVoices() || [];
+        self.ar = vs.filter(function (v) { return /^ar[-_]SA/i.test(v.lang); })[0] || vs.filter(function (v) { return /^ar/i.test(v.lang); })[0] || null;
+        self.label();
+      }
+      pick(); speechSynthesis.onvoiceschanged = pick;
+    },
+    effective: function () { if (this.mode === 'off') return 'off'; if (this.mode === 'babble') return 'babble'; return this.ar ? 'tts' : 'babble'; },
+    label: function () {
+      var e = this.effective();
+      $('#voiceLabel').textContent = e === 'off' ? 'مكتوم' : e === 'tts' ? 'صوت عربي' : 'رطانة نقطة';
+      $('#voiceBtn').setAttribute('aria-pressed', String(e !== 'off'));
+    },
+    cycle: function () {
+      var order = this.ar ? ['auto', 'babble', 'off'] : ['babble', 'off'];
+      var i = order.indexOf(this.mode === 'auto' && !this.ar ? 'babble' : this.mode);
+      this.mode = order[(i + 1) % order.length]; store.set('voice', this.mode);
+      this.stop(); this.label();
+      if (this.effective() !== 'off') { sfxReady(); this.say(['تمام، هذا صوتي الحين. لا تعليقات لو سمحت.']); }
+    },
+    stop: function () { this.token++; if ('speechSynthesis' in window) speechSynthesis.cancel(); Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); },
+    // say(lines): captions always; voice by mode. Resolves when all lines finish (or are skipped).
+    say: function (lines, done) {
+      var self = this, my = ++this.token, i = 0;
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      this.current = lines;
+      var bubble = $('#bubble'), out = $('#bubbleText');
+      bubble.classList.remove('is-idle');
+      function next() {
+        if (my !== self.token) return;
+        if (i >= lines.length) { Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); if (done) done(); return; }
+        var line = lines[i++];
+        $('#sayLive').textContent = line;
+        UXP.log.push(line);
+        self.line(line, my, function () { if (my === self.token) setTimeout(next, 380); });
+      }
+      next();
+    },
+    line: function (text, my, finish) {
+      var self = this, out = $('#bubbleText'), mode = this.effective(), chars = 0, ended = false, flap = null, type = null;
+      nq.classList.add('is-talking');
+      function end() {
+        if (ended) return; ended = true;
+        clearInterval(flap); clearInterval(type); out.textContent = text;
+        Av.set('mouth', 'closed'); finish();
+      }
+      this.skipCurrent = function () { if ('speechSynthesis' in window) speechSynthesis.cancel(); end(); };
+      if (reduced) out.textContent = text;
+      else { out.textContent = ''; type = setInterval(function () { chars += 2; out.textContent = text.slice(0, chars); if (chars >= text.length) clearInterval(type); }, 32); }
+      flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
+      var readMs = Math.max(1500, text.length * 62);
+      if (mode === 'tts') {
+        var u = new SpeechSynthesisUtterance(text);
+        u.voice = this.ar; u.lang = this.ar.lang; u.rate = 1.04; u.pitch = 1.35;
+        u.onend = end; u.onerror = end;
+        speechSynthesis.speak(u);
+        setTimeout(end, text.length * 140 + 3500); // some engines never fire onend
+      } else {
+        if (mode === 'babble' && sfxReady()) {
+          var syll = Math.ceil(text.replace(/\s+/g, '').length / 2.2);
+          for (var k = 0; k < syll; k++) tone(520 + ((k * 137) % 9) * 38, .045, 'square', .035, k * (readMs / 1000 / syll));
+        }
+        setTimeout(end, readMs);
+      }
+    }
+  };
+  function say(lines, done) { Voice.say(lines, done); }
+
+  /* ===== Scenes ===== */
+  var cleanups = [];
+  function onLeave(fn) { cleanups.push(fn); }
+  function every(ms, fn) { var id = setInterval(fn, ms); onLeave(function () { clearInterval(id); }); return id; }
+  function after(ms, fn) { var id = setTimeout(fn, ms); onLeave(function () { clearTimeout(id); }); return id; }
+  function score(game, pts, max) { UXP.scores[game] = Math.round(pts / max * 100); }
+  function pick(a) { return a[(Math.random() * a.length) | 0]; }
+  function worldVars(w) { return '--w-bg:' + w[0] + ';--w-fg:' + w[1] + ';--w-a1:' + w[2] + ';--w-a2:' + w[3] + ";--w-font:'" + w[4] + "'"; }
+
+  var SCENES = [
+    { id: 'hello', label: 'البداية',
+      html: '<div class="wrap split"><div style="display:grid;gap:16px"><p class="eyebrow" lang="en" dir="ltr">USERS-X · FOR PARTNERS</p><h1>جمهورك يحضر.<br><em>خلّه يلعب.</em></h1><p class="lead">يوزرز إكس تصمّم وتشغّل تجارب تفاعلية هجينة — على الجوال وفي المكان بنفس اللحظة — وتعطي الجهات تفاعل تقدر تقيسه.</p><p class="note">هذا العرض نفسه لعبة: خمس ألعاب صغيرة، ونقاطك تنحسب للنهاية.</p></div><div class="hero-x" style="justify-self:center">' + symbolSVG(true) + '</div></div>',
+      lines: ['هلا والله بالشريك! أنا نقطة… مدير العلاقات، والتسويق، والمونتاج، وأحياناً أوزّع الماي.',
+              'أدري إنك شفت ألف عرض فيه كلمة «تفاعل»… هذا غير. هنا إنت اللي بتلعب. حرفياً.',
+              'اضغط «التالي» تحت، أو الأسهم في الكيبورد. وإذا زهقت مني، فيه زر يكتمني… بس بزعل.'] },
+
+    { id: 'attention', label: 'المشكلة', game: 'attention',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">THE PROBLEM · MINI-GAME 01</p><h2>جمهورك حاضر… <em>وجواله أحضر.</em></h2><p class="lead">اضغط على أي شخص يطالع جواله ورجّعه للفعالية. عندك 15 ثانية.</p><div class="card" style="display:grid;gap:14px"><div class="hud"><span>الانتباه <span id="aPct">100</span>%</span><span id="aTime">00:15</span></div><div class="meter"><span id="aMeter"></span></div><div class="seats" id="seats"></div><div class="row" style="justify-content:center"><button class="btn btn--x" type="button" id="aStart">ابدأ</button></div><p class="result" id="aRes" role="status"></p></div></div>',
+      lines: ['خلني أوريك المشكلة بدل ما أشرحها… لأن الشرح ممل، وإنت أصلاً نص عينك على جوالك.',
+              'اضغط على أي واحد يطالع جواله ورجّعه للفعالية. جاهز؟ اضغط ابدأ.'],
+      mount: function (root) {
+        var seats = $('#seats', root), btn = $('#aStart', root), res = $('#aRes', root), pct = $('#aPct', root), meter = $('#aMeter', root), time = $('#aTime', root);
+        for (var i = 0; i < 9; i++) seats.insertAdjacentHTML('beforeend', '<button class="seat is-watch" type="button" aria-label="شخص ' + (i + 1) + ' يتابع الفعالية"><i></i></button>');
+        var list = $$('.seat', seats), running = false, samples = [], left = 15;
+        list.forEach(function (s, n) {
+          s.addEventListener('click', function () {
+            if (!running || !s.classList.contains('is-phone')) return;
+            s.classList.replace('is-phone', 'is-watch'); s.setAttribute('aria-label', 'شخص ' + (n + 1) + ' يتابع الفعالية'); SFX.blip();
+          });
+        });
+        function watching() { return list.filter(function (s) { return s.classList.contains('is-watch'); }).length; }
+        btn.addEventListener('click', function () {
+          if (running) return; running = true; btn.disabled = true; samples = []; left = 15; res.textContent = '';
+          say(['يلا! … لا، مو ذاك. هذاك يطالع إنستقرام.']);
+          every(650, function () {
+            if (!running) return;
+            var w = list.filter(function (s) { return s.classList.contains('is-watch'); });
+            for (var k = 0; k < 2 && w.length; k++) { var s = w.splice((Math.random() * w.length) | 0, 1)[0]; s.classList.replace('is-watch', 'is-phone'); s.setAttribute('aria-label', 'شخص يطالع جواله — اضغط عليه'); }
+            var p = Math.round(watching() / 9 * 100); samples.push(p); pct.textContent = p; meter.style.width = p + '%';
+          });
+          every(1000, function () {
+            if (!running) return;
+            left--; time.textContent = '00:' + String(left).padStart(2, '0');
+            if (left <= 0) {
+              running = false; btn.disabled = false; btn.textContent = 'مرة ثانية';
+              var avg = Math.round(samples.reduce(function (a, b) { return a + b; }, 0) / Math.max(1, samples.length));
+              score('attention', avg, 100);
+              res.textContent = 'متوسط الانتباه: ' + avg + '%';
+              if (avg >= 70) { SFX.good(); Av.fx('is-hop'); say(['ما شاء الله، ' + avg + '٪! بس تخيل تسوي هذا لخمسة آلاف شخص بيدك… لا تسويها. خلّها علينا.']); }
+              else if (avg >= 40) { say([avg + '٪… يعني نص جمهورك راح للتيك توك. وهذا وإنت تحاول! تخيل لو ما حاولت.']); }
+              else { SFX.bad(); Av.fx('is-shake'); say([avg + '٪؟ يا شيخ حتى إنت ما لحقت عليهم. هذي بالضبط فعاليتك يوم الخميس.']); }
+            }
+          });
+        });
+      } },
+
+    { id: 'idea', label: 'الفكرة',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">THE IDEA</p><h2>لاعب، <em>مو جمهور.</em></h2><p class="lead">بدل ما الجوال يسرق انتباه جمهورك، يصير الجوال هو اللعبة نفسها.</p><div class="grid"><div class="card"><p class="big-num">01</p><h3>رقمي على الجوال</h3><p style="color:#D2D2DA">دخول بالجوال أو كود الفعالية، تذكرة رقمية، وجولات حيّة بعدّاد.</p></div><div class="card"><p class="big-num" style="color:var(--cyan)">02</p><h3>حضوري في المكان</h3><p style="color:#D2D2DA">التجربة تصير في الفرع أو القاعة نفسها، مع الشلّة.</p></div><div class="card"><p class="big-num" style="color:var(--bone)">03</p><h3>أثر ينقاس</h3><p style="color:#D2D2DA">كل جولة تترك رقم: زيارة محققة، قسيمة مستردة، لاعب رجع.</p></div></div></div>',
+      lines: ['الفكرة بسيطة لدرجة إنها تقهر: بدل ما تحارب الجوال… نخلي الجوال هو اللعبة.',
+              'رقمي على الجوال، وحضوري في المكان، بنفس اللحظة. واللي يلعب، يرجع. واللي يرجع… يشتري. ما قلت لك؟ تقهر.'] },
+
+    { id: 'choice', label: 'غرفة الاختيار', game: 'choice', world: ['#EDECE8', '#111114', '#E5283A', '#0FB5A4', 'Changa'],
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">GAME WORLD · MINI-GAME 02</p><div class="world"><div class="world__art"><img src="assets/choice-room-world.jpg" alt="غرفة بيضاء فيها بابين: 01 بإطار أحمر و02 بإطار أخضر مزرق" width="1280" height="720"></div><div class="world__body"><div class="row" style="justify-content:space-between"><h2 class="world__title">غرفة الاختيار</h2><span class="world__tag">بابين. قرار واحد.</span></div><p>فريقين، بابين، وقرار واحد يتاخذ خلال 30 ثانية. اللي يختار غلط… يطلع. هنا: 3 جولات، و10 ثواني لكل قرار.</p><div class="hud" style="color:#111114"><span>جولة <span id="cRound">1</span>/3</span><span id="cTime">00:10</span><span>نجيت <span id="cWin">0</span></span></div><div class="doors"><button class="door door--a" type="button" data-d="a" aria-label="الباب 01">01</button><button class="door door--b" type="button" data-d="b" aria-label="الباب 02">02</button></div><p class="result" id="cRes" role="status"></p><div class="row"><button class="btn" type="button" id="cStart">ابدأ الجولات</button></div></div></div></div>',
+      lines: ['هذي غرفة الاختيار. بابين وقرار واحد… واللي يختار غلط يطلع. زي اجتماعات الميزانية بالضبط.',
+              'تنفع لفرق الشركات والفعاليات الجماعية. جرّب: ثلاث جولات، وعشر ثواني لكل قرار.'],
+      mount: function (root) {
+        var doors = $$('.door', root), btn = $('#cStart', root), res = $('#cRes', root), round = 0, wins = 0, left = 10, live = false, timer = null;
+        doors.forEach(function (d) { d.disabled = true; d.addEventListener('click', function () { choose(d.getAttribute('data-d')); }); });
+        function startRound() {
+          round++; left = 10; live = true; $('#cRound', root).textContent = round; res.textContent = 'اختر…';
+          doors.forEach(function (d) { d.disabled = false; d.classList.remove('is-pick'); });
+          clearInterval(timer);
+          timer = every(1000, function () { if (!live) return; left--; SFX.tick(); $('#cTime', root).textContent = '00:' + String(left).padStart(2, '0'); if (left <= 0) choose(null); });
+        }
+        function choose(d) {
+          if (!live) return; live = false; clearInterval(timer);
+          var safe = Math.random() < .5 ? 'a' : 'b';
+          doors.forEach(function (x) { x.disabled = true; if (x.getAttribute('data-d') === d) x.classList.add('is-pick'); });
+          SFX.door();
+          if (!d) res.textContent = 'خلص الوقت… الغرفة اختارت عنك.';
+          else if (d === safe) { wins++; $('#cWin', root).textContent = wins; res.textContent = 'نجيت! الباب ' + (d === 'a' ? '01' : '02') + ' كان صح.'; SFX.good(); }
+          else res.textContent = 'طلعت… الصح كان الباب ' + (safe === 'a' ? '01' : '02') + '.';
+          if (round < 3) after(1300, startRound);
+          else after(1000, function () {
+            score('choice', wins, 3); btn.disabled = false; btn.textContent = 'مرة ثانية';
+            say([wins === 3 ? 'ثلاثة من ثلاثة؟ إنت يا محظوظ يا تقرأ أفكاري. الحالتين مخيفة.' : wins === 0 ? 'صفر من ثلاثة. لا تزعل… الأبواب ما تعرف إنك شريك مهم.' : wins + ' من ثلاثة. نتيجة محترمة… لموظف جديد.']);
+          });
+        }
+        btn.addEventListener('click', function () { btn.disabled = true; round = 0; wins = 0; $('#cWin', root).textContent = 0; startRound(); });
+      } },
+
+    { id: 'standing', label: 'آخر من يصمد', game: 'standing', world: ['#0D0B08', '#F2EDE4', '#FFC400', '#FF5A1F', 'Changa'],
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">GAME WORLD · MINI-GAME 03</p><div class="world"><div class="world__art"><img src="assets/last-standing-world.jpg" alt="قاعة مظلمة فيها دوائر صفراء مرقّمة يقف عليها لاعبين" width="1280" height="720"></div><div class="world__body"><div class="hazard"></div><div class="row" style="justify-content:space-between"><h2 class="world__title">آخر من يصمد</h2><span class="world__tag">كل دقيقة تطلع لاعب.</span></div><p>اضغط وثبّت على الدائرة. إذا رفعت إصبعك… تطلع. إنت رقم 07، وباقي اللاعبين يطلعون واحد ورا الثاني.</p><div class="hud"><span>باقي <span id="sLeft">16</span> من 16</span><span id="sTime">00:10</span></div><div class="spots" id="spots"></div><button class="hold" type="button" id="hold" aria-label="اضغط وثبّت — أو ثبّت زر المسافة">اضغط وثبّت</button><p class="result" id="sRes" role="status"></p></div></div></div>',
+      lines: ['آخر من يصمد. القاعدة وحدة: لا ترفع إصبعك.',
+              'أعرف إنها صعبة على ناس تعودت ترد على الواتساب كل ثانيتين… بس حاول. إنت رقم سبعة.'],
+      mount: function (root) {
+        var spots = $('#spots', root), hold = $('#hold', root), res = $('#sRes', root), held = false, out = 0, t = 0, ticker = null, over = false;
+        for (var n = 1; n <= 16; n++) spots.insertAdjacentHTML('beforeend', '<i' + (n === 7 ? ' class="is-me"' : '') + '>' + String(n).padStart(2, '0') + '</i>');
+        var dots = $$('i', spots);
+        function reset() { out = 0; t = 0; over = false; dots.forEach(function (d) { d.classList.remove('is-out'); }); $('#sLeft', root).textContent = 16; $('#sTime', root).textContent = '00:10'; }
+        function begin(e) {
+          if (e) e.preventDefault();
+          if (held) return; held = true; hold.classList.add('is-held'); hold.textContent = 'ثبّت!';
+          if (over || t === 0) reset();
+          res.textContent = '';
+          ticker = setInterval(function () {
+            t++; var others = dots.filter(function (d, i) { return i !== 6 && !d.classList.contains('is-out'); });
+            if (others.length) { pick(others).classList.add('is-out'); out++; SFX.tick(); }
+            $('#sLeft', root).textContent = 16 - out; $('#sTime', root).textContent = '00:' + String(Math.max(0, 10 - Math.round(t * .67))).padStart(2, '0');
+            if (out >= 15) win();
+          }, 650);
+          onLeave(function () { clearInterval(ticker); });
+        }
+        function win() {
+          clearInterval(ticker); held = false; over = true; hold.classList.remove('is-held'); hold.textContent = 'مرة ثانية';
+          score('standing', 15, 15); res.textContent = 'صمدت للآخر! إنت آخر واحد واقف.'; SFX.good(); Av.fx('is-hop');
+          say(['صمدت! أول مرة أشوف شريك ما رفع إصبعه… ولا حتى عشان يقول «نرجع لكم».']);
+        }
+        function end() {
+          if (!held) return; held = false; clearInterval(ticker); hold.classList.remove('is-held');
+          if (over) return; over = true;
+          score('standing', out, 15); dots[6].classList.add('is-out'); hold.textContent = 'مرة ثانية';
+          res.textContent = 'رفعت إصبعك… طلعت. صمدت قدّام ' + out + ' لاعب.'; SFX.bad(); Av.fx('is-shake');
+          say([out > 10 ? 'قريب! بس «قريب» ما يدخل التقرير.' : 'رفعت إصبعك؟ أكيد جاك إشعار. شفت؟ هذي المشكلة اللي قلت لك عنها.']);
+        }
+        hold.addEventListener('pointerdown', begin);
+        ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { hold.addEventListener(ev, end); });
+        hold.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) begin(e); });
+        hold.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') end(); });
+        hold.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+      } },
+
+    { id: 'os', label: 'لعنة أوس', game: 'os', world: ['#07060A', '#E9DFCF', '#A3121F', '#B08D57', 'Blaka'],
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">GAME WORLD · MINI-GAME 04 · 18+</p><div class="world" id="osWorld"><div class="world__art"><img src="assets/curse-of-os-world.jpg" alt="غرفة مظلمة فيها باب بنقوش نجوم وشمعة على الأرض وأثر يد حمراء على الجدار" width="1280" height="720"><div class="os-light" id="osLight"></div></div><div class="world__body"><div class="row" style="justify-content:space-between"><h2 class="world__title">لعنة أوس</h2><span class="world__tag">«اللغز ما ينحل... يتورث.»</span></div><p>رعب نفسي هجين: 90 دقيقة، 4 إلى 6 لاعبين، وباب واحد يطلّعكم. اللغز هنا: «اسمي مكتوب على الباب… بس ناقصه حرف».</p><div class="cipher" aria-label="الاسم: ألف، فراغ، سين"><span>أ</span><span class="blank" id="blank">؟</span><span>س</span></div><div class="candle" aria-hidden="true"><span id="candle"></span></div><div class="letters" id="letters"></div><p class="result" id="oRes" role="status"></p><p class="note" style="color:#B08D57;border-color:#A3121F">تنبيه: أجواء رعب نفسي وأصوات مفاجئة · +18</p></div></div></div>',
+      lines: ['هنا نطفّي الأنوار شوي… لا تخاف، الرعب نفسي بس. الفواتير هي الرعب الحقيقي.',
+              'اسمي مكتوب على الباب، بس ناقصه حرف. عندك لين تنطفي الشمعة. وأرجوك لا تقول «ي»… بتفشّلني.'],
+      mount: function (root) {
+        var light = $('#osLight', root), world = $('#osWorld', root), letters = $('#letters', root), res = $('#oRes', root), candle = $('#candle', root);
+        world.addEventListener('pointermove', function (e) { var r = world.getBoundingClientRect(); light.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100) + '%'); light.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100) + '%'); });
+        var opts = ['ي', 'و', 'ن', 'ر'].sort(function () { return Math.random() - .5; }), tries = 0, left = 15, done = false;
+        opts.forEach(function (l) { letters.insertAdjacentHTML('beforeend', '<button type="button" aria-label="الحرف ' + l + '">' + l + '</button>'); });
+        var tick = every(1000, function () {
+          if (done) return; left--; candle.style.width = (left / 15 * 100) + '%';
+          if (left <= 0) { done = true; score('os', 0, 1); res.textContent = 'انطفت الشمعة… والاسم بقى ناقص.'; SFX.bad(); say(['انطفت الشمعة. عادي، حتى أوس نفسه ما حلّها من أول مرة. ولا ثاني مرة. ولا… خلاص.']); }
+        });
+        $$('button', letters).forEach(function (b) {
+          b.addEventListener('click', function () {
+            if (done) return; tries++;
+            if (b.textContent === 'و') {
+              done = true; $('#blank', root).textContent = 'و'; $('#blank', root).classList.remove('blank');
+              score('os', tries === 1 ? 1 : .5, 1); res.textContent = 'أوس. انفتح الباب… واللعنة انتقلت لك. مبروك؟'; SFX.good(); Av.fx('is-hop');
+              say([tries === 1 ? 'من أول محاولة؟ طيب… خلني أبعد عنك شوي.' : 'حلّيتها. متأخر شوي، بس الباب ما يحاسب على الوقت… أنا أحاسب.']);
+            } else {
+              b.classList.add('is-wrong'); b.disabled = true; SFX.bad(); Av.fx('is-shake');
+              say([b.textContent === 'ي' ? 'قلت لك لا تقول ي! … «أيس»؟ هذا مشروب مو لعنة.' : 'لا. فكّر في اسم اللعبة… هو مكتوب فوق بخط كبير. مرة كبير.']);
+            }
+          });
+        });
+      } },
+
+    { id: 'asia', label: 'مشوار آسيا', game: 'asia', world: ['#04351F', '#FFFFFF', '#F5C542', '#2BD67B', 'Marhey'],
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">GAME WORLD · FOOTBALL QUEST · MINI-GAME 05</p><div class="world"><div class="world__art"><img src="assets/asia-journey-world.jpg" alt="ملعب كورة أخضر تحت أضواء الملعب وقصاصات احتفال" width="1280" height="720"></div><div class="world__body"><div class="row" style="justify-content:space-between"><h2 class="world__title">مشوار آسيا</h2><span class="world__tag">منتخبنا يجمعنا.</span></div><p>لعبة الموسم الكروي على الجوال: يجمع اللاعب المنتخبات، يلعب مع شلّته داخل الفرع، ويستلم قسيمة يستردها عندك. هنا: 3 ضربات جزاء.</p><div class="pitch" id="pitch"><div class="goal"></div><div class="keeper" id="keeper"></div><div class="aim" id="aim"></div><div class="ball" id="ball"></div></div><div class="hud"><span>أهداف <span id="pGoals">0</span>/3</span><span class="coins">عملات <span id="pCoins">0</span></span></div><div class="row"><button class="btn" type="button" id="shoot">سدّد</button></div><p class="result" id="pRes" role="status"></p><p class="note" style="color:#BFE8D0">لعبة مستقلة وغير رسمية، وغير معتمدة من الاتحاد الآسيوي لكرة القدم أو أي اتحاد وطني.</p></div></div></div>',
+      lines: ['مشوار آسيا، نسختنا اسمها Football Quest. منتخبنا يجمعنا… والقسيمة تجمعهم في فرعك.',
+              'السهم الأبيض يتحرك؛ اضغط «سدّد» وقت ما يكون بعيد عن الحارس. الحارس عندنا شاطر… بس مو أشطر من مدير المشتريات.'],
+      mount: function (root) {
+        var aim = $('#aim', root), keeper = $('#keeper', root), ball = $('#ball', root), shootBtn = $('#shoot', root), res = $('#pRes', root);
+        var x = 50, dir = 1, shots = 0, goals = 0, busy = false, raf = null, lastT = 0;
+        function loop(t) {
+          raf = requestAnimationFrame(loop);
+          if (busy) return;
+          var dt = lastT ? Math.min(40, t - lastT) : 16; lastT = t;
+          x += dir * dt * .06; if (x > 82) { x = 82; dir = -1; } if (x < 18) { x = 18; dir = 1; }
+          aim.style.left = x + '%';
+        }
+        raf = requestAnimationFrame(loop); onLeave(function () { cancelAnimationFrame(raf); });
+        shootBtn.addEventListener('click', function () {
+          if (busy || shots >= 3) { if (shots >= 3) { shots = 0; goals = 0; $('#pGoals', root).textContent = 0; $('#pCoins', root).textContent = 0; shootBtn.textContent = 'سدّد'; res.textContent = ''; } return; }
+          busy = true; shots++; SFX.kick();
+          var dive = pick([28, 50, 72]); keeper.style.left = 'calc(' + dive + '% - 6.5%)';
+          ball.style.left = x + '%'; ball.style.bottom = '58%';
+          var goal = Math.abs(dive - x) > 13;
+          after(420, function () {
+            if (goal) { goals++; $('#pGoals', root).textContent = goals; $('#pCoins', root).textContent = goals * 100; res.textContent = 'قوووول! +100 عملة.'; SFX.good(); }
+            else { res.textContent = 'صدّها الحارس.'; SFX.bad(); }
+            after(800, function () {
+              ball.style.left = '50%'; ball.style.bottom = '8%'; keeper.style.left = 'calc(50% - 6.5%)'; busy = false;
+              if (shots >= 3) {
+                score('asia', goals, 3); shootBtn.textContent = 'مرة ثانية';
+                say([goals === 3 ? 'ثلاثة من ثلاثة! خلاص اعتمدناك هدّاف الشراكات.' : goals === 0 ? 'ولا هدف. الحمدلله إن الشراكة ما تعتمد على رجلك.' : goals + ' من ثلاثة. لاعب محترم… من الدكة.']);
+              }
+            });
+          });
+        });
+      } },
+
+    { id: 'journey', label: 'رحلة اللاعب',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">HOW IT WORKS FOR YOU</p><h2>من الجوال… <em>لين الكاشير.</em></h2><p class="lead">اضغط «الخطوة الجاية» وتابع رحلة لاعب واحد داخل حملتك.</p><div class="journey" id="journey"></div><div class="row"><button class="btn btn--x" type="button" id="jNext">الخطوة الجاية</button></div></div>',
+      steps: [['يفتح التطبيق', 'دخول بالجوال أو كود الفعالية'], ['يقرب من فرعك', 'الموقع يتحقق وقت استخدام التطبيق فقط'], ['يمسح رمز الفرع', 'رمز يومي يتغير، فالزيارة تتسجل محققة'], ['يلعب مع شلّته', 'جولة جماعية داخل الفرع، يفوزون كلهم أو ما يفوز أحد'], ['يستلم قسيمة', 'في محفظته، برمز استرداد يُستخدم مرة وحدة'], ['توصلك الأرقام', 'لوحة شركاء بتقارير مجمّعة: زيارات، قسائم، عودة']],
+      lines: ['وهنا الجزء اللي يهمك فعلاً… لأن الألعاب حلوة، بس المحاسب ما يضحك عليها.',
+              'تابع لاعب واحد من جواله لين كاشيرك. وكل خطوة تتسجل.'],
+      mount: function (root, scene) {
+        var j = $('#journey', root), i = 0;
+        scene.steps.forEach(function (s, n) { j.insertAdjacentHTML('beforeend', '<div class="step"><b>' + String(n + 1).padStart(2, '0') + '</b><h3>' + s[0] + '</h3><p style="color:#C9C9D2;font-size:.92rem">' + s[1] + '</p></div>'); });
+        var steps = $$('.step', j);
+        $('#jNext', root).addEventListener('click', function (e) {
+          if (i >= steps.length) { steps.forEach(function (s) { s.classList.remove('is-on'); }); i = 0; e.currentTarget.textContent = 'الخطوة الجاية'; return; }
+          steps[i].classList.add('is-on'); SFX.blip(); i++;
+          if (i === steps.length) { e.currentTarget.textContent = 'من البداية'; say(['شفت؟ ولا خطوة فيها «إن شاء الله يوصل الإعلان». كلها أرقام.']); }
+        });
+      } },
+
+    { id: 'trust', label: 'القياس والثقة',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">MEASUREMENT &amp; TRUST</p><h2>أرقام تقدر <em>تحطها في التقرير.</em></h2><div class="grid"><div class="card"><p class="big-num">60%+</p><p>من مسوحات رموز الفروع تكون زيارات محققة</p></div><div class="card"><p class="big-num" style="color:var(--cyan)">40%+</p><p>من القسائم الممنوحة تنسترد</p></div><div class="card"><p class="big-num" style="color:var(--bone)">35% / 15%</p><p>لاعبين يرجعون في اليوم 1 واليوم 7</p></div><div class="card"><p class="big-num" style="color:var(--warn)">3+</p><p>متوسط اللاعبين في الجولة الجماعية</p></div></div><p class="note">هذي أهداف التجربة الأولى المكتوبة في وثائق المنتج، مو نتائج سابقة. تنراجع بعد أول 7 أيام من الإطلاق.</p><div class="grid"><div class="card"><h3>البيانات داخل المملكة</h3><p style="color:#C9C9D2">بيانات اللعب والمحافظ والقسائم في منطقة الدمام السحابية.</p></div><div class="card"><h3>تقارير مجمّعة</h3><p style="color:#C9C9D2">الشريك يشوف أرقام مجمّعة، مو بيانات أشخاص.</p></div><div class="card"><h3>حماية القاصرين</h3><p style="color:#C9C9D2">بوابة عمر، وأقل من 15 سنة ما يسجّل، ومن 15 إلى 17 بقيود.</p></div></div></div>',
+      lines: ['قبل تسأل: البيانات داخل المملكة، والتقارير مجمّعة، وما نبيع بيانات أحد.',
+              'حتى أنا ما أعرف رقم جوالك… وبصراحة مرتاح كذا.',
+              'والأرقام اللي فوق أهداف التجربة الأولى، مو نتائج سابقة. ما نكذب عليك من أول اجتماع… نخليها للاجتماع الثالث. أمزح!'] },
+
+    { id: 'packages', label: 'الباقات',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">WAYS TO PLAY TOGETHER</p><h2>ثلاث طرق <em>نلعب فيها مع بعض.</em></h2><div class="grid"><div class="card pkg"><span class="tag" style="color:var(--cyan)">ابدأ صغير</span><h3>تجربة فرع</h3><ul><li>فرع أو فرعين</li><li>رمز فرع يومي وقسائم</li><li>تقرير نهاية التجربة</li></ul><p class="price">السعر: نحدده معك حسب المدة</p></div><div class="card pkg" style="border-color:var(--magenta)"><span class="tag" style="color:var(--magenta)">الموسم</span><h3>حملة موسم كامل</h3><ul><li>كل فروعك المشاركة</li><li>زيارات محققة وقسائم وسلسلة زيارات</li><li>لوحة شركاء وتقارير يومية مجمّعة</li></ul><p class="price">السعر: حسب عدد الفروع والمدة</p></div><div class="card pkg"><span class="tag" style="color:var(--bone)">عالمك</span><h3>عالم لعبة خاص</h3><ul><li>قالب من عوالمنا بهوية فعاليتك</li><li>للشركات والفعاليات الجماعية</li><li>تشغيل في المكان أو أونلاين</li></ul><p class="price">السعر: حسب الفعالية</p></div></div></div>',
+      lines: ['الأسعار؟ ما حطيتها هنا… مو لأنها غالية. لأني نقطة، وما عندي صلاحية أفاوض.',
+              'ابدأ بفرع، أو خذ الموسم كامل، أو نبني لك عالمك الخاص. والفريق يحسبها معك على قد فروعك.'] },
+
+    { id: 'status', label: 'وش جاهز',
+      html: '<div class="wrap"><p class="eyebrow" lang="en" dir="ltr">STRAIGHT TALK</p><h2>وش جاهز… <em>ووش قريب.</em></h2><div class="card"><div class="status-row"><div><h3>مشوار آسيا · Football Quest</h3><p style="color:#C9C9D2">التطبيق قيد البناء، والإطلاق مخطط في ديسمبر 2026 قبل بداية الموسم الكروي في يناير.</p></div><span class="tag" style="color:var(--good)">قيد البناء</span></div><div class="status-row"><div><h3>غرفة الاختيار</h3><p style="color:#C9C9D2">قالب لعبة للفرق والفعاليات، ونخصّصه لك.</p></div><span class="tag" style="color:var(--cyan)">قالب</span></div><div class="status-row"><div><h3>آخر من يصمد</h3><p style="color:#C9C9D2">تحدي جماهيري للفعاليات الكبيرة.</p></div><span class="tag" style="color:var(--warn)">قيد التطوير</span></div><div class="status-row"><div><h3>لعنة أوس</h3><p style="color:#C9C9D2">تجربة رعب نفسي +18 بتذاكر، تنطلق بعد التراخيص.</p></div><span class="tag" style="color:#E9DFCF">قريباً</span></div></div><p class="note">أول شركاء الموسم هم اللي يشكّلون الحملة معنا من البداية.</p></div>',
+      lines: ['ما راح أكذب عليك وأقول كل شي جاهز… الكذب مو من هويتنا. الماجنتا من هويتنا.',
+              'مشوار آسيا قيد البناء وينطلق قبل الموسم. والشريك اللي يدخل الحين… يختار مكانه قبل الزحمة.'] },
+
+    { id: 'finale', label: 'قرارك',
+      html: '<div class="wrap split"><div style="display:grid;gap:16px"><p class="eyebrow" lang="en" dir="ltr">THE GAME HAS STARTED · YOUR CHOICE</p><h2>لاحظت؟ قعدت تلعب <em>في عرض تقديمي.</em></h2><p class="lead">تخيّل هذا مع جمهورك. خطوتنا الجاية اجتماع قصير نحدد فيه فروعك والموسم.</p><div class="card" style="display:grid;gap:10px"><h3>التواصل</h3><p>البريد: <span id="cEmail"></span></p><p>الجوال: <span id="cPhone"></span></p><div class="row"><button class="btn btn--x" type="button" id="copyMsg">انسخ رسالة طلب اجتماع</button></div><p class="result" id="copyRes" role="status"></p></div></div><div class="card" style="display:grid;gap:12px"><h3>نتيجتك في العرض</h3><div class="score-board" id="board"></div><p class="final-x num" id="lv">LV 00</p><p id="rank" style="color:#C9C9D2"></p></div></div>',
+      lines: ['خلصنا. ولاحظت؟ قعدت تلعب في عرض تقديمي… تخيّل جمهورك.',
+              'اللعبة بدأت. والقرار… قرارك. اضغط وانسخ رسالة طلب الاجتماع. وإذا ما ضغطت، عادي… بس بزعل. شوي.'],
+      mount: function (root) {
+        var names = { attention: 'صيد الانتباه', choice: 'غرفة الاختيار', standing: 'آخر من يصمد', os: 'لعنة أوس', asia: 'مشوار آسيا' }, total = 0, played = 0, html = '';
+        Object.keys(names).forEach(function (k) {
+          var v = UXP.scores[k]; if (v !== undefined) { total += v; played++; }
+          html += '<div><span>' + names[k] + '</span><b class="num">' + (v === undefined ? 'ما لعبتها' : v + '%') + '</b></div>';
+        });
+        $('#board', root).innerHTML = html;
+        var lv = Math.round(total / 5 / 100 * 12);
+        $('#lv', root).textContent = 'LV ' + String(lv).padStart(2, '0');
+        $('#rank', root).textContent = played === 0 ? 'ولا لعبة؟ واضح إنك تحب العروض المملة. ارجع والعب وحدة على الأقل.' : lv >= 9 ? 'لاعب محترف. جاهز تصير شريك يلعب، مو راعي يتفرج.' : lv >= 5 ? 'مستوى ممتاز… لشخص كان جاي يشوف عرض عادي.' : 'بداية. حتى أوس بدأ من هنا.';
+        var ph = '<span class="placeholder">[يُضاف بعد الاعتماد]</span>';
+        $('#cEmail', root).innerHTML = CONTACT.email ? '<span dir="ltr">' + CONTACT.email + '</span>' : ph;
+        $('#cPhone', root).innerHTML = CONTACT.phone ? '<span dir="ltr">' + CONTACT.phone + '</span>' : ph;
+        $('#copyMsg', root).addEventListener('click', function () {
+          var msg = 'هلا فريق يوزرز إكس، شفنا عرض الشركاء ونبي اجتماع قصير نحدد فيه الفروع والموسم.\nالجهة: [اسم الجهة]\nالمسؤول: [الاسم]\nعدد الفروع: [__]';
+          var r = $('#copyRes', root);
+          function ok() { r.textContent = 'انسخت الرسالة. أرسلها عبر قنوات يوزرز إكس الرسمية.'; SFX.good(); Av.wave(); }
+          function no() { r.textContent = msg; }
+          try { navigator.clipboard.writeText(msg).then(ok, no); } catch (e) { no(); }
+        });
+        Av.wave();
+      } }
+  ];
+
+  /* ===== Scene engine ===== */
+  var initialHash = location.hash.slice(1);
+  var stage = $('#stage'), dots = $('#dots'), idx = 0, started = false;
+  SCENES.forEach(function (s, i) {
+    var el = document.createElement('section');
+    el.className = 'scene'; el.id = 'scene-' + s.id; el.hidden = true; el.setAttribute('aria-label', s.label);
+    if (s.world) el.setAttribute('style', worldVars(s.world));
+    stage.appendChild(el);
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', (i + 1) + ' — ' + s.label); b.innerHTML = '<span></span>';
+    b.addEventListener('click', function () { go(i); });
+    dots.appendChild(b);
+  });
+  function go(i) {
+    if (i < 0 || i >= SCENES.length) return;
+    cleanups.splice(0).forEach(function (f) { try { f(); } catch (e) {} });
+    var prev = $$('.scene', stage)[idx]; if (prev) { prev.hidden = true; prev.innerHTML = ''; }
+    idx = i;
+    var s = SCENES[i], el = $$('.scene', stage)[i];
+    el.innerHTML = s.html; el.hidden = false; el.scrollTop = 0;
+    el.classList.remove('is-in'); void el.offsetWidth; el.classList.add('is-in');
+    try { if (s.mount) s.mount(el, s); } catch (e) { console.warn('[USERS-X] scene failed', s.id, e); }
+    $$('button', dots).forEach(function (b, n) { if (n === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); if (n < i) b.classList.add('is-seen'); });
+    $('#counter').textContent = String(i + 1).padStart(2, '0') + '/' + String(SCENES.length).padStart(2, '0');
+    $('#prevBtn').disabled = i === 0; $('#nextBtn').disabled = i === SCENES.length - 1;
+    try { location.hash = s.id; } catch (e) {}
+    UXP.scene = s.id;
+    if (started) { say(s.lines); SFX.blip(); }
+    var h = $('h1, h2', el); if (h && started) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }
+  $('#prevBtn').addEventListener('click', function () { go(idx - 1); });
+  $('#nextBtn').addEventListener('click', function () { go(idx + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (!started) { if (e.key === 'x' || e.key === 'X') { e.preventDefault(); begin(true); } return; }
+    if (e.target.closest && e.target.closest('.hold')) return;
+    if (e.key === 'ArrowLeft') go(idx + 1);   // RTL: left moves forward
+    if (e.key === 'ArrowRight') go(idx - 1);
+  });
+  var sx = null;
+  stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (sx === null || e.target.closest('.hold, .pitch, .seats, .doors, .letters')) { sx = null; return; }
+    var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 70) go(idx + (dx > 0 ? 1 : -1)); sx = null;
+  }, { passive: true });
+
+  $('#skipLine').addEventListener('click', function () { if (Voice.skipCurrent) Voice.skipCurrent(); });
+  $('#replayLine').addEventListener('click', function () { say(SCENES[idx].lines); });
+  $('#voiceBtn').addEventListener('click', function () { Voice.cycle(); });
+  var QUIPS = ['لا تضغطني… أنا مقدّم، مو زر.', 'تدري إن المربّع الماجنتا اللي في قلبي يمثّلك إنت؟ لا تتحمس، هو مربّع بس.', 'ركّز على العرض. أنا هنا بس عشان أطلع حلو.', 'إذا عجبك العرض، قول للفريق. إذا ما عجبك… قول لي أنا، ما أسمع زين.', 'كمّل، باقي شوي… قلتها في أول شريحة بعد.'];
+  avBtn.addEventListener('click', function () { if (!started) return; Av.fx('is-hop'); say([pick(QUIPS)]); });
+
+  function begin(withVoice) {
+    if (started) return;
+    started = true;
+    if (!withVoice) { Voice.mode = 'off'; } else if (Voice.mode === 'off') { Voice.mode = 'auto'; }
+    if (withVoice) sfxReady();
+    Voice.label();
+    $('#start').hidden = true;
+    Av.wave();
+    var fromHash = SCENES.map(function (s) { return s.id; }).indexOf(initialHash);
+    go(fromHash > 0 ? fromHash : 0);
+  }
+  $('#startBtn').addEventListener('click', function () { begin(true); });
+  $('#startMuted').addEventListener('click', function () { begin(false); });
+  window.addEventListener('hashchange', function () { var n = SCENES.map(function (s) { return s.id; }).indexOf(location.hash.slice(1)); if (started && n >= 0 && n !== idx) go(n); });
+
+  Voice.init();
+  go(0); // first scene visible behind the start card for thumbnails
+  $('#startBtn').focus();
+})();
+</script>
+
+</body></html>
