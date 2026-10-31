@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const http = require('http'); const fs = require('fs'); const path = require('path');
 const ROOT = process.argv[2], OUT = process.argv[3];
-const srv = http.createServer((q, r) => { const p = path.join(ROOT, q.url.split('?')[0].split('#')[0].replace(/^\/$/, '/index.html')); if (!fs.existsSync(p)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': p.endsWith('.html') ? 'text/html; charset=utf-8' : p.endsWith('.jpg') ? 'image/jpeg' : 'image/png' }); fs.createReadStream(p).pipe(r); });
+const srv = http.createServer((q, r) => { const p = path.join(ROOT, q.url.split('?')[0].split('#')[0].replace(/^\/$/, '/index.html')); if (!fs.existsSync(p)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': p.endsWith('.html') ? 'text/html; charset=utf-8' : p.endsWith('.jpg') ? 'image/jpeg' : p.endsWith('.mp3') ? 'audio/mpeg' : 'image/png' }); fs.createReadStream(p).pipe(r); });
 const res = []; const ok = (c, m) => { res.push((c ? 'PASS ' : 'FAIL ') + m); };
 srv.listen(0, async () => {
   const base = 'http://127.0.0.1:' + srv.address().port + '/index.html';
@@ -13,6 +13,9 @@ srv.listen(0, async () => {
     await p.click('#startBtn'); await p.waitForTimeout(1500);
     ok(await p.evaluate(() => window.__uxp.scene) === 'hello', vp.n + ' starts at hello');
     ok((await p.textContent('#bubbleText')).length > 5, vp.n + ' nuqta speaks captions');
+    await p.waitForTimeout(1500);
+    ok(await p.evaluate(() => window.__uxp.clips || 0) >= 1, vp.n + ' recorded voice clip playing: ' + await p.evaluate(() => window.__uxp.clips));
+    ok(/صوت نقطة/.test(await p.textContent('#voiceLabel')), vp.n + ' label shows recorded voice');
     ok(/رطانة|صوت/.test(await p.textContent('#voiceLabel')), vp.n + ' voice label: ' + await p.textContent('#voiceLabel'));
     await p.screenshot({ path: OUT + '/' + vp.n + '-01-hello.png' });
     const ids = await p.evaluate(() => [...document.querySelectorAll('.scene')].map(s => s.id.replace('scene-', '')));

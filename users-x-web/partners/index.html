@@ -256,7 +256,7 @@ p { margin: 0; }
   'use strict';
 
   /* ===== Contact details — fill only with confirmed USERS-X details ===== */
-  var CONTACT = { email: '', phone: '' }; // [PLACEHOLDER] empty = shows a clear placeholder, never a fake address
+  var CONTACT = { email: '', phone: '+966565952065' }; // [PLACEHOLDER] empty = shows a clear placeholder, never a fake address
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -354,8 +354,12 @@ p { margin: 0; }
   };
 
   /* ===== Voice: device Arabic TTS when available, else «رطانة نقطة» chiptune babble, else silent captions ===== */
+  /* Recorded voice of «نقطة» (one clip per line, assets/voice/NN.mp3). Lines not in this list fall back to device TTS or babble. */
+  var VOICE_LINES = ["هلا والله بالشريك! أنا نقطة… مدير العلاقات، والتسويق، والمونتاج، وأحياناً أوزّع الماي.", "أدري إنك شفت ألف عرض فيه كلمة «تفاعل»… هذا غير. هنا إنت اللي بتلعب. حرفياً.", "اضغط «التالي» تحت، أو الأسهم في الكيبورد. وإذا زهقت مني، فيه زر يكتمني… بس بزعل.", "خلني أوريك المشكلة بدل ما أشرحها… لأن الشرح ممل، وإنت أصلاً نص عينك على جوالك.", "اضغط على أي واحد يطالع جواله ورجّعه للفعالية. جاهز؟ اضغط ابدأ.", "الفكرة بسيطة لدرجة إنها تقهر: بدل ما تحارب الجوال… نخلي الجوال هو اللعبة.", "رقمي على الجوال، وحضوري في المكان، بنفس اللحظة. واللي يلعب، يرجع. واللي يرجع… يشتري. ما قلت لك؟ تقهر.", "هذي غرفة الاختيار. بابين وقرار واحد… واللي يختار غلط يطلع. زي اجتماعات الميزانية بالضبط.", "تنفع لفرق الشركات والفعاليات الجماعية. جرّب: ثلاث جولات، وعشر ثواني لكل قرار.", "آخر من يصمد. القاعدة وحدة: لا ترفع إصبعك.", "أعرف إنها صعبة على ناس تعودت ترد على الواتساب كل ثانيتين… بس حاول. إنت رقم سبعة.", "هنا نطفّي الأنوار شوي… لا تخاف، الرعب نفسي بس. الفواتير هي الرعب الحقيقي.", "اسمي مكتوب على الباب، بس ناقصه حرف. عندك لين تنطفي الشمعة. وأرجوك لا تقول «ي»… بتفشّلني.", "مشوار آسيا، نسختنا اسمها Football Quest. منتخبنا يجمعنا… والقسيمة تجمعهم في فرعك.", "السهم الأبيض يتحرك؛ اضغط «سدّد» وقت ما يكون بعيد عن الحارس. الحارس عندنا شاطر… بس مو أشطر من مدير المشتريات.", "وهنا الجزء اللي يهمك فعلاً… لأن الألعاب حلوة، بس المحاسب ما يضحك عليها.", "تابع لاعب واحد من جواله لين كاشيرك. وكل خطوة تتسجل.", "قبل تسأل: البيانات داخل المملكة، والتقارير مجمّعة، وما نبيع بيانات أحد.", "حتى أنا ما أعرف رقم جوالك… وبصراحة مرتاح كذا.", "والأرقام اللي فوق أهداف التجربة الأولى، مو نتائج سابقة. ما نكذب عليك من أول اجتماع… نخليها للاجتماع الثالث. أمزح!", "الأسعار؟ ما حطيتها هنا… مو لأنها غالية. لأني نقطة، وما عندي صلاحية أفاوض.", "ابدأ بفرع، أو خذ الموسم كامل، أو نبني لك عالمك الخاص. والفريق يحسبها معك على قد فروعك.", "ما راح أكذب عليك وأقول كل شي جاهز… الكذب مو من هويتنا. الماجنتا من هويتنا.", "مشوار آسيا قيد البناء وينطلق قبل الموسم. والشريك اللي يدخل الحين… يختار مكانه قبل الزحمة.", "خلصنا. ولاحظت؟ قعدت تلعب في عرض تقديمي… تخيّل جمهورك.", "اللعبة بدأت. والقرار… قرارك. اضغط وانسخ رسالة طلب الاجتماع. وإذا ما ضغطت، عادي… بس بزعل. شوي.", "تمام، هذا صوتي الحين. لا تعليقات لو سمحت.", "يلا! … لا، مو ذاك. هذاك يطالع إنستقرام.", "ما شاء الله! بس تخيل تسوي هذا لخمسة آلاف شخص بيدك… لا تسويها. خلّها علينا.", "يعني نص جمهورك راح للتيك توك. وهذا وإنت تحاول! تخيل لو ما حاولت.", "يا شيخ حتى إنت ما لحقت عليهم. هذي بالضبط فعاليتك يوم الخميس.", "ثلاثة من ثلاثة؟ إنت يا محظوظ يا تقرأ أفكاري. الحالتين مخيفة.", "صفر من ثلاثة. لا تزعل… الأبواب ما تعرف إنك شريك مهم.", "نتيجة محترمة… لموظف جديد.", "صمدت! أول مرة أشوف شريك ما رفع إصبعه… ولا حتى عشان يقول «نرجع لكم».", "قريب! بس «قريب» ما يدخل التقرير.", "رفعت إصبعك؟ أكيد جاك إشعار. شفت؟ هذي المشكلة اللي قلت لك عنها.", "انطفت الشمعة. عادي، حتى أوس نفسه ما حلّها من أول مرة. ولا ثاني مرة. ولا… خلاص.", "من أول محاولة؟ طيب… خلني أبعد عنك شوي.", "حلّيتها. متأخر شوي، بس الباب ما يحاسب على الوقت… أنا أحاسب.", "قلت لك لا تقول ي! … «أيس»؟ هذا مشروب مو لعنة.", "لا. فكّر في اسم اللعبة… هو مكتوب فوق بخط كبير. مرة كبير.", "ثلاثة من ثلاثة! خلاص اعتمدناك هدّاف الشراكات.", "ولا هدف. الحمدلله إن الشراكة ما تعتمد على رجلك.", "لاعب محترم… من الدكة.", "شفت؟ ولا خطوة فيها «إن شاء الله يوصل الإعلان». كلها أرقام.", "لا تضغطني… أنا مقدّم، مو زر.", "تدري إن المربّع الماجنتا اللي في قلبي يمثّلك إنت؟ لا تتحمس، هو مربّع بس.", "ركّز على العرض. أنا هنا بس عشان أطلع حلو.", "إذا عجبك العرض، قول للفريق. إذا ما عجبك… قول لي أنا، ما أسمع زين.", "كمّل، باقي شوي… قلتها في أول شريحة بعد."];
+  var CLIP = {}; VOICE_LINES.forEach(function (t, i) { CLIP[t] = 'assets/voice/' + String(i).padStart(2, '0') + '.mp3'; });
+
   var Voice = {
-    mode: store.get('voice', 'auto'), ar: null, token: 0, current: null,
+    mode: store.get('voice2', 'real'), ar: null, token: 0, current: null,
     init: function () {
       if (!('speechSynthesis' in window)) return this.label();
       var self = this;
@@ -366,25 +370,32 @@ p { margin: 0; }
       }
       pick(); speechSynthesis.onvoiceschanged = pick;
     },
-    effective: function () { if (this.mode === 'off') return 'off'; if (this.mode === 'babble') return 'babble'; return this.ar ? 'tts' : 'babble'; },
+    effective: function (text) {
+      if (this.mode === 'off') return 'off';
+      if (this.mode === 'real' && (!text || CLIP[text])) return 'real';
+      if (this.mode === 'babble') return 'babble';
+      return this.ar ? 'tts' : 'babble';
+    },
     label: function () {
       var e = this.effective();
-      $('#voiceLabel').textContent = e === 'off' ? 'مكتوم' : e === 'tts' ? 'صوت عربي' : 'رطانة نقطة';
+      $('#voiceLabel').textContent = e === 'off' ? 'مكتوم' : e === 'real' ? 'صوت نقطة' : e === 'tts' ? 'صوت الجهاز' : 'رطانة نقطة';
       $('#voiceBtn').setAttribute('aria-pressed', String(e !== 'off'));
     },
     cycle: function () {
-      var order = this.ar ? ['auto', 'babble', 'off'] : ['babble', 'off'];
-      var i = order.indexOf(this.mode === 'auto' && !this.ar ? 'babble' : this.mode);
-      this.mode = order[(i + 1) % order.length]; store.set('voice', this.mode);
+      var order = ['real', 'babble', 'off'];
+      var i = Math.max(0, order.indexOf(this.mode));
+      this.mode = order[(i + 1) % order.length]; store.set('voice2', this.mode);
       this.stop(); this.label();
       if (this.effective() !== 'off') { sfxReady(); this.say(['تمام، هذا صوتي الحين. لا تعليقات لو سمحت.']); }
     },
-    stop: function () { this.token++; if ('speechSynthesis' in window) speechSynthesis.cancel(); Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); },
+    stop: function () { this.token++; if ('speechSynthesis' in window) speechSynthesis.cancel(); if (this.audio) { this.audio.pause(); this.audio = null; } Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); },
     // say(lines): captions always; voice by mode. Resolves when all lines finish (or are skipped).
     say: function (lines, done) {
       var self = this, my = ++this.token, i = 0;
       if ('speechSynthesis' in window) speechSynthesis.cancel();
+      if (this.audio) { this.audio.pause(); this.audio = null; }
       this.current = lines;
+      lines.forEach(function (t) { if (CLIP[t]) { var a = new Audio(); a.preload = 'auto'; a.src = CLIP[t]; } }); // warm the cache
       var bubble = $('#bubble'), out = $('#bubbleText');
       bubble.classList.remove('is-idle');
       function next() {
@@ -398,18 +409,55 @@ p { margin: 0; }
       next();
     },
     line: function (text, my, finish) {
-      var self = this, out = $('#bubbleText'), mode = this.effective(), chars = 0, ended = false, flap = null, type = null;
+      var self = this, out = $('#bubbleText'), mode = this.effective(text), chars = 0, ended = false, flap = null, type = null, raf = null;
       nq.classList.add('is-talking');
       function end() {
         if (ended) return; ended = true;
-        clearInterval(flap); clearInterval(type); out.textContent = text;
+        clearInterval(flap); clearInterval(type); cancelAnimationFrame(raf); out.textContent = text;
+        if (self.audio && mode === 'real') { self.audio.pause(); self.audio = null; }
         Av.set('mouth', 'closed'); finish();
       }
       this.skipCurrent = function () { if ('speechSynthesis' in window) speechSynthesis.cancel(); end(); };
-      if (reduced) out.textContent = text;
-      else { out.textContent = ''; type = setInterval(function () { chars += 2; out.textContent = text.slice(0, chars); if (chars >= text.length) clearInterval(type); }, 32); }
-      flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
+      function typeOver(ms) {
+        if (reduced) { out.textContent = text; return; }
+        out.textContent = ''; var step = Math.max(16, ms / text.length);
+        type = setInterval(function () { chars += 1; out.textContent = text.slice(0, chars); if (chars >= text.length) clearInterval(type); }, step);
+      }
       var readMs = Math.max(1500, text.length * 62);
+      if (mode === 'real') {
+        var a = new Audio(CLIP[text]); self.audio = a;
+        var analyser = null, buf = null;
+        if (sfxReady() && ctx.createMediaElementSource) {
+          try { var src = ctx.createMediaElementSource(a); analyser = ctx.createAnalyser(); analyser.fftSize = 512; src.connect(analyser); analyser.connect(ctx.destination); buf = new Uint8Array(analyser.fftSize); } catch (e) { analyser = null; }
+        }
+        function lip() { // mouth follows the real loudness of the voice
+          raf = requestAnimationFrame(lip);
+          if (my !== self.token) return end();
+          if (!analyser) return;
+          analyser.getByteTimeDomainData(buf); var sum = 0;
+          for (var q = 0; q < buf.length; q++) { var v = (buf[q] - 128) / 128; sum += v * v; }
+          var rms = Math.sqrt(sum / buf.length);
+          Av.set('mouth', rms > .045 ? 'open' : 'closed');
+          nq.style.setProperty('--ey', rms > .16 ? -1 : 0);
+        }
+        a.addEventListener('loadedmetadata', function () { typeOver(a.duration * 1000 * .92); });
+        a.addEventListener('ended', end); a.addEventListener('error', function () { mode = 'babble'; flapAndWait(); });
+        if (!analyser) flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
+        var played = a.play(); if (played && played.then) played.then(function () { UXP.clips = (UXP.clips || 0) + 1; }, function () { flapAndWait(); });
+        lip();
+        setTimeout(end, 30000);
+        return;
+      }
+      function flapAndWait() {
+        if (ended) return;
+        typeOver(readMs * .8);
+        clearInterval(flap);
+        flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
+        setTimeout(end, readMs);
+      }
+      if (mode !== 'tts' && mode !== 'babble') return flapAndWait();
+      typeOver(readMs * .8);
+      flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
       if (mode === 'tts') {
         var u = new SpeechSynthesisUtterance(text);
         u.voice = this.ar; u.lang = this.ar.lang; u.rate = 1.04; u.pitch = 1.35;
@@ -475,9 +523,9 @@ p { margin: 0; }
               var avg = Math.round(samples.reduce(function (a, b) { return a + b; }, 0) / Math.max(1, samples.length));
               score('attention', avg, 100);
               res.textContent = 'متوسط الانتباه: ' + avg + '%';
-              if (avg >= 70) { SFX.good(); Av.fx('is-hop'); say(['ما شاء الله، ' + avg + '٪! بس تخيل تسوي هذا لخمسة آلاف شخص بيدك… لا تسويها. خلّها علينا.']); }
-              else if (avg >= 40) { say([avg + '٪… يعني نص جمهورك راح للتيك توك. وهذا وإنت تحاول! تخيل لو ما حاولت.']); }
-              else { SFX.bad(); Av.fx('is-shake'); say([avg + '٪؟ يا شيخ حتى إنت ما لحقت عليهم. هذي بالضبط فعاليتك يوم الخميس.']); }
+              if (avg >= 70) { SFX.good(); Av.fx('is-hop'); say(['ما شاء الله! بس تخيل تسوي هذا لخمسة آلاف شخص بيدك… لا تسويها. خلّها علينا.']); }
+              else if (avg >= 40) { say(['يعني نص جمهورك راح للتيك توك. وهذا وإنت تحاول! تخيل لو ما حاولت.']); }
+              else { SFX.bad(); Av.fx('is-shake'); say(['يا شيخ حتى إنت ما لحقت عليهم. هذي بالضبط فعاليتك يوم الخميس.']); }
             }
           });
         });
@@ -512,7 +560,7 @@ p { margin: 0; }
           if (round < 3) after(1300, startRound);
           else after(1000, function () {
             score('choice', wins, 3); btn.disabled = false; btn.textContent = 'مرة ثانية';
-            say([wins === 3 ? 'ثلاثة من ثلاثة؟ إنت يا محظوظ يا تقرأ أفكاري. الحالتين مخيفة.' : wins === 0 ? 'صفر من ثلاثة. لا تزعل… الأبواب ما تعرف إنك شريك مهم.' : wins + ' من ثلاثة. نتيجة محترمة… لموظف جديد.']);
+            say([wins === 3 ? 'ثلاثة من ثلاثة؟ إنت يا محظوظ يا تقرأ أفكاري. الحالتين مخيفة.' : wins === 0 ? 'صفر من ثلاثة. لا تزعل… الأبواب ما تعرف إنك شريك مهم.' : 'نتيجة محترمة… لموظف جديد.']);
           });
         }
         btn.addEventListener('click', function () { btn.disabled = true; round = 0; wins = 0; $('#cWin', root).textContent = 0; startRound(); });
@@ -615,7 +663,7 @@ p { margin: 0; }
               ball.style.left = '50%'; ball.style.bottom = '8%'; keeper.style.left = 'calc(50% - 6.5%)'; busy = false;
               if (shots >= 3) {
                 score('asia', goals, 3); shootBtn.textContent = 'مرة ثانية';
-                say([goals === 3 ? 'ثلاثة من ثلاثة! خلاص اعتمدناك هدّاف الشراكات.' : goals === 0 ? 'ولا هدف. الحمدلله إن الشراكة ما تعتمد على رجلك.' : goals + ' من ثلاثة. لاعب محترم… من الدكة.']);
+                say([goals === 3 ? 'ثلاثة من ثلاثة! خلاص اعتمدناك هدّاف الشراكات.' : goals === 0 ? 'ولا هدف. الحمدلله إن الشراكة ما تعتمد على رجلك.' : 'لاعب محترم… من الدكة.']);
               }
             });
           });
@@ -735,7 +783,7 @@ p { margin: 0; }
   function begin(withVoice) {
     if (started) return;
     started = true;
-    if (!withVoice) { Voice.mode = 'off'; } else if (Voice.mode === 'off') { Voice.mode = 'auto'; }
+    if (!withVoice) { Voice.mode = 'off'; } else if (Voice.mode === 'off') { Voice.mode = 'real'; }
     if (withVoice) sfxReady();
     Voice.label();
     $('#start').hidden = true;
