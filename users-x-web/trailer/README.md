@@ -2,7 +2,7 @@
 
 تريلر مدته 45 ثانية، مبني بالكود بالكامل: Three.js للمشاهد الثلاثية، وCanvas للنصوص والشعار، وصوت مركّب بـ Python. ما فيه أي عينات أو لقطات جاهزة من خارج المشروع.
 
-**الملف النهائي:** `dist/USERS-X-Trailer-1080p.mp4`، بمقاس 1920×1080 و24 إطار في الثانية، فيديو H.264 وصوت AAC ستيريو بتردد 48 كيلوهرتز.
+**الملف النهائي:** `dist/USERS-X-Trailer-1080p.mp4`، بمقاس 1920×1080 و24 إطار في الثانية، فيديو H.264 وصوت AAC ستيريو بتردد 48 كيلوهرتز، والحجم قرابة 30 ميجا.
 
 ## المقاطع
 
@@ -34,9 +34,11 @@ node capture.cjs frames range 0 1080
 # 2) الصوت
 python3 audio.py score.wav
 # 3) التركيب
+# (تمريرتين بمعدل 5 ميجابت عشان الحجم يكون قرابة 30 ميجا، لأن الحبيبات تكبّر الملف كثير)
+ffmpeg -framerate 24 -i frames/%05d.jpg -c:v libx264 -preset slow -b:v 5M -pass 1 -pix_fmt yuv420p -an -f null /dev/null
 ffmpeg -framerate 24 -i frames/%05d.jpg -i score.wav \
-  -c:v libx264 -preset slow -crf 18 -pix_fmt yuv420p -profile:v high -movflags +faststart \
-  -c:a aac -b:a 256k -shortest dist/USERS-X-Trailer-1080p.mp4
+  -c:v libx264 -preset slow -b:v 5M -maxrate 8M -bufsize 10M -pass 2 -pix_fmt yuv420p -profile:v high \
+  -movflags +faststart -c:a aac -b:a 192k -shortest dist/USERS-X-Trailer-1080p.mp4
 ```
 
 لمعاينة إطارات محددة: `node capture.cjs preview 6.2,16,35.4`.
