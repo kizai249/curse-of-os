@@ -48,7 +48,7 @@ em { font-style: normal; color: var(--magenta); }
 
 /* ---------- stage ---------- */
 .stage { position: relative; overflow: hidden; }
-.scene { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding-block: 28px 220px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.scene { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding-block: 28px calc(var(--host-h, 190px) + 30px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .scene[hidden] { display: none !important; }
 .scene.is-in { animation: scene-in 420ms steps(6); }
 @keyframes scene-in { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
@@ -87,6 +87,7 @@ p { margin: 0; }
 .bubble { pointer-events: auto; flex: 1; min-width: 0; position: relative; background: var(--bone); color: var(--void); border-radius: 14px; padding: 12px 14px 10px; box-shadow: 4px 4px 0 var(--magenta), 7px 7px 0 var(--cyan); margin-bottom: 26px; }
 .bubble::after { content: ""; position: absolute; left: -9px; bottom: 16px; width: 14px; height: 14px; background: var(--bone); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
 .bubble__text { font-weight: 700; font-size: 1rem; line-height: 1.6; min-height: 1.6em; }
+.bubble__text .ghost { color: transparent; }
 .bubble__tools { display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
 .bubble__tools button { min-height: 32px; padding: 2px 10px; border-radius: 8px; border: 1px solid #C9C9D2; background: transparent; color: var(--void); font-size: .8rem; font-weight: 700; }
 .bubble.is-idle .bubble__text { color: #55576B; }
@@ -201,7 +202,8 @@ p { margin: 0; }
   .host__avatar { width: 72px; }
   .bubble { margin-bottom: 14px; }
   .bubble__text { font-size: .92rem; }
-  .scene { padding-bottom: 240px; }
+  .dots { gap: 0; flex-wrap: nowrap; }
+  .dots button { width: 18px; }
   .brand img, .brand b { display: none; }
   .spots { grid-template-columns: repeat(8, 1fr); gap: 4px; }
   .nav .btn span.lbl { display: none; }
@@ -311,6 +313,7 @@ p { margin: 0; }
       layer(2, 2, C.cyan) + layer(2, 1, C.magenta) + layer(2, 0, C.bone) + layer(1, 0, C.void) + layer(0, 0, null) + '</svg>';
   })();
   var avBtn = $('#avatar'); avBtn.innerHTML = NQ;
+  if (window.ResizeObserver) new ResizeObserver(function (en) { document.documentElement.style.setProperty('--host-h', Math.ceil(en[0].contentRect.height) + 'px'); }).observe($('#host'));
   var nq = $('svg', avBtn);
   var Av = {
     set: function (a, v) { nq.setAttribute('data-' + a, v); },
@@ -388,16 +391,18 @@ p { margin: 0; }
       this.stop(); this.label();
       if (this.effective() !== 'off') { sfxReady(); this.say(['تمام، هذا صوتي الحين. لا تعليقات لو سمحت.']); }
     },
-    stop: function () { this.token++; if ('speechSynthesis' in window) speechSynthesis.cancel(); if (this.audio) { this.audio.pause(); this.audio = null; } Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); },
-    // say(lines): captions always; voice by mode. Resolves when all lines finish (or are skipped).
+    stop: function () { this.token++; this.cut(); Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); },
+    // stop whatever is sounding right now (recorded clip or device voice)
+    cut: function () {
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      if (this.src) { try { this.src.onended = null; this.src.stop(); } catch (e) {} this.src = null; }
+    },
     say: function (lines, done) {
       var self = this, my = ++this.token, i = 0;
-      if ('speechSynthesis' in window) speechSynthesis.cancel();
-      if (this.audio) { this.audio.pause(); this.audio = null; }
+      this.cut();
       this.current = lines;
-      lines.forEach(function (t) { if (CLIP[t]) { var a = new Audio(); a.preload = 'auto'; a.src = CLIP[t]; } }); // warm the cache
-      var bubble = $('#bubble'), out = $('#bubbleText');
-      bubble.classList.remove('is-idle');
+      if (this.effective() === 'real' && ctx) lines.forEach(function (t) { if (CLIP[t]) loadClip(CLIP[t]); }); // decode ahead, once
+      $('#bubble').classList.remove('is-idle');
       function next() {
         if (my !== self.token) return;
         if (i >= lines.length) { Av.set('mouth', 'closed'); nq.classList.remove('is-talking'); if (done) done(); return; }
@@ -409,73 +414,84 @@ p { margin: 0; }
       next();
     },
     line: function (text, my, finish) {
-      var self = this, out = $('#bubbleText'), mode = this.effective(text), chars = 0, ended = false, flap = null, type = null, raf = null;
+      var self = this, out = $('#bubbleText'), mode = this.effective(text), ended = false, flap = null, type = null, raf = null, guard = null;
       nq.classList.add('is-talking');
+      function show(n) { // full line is always laid out; the unread part stays invisible, so the bubble never jumps
+        out.innerHTML = '';
+        out.appendChild(document.createTextNode(text.slice(0, n)));
+        var rest = document.createElement('span'); rest.className = 'ghost'; rest.textContent = text.slice(n); out.appendChild(rest);
+      }
       function end() {
         if (ended) return; ended = true;
-        clearInterval(flap); clearInterval(type); cancelAnimationFrame(raf); out.textContent = text;
-        if (self.audio && mode === 'real') { self.audio.pause(); self.audio = null; }
-        Av.set('mouth', 'closed'); finish();
+        clearInterval(flap); clearInterval(type); clearTimeout(guard); cancelAnimationFrame(raf);
+        if (mode === 'real') self.cut();
+        out.textContent = text; Av.set('mouth', 'closed'); nq.style.setProperty('--ey', 0); finish();
       }
-      this.skipCurrent = function () { if ('speechSynthesis' in window) speechSynthesis.cancel(); end(); };
+      this.skipCurrent = function () { self.cut(); end(); };
       function typeOver(ms) {
         if (reduced) { out.textContent = text; return; }
-        out.textContent = ''; var step = Math.max(16, ms / text.length);
-        type = setInterval(function () { chars += 1; out.textContent = text.slice(0, chars); if (chars >= text.length) clearInterval(type); }, step);
+        var n = 0, step = Math.max(16, ms / text.length); show(0);
+        clearInterval(type);
+        type = setInterval(function () { n++; show(n); if (n >= text.length) clearInterval(type); }, step);
       }
-      var readMs = Math.max(1500, text.length * 62);
-      if (mode === 'real') {
-        var a = new Audio(CLIP[text]); self.audio = a;
-        var analyser = null, buf = null, silent = 0;
-        if (sfxReady() && ctx.createMediaElementSource) {
-          try { var src = ctx.createMediaElementSource(a); analyser = ctx.createAnalyser(); analyser.fftSize = 512; src.connect(analyser); analyser.connect(ctx.destination); buf = new Uint8Array(analyser.fftSize); } catch (e) { analyser = null; }
-        }
-        function lip() { // mouth follows the real loudness of the voice
-          raf = requestAnimationFrame(lip);
-          if (my !== self.token) return end();
-          if (!analyser) return;
-          analyser.getByteTimeDomainData(buf); var sum = 0;
-          for (var q = 0; q < buf.length; q++) { var v = (buf[q] - 128) / 128; sum += v * v; }
-          var rms = Math.sqrt(sum / buf.length);
-          // if the browser hides the audio data (some file:// or data: setups), fall back to a timed flap
-          if (rms < .002 && !a.paused && a.currentTime > .4) { if (++silent > 45) { analyser = null; flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120); } }
-          else silent = 0;
-          Av.set('mouth', rms > .045 ? 'open' : 'closed');
-          nq.style.setProperty('--ey', rms > .16 ? -1 : 0);
-        }
-        a.addEventListener('loadedmetadata', function () { typeOver(a.duration * 1000 * .92); });
-        a.addEventListener('ended', end); a.addEventListener('error', function () { mode = 'babble'; flapAndWait(); });
-        if (!analyser) flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
-        var played = a.play(); if (played && played.then) played.then(function () { UXP.clips = (UXP.clips || 0) + 1; }, function () { flapAndWait(); });
-        lip();
-        setTimeout(end, 30000);
-        return;
-      }
-      function flapAndWait() {
-        if (ended) return;
-        typeOver(readMs * .8);
+      function startFlap() {
         clearInterval(flap);
         flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
-        setTimeout(end, readMs);
       }
-      if (mode !== 'tts' && mode !== 'babble') return flapAndWait();
+      var readMs = Math.max(1500, text.length * 62);
+      function silentRead() { if (ended) return; typeOver(readMs * .8); startFlap(); guard = setTimeout(end, readMs); }
+      if (mode === 'real') {
+        if (!sfxReady()) return silentRead();
+        show(0);
+        loadClip(CLIP[text]).then(function (buffer) {
+          if (ended || my !== self.token) return;
+          var src = ctx.createBufferSource(), an = ctx.createAnalyser(), data;
+          src.buffer = buffer; an.fftSize = 512; data = new Uint8Array(an.fftSize);
+          src.connect(an); an.connect(ctx.destination);
+          src.onended = end; self.src = src;
+          src.start();
+          UXP.clips = (UXP.clips || 0) + 1;
+          typeOver(buffer.duration * 1000 * .92);
+          guard = setTimeout(end, buffer.duration * 1000 + 1500);
+          (function lip() { // the mouth follows the real loudness of the voice
+            raf = requestAnimationFrame(lip);
+            if (my !== self.token) return end();
+            an.getByteTimeDomainData(data); var sum = 0;
+            for (var q = 0; q < data.length; q++) { var v = (data[q] - 128) / 128; sum += v * v; }
+            var rms = Math.sqrt(sum / data.length);
+            Av.set('mouth', rms > .045 ? 'open' : 'closed');
+            nq.style.setProperty('--ey', rms > .16 ? -1 : 0);
+          })();
+        }, function () { mode = 'babble'; silentRead(); });
+        return;
+      }
+      if (mode !== 'tts' && mode !== 'babble') return silentRead();
       typeOver(readMs * .8);
-      flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120);
+      startFlap();
       if (mode === 'tts') {
         var u = new SpeechSynthesisUtterance(text);
         u.voice = this.ar; u.lang = this.ar.lang; u.rate = 1.04; u.pitch = 1.35;
         u.onend = end; u.onerror = end;
         speechSynthesis.speak(u);
-        setTimeout(end, text.length * 140 + 3500); // some engines never fire onend
+        guard = setTimeout(end, text.length * 140 + 3500); // some engines never fire onend
       } else {
-        if (mode === 'babble' && sfxReady()) {
+        if (sfxReady()) {
           var syll = Math.ceil(text.replace(/\s+/g, '').length / 2.2);
           for (var k = 0; k < syll; k++) tone(520 + ((k * 137) % 9) * 38, .045, 'square', .035, k * (readMs / 1000 / syll));
         }
-        setTimeout(end, readMs);
+        guard = setTimeout(end, readMs);
       }
     }
   };
+  // Clips are decoded once into the shared AudioContext (unlocked by the first click),
+  // which plays reliably on phones and lets the mouth read the real waveform.
+  var clipCache = {};
+  function loadClip(url) {
+    if (!clipCache[url]) clipCache[url] = fetch(url).then(function (r) { return r.arrayBuffer(); })
+      .then(function (ab) { return new Promise(function (res, rej) { ctx.decodeAudioData(ab, res, rej); }); })
+      .catch(function (e) { delete clipCache[url]; throw e; });
+    return clipCache[url];
+  }
   function say(lines, done) { Voice.say(lines, done); }
 
   /* ===== Scenes ===== */
