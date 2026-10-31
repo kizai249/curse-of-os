@@ -426,7 +426,7 @@ p { margin: 0; }
       var readMs = Math.max(1500, text.length * 62);
       if (mode === 'real') {
         var a = new Audio(CLIP[text]); self.audio = a;
-        var analyser = null, buf = null;
+        var analyser = null, buf = null, silent = 0;
         if (sfxReady() && ctx.createMediaElementSource) {
           try { var src = ctx.createMediaElementSource(a); analyser = ctx.createAnalyser(); analyser.fftSize = 512; src.connect(analyser); analyser.connect(ctx.destination); buf = new Uint8Array(analyser.fftSize); } catch (e) { analyser = null; }
         }
@@ -437,6 +437,9 @@ p { margin: 0; }
           analyser.getByteTimeDomainData(buf); var sum = 0;
           for (var q = 0; q < buf.length; q++) { var v = (buf[q] - 128) / 128; sum += v * v; }
           var rms = Math.sqrt(sum / buf.length);
+          // if the browser hides the audio data (some file:// or data: setups), fall back to a timed flap
+          if (rms < .002 && !a.paused && a.currentTime > .4) { if (++silent > 45) { analyser = null; flap = setInterval(function () { if (my !== self.token) return end(); Av.set('mouth', nq.getAttribute('data-mouth') === 'open' ? 'closed' : 'open'); }, 120); } }
+          else silent = 0;
           Av.set('mouth', rms > .045 ? 'open' : 'closed');
           nq.style.setProperty('--ey', rms > .16 ? -1 : 0);
         }

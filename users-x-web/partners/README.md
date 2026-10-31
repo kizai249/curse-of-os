@@ -26,3 +26,9 @@
 
 ## الاختبار
 `node users-x-web/partners/tests/e2e.cjs users-x-web/partners <مجلد اللقطات>` — يمر على كل المشاهد والألعاب على الكمبيوتر والجوال.
+
+## ملف واحد للإرسال
+`dist/USERS-X-Partners.html` — العرض كامل في ملف واحد (حوالي 5.5 ميجا): الخطوط والصور والـ51 مقطع صوت كلها داخله، ويشتغل بدون إنترنت.
+يتولّد من المصدر بـ:
+`python3 users-x-web/partners/tools/build_single.py <مجلد العرض المنشور مع assets> users-x-web/assets/fonts users-x-web/partners/dist/USERS-X-Partners.html`
+واختباره أوفلاين: `node users-x-web/partners/tests/single.cjs <مسار الملف> <مجلد اللقطات>`
