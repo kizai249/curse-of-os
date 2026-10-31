@@ -141,7 +141,7 @@ function setPool(fn) {
 
 // ---------- 2D overlay ----------
 const ov = document.getElementById('ov'); const g2 = ov.getContext('2d');
-const loadImg = s => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = s; });
+const loadImg = s => new Promise((r, j) => { const i = new Image(); i.onload = () => r(i); i.onerror = () => j(new Error('image failed: ' + s)); i.src = s; });
 let IMG = {};
 const WORLDS = [
   { img: 'curse-of-os-world.jpg', name: 'لعنة أوس', font: '400 150px Blaka', tag: 'HORROR · HYBRID', accent: '#A3121F', fg: '#E9DFCF' },

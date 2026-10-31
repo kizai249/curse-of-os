@@ -23,3 +23,7 @@ ui-debug.log
 *.mobileprovision
 unity/FootballQuest/fastlane/report.xml
 unity/FootballQuest/fastlane/README.md
+
+# سجلات أدوات محلية
+.cto-toolkit/
+.harnesskit/
