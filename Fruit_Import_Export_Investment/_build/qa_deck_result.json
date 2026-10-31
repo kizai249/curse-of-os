@@ -1,0 +1,40 @@
+{
+ "errors": [],
+ "checks": {
+  "slides": 22,
+  "keyboardNext": "3 / 22",
+  "keyboardPrev": "2 / 22",
+  "end": "22 / 22",
+  "btnPrev": "21 / 22",
+  "gridOpen": true,
+  "gridJump": "13 / 22",
+  "panelRecompute": {
+   "before": 2573178,
+   "after": 653351,
+   "changed": true,
+   "panelShowsNew": true
+  },
+  "panelMatchesEngine": true,
+  "fundingWarningShown": true,
+  "scenario_conservative": -697859,
+  "scenario_optimistic": 6188731,
+  "scenario_base": 2573178,
+  "resp_laptop": {
+   "reader": false,
+   "horizontalScroll": false
+  },
+  "resp_fullhd": {
+   "reader": false,
+   "horizontalScroll": false
+  },
+  "resp_tablet": {
+   "reader": false,
+   "horizontalScroll": false
+  },
+  "resp_phone": {
+   "reader": true,
+   "horizontalScroll": false
+  },
+  "pdfBytes": 2020044
+ }
+}

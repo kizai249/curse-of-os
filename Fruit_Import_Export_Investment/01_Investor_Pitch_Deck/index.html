@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fresh Fruit Import — Investor Deck</title>
+<meta name="description" content="Interactive investor pitch deck: Egyptian bananas imported to Jeddah. All figures computed live by one financial engine.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<div class="ui top">
+  <div class="pill" id="scenarioPill" role="group" aria-label="Scenario">
+    <button data-scn="conservative">متحفظ</button><button data-scn="base" class="on">أساسي</button><button data-scn="optimistic">متفائل</button>
+  </div>
+  <div class="pill nav">
+    <button id="btnPanel" title="لوحة التحكم المالية (P)">⚙ لوحة التحكم</button>
+    <button id="btnGrid" title="كل الشرائح (G)">▦</button>
+    <button id="btnFull" title="ملء الشاشة (F)">⛶</button>
+    <button id="btnPrint" title="طباعة / PDF">⎙</button>
+    <button id="btnHelp" title="اختصارات">?</button>
+  </div>
+</div>
+<div class="ui bottom">
+  <div class="pill"><button id="btnPrev" aria-label="السابق">→</button><span class="counter" id="counter">1 / 22</span><button id="btnNext" aria-label="التالي">←</button></div>
+</div>
+<div class="help" id="help">
+  <div><kbd>←</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd> التالي · <kbd>→</kbd> <kbd>PgUp</kbd> السابق</div>
+  <div><kbd>Home</kbd>/<kbd>End</kbd> الأولى/الأخيرة · <kbd>F</kbd> ملء الشاشة · <kbd>P</kbd> لوحة التحكم · <kbd>G</kbd> فهرس · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> السيناريو</div>
+</div>
+<div class="overview" id="overview"></div>
+
+<!-- ================= CONTROL PANEL ================= -->
+<aside class="panel" id="panel" aria-label="Financial control panel">
+  <header>
+    <button class="x" id="panelClose" aria-label="إغلاق">✕</button>
+    <h3>لوحة التحكم المالية</h3>
+    <p>كل تعديل يعيد حساب النموذج كاملاً (60 شهراً) من نفس المحرك المالي وتتحدث جميع الشرائح والرسوم فوراً.</p>
+  </header>
+  <div class="live">
+    <div><span>إيرادات 5 سنوات</span><b data-k="m.totalRevenue5y" data-f="m"></b></div>
+    <div><span>صافي ربح 5 سنوات</span><b data-k="m.totalNI5y" data-f="m"></b></div>
+    <div><span>IRR (قيمة دفترية)</span><b data-k="m.irrBook" data-f="pct"></b></div>
+    <div><span>العائد على الاستثمار ROI</span><b data-k="m.roi5y" data-f="pct0"></b></div>
+    <div><span>أدنى رصيد نقدي</span><b data-k="m.minCash" data-f="k"></b></div>
+    <div><span>استرداد نقدي (شهر)</span><b data-k="m.cashPaybackMonth" data-f="mo"></b></div>
+    <div><span>تعادل (حاوية/شهر)</span><b data-k="m.breakEvenContainersY1" data-f="n1"></b></div>
+    <div><span>رأس المال المطلوب</span><b data-k="m.requiredCapital" data-f="k"></b></div>
+  </div>
+  <div class="warn" id="warn"></div>
+  <div class="ctrls" id="ctrls"></div>
+  <div class="actions"><button id="reset">إعادة الضبط</button><button class="pr" id="panelDone">تم</button></div>
+</aside>
+
+<main class="deck"><div class="stage" id="stage">
+
+<!-- 1 COVER -->
+<section class="slide dark cover" data-title="الغلاف">
+  <div class="brand"><span class="dot"></span>FRESH FRUIT TRADING · INVESTOR PRESENTATION</div>
+  <svg class="art" viewBox="0 0 640 640" aria-hidden="true">
+    <defs>
+      <linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3D27A"/><stop offset="1" stop-color="#C59A3E"/></linearGradient>
+      <linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E3C27A" stop-opacity="0"/><stop offset=".5" stop-color="#E3C27A"/><stop offset="1" stop-color="#E3C27A" stop-opacity="0"/></linearGradient>
+    </defs>
+    <g opacity=".22" stroke="#E3C27A" fill="none">
+      <circle cx="320" cy="320" r="300"/><circle cx="320" cy="320" r="230"/><circle cx="320" cy="320" r="160"/>
+      <path d="M20 320h600M320 20v600"/>
+    </g>
+    <g class="orbit">
+      <path d="M120 470 C 220 300, 420 250, 520 150" stroke="url(#gl)" stroke-width="2" fill="none" stroke-dasharray="6 8"/>
+      <circle cx="120" cy="470" r="9" fill="#2E9E74"/><circle cx="520" cy="150" r="9" fill="#C59A3E"/>
+      <text x="96" y="505" fill="#CFE7DA" font-size="16" font-family="Plex Arabic">مصر</text>
+      <text x="500" y="128" fill="#E3C27A" font-size="16" font-family="Plex Arabic">جدة</text>
+    </g>
+    <g transform="translate(250 230) rotate(-18)">
+      <path d="M10 150 C 40 40, 160 -10, 250 20 C 170 30, 80 90, 40 170 Z" fill="url(#gb)"/>
+      <path d="M30 175 C 70 70, 190 30, 270 70 C 190 70, 100 120, 60 195 Z" fill="url(#gb)" opacity=".85"/>
+      <path d="M58 200 C 110 110, 220 90, 285 125 C 205 120, 125 155, 85 220 Z" fill="url(#gb)" opacity=".7"/>
+      <rect x="240" y="8" width="30" height="16" rx="4" fill="#7A5A1E" transform="rotate(20 255 16)"/>
+    </g>
+  </svg>
+  <div style="max-width:880px; margin-top:80px">
+    <div class="kicker">Fresh Fruit Import · Egypt → Jeddah</div>
+    <h1>استيراد الموز المصري<br><span>إلى سوق جدة</span></h1>
+    <p class="lead" style="margin-top:20px">فرصة تجارية قصيرة الدورة مبنية على بيانات تكلفة فعلية لشحنة واحدة، ومحوّلة إلى نموذج مالي متكامل لمدة 5 سنوات بثلاثة سيناريوهات.</p>
+  </div>
+  <div class="meta">
+    <div class="kpi"><div class="l">رأس المال المطلوب</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div></div>
+    <div class="kpi"><div class="l">IRR للمساهمين (أساسي)</div><div class="v"><span class="count" data-k="m.irrBook" data-f="pct"></span></div></div>
+    <div class="kpi"><div class="l">استرداد رأس المال نقدياً</div><div class="v"><span data-k="m.cashPaybackMonth" data-f="mo"></span><small>شهر</small></div></div>
+    <div class="small" style="align-self:flex-end; max-width:300px">مسودة للنقاش — أكتوبر 2026 · سرّي<br>الأرقام توقعات وليست عوائد مضمونة</div>
+  </div>
+</section>
+
+<!-- 2 EXECUTIVE SUMMARY -->
+<section class="slide" data-title="الملخص التنفيذي">
+  <div class="head"><div><div class="kicker"><span class="idx">02</span>Executive Summary</div><h2>الملخص التنفيذي</h2><div class="rule"></div></div>
+    <span class="badge-live">محسوب مباشرة من المحرك المالي · <span data-k="scnLabel"></span></span></div>
+  <div class="body g-64">
+    <div class="col">
+      <div class="kpis g4" style="display:grid">
+        <div class="kpi"><div class="l">رأس المال</div><div class="v"><span class="count" data-k="m.capital" data-f="k"></span></div><div class="s">ثابت + عامل + احتياطي</div></div>
+        <div class="kpi"><div class="l">إيرادات السنة 2</div><div class="v"><span class="count" data-k="y.1.revenue" data-f="m"></span></div><div class="s"><span data-k="y.1.shipments" data-f="n0"></span> شحنة</div></div>
+        <div class="kpi"><div class="l">صافي ربح 5 سنوات</div><div class="v"><span class="count" data-k="m.totalNI5y" data-f="m"></span></div><div class="s">بعد الزكاة</div></div>
+        <div class="kpi"><div class="l">IRR</div><div class="v"><span class="count" data-k="m.irrBook" data-f="pct"></span></div><div class="s">تخارج بالقيمة الدفترية</div></div>
+      </div>
+      <div class="card">
+        <ul class="ticks">
+          <li><b>النشاط:</b> شراء الموز من مزارع مصر، تعبئته في كراتين (1,700 كرتون/شحنة)، شحنه مبرّداً إلى جدة، إنضاجه وبيعه لتجار الجملة والأسواق المركزية والتجزئة.</li>
+          <li><b>الميزة الاقتصادية:</b> دورة نقدية قصيرة ≈ <b class="num" data-k="m.ccc" data-f="n0"></b> يوماً ⇐ رأس المال يدور ≈ <b class="num" data-k="m.cyclesPerYear" data-f="n1"></b> مرات سنوياً.</li>
+          <li><b>تصحيح جوهري:</b> «صافي الربح» في الصورة (34,042 ر.س/شحنة) هو ربح قبل المصاريف الثابتة والتلف والتخزين والعمولة. بعد إضافتها تصبح مساهمة الشحنة <b class="num" data-k="u.contribution" data-f="sar"></b> ر.س.</li>
+          <li><b>نقطة التعادل:</b> <b class="num" data-k="m.breakEvenContainersY1" data-f="n1"></b> شحنة شهرياً لتغطية المصاريف الثابتة · أول شهر EBITDA موجب: الشهر <b class="num" data-k="m.ebitdaBreakEvenMonth" data-f="mo"></b>.</li>
+          <li><b>أكبر المخاطر:</b> سعر البيع والتلف وانتظام توريد الموز المصري؛ السيناريو المتحفظ يحقق خسارة — ولذلك نقترح ضوابط إيقاف خسارة واضحة.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card fill"><h3>الإيرادات وصافي الربح (5 سنوات)</h3><div class="chart"><canvas id="c-exec"></canvas></div></div>
+  </div>
+  <div class="foot"><span class="src">المصدر: صورة بيانات التكلفة (شحنة واحدة) + افتراضات معلنة في سجل الافتراضات. جميع المبالغ بالريال السعودي بدون ضريبة القيمة المضافة.</span><span>02</span></div>
+</section>
+
+<!-- 3 INVESTMENT OPPORTUNITY -->
+<section class="slide dark" data-title="الفرصة الاستثمارية">
+  <div class="head"><div><div class="kicker"><span class="idx">03</span>Investment Opportunity</div><h2>الفرصة الاستثمارية</h2><div class="rule"></div></div>
+    <p class="lead">تمويل رأس مال عامل لتجارة سلعة سريعة الدوران، مع احتياطي نقدي يحمي استمرارية العمليات.</p></div>
+  <div class="body g3">
+    <div class="col">
+      <div class="kpi"><div class="l">إجمالي الاستثمار المطلوب</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div><div class="s">أدنى رأس مال يُبقي النقد فوق الاحتياطي في كل شهر</div></div>
+      <div class="kpi"><div class="l">الحد الأدنى للتذكرة الاستثمارية</div><div class="v"><small>ر.س</small><span data-k="inv.minimumTicket" data-f="sar"></span></div><div class="s">حتى 8 مستثمرين كحد أقصى</div></div>
+      <div class="kpi"><div class="l">صافي القيمة الحالية @ <span data-k="p.finance.discountRate" data-f="pct0"></span></div><div class="v"><small>ر.س</small><span class="count" data-k="m.npvBook" data-f="sar"></span></div></div>
+    </div>
+    <div class="card fill"><h3>استخدامات الأموال</h3><div class="chart"><canvas id="c-uses-d"></canvas></div></div>
+    <div class="col">
+      <div class="card"><h3>ماذا يحصل المستثمر؟</h3>
+        <ul class="ticks sm">
+          <li>خياران: <b>حصة ملكية</b> أو <b>مشاركة في الأرباح</b> مع استرداد رأس المال عند التخارج.</li>
+          <li>توزيع <b data-k="p.finance.payoutRatio" data-f="pct0"></b> من صافي ربح السنة السابقة بشرط بقاء الاحتياطي.</li>
+          <li>تقارير شهرية: شحنات، تلف، تحصيل، نقد.</li>
+          <li>لا عائد مضمون — العوائد تتبع الأداء الفعلي.</li>
+        </ul></div>
+      <div class="card"><h3>نسبة الملكية المطلوبة لتحقيق IRR <span data-k="inv.targetIRR" data-f="pct0"></span></h3>
+        <div class="v num" style="font-size:40px;font-weight:700;color:var(--gold-2)"><span data-k="inv.equityShareForTarget" data-f="pct0"></span></div>
+        <div class="small">محسوبة من التدفقات الموزعة + القيمة الدفترية في السنة 5 (سيناريو حالي).</div></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">الحد الأدنى للتذكرة = رأس المال ÷ 8 مقرّباً. معدل الخصم افتراض لمخاطر المنشآت الصغيرة في السعودية.</span><span>03</span></div>
+</section>
+
+<!-- 4 BUSINESS OVERVIEW -->
+<section class="slide beige" data-title="نظرة عامة">
+  <div class="head"><div><div class="kicker"><span class="idx">04</span>Business Overview</div><h2>نظرة عامة على المشروع</h2><div class="rule"></div></div>
+    <p class="lead">شركة سعودية للتجارة في الفواكه الطازجة، تبدأ بمنتج واحد ومسار واحد مُثبت التكلفة، ثم تتوسع بعد التحقق من السوق.</p></div>
+  <div class="body g3">
+    <div class="card"><h3>المنتج</h3><p>موز مصري (أصناف كافندش الشائعة) في كراتين ≈ <b class="num" data-k="p.unitKg" data-f="n1"></b> كجم، يصل أخضر ويُنضج في جدة قبل البيع.</p>
+      <div class="kpi" style="margin-top:14px"><div class="l">لكل شحنة</div><div class="v"><span data-k="p.shipment.cartonsPerContainer" data-f="sar"></span><small>كرتون</small></div><div class="s"><span data-k="p.shipment.tonsPerContainer" data-f="n0"></span> طن (حسب الصورة — يحتاج تحقق من حمولة البراد)</div></div></div>
+    <div class="card"><h3>المسار</h3><p>مزارع ومحطات تعبئة في مصر ← نقل مبرّد (بحري/بري-عبّارة) ← ميناء جدة ← غرف إنضاج ← سوق الجملة والتجزئة.</p>
+      <div class="kpi" style="margin-top:14px"><div class="l">من الشراء حتى البيع</div><div class="v"><span data-k="m.inventoryDays" data-f="n0"></span><small>يوم</small></div><div class="s">شامل الإنضاج والبيع</div></div></div>
+    <div class="card"><h3>العملاء المستهدفون</h3>
+      <ul class="ticks sm"><li>تجار الجملة في السوق المركزي بجدة (نقدي/قصير الأجل)</li><li>سلاسل التجزئة والهايبر ماركت (آجل 30–60 يوم)</li><li>الفنادق والمطاعم والتموين (HORECA)</li><li>موزعو المدن القريبة (مكة، الطائف)</li></ul>
+      <p class="small" style="margin-top:10px">لا توجد خطابات نوايا من عملاء حتى الآن — أولوية قبل الإغلاق.</p></div>
+  </div>
+  <div class="foot"><span class="src">الفريق المقترح (ضمن المصاريف): مدير عام، مدير عمليات ولوجستيات، مندوب مبيعات، محاسب، منسق توريد في مصر.</span><span>04</span></div>
+</section>
+
+<!-- 5 BUSINESS MODEL -->
+<section class="slide" data-title="نموذج العمل">
+  <div class="head"><div><div class="kicker"><span class="idx">05</span>Business Model</div><h2>نموذج العمل: هامش لكل كرتون × عدد الدورات</h2><div class="rule"></div></div>
+    <p class="lead">نربح من الفرق بين سعر البيع في جدة والتكلفة واصلة، ونضاعف الربح بتدوير نفس رأس المال عدة مرات في السنة.</p></div>
+  <div class="body g-64">
+    <div class="card fill"><h3>اقتصاديات الكرتون الواحد (ر.س)</h3><div class="chart"><canvas id="c-waterfall"></canvas></div></div>
+    <div class="col">
+      <div class="kpis g2" style="display:grid">
+        <div class="kpi"><div class="l">سعر البيع/كرتون</div><div class="v"><span data-k="u.price" data-f="n2"></span></div></div>
+        <div class="kpi"><div class="l">تكلفة الكرتون المباع</div><div class="v"><span data-k="u.landedPerSoldCarton" data-f="n2"></span></div></div>
+        <div class="kpi"><div class="l">هامش الربح الإجمالي</div><div class="v"><span data-k="u.grossMargin" data-f="pct"></span></div></div>
+        <div class="kpi"><div class="l">مساهمة الشحنة</div><div class="v"><span data-k="u.contribution" data-f="k"></span></div></div>
+      </div>
+      <div class="card"><h3>مصادر الإيراد</h3><ul class="ticks sm"><li>بيع الموز المُنضج بالكرتون (المصدر الوحيد في النموذج).</li><li>فرص لاحقة غير مُدرجة: خدمات إنضاج للغير، منتجات موسمية أخرى من مصر.</li></ul></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">التكلفة تشمل تكاليف الصورة + تكاليف ناقصة أضفناها: إنضاج وتخزين، نقل داخلي، تأمين، تلف <span data-k="u.spoilage" data-f="pct0"></span>.</span><span>05</span></div>
+</section>
+
+<!-- 6 MARKET OPPORTUNITY -->
+<section class="slide beige" data-title="فرصة السوق">
+  <div class="head"><div><div class="kicker"><span class="idx">06</span>Market Opportunity</div><h2>فرصة السوق</h2><div class="rule"></div></div>
+    <p class="lead">سوق موز سعودي يعتمد كلياً تقريباً على الاستيراد، وحجم خطتنا جزء صغير جداً منه — التحدي هو الوصول للمشترين لا حجم السوق.</p></div>
+  <div class="body g3">
+    <div class="col">
+      <div class="kpi"><div class="l">واردات السعودية من الموز 2024 (قيمة)</div><div class="v">307<small>مليون $</small></div><div class="s">+18.6% مقارنة بـ 2023 (مصدر ثانوي — يحتاج تأكيد من UN Comtrade)</div></div>
+      <div class="kpi"><div class="l">إيرادات السنة 5 كنسبة من الواردات</div><div class="v"><span data-k="d.marketShareY5" data-f="pct2"></span></div><div class="s">حصة صغيرة جداً = مخاطر طلب محدودة</div></div>
+    </div>
+    <div class="card"><h3>محركات الطلب</h3><ul class="ticks sm">
+      <li>نمو السكان والوافدين وارتفاع استهلاك الفواكه الطازجة.</li>
+      <li>المواسم: رمضان والحج والعمرة ترفع الطلب في جدة ومكة.</li>
+      <li>حساسية سعرية في شريحة الجملة ⇐ مساحة للموز المصري الأقل سعراً من العلامات الفاخرة.</li>
+      <li>قرب مصر الجغرافي ⇐ دورة أقصر من الإكوادور والفلبين.</li></ul></div>
+    <div class="card"><h3>ما لا نعرفه بعد (يجب التحقق)</h3><ul class="ticks sm">
+      <li>الحجم بالطن ونصيب مصر من واردات الموز السعودية.</li>
+      <li>أسعار الجملة الفعلية للموز المصري في جدة على مدار السنة.</li>
+      <li>تقويم حصاد الموز المصري بالشهر.</li>
+      <li>متطلبات الهيئة والوزارة الحالية لكل شحنة.</li></ul>
+      <p class="small" style="margin-top:8px">لم نخترع أرقام سوق — هذه فجوات معلنة.</p></div>
+  </div>
+  <div class="foot"><span class="src">المصادر: worldstopexports.com (Bananas imports by country, 2024)؛ oec.world (2023: 232 مليون $)؛ trendeconomy (HS 0803). التعريفات تختلف بين المصادر.</span><span>06</span></div>
+</section>
+
+<!-- 7 TARGET MARKETS -->
+<section class="slide" data-title="الأسواق والدول">
+  <div class="head"><div><div class="kicker"><span class="idx">07</span>Target Markets &amp; Countries</div><h2>الأسواق والدول المستهدفة</h2><div class="rule"></div></div>
+    <p class="lead">اخترنا مصر كبلد منشأ وجدة كسوق أول بناءً على المسافة والإعفاء الجمركي العربي وتوفر بيانات تكلفة فعلية.</p></div>
+  <div class="body g-64">
+    <div class="card"><h3>مقارنة بلدان المنشأ (تقييم نوعي)</h3>
+      <table><thead><tr><th>المعيار</th><th>مصر</th><th>الهند</th><th>الفلبين</th><th>الإكوادور</th></tr></thead><tbody>
+        <tr><td>مدة الشحن إلى جدة</td><td><span class="tag g">أيام</span></td><td><span class="tag a">1–2 أسبوع</span></td><td><span class="tag r">3+ أسابيع</span></td><td><span class="tag r">4+ أسابيع</span></td></tr>
+        <tr><td>الرسوم الجمركية</td><td><span class="tag g">0% (اتفاقية التجارة العربية) *</span></td><td><span class="tag a">تعرفة الخليج</span></td><td><span class="tag a">تعرفة الخليج</span></td><td><span class="tag a">تعرفة الخليج</span></td></tr>
+        <tr><td>الشريحة السعرية</td><td>اقتصادية</td><td>اقتصادية</td><td>متميزة</td><td>متميزة</td></tr>
+        <tr><td>عمر الرف والجودة</td><td><span class="tag a">متوسط</span></td><td><span class="tag a">متوسط</span></td><td><span class="tag g">مرتفع</span></td><td><span class="tag g">مرتفع</span></td></tr>
+        <tr><td>توفر بيانات تكلفة لدينا</td><td><span class="tag g">نعم (الصورة)</span></td><td><span class="tag r">لا</span></td><td><span class="tag r">لا</span></td><td><span class="tag r">لا</span></td></tr>
+        <tr><td>الموسمية</td><td><span class="tag a">انخفاض صيفي (افتراض)</span></td><td>على مدار السنة</td><td>على مدار السنة</td><td>على مدار السنة</td></tr>
+      </tbody></table>
+      <p class="small" style="margin-top:10px">* تتطلب شهادة منشأ عربية معتمدة — يُؤكد مع مخلّص جمركي مرخّص.</p></div>
+    <div class="col">
+      <div class="card"><h3>أسواق البيع بالترتيب</h3><ul class="ticks sm">
+        <li><b>المرحلة 1 — جدة:</b> السوق المركزي + التجزئة (أقرب ميناء).</li>
+        <li><b>المرحلة 2 — مكة والطائف:</b> نفس مركز التوزيع.</li>
+        <li><b>المرحلة 3 — الرياض والشرقية:</b> بعد إثبات الهامش ووجود غرف إنضاج.</li></ul></div>
+      <div class="card"><h3>بلد منشأ بديل للصيف</h3><p class="small">لتغطية انخفاض توريد الموز المصري صيفاً يمكن دراسة الهند كمصدر تكميلي — غير مُدرج في الأرقام حتى الحصول على عروض أسعار.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">التقييم نوعي وليس رقمياً. مدد الشحن تقريبية حسب المسافة البحرية.</span><span>07</span></div>
+</section>
+
+<!-- 8 SEASONAL -->
+<section class="slide beige" data-title="المحفظة والموسمية">
+  <div class="head"><div><div class="kicker"><span class="idx">08</span>Fruit Portfolio &amp; Seasonal Strategy</div><h2>محفظة الفواكه وتقويم المواسم</h2><div class="rule"></div></div>
+    <p class="lead">لا نفترض توفر الموز بنفس الكمية طوال العام: النموذج يطبق مؤشراً موسمياً يخفض الشحنات صيفاً.</p></div>
+  <div class="body" style="grid-template-rows:auto 1fr">
+    <div class="card"><div class="heat" id="heat"></div>
+      <div class="small" style="margin-top:12px;display:flex;gap:24px;flex-wrap:wrap"><span><span class="tag g">أخضر</span> الموز — داخل النموذج المالي (رقم = مؤشر الكمية)</span><span><span class="tag a">ذهبي</span> فواكه مستقبلية — خارج النموذج حتى الحصول على عروض أسعار</span></div></div>
+    <div class="body g3" style="gap:20px">
+      <div class="card"><h3>الشراء</h3><p class="small">تكثيف الشحنات من أكتوبر إلى مارس، وخفضها 40–50% في يونيو–أغسطس حيث تزيد الحرارة من التلف ويقل المعروض (افتراض يُتحقق منه مع المزارعين).</p></div>
+      <div class="card"><h3>البيع</h3><p class="small">رمضان (فبراير–مارس 2027 تقريباً) وموسم العمرة يرفعان الطلب في جدة ومكة؛ لا نرفع السعر في النموذج — أي زيادة موسمية هي فرصة إضافية.</p></div>
+      <div class="card"><h3>التنويع</h3><p class="small">البرتقال المصري يبدأ تصديره عادة في ديسمبر، والمانجو يصل للسعودية من يونيو بذروة يوليو–نوفمبر، والبطيخ مارس–سبتمبر — تغطي الفجوة الصيفية للموز.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">مواسم المانجو والبطيخ والبرتقال: FoodBusinessMEA، FreshPlaza (2025)، AboutMSR. موسمية الموز المصري: افتراض محلل منخفض الثقة.</span><span>08</span></div>
+</section>
+
+<!-- 9 SUPPLY CHAIN -->
+<section class="slide" data-title="سلسلة الإمداد">
+  <div class="head"><div><div class="kicker"><span class="idx">09</span>Supply Chain &amp; Operations</div><h2>سلسلة الإمداد والعمليات</h2><div class="rule"></div></div>
+    <p class="lead">سلسلة تبريد متصلة من محطة التعبئة إلى غرفة الإنضاج. كل يوم تأخير = تلف إضافي وتكلفة تخزين.</p></div>
+  <div class="body" style="grid-template-rows:auto auto 1fr; gap:20px">
+    <div class="chain" id="chain">
+      <div class="step"><span class="d" data-k="p.timing.supplierDays" data-f="d"></span><div class="n">1</div><h4>الشراء</h4><p>عقد مع مزرعة/محطة تعبئة؛ الدفع عند التحميل</p></div>
+      <div class="step"><span class="d" data-k="p.timing.prepDays" data-f="d"></span><div class="n">2</div><h4>التعبئة</h4><p>كراتين، فوم، أكياس، معالجة، تبريد أولي 13–14°م</p></div>
+      <div class="step"><span class="d" data-k="p.timing.transitDays" data-f="d"></span><div class="n">3</div><h4>الشحن</h4><p>براد مبرّد؛ تسجيل حرارة مستمر</p></div>
+      <div class="step"><span class="d" data-k="p.timing.clearanceDays" data-f="d"></span><div class="n">4</div><h4>التخليص</h4><p>فسح نباتي، شهادة منشأ، منصة فسح</p></div>
+      <div class="step"><span class="d" data-k="p.timing.ripeningDays" data-f="d"></span><div class="n">5</div><h4>الإنضاج</h4><p>غرف إيثيلين مؤجرة في جدة</p></div>
+      <div class="step"><span class="d" data-k="p.timing.sellingDays" data-f="d"></span><div class="n">6</div><h4>البيع</h4><p>جملة وتجزئة وفنادق</p></div>
+      <div class="step"><span class="d" data-k="p.timing.customerDays" data-f="d"></span><div class="n">7</div><h4>التحصيل</h4><p>نقدي في السوق، آجل للسلاسل</p></div>
+    </div>
+    <div class="flowline" id="flowline"></div>
+    <div class="body g2" style="gap:20px">
+      <div class="card"><h3>المتطلبات التنظيمية (السعودية)</h3><ul class="ticks sm">
+        <li>سجل تجاري يتضمن نشاط تجارة المواد الغذائية + حساب لدى هيئة الغذاء والدواء.</li>
+        <li>ترخيص استيراد خضار وفواكه من وزارة البيئة والمياه والزراعة.</li>
+        <li>شهادة صحة نباتية، شهادة منشأ، شهادة مطابقة من جهة معتمدة، فاتورة وقائمة تعبئة.</li>
+        <li>التخليص عبر منصة فسح (هيئة الزكاة والضريبة والجمارك) بواسطة مخلّص مرخّص.</li></ul></div>
+      <div class="card"><h3>التخزين والتوزيع</h3><ul class="ticks sm">
+        <li>نموذج «خفيف الأصول»: تأجير غرف إنضاج وتبريد بدل بنائها في البداية.</li>
+        <li>نقل داخلي مبرد بالتعاقد؛ تكلفة <span class="num" data-k="p.shipment.localTransport" data-f="sar"></span> ر.س/شحنة (افتراض).</li>
+        <li>مسجلات حرارة لكل شحنة وتأمين بضاعة <span class="num" data-k="p.shipment.cargoInsuranceRate" data-f="pct1"></span>.</li></ul></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">المتطلبات وفق إرشادات هيئة الغذاء والدواء (Intertek SFDA guidelines) ووزارة البيئة؛ تتغير دورياً ويجب تأكيدها قبل أول شحنة.</span><span>09</span></div>
+</section>
+
+<!-- 10 COMPETITIVE ADVANTAGE -->
+<section class="slide beige" data-title="الميزة التنافسية">
+  <div class="head"><div><div class="kicker"><span class="idx">10</span>Competitive Advantage</div><h2>المنافسة والميزة التنافسية</h2><div class="rule"></div></div>
+    <p class="lead">نتنافس في شريحة السعر الاقتصادي، لا مع العلامات العالمية الفاخرة. ميزتنا مبنية على التكلفة والسرعة — ويجب إثباتها.</p></div>
+  <div class="body g3">
+    <div class="card"><h3>المنافسون</h3><table><thead><tr><th>الفئة</th><th>الموقع</th></tr></thead><tbody>
+      <tr><td>علامات عالمية (موز فلبيني/إكوادوري)</td><td>جودة ثابتة، سعر أعلى</td></tr>
+      <tr><td>مستوردو الموز الهندي</td><td>سعر منخفض، منافس مباشر</td></tr>
+      <tr><td>تجار يستوردون من مصر</td><td>نفس المنتج — المنافسة على السعر والعلاقات</td></tr>
+      <tr><td>سلاسل التجزئة (استيراد مباشر)</td><td>قوة شرائية كبيرة</td></tr></tbody></table></div>
+    <div class="card"><h3>ما نملكه</h3><ul class="ticks sm">
+      <li>تكلفة فعلية مفصلة لشحنة كاملة (من الصورة).</li>
+      <li>مسار قصير: من الشراء للبيع ≈ <span class="num" data-k="m.inventoryDays" data-f="n0"></span> يوماً.</li>
+      <li>إعفاء جمركي عربي محتمل.</li>
+      <li>هيكل خفيف الأصول وتكاليف ثابتة منخفضة.</li></ul></div>
+    <div class="card"><h3>ما يجب بناؤه</h3><ul class="ticks sm">
+      <li>عقد توريد مكتوب مع معايير جودة وغرامات.</li>
+      <li>خطابات نوايا من 3–5 مشترين في جدة.</li>
+      <li>علاقة مع مشغّل غرف إنضاج.</li>
+      <li>سجل أداء أول 3 شحنات (تلف، سعر فعلي، تحصيل).</li></ul></div>
+  </div>
+  <div class="foot"><span class="src">تحليل نوعي؛ لا تتوفر لدينا حصص سوقية موثقة للمنافسين.</span><span>10</span></div>
+</section>
+
+<!-- 11 REVENUE MODEL -->
+<section class="slide" data-title="نموذج الإيرادات">
+  <div class="head"><div><div class="kicker"><span class="idx">11</span>Revenue Model</div><h2>نموذج الإيرادات: الصورة مقابل النموذج</h2><div class="rule"></div></div>
+    <p class="lead">نفس بيانات الشحنة، مع التكاليف الناقصة. هذا هو الفرق بين «ربح الشحنة» و«ربح الشركة».</p></div>
+  <div class="body g-46">
+    <div class="card"><h3>حسب المنتج والمسار (لكل شحنة)</h3>
+      <table class="tight"><thead><tr><th>البند</th><th class="n">الصورة</th><th class="n">النموذج</th></tr></thead><tbody id="ueTable"></tbody></table></div>
+    <div class="col">
+      <div class="card fill" style="flex:1"><h3>مكونات التكلفة واصل (ر.س/شحنة)</h3><div class="chart"><canvas id="c-cost"></canvas></div></div>
+      <div class="card"><table><thead><tr><th>الفاكهة</th><th>المنشأ</th><th>البيع</th><th class="n">إيرادات س1</th><th class="n">إيرادات س5</th><th>الحالة</th></tr></thead><tbody>
+        <tr><td>موز</td><td>مصر</td><td>جدة، السعودية</td><td class="n" data-k="y.0.revenue" data-f="m"></td><td class="n" data-k="y.4.revenue" data-f="m"></td><td><span class="tag g">في النموذج</span></td></tr>
+        <tr><td>برتقال</td><td>مصر</td><td>جدة/الرياض</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">بانتظار عروض أسعار</span></td></tr>
+        <tr><td>مانجو</td><td>مصر</td><td>جدة</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">بانتظار عروض أسعار</span></td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">مكنة الشد (7,000 جنيه) نُقلت من تكلفة الشحنة إلى الأصول الثابتة. سعر الصرف <span data-k="p.shipment.fxEGPperSAR" data-f="n2"></span> جنيه/ريال (الصورة استخدمت 14.90).</span><span>11</span></div>
+</section>
+
+<!-- 12 CAPITAL REQUIREMENTS -->
+<section class="slide beige" data-title="متطلبات رأس المال">
+  <div class="head"><div><div class="kicker"><span class="idx">12</span>Capital Requirements</div><h2>متطلبات رأس المال: المصادر والاستخدامات</h2><div class="rule"></div></div>
+    <p class="lead">رأس المال محسوب من التدفق النقدي الشهري: أدنى مبلغ يمنع النقد من النزول تحت الاحتياطي في أي شهر خلال 5 سنوات.</p></div>
+  <div class="body g-46">
+    <div class="card"><h3>الاستخدامات (ر.س)</h3><table><thead><tr><th>البند</th><th>النوع</th><th class="n">المبلغ</th></tr></thead><tbody id="usesTable"></tbody></table></div>
+    <div class="col">
+      <div class="kpis g3" style="display:grid">
+        <div class="kpi"><div class="l">رأس مال ثابت</div><div class="v"><span data-k="d.fixedCap" data-f="k"></span></div></div>
+        <div class="kpi"><div class="l">رأس مال عامل</div><div class="v"><span data-k="d.workCap" data-f="k"></span></div></div>
+        <div class="kpi"><div class="l">احتياطي</div><div class="v"><span data-k="d.reserveCap" data-f="k"></span></div></div>
+      </div>
+      <div class="card fill" style="flex:1"><h3>أدنى نقطة نقدية: الشهر <span class="num" data-k="uses.troughMonth" data-f="n0"></span></h3><div class="chart"><canvas id="c-uses"></canvas></div></div>
+      <p class="small">المصادر: 100% حقوق ملكية من المستثمرين/المؤسس. لا قروض بنكية في النموذج الأساسي (يمكن إضافة تمويل تجاري لاحقاً لتقليل الحاجة لرأس المال).</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">التفكيك عند أدنى نقطة تدفق نقدي تراكمي قبل التمويل. «التقريب» = الفرق حتى أقرب 25 ألف.</span><span>12</span></div>
+</section>
+
+<!-- 13 FINANCIAL FORECAST -->
+<section class="slide" data-title="التوقعات المالية">
+  <div class="head"><div><div class="kicker"><span class="idx">13</span>Financial Forecast</div><h2>التوقعات المالية لخمس سنوات</h2><div class="rule"></div></div>
+    <span class="badge-live">السيناريو: <span data-k="scnLabel"></span></span></div>
+  <div class="body g-64">
+    <div class="col">
+      <div class="card fill" style="flex:1.1"><h3>السنة الأولى شهرياً</h3><div class="chart"><canvas id="c-monthly"></canvas></div></div>
+      <div class="card fill" style="flex:1"><h3>الإيرادات وإجمالي الربح وصافي الربح سنوياً</h3><div class="chart"><canvas id="c-annual"></canvas></div></div>
+    </div>
+    <div class="card"><h3>قائمة الدخل المختصرة (ألف ر.س)</h3><table id="isTable"></table></div>
+  </div>
+  <div class="foot"><span class="src">النموذج الكامل (شهري/ربع سنوي/سنوي، ميزانية، تدفقات) في Financial_Model.xlsx — مطابق للمحرك حتى الهللة.</span><span>13</span></div>
+</section>
+
+<!-- 14 CAPITAL CYCLE -->
+<section class="slide dark" data-title="دورة رأس المال">
+  <div class="head"><div><div class="kicker"><span class="idx">14</span>Capital Turnover Cycle</div><h2>دورة دوران رأس المال</h2><div class="rule"></div></div>
+    <p class="lead">كل ريال يخرج للمورد يعود بعد <b class="num" data-k="m.ccc" data-f="n0"></b> يوماً تقريباً مع هامشه — ثم يُعاد استخدامه.</p></div>
+  <div class="body g2">
+    <div class="cycle"><svg id="cycleSvg" viewBox="0 0 620 560"></svg></div>
+    <div class="col">
+      <div class="kpis g2" style="display:grid">
+        <div class="kpi"><div class="l">أيام المخزون (شراء ← بيع)</div><div class="v"><span data-k="m.inventoryDays" data-f="n0"></span></div></div>
+        <div class="kpi"><div class="l">أيام الشحن والتخليص</div><div class="v"><span data-k="m.transitDays" data-f="n0"></span></div></div>
+        <div class="kpi"><div class="l">أيام التحصيل DSO</div><div class="v"><span data-k="m.dso" data-f="n0"></span></div></div>
+        <div class="kpi"><div class="l">أيام السداد DPO</div><div class="v"><span data-k="m.dpo" data-f="n1"></span></div></div>
+        <div class="kpi"><div class="l">دورة التحويل النقدي CCC</div><div class="v"><span data-k="m.ccc" data-f="n0"></span><small>يوم</small></div></div>
+        <div class="kpi"><div class="l">عدد الدورات سنوياً</div><div class="v"><span class="count" data-k="m.cyclesPerYear" data-f="n1"></span><small>×</small></div></div>
+      </div>
+      <div class="card"><h3>ماذا يعني ذلك؟</h3><p style="font-size:16px">كل <b>100,000 ر.س</b> رأس مال عامل يمكن أن تموّل مبيعات سنوية بحدود <b class="num" data-k="m.salesPer100k" data-f="sar"></b> ر.س (نظرياً عند تشغيل مستمر). معدل دوران رأس المال المستثمر في السنة 2: <b class="num" data-k="m.revenueToCapitalY2" data-f="n1"></b>× (إيرادات ÷ رأس المال).</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">DPO = مدة السداد للمورد × حصة الموز والتعبئة من التكلفة. الحساب النظري يفترض تشغيلاً بلا توقف؛ الواقع أقل بسبب الموسمية.</span><span>14</span></div>
+</section>
+
+<!-- 15 CASH FLOW -->
+<section class="slide" data-title="التدفق النقدي">
+  <div class="head"><div><div class="kicker"><span class="idx">15</span>Cash Flow &amp; Working Capital</div><h2>التدفق النقدي ورأس المال العامل</h2><div class="rule"></div></div>
+    <p class="lead">الربح المحاسبي لا يساوي النقد: النمو يحبس نقداً في البضاعة والذمم. لذلك نُبقي احتياطياً ونوزّع جزءاً فقط من الأرباح.</p></div>
+  <div class="body g-64">
+    <div class="card fill"><h3>الرصيد النقدي الشهري مقابل الاحتياطي ورأس المال العامل</h3><div class="chart"><canvas id="c-cash"></canvas></div></div>
+    <div class="col">
+      <div class="kpi"><div class="l">أدنى رصيد نقدي</div><div class="v"><span data-k="m.minCash" data-f="k"></span></div><div class="s">الشهر <span data-k="m.minCashMonth" data-f="n0"></span> · الاحتياطي المستهدف <span data-k="m.reserve" data-f="k"></span></div></div>
+      <div class="kpi"><div class="l">ذروة رأس المال العامل</div><div class="v"><span data-k="m.peakNWC" data-f="k"></span></div><div class="s">بضاعة بالطريق + ذمم − دائنون</div></div>
+      <div class="card"><table id="cfTable"></table></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">التدفق التشغيلي بالطريقة غير المباشرة؛ مطابق لتغير النقد في الميزانية لكل شهر (فرق = 0).</span><span>15</span></div>
+</section>
+
+<!-- 16 PROFITABILITY & RETURNS -->
+<section class="slide beige" data-title="الربحية والعوائد">
+  <div class="head"><div><div class="kicker"><span class="idx">16</span>Profitability &amp; Investment Returns</div><h2>الربحية وعوائد الاستثمار</h2><div class="rule"></div></div>
+    <p class="lead">العائد يأتي من توزيعات سنوية + قيمة حقوق الملكية المتبقية في السنة 5. نعرض تخارجاً متحفظاً (قيمة دفترية) وآخر بمضاعف ربح.</p></div>
+  <div class="body g-46">
+    <div class="kpis g2" style="display:grid; align-content:start">
+      <div class="kpi"><div class="l">IRR — قيمة دفترية</div><div class="v"><span class="count" data-k="m.irrBook" data-f="pct"></span></div></div>
+      <div class="kpi"><div class="l">IRR — مضاعف <span data-k="p.finance.exitMultipleNI" data-f="n0"></span>× ربح</div><div class="v"><span class="count" data-k="m.irrExit" data-f="pct"></span></div></div>
+      <div class="kpi"><div class="l">NPV @ <span data-k="p.finance.discountRate" data-f="pct0"></span></div><div class="v"><span data-k="m.npvBook" data-f="k"></span></div></div>
+      <div class="kpi"><div class="l">ROI (5 سنوات)</div><div class="v"><span data-k="m.roi5y" data-f="pct0"></span></div><div class="s">سنوي مركب <span data-k="m.roiAnnualized" data-f="pct"></span></div></div>
+      <div class="kpi"><div class="l">هامش صافي الربح س3</div><div class="v"><span data-k="y.2.netMargin" data-f="pct"></span></div></div>
+      <div class="kpi"><div class="l">ROE س3</div><div class="v"><span data-k="m.roe.2" data-f="pct"></span></div></div>
+      <div class="kpi"><div class="l">EBITDA س3</div><div class="v"><span data-k="y.2.ebitda" data-f="k"></span></div></div>
+      <div class="kpi"><div class="l">هامش إجمالي</div><div class="v"><span data-k="u.grossMargin" data-f="pct"></span></div></div>
+    </div>
+    <div class="col">
+      <div class="card fill" style="flex:1"><h3>صافي الربح: موزع مقابل مُعاد استثماره</h3><div class="chart"><canvas id="c-dist"></canvas></div></div>
+      <div class="card fill" style="flex:1"><h3>مقارنة السيناريوهات — صافي الربح السنوي</h3><div class="chart"><canvas id="c-scen"></canvas></div></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">ROI = (التوزيعات + حقوق الملكية الدفترية في س5 − رأس المال) ÷ رأس المال. التوزيع: <span data-k="p.finance.payoutRatio" data-f="pct0"></span> من ربح السنة السابقة بشرط الاحتياطي؛ الباقي يُعاد استثماره في رأس المال العامل.</span><span>16</span></div>
+</section>
+
+<!-- 17 BREAK-EVEN & PAYBACK -->
+<section class="slide" data-title="التعادل والاسترداد">
+  <div class="head"><div><div class="kicker"><span class="idx">17</span>Break-Even &amp; Payback</div><h2>نقطة التعادل وفترة الاسترداد</h2><div class="rule"></div></div>
+    <p class="lead">نفرّق بين ثلاثة أشياء: تعادل الربح، استرداد رأس المال نقدياً من التشغيل، واسترداد المستثمر لأمواله فعلياً عبر التوزيعات.</p></div>
+  <div class="body g-64">
+    <div class="card fill"><h3>الشحنات الشهرية مقابل شحنات التعادل</h3><div class="chart"><canvas id="c-be"></canvas></div></div>
+    <div class="col">
+      <div class="kpi"><div class="l">شحنات التعادل شهرياً</div><div class="v"><span data-k="m.breakEvenContainersY1" data-f="n1"></span></div><div class="s">سعر بيع التعادل للكرتون (يغطي التكلفة المتغيرة فقط): <span data-k="m.breakEvenSellPrice" data-f="n2"></span> ر.س</div></div>
+      <div class="kpi"><div class="l">① أول شهر EBITDA موجب</div><div class="v">الشهر <span data-k="m.ebitdaBreakEvenMonth" data-f="mo"></span></div></div>
+      <div class="kpi"><div class="l">② تعادل الربح التراكمي</div><div class="v">الشهر <span data-k="m.cumulativeBreakEvenMonth" data-f="mo"></span></div></div>
+      <div class="kpi"><div class="l">③ التدفق التشغيلي التراكمي ≥ رأس المال</div><div class="v">الشهر <span data-k="m.cashPaybackMonth" data-f="mo"></span></div></div>
+      <div class="kpi"><div class="l">④ التوزيعات التراكمية ≥ رأس المال</div><div class="v">الشهر <span data-k="m.distributionPaybackMonth" data-f="mo"></span></div><div class="s">ما لم يُوزَّع يبقى في الشركة كنقد ورأس مال عامل يملكه المساهمون</div></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">الاسترداد النقدي (③) لا يعني أن المستثمر استلم أمواله؛ الاسترداد الفعلي (④) يعتمد على سياسة التوزيع.</span><span>17</span></div>
+</section>
+
+<!-- 18 RISK -->
+<section class="slide beige" data-title="المخاطر">
+  <div class="head"><div><div class="kicker"><span class="idx">18</span>Risk Analysis &amp; Mitigation</div><h2>تحليل المخاطر وخطط المعالجة</h2><div class="rule"></div></div>
+    <p class="lead">أثر كل صدمة على صافي الربح التراكمي لخمس سنوات (مع ثبات رأس المال). سعر البيع هو المتغير الأخطر.</p></div>
+  <div class="body g2">
+    <div class="card fill"><h3>تحليل الحساسية — التغير في صافي ربح 5 سنوات (ألف ر.س)</h3><div class="chart"><canvas id="c-tornado"></canvas></div></div>
+    <div class="card"><h3>المخاطر الرئيسية والمعالجة</h3><table><thead><tr><th>الخطر</th><th>الأثر</th><th>المعالجة</th></tr></thead><tbody>
+      <tr><td>انخفاض سعر البيع</td><td><span class="tag r">عالٍ</span></td><td>خطابات نوايا، تنويع العملاء، بيع جزئي مسبق</td></tr>
+      <tr><td>التلف وسلسلة التبريد</td><td><span class="tag r">عالٍ</span></td><td>مسجلات حرارة، تأمين، معايير قبول عند التحميل</td></tr>
+      <tr><td>انقطاع التوريد / الموسمية</td><td><span class="tag a">متوسط</span></td><td>موردان على الأقل، مصدر بديل صيفي</td></tr>
+      <tr><td>قيود استيراد / متبقيات مبيدات</td><td><span class="tag a">متوسط</span></td><td>فحص مختبري قبل الشحن، شهادة مطابقة</td></tr>
+      <tr><td>تأخر التحصيل</td><td><span class="tag a">متوسط</span></td><td>سقف ائتمان لكل عميل، نقدي في السوق المركزي</td></tr>
+      <tr><td>سعر صرف الجنيه</td><td><span class="tag g">منخفض</span></td><td>التسعير بالريال/الدولار مع المورد</td></tr>
+      <tr><td>مخاطر التنفيذ (فريق جديد)</td><td><span class="tag a">متوسط</span></td><td>بدء تدريجي، قاعدة إيقاف خسارة بعد 9 أشهر</td></tr></tbody></table>
+      <p class="small" style="margin-top:8px">قاعدة الإيقاف المقترحة: إذا كانت مساهمة الشحنة الفعلية &lt; <b class="num" data-k="d.stopLoss" data-f="sar"></b> ر.س لثلاث شحنات متتالية، يتوقف التوسع ويُعاد التقييم.</p></div>
+  </div>
+  <div class="foot"><span class="src">الحساسية محسوبة بإعادة تشغيل النموذج كاملاً لكل صدمة (وليس تقديراً خطياً).</span><span>18</span></div>
+</section>
+
+<!-- 19 INVESTMENT STRUCTURE -->
+<section class="slide" data-title="هيكل الاستثمار">
+  <div class="head"><div><div class="kicker"><span class="idx">19</span>Investment Structure</div><h2>هيكل الاستثمار: نموذجان للمقارنة</h2><div class="rule"></div></div>
+    <p class="lead">الأرقام توضيحية محسوبة من التدفقات المتوقعة؛ النسب النهائية تُتفاوض ولا تمثل عوائد مضمونة.</p></div>
+  <div class="body g2">
+    <div class="card"><h3>أ) استثمار بحصة ملكية (Equity)</h3>
+      <p class="small">المستثمر يدفع كامل رأس المال ويحصل على نسبة من الأسهم؛ المؤسس يحصل على الباقي مقابل الإدارة والعلاقات (براتب سوقي ضمن المصاريف).</p>
+      <table style="margin-top:10px"><thead><tr><th>حصة المستثمر</th><th class="n">IRR دفتري</th><th class="n">IRR بمضاعف</th><th class="n">مضاعف المال</th></tr></thead><tbody id="eqTable"></tbody></table>
+      <ul class="ticks sm" style="margin-top:12px"><li>حقوق تصويت ومجلس، تقارير شهرية، حق الاطلاع.</li><li>المخاطرة: المستثمر يتحمل الخسارة بقدر حصته.</li></ul></div>
+    <div class="card"><h3>ب) مشاركة في الأرباح (Profit-Sharing)</h3>
+      <p class="small">المستثمر يموّل، ويحصل على نسبة من الأرباح الموزعة، ويسترد رأس ماله من حقوق الملكية عند التخارج قبل تقسيم الفائض.</p>
+      <table style="margin-top:10px"><thead><tr><th>نسبة المستثمر من الأرباح</th><th class="n">IRR</th><th class="n">مضاعف المال</th></tr></thead><tbody id="psTable"></tbody></table>
+      <ul class="ticks sm" style="margin-top:12px"><li>أبسط في التنفيذ ومتوافق مع صيغ المشاركة الشرعية.</li><li>المخاطرة: إذا خسر المشروع يُسترد رأس المال من الأصول المتبقية فقط — لا ضمان.</li></ul></div>
+  </div>
+  <div class="foot"><span class="src">التدفقات للمساهمين مجتمعين: −رأس المال في السنة 0، التوزيعات السنوية، ثم حقوق الملكية الدفترية (أو مضاعف الربح) في السنة 5.</span><span>19</span></div>
+</section>
+
+<!-- 20 GROWTH -->
+<section class="slide beige" data-title="استراتيجية النمو">
+  <div class="head"><div><div class="kicker"><span class="idx">20</span>Growth Strategy</div><h2>استراتيجية النمو المرحلية</h2><div class="rule"></div></div>
+    <p class="lead">كل مرحلة مشروطة بتحقيق مؤشرات المرحلة السابقة — لا توسع قبل إثبات الهامش.</p></div>
+  <div class="body g4">
+    <div class="card"><div class="kicker">Phase 1 · M1–12</div><h3>إثبات النموذج</h3><ul class="ticks sm"><li>موز مصري ← جدة</li><li>حتى <span class="num" data-k="p.volume.y1TargetContainers" data-f="n0"></span> شحنات/شهر</li><li>هدف: تلف ≤ <span class="num" data-k="p.shipment.spoilageRate" data-f="pct0"></span>، سعر ≥ <span class="num" data-k="p.shipment.sellPricePerCarton" data-f="n0"></span> ر.س</li></ul></div>
+    <div class="card"><div class="kicker">Phase 2 · Y2</div><h3>التوسع الجغرافي</h3><ul class="ticks sm"><li>مكة، الطائف، سلاسل التجزئة</li><li>نمو <span class="num" data-k="p.volume.monthlyGrowth" data-f="pct1"></span> شهرياً</li><li>عقد سنوي مع مشغل إنضاج</li></ul></div>
+    <div class="card"><div class="kicker">Phase 3 · Y3</div><h3>تنويع المنتجات</h3><ul class="ticks sm"><li>برتقال ومانجو وبطيخ من مصر</li><li>تغطية الفجوة الصيفية</li><li>غير مُدرج في الأرقام</li></ul></div>
+    <div class="card"><div class="kicker">Phase 4 · Y4–5</div><h3>الأصول والرياض</h3><ul class="ticks sm"><li>غرف إنضاج مملوكة (دراسة جدوى منفصلة)</li><li>الرياض والشرقية</li><li>سقف <span class="num" data-k="p.volume.maxContainers" data-f="n0"></span> شحنات/شهر</li></ul></div>
+  </div>
+  <div class="foot"><span class="src">الأرقام المالية تشمل المرحلتين 1 و2 فقط (موز). المراحل 3 و4 خيارات نمو غير محسوبة.</span><span>20</span></div>
+</section>
+
+<!-- 21 EXIT -->
+<section class="slide dark" data-title="استراتيجية التخارج">
+  <div class="head"><div><div class="kicker"><span class="idx">21</span>Exit Strategy</div><h2>استراتيجية التخارج</h2><div class="rule"></div></div>
+    <p class="lead">شركة تجارة صغيرة قيمتها الأساسية في رأس مالها العامل وتدفقاتها النقدية — لذلك نعتمد طرق تخارج واقعية.</p></div>
+  <div class="body g-46">
+    <div class="col">
+      <div class="kpi"><div class="l">حقوق الملكية الدفترية نهاية س5</div><div class="v"><span data-k="m.endEquity" data-f="m"></span></div><div class="s">منها نقد <span data-k="m.endCash" data-f="m"></span></div></div>
+      <div class="kpi"><div class="l">قيمة تخارج بمضاعف <span data-k="p.finance.exitMultipleNI" data-f="n0"></span>× صافي ربح س5</div><div class="v"><span data-k="m.exitValue" data-f="m"></span></div></div>
+    </div>
+    <div class="body g2" style="gap:18px">
+      <div class="card"><h3>1. إعادة شراء من المؤسس</h3><p class="small">حق شراء حصة المستثمر بعد السنة 3 بصيغة محددة مسبقاً (القيمة الدفترية + مضاعف متفق عليه).</p></div>
+      <div class="card"><h3>2. مشاركة متناقصة</h3><p class="small">شراء تدريجي لحصة المستثمر سنوياً من التدفقات النقدية حتى التخارج الكامل.</p></div>
+      <div class="card"><h3>3. بيع استراتيجي</h3><p class="small">لموزع فواكه أكبر أو سلسلة تجزئة تبحث عن مصدر توريد قائم.</p></div>
+      <div class="card"><h3>4. البقاء والتوزيع</h3><p class="small">الاستمرار كمساهم يتلقى توزيعات سنوية دون بيع.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="src">المضاعف افتراض منخفض الثقة؛ لا توجد صفقات مماثلة موثقة لدينا.</span><span>21</span></div>
+</section>
+
+<!-- 22 CONTACT -->
+<section class="slide dark cover" data-title="الخطوات التالية">
+  <div><div class="kicker"><span class="idx">22</span>Investment Opportunity &amp; Next Steps</div><h1 style="font-size:60px">الخطوات التالية<br><span>قبل إغلاق الاستثمار</span></h1></div>
+  <div class="body g3" style="flex:none">
+    <div class="card"><h3>العناية الواجبة (4–6 أسابيع)</h3><ul class="ticks sm"><li>عروض أسعار مكتوبة: موز، تعبئة، شحن، إنضاج</li><li>3–5 خطابات نوايا من مشترين</li><li>تأكيد الإعفاء الجمركي ومتطلبات الفسح</li></ul></div>
+    <div class="card"><h3>شحنة تجريبية</h3><ul class="ticks sm"><li>شحنة واحدة بتمويل محدود (≈ <span class="num" data-k="u.landed" data-f="k"></span>)</li><li>قياس التلف والسعر الفعلي والتحصيل</li><li>تحديث النموذج بالأرقام الفعلية</li></ul></div>
+    <div class="card"><h3>الإغلاق</h3><ul class="ticks sm"><li>اختيار هيكل الاستثمار</li><li>اتفاقية مساهمين وحوكمة</li><li>ضخ رأس المال على دفعات مرتبطة بالمؤشرات</li></ul></div>
+  </div>
+  <div style="display:flex; justify-content:space-between; align-items:flex-end">
+    <div><div class="small">للتواصل</div><div style="font-size:24px; color:var(--gold-2); font-weight:700">[اسم المؤسس] · [رقم الجوال] · [البريد الإلكتروني]</div></div>
+    <div class="small" style="max-width:520px">هذا العرض لأغراض النقاش ولا يمثل عرضاً للأوراق المالية. التوقعات قائمة على افتراضات قابلة للتغير ومعلنة في سجل الافتراضات.</div>
+  </div>
+</section>
+
+</div></main>
+
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/chart.umd.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

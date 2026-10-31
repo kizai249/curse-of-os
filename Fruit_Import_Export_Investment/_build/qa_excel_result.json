@@ -1,0 +1,74 @@
+{
+ "returns_vs_engine": {
+  "IRR — book exit (A)": 0.403613002101316,
+  "IRR — multiple exit (B)": 0.447340844957564,
+  "NPV @ discount rate — A": 1007277.6513158,
+  "NPV @ discount rate — B": 1279980.04862572,
+  "ROI 5-year (dividends + book equity − capital) / capital": 3.95873469446819,
+  "Annualised ROI": 0.377444707170542,
+  "5-year cumulative net income": 2573177.55140432,
+  "Cash payback month (cum. pre-financing FCF ≥ capital)": 40,
+  "Distribution payback month (cum. dividends ≥ capital)": 52,
+  "First month with positive EBITDA": 10,
+  "Minimum month-end cash": 159100.374533333,
+  "Emergency reserve target": 145405.309,
+  "Break-even containers / month (Y1 overhead)": 1.94301819479928,
+  "Break-even selling price / carton": 35.1634540870065
+ },
+ "scenario_switch": {
+  "conservative": {
+   "excel_NI5y": -697858.7425457255,
+   "engine_NI5y": -697858.7425457254,
+   "excel_end_cash": 166548.849714167,
+   "engine_end_cash": 166548.84971416774
+  },
+  "optimistic": {
+   "excel_NI5y": 6188731.06052218,
+   "engine_NI5y": 6188731.060522182,
+   "excel_end_cash": 4035345.09979442,
+   "engine_end_cash": 4035345.099794419
+  }
+ },
+ "cells_compared": 1020,
+ "max_abs_diff_SAR": 1.123407855629921e-08,
+ "mismatches": [],
+ "formula_errors": [],
+ "checks": [
+  [
+   "Balance sheet balances every month",
+   true
+  ],
+  [
+   "Balance sheet balances (min)",
+   true
+  ],
+  [
+   "Cash flow ties to balance-sheet cash every month",
+   true
+  ],
+  [
+   "Capital is not counted as revenue",
+   true
+  ],
+  [
+   "Annual net income = sum of monthly",
+   true
+  ],
+  [
+   "Cash never below zero",
+   true
+  ],
+  [
+   "Cash stays ≥ emergency reserve (funding adequate)",
+   true
+  ],
+  [
+   "Base: 5y net income matches engine.js (±1 SAR) — valid when scenario = 2",
+   true
+  ],
+  [
+   "Base: closing cash matches engine.js (±1 SAR) — valid when scenario = 2",
+   true
+  ]
+ ]
+}
