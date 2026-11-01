@@ -5,7 +5,7 @@ images (filename only; raster content needs visual check), font/binary (skipped,
 import io, json, re, subprocess, sys, unicodedata, zipfile
 from pathlib import Path
 
-OLD = re.compile(r"damanat[iy]|ضماناتي|يتاناماض", re.I)
+OLD = re.compile(r"damanat[iy]|ضماناتي|يتانامض", re.I)
 TEXT = {".py", ".mjs", ".js", ".md", ".txt", ".html", ".css", ".json", ".svg", ".csv", ".gpl", ".gitignore", ".xml", ".yaml", ".yml"}
 OOXML = {".pptx", ".docx", ".xlsx"}
 RASTER = {".png", ".jpg", ".jpeg", ".gif", ".ico", ".mp4"}
