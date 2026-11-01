@@ -49,7 +49,12 @@ def main(root, out):
     rows = []
     for f in sorted(p for p in root.rglob("*") if p.is_file() and "_build" not in p.parts and "__pycache__" not in p.parts):
         rel = str(f.relative_to(root))
-        kind, h = scan_bytes(f.name, f.read_bytes())
+        try:
+            kind, h = scan_bytes(f.name, f.read_bytes())
+        except (OSError, zipfile.BadZipFile, subprocess.SubprocessError) as e:
+            # one unreadable or damaged file must not abort the audit: record it as unverified
+            kind, h = "unreadable", []
+            print(f"WARNING: could not scan {rel}: {e}", file=sys.stderr)
         name_hit = bool(OLD.search(rel))
         rows.append({"file": rel, "kind": kind, "name_hit": name_hit, "content_hits": len(h), "samples": h[:3]})
     json.dump(rows, open(out, "w"), ensure_ascii=False, indent=1)

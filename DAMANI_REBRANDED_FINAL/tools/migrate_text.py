@@ -20,7 +20,11 @@ def main(root):
     for f in sorted(Path(root).rglob("*")):
         if not f.is_file() or f.name in SKIP or (f.suffix not in EXT and f.name != ".gitignore"):
             continue
-        s = f.read_text(encoding="utf-8")
+        try:
+            s = f.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as e:
+            print(json.dumps({"file": str(f.relative_to(root)), "skipped": str(e)}, ensure_ascii=False), file=sys.stderr)
+            continue
         counts = {}
         for old, new in SPECIFIC + GENERAL:
             n = s.count(old)
@@ -28,7 +32,11 @@ def main(root):
                 counts[old] = n
                 s = s.replace(old, new)
         if counts:
-            f.write_text(s, encoding="utf-8")
+            try:
+                f.write_text(s, encoding="utf-8")
+            except OSError as e:
+                print(json.dumps({"file": str(f.relative_to(root)), "write_failed": str(e)}, ensure_ascii=False), file=sys.stderr)
+                continue
             print(json.dumps({"file": str(f.relative_to(root)), "replacements": counts}, ensure_ascii=False))
 
 
