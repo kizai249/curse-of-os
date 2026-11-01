@@ -1,5 +1,7 @@
 """Regenerate the whole Damani brand system and the delivery packages in dist/."""
 import shutil
+import subprocess
+import sys
 import zipfile
 
 import build_applications
@@ -38,13 +40,23 @@ def package():
         shutil.copy(OUT / f, DIST / f.split("/")[-1])
 
 
+STEPS = [("logos", build_logos.build), ("foundation", build_foundation.build), ("exports", build_exports.build),
+         ("applications", build_applications.build), ("motion", build_motion.build), ("book", build_book.build),
+         ("pptx", build_pptx.build), ("docs", build_docs.build), ("package", package)]
+
+
+def main():
+    """Run every build step. A file-system, render or archive failure in any step is reported with the
+    step's name and stops the build with exit code 1, so a half-built system is never mistaken for a finished one."""
+    for name, step in STEPS:
+        try:
+            step()
+        except (OSError, subprocess.CalledProcessError, zipfile.BadZipFile) as e:
+            print(f"BUILD FAILED at step '{name}': {e}", file=sys.stderr)
+            print("Outputs from this and later steps are incomplete; fix the cause and re-run build_all.py.", file=sys.stderr)
+            return 1
+    return 0
+
+
 if __name__ == "__main__":
-    build_logos.build()
-    build_foundation.build()
-    build_exports.build()
-    build_applications.build()
-    build_motion.build()
-    build_book.build()
-    build_pptx.build()
-    build_docs.build()
-    package()
+    sys.exit(main())
