@@ -34,7 +34,12 @@ def main(src, dst, edited_dir):
         raise SystemExit(f"cannot read PDF {src}: {e}")
     writer = PdfWriter(clone_from=reader)
     log = []
-    for f in sorted(Path(edited_dir).glob("p*_*.png")):
+    if not Path(edited_dir).is_dir():
+        raise SystemExit(f"edited images folder not found: {edited_dir}")
+    edited = sorted(Path(edited_dir).glob("p*_*.png"))
+    if not edited:
+        raise SystemExit(f"no p<page>_<Image>.png files in {edited_dir}")
+    for f in edited:
         m = re.fullmatch(r"p(\d+)_(\w+)\.png", f.name)
         if not m:
             continue
