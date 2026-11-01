@@ -264,11 +264,13 @@ window.TIMING = { BPM, BEAT, BAR, SEC, DUR };
 (async () => {
   const names = ['usersx-wordmark.png', ...WORLDS.map(w => w.img)];
   (await Promise.all(names.map(n => loadImg((n.startsWith('usersx') ? '../assets/logo/' : '../assets/games/') + n)))).forEach((im, i) => IMG[names[i]] = im);
-  await Promise.all(['800 100px Kufam', '700 20px SpaceMono', '400 100px Blaka', '800 100px Changa', '700 100px Marhey', '700 20px Handjet'].map(f => document.fonts.load(f, 'ابجد ABC 01')));
+  const fontSpecs = ['800 100px Kufam', '700 20px SpaceMono', '400 100px Blaka', '800 100px Changa', '700 100px Marhey', '700 20px Handjet'];
+  const loaded = await Promise.all(fontSpecs.map(f => document.fonts.load(f, 'ابجد ABC 01')));
+  loaded.forEach((faces, i) => { if (!faces.length) throw new Error('font failed: ' + fontSpecs[i]); }); // fail loudly instead of silently rendering a fallback font
   const geo = new THREE.PlaneGeometry(2.2, 3.1);
   for (let i = 0; i < 28; i++) { const w = WORLDS[i % 4]; const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: makeCardTexture(w), roughness: .35, metalness: .1, side: THREE.DoubleSide })); cardGroup.add(m); cards.push(m); }
   render(0); window.READY = true;
-})();
+})().catch(e => console.error('setup failed: ' + e.message));
 </script>
 </body>
 </html>
