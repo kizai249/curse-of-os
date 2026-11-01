@@ -56,6 +56,8 @@ p { font-size: 18px; line-height: 1.75; }
 .body { flex: 1; min-height: 0; display: grid; gap: 28px; align-items: start; }
 .body > .col, .body > .card.fill, .body > .cycle, .body > .kpis { align-self: stretch; }
 .tight td, .tight th { padding: 4.5px 10px; font-size: 14px; }
+.g4 .kpi { padding: 14px 14px; }
+.g4 .kpi .l { font-size: 13px; }
 .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); }
 .g-64 { grid-template-columns: 1.55fr 1fr; } .g-46 { grid-template-columns: 1fr 1.55fr; }
 .col { display: flex; flex-direction: column; gap: 18px; min-height: 0; }

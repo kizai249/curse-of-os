@@ -11,7 +11,7 @@
   var MONTHS_AR = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 
   // ---------------- state ----------------
-  var state = { scn: 'base', ctrl: {}, autoCapital: true };
+  var state = { scn: 'base', ctrl: {}, autoCapital: false };
   var res, ctx, scenStatic, sens;
 
   // ---------------- formatting ----------------
@@ -45,7 +45,7 @@
       if (key === 'finance.initialInvestment') return;
       var parts = key.split('.'); p[parts[0]][parts[1]] = v;
     });
-    p.finance.initialInvestment = state.autoCapital ? null : (state.ctrl['finance.initialInvestment'] || null);
+    p.finance.initialInvestment = state.autoCapital ? null : (state.ctrl['finance.initialInvestment'] || p.finance.initialInvestment);
     return p;
   }
   function compute() {
@@ -73,18 +73,19 @@
     });
     tables(); heat(); cycle(); updateCharts();
     var warn = Q('#warn'), m = res.metrics;
-    if (m.belowReserve) {
+    var short = m.planContainers5y - m.shippedContainers5y;
+    if (m.cashOutMonth || m.belowReserve || short > 0.5) {
       warn.classList.add('show');
-      warn.innerHTML = 'تنبيه تمويل: أدنى رصيد نقدي ' + fmt(m.minCash, 'k') + ' في الشهر ' + m.minCashMonth +
-        ' أقل من الاحتياطي (' + fmt(m.reserve, 'k') + '). رأس المال المطلوب: ' + fmt(m.requiredCapital, 'sar') + ' ر.س' +
-        (m.cashOutMonth ? ' — النقد يصبح سالباً في الشهر ' + m.cashOutMonth : '');
+      warn.innerHTML = (m.cashOutMonth ? 'تنبيه: النقد ينفد في الشهر ' + m.cashOutMonth + ' — المشروع لا يغطي مصاريفه بهذه الافتراضات. ' : '') +
+        (short > 0.5 ? 'الكاش لا يكفي لتنفيذ الخطة كاملة: شُحن ' + n(m.shippedContainers5y, 0) + ' من ' + n(m.planContainers5y, 0) + ' شحنة خلال 5 سنوات. ' : '') +
+        'رأس المال اللازم للخطة دون قيد: ' + fmt(m.requiredCapital, 'sar') + ' ر.س.';
     } else warn.classList.remove('show');
   }
 
   function tables() {
     var u = res.unit, c = u.components, p = ctx.p;
     var rows = [
-      ['الموز (32 طن)', 20400, c.fruit], ['مواد التعبئة', 7707.52, c.packaging], ['المعالجة + العمالة', 850, c.treatment + c.labor],
+      ['الموز السوداني (32 طن)', 20400, c.fruit], ['مواد التعبئة (مصر)', 7707.52, c.packaging], ['المعالجة + العمالة', 850, c.treatment + c.labor], ['تنسيق في السودان', 0, c.coordination],
       ['شحن البراد', 16000, c.freight], ['تصديق وتخليص', 6000, c.clearance], ['رسوم جمركية', 0, c.duty], ['تأمين البضاعة', 0, c.insurance],
       ['نقل داخلي', 0, c.localTransport], ['إنضاج وتخزين', 0, c.ripening], ['التكلفة واصل', 50957.52, u.landed, 1],
       ['الكراتين المباعة', 1700, u.cartonsSold], ['الإيراد', 85000, u.revenue, 1], ['عمولة البيع', 0, u.commission],
@@ -93,6 +94,9 @@
     Q('#ueTable').innerHTML = rows.map(function (r) {
       return '<tr' + (r[3] ? ' class="tot"' : '') + '><td>' + r[0] + '</td><td class="n">' + fmt(r[1], r[4] || 'sar') + '</td><td class="n">' + fmt(r[2], r[4] || 'sar') + '</td></tr>';
     }).join('');
+    Q('#bomTable').innerHTML = u.bom.lines.map(function (l) {
+      return '<tr><td>' + l.ar + '</td><td class="n">' + n(l.qty, l.qty % 1 ? 1 : 0) + ' ' + l.unit + '</td><td class="n">' + n(Math.round(l.totalEGP), 0) + '</td><td class="n">' + n(Math.round(l.totalSAR), 0) + '</td></tr>';
+    }).join('') + '<tr class="tot"><td>الإجمالي</td><td class="n">' + n(u.bom.perCartonSAR, 2) + ' ر.س/كرتون</td><td class="n">' + n(Math.round(u.bom.totalEGP), 0) + '</td><td class="n">' + n(Math.round(u.bom.totalSAR), 0) + '</td></tr>';
     var TYPE = { fixed: '<span class="tag g">ثابت</span>', working: '<span class="tag a">عامل</span>', reserve: '<span class="tag">احتياطي</span>' };
     Q('#usesTable').innerHTML = res.uses.items.map(function (it) { return '<tr><td>' + it.ar + '</td><td>' + TYPE[it.type] + '</td><td class="n">' + fmt(it.v, 'sar') + '</td></tr>'; }).join('') +
       '<tr class="tot"><td>الإجمالي</td><td></td><td class="n">' + fmt(res.uses.total, 'sar') + '</td></tr>';
@@ -113,10 +117,8 @@
   function heat() {
     var s = ctx.p.volume.seasonality;
     var rows = [
-      { f: 'موز مصري (النموذج)', v: s.map(function (x) { return x; }), model: true },
-      { f: 'برتقال مصري *', v: [2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2] },
-      { f: 'مانجو مصري', v: [0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 0] },
-      { f: 'بطيخ مصري', v: [0, 0, 1, 1, 3, 3, 3, 1, 1, 0, 0, 0] }
+      { f: 'موز سوداني (النموذج)', v: s.map(function (x) { return x; }), model: true },
+      { f: 'طلب مرتفع في جدة *', v: [0, 3, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0] }
     ];
     var h = '<div></div>' + MONTHS_AR.map(function (m) { return '<div class="h">' + m + '</div>'; }).join('');
     rows.forEach(function (r) {
@@ -126,7 +128,7 @@
         else h += '<div class="c' + (x ? ' p' + x : '') + '"></div>';
       });
     });
-    Q('#heat').innerHTML = h + '<div class="small" style="grid-column:1/-1;margin-top:6px">* برتقال: بداية التصدير ديسمبر (مصدر)؛ نهاية الموسم افتراض.</div>';
+    Q('#heat').innerHTML = h + '<div class="small" style="grid-column:1/-1;margin-top:6px">* رمضان 2027 ≈ فبراير–مارس، الحج ≈ مايو. الطلب الموسمي غير محسوب في الأسعار.</div>';
   }
 
   function cycle() {
@@ -186,13 +188,13 @@
       { label: 'صافي الربح', data: Y.map(function (y) { return y.netIncome; }), type: 'line', borderColor: C.gold, backgroundColor: C.gold, tension: .35, pointRadius: 5, borderWidth: 3, order: 1 }] }, options: baseOpts() });
     // waterfall per shipped carton
     var cc = u.components, k = ctx.p.shipment.cartonsPerContainer, per = function (v) { return v / k; };
-    var steps = [['الموز', cc.fruit], ['التعبئة', cc.packaging], ['الشحن', cc.freight], ['التخليص والرسوم', cc.clearance + cc.duty], ['إنضاج ونقل', cc.ripening + cc.localTransport], ['أخرى', cc.treatment + cc.labor + cc.insurance], ['العمولة', u.commission]];
+    var steps = [['الموز', cc.fruit], ['التعبئة', cc.packaging], ['الشحن', cc.freight], ['التخليص والرسوم', cc.clearance + cc.duty], ['إنضاج ونقل', cc.ripening + cc.localTransport], ['أخرى', cc.treatment + cc.labor + cc.coordination + cc.insurance], ['العمولة', u.commission]];
     var lab = ['الإيراد/كرتون'], dat = [[0, per(u.revenue)]], cols = [C.forest], top = per(u.revenue);
     steps.forEach(function (s) { lab.push(s[0]); dat.push([top - per(s[1]), top]); cols.push(C.gold2); top -= per(s[1]); });
     lab.push('المساهمة'); dat.push([0, top]); cols.push(top >= 0 ? C.emerald2 : C.red);
     mk('c-waterfall', { type: 'bar', data: { labels: lab, datasets: [{ label: 'ر.س/كرتون', data: dat, backgroundColor: cols, borderRadius: 4, barPercentage: .7 }] },
       options: baseOpts({ plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: function (v) { return v; } } } } }) });
-    mk('c-cost', { type: 'bar', data: { labels: Object.keys(cc).map(function (x) { return ({ fruit: 'الموز', packaging: 'التعبئة', treatment: 'المعالجة', labor: 'العمالة', freight: 'الشحن', insurance: 'التأمين', clearance: 'التخليص', duty: 'الجمارك', localTransport: 'نقل داخلي', ripening: 'الإنضاج' })[x]; }),
+    mk('c-cost', { type: 'bar', data: { labels: Object.keys(cc).map(function (x) { return ({ fruit: 'الموز', packaging: 'التعبئة', treatment: 'المعالجة', labor: 'العمالة', coordination: 'تنسيق السودان', freight: 'الشحن', insurance: 'التأمين', clearance: 'التخليص', duty: 'الجمارك', localTransport: 'نقل داخلي', ripening: 'الإنضاج' })[x]; }),
       datasets: [{ label: 'ر.س', data: Object.keys(cc).map(function (x) { return cc[x]; }), backgroundColor: Object.keys(cc).map(function (x, i) { return ['fruit', 'freight', 'packaging', 'clearance'].indexOf(x) >= 0 ? C.emerald : C.gold2; }), borderRadius: 4 }] },
       options: baseOpts({ indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(0,0,0,.06)' } }, y: { grid: { display: false } } } }) });
     var useCols = [C.forest, C.emerald, C.emerald2, '#7FC2A1', C.gold, C.gold2, '#9C8B6A', C.beige];
@@ -222,10 +224,11 @@
       { label: 'نقد آخر السنة', data: Y.map(function (y) { return y.cash; }), type: 'line', borderColor: C.forest, pointRadius: 4, borderWidth: 2, tension: .3 }] }, options: baseOpts() });
     var sc = scenStatic, scCols = { conservative: C.red, base: C.emerald, optimistic: C.gold };
     mk('c-scen', { type: 'line', data: { labels: yl, datasets: Object.keys(sc).map(function (k2) {
-      return { label: sc[k2].labelAr + ' (رأس مال ' + fmt(sc[k2].metrics.requiredCapital, 'k') + ')', data: sc[k2].years.map(function (y) { return y.netIncome; }), borderColor: scCols[k2], backgroundColor: scCols[k2], borderWidth: k2 === state.scn ? 4 : 2, pointRadius: 4, tension: .3 }; }) }, options: baseOpts() });
+      return { label: sc[k2].labelAr + ' (رأس مال ' + fmt(sc[k2].metrics.capital, 'k') + ')', data: sc[k2].years.map(function (y) { return y.netIncome; }), borderColor: scCols[k2], backgroundColor: scCols[k2], borderWidth: k2 === state.scn ? 4 : 2, pointRadius: 4, tension: .3 }; }) }, options: baseOpts() });
     var ohM = R.overhead.map(function (o, i) { return i + 1 < ctx.p.volume.launchMonth ? null : o / u.contribution; });
     mk('c-be', { type: 'bar', data: { labels: ml, datasets: [
-      { label: 'الشحنات المخططة', data: R.shipments, backgroundColor: R.shipments.map(function (s, i) { return ohM[i] != null && s >= ohM[i] ? C.emerald : C.gold2; }), borderRadius: 2, order: 2 },
+      { label: 'الخطة', data: R.plan, type: 'line', borderColor: C.muted, borderDash: [2, 3], pointRadius: 0, borderWidth: 1.5, order: 0 },
+      { label: 'الشحنات الفعلية (حسب الكاش)', data: R.shipments, backgroundColor: R.shipments.map(function (s, i) { return ohM[i] != null && s >= ohM[i] ? C.emerald : C.gold2; }), borderRadius: 2, order: 2 },
       { label: 'شحنات التعادل', data: ohM, type: 'line', borderColor: C.red, borderDash: [5, 5], pointRadius: 0, borderWidth: 2, order: 1 }] },
       options: baseOpts({ scales: { x: { ticks: { maxTicksLimit: 12 } }, y: { ticks: { callback: function (v) { return v; } } } } }) });
     var rows = sens.rows.slice().sort(function (a, b) { return a.dNi5y - b.dNi5y; });
@@ -277,7 +280,8 @@
 
   // ---------------- control panel ----------------
   var CTRL = [
-    ['الاستثمار', [['finance.initialInvestment', 'رأس المال المستثمر (ر.س)', 200000, 2500000, 25000, 'sar']]],
+    ['الاستثمار', [['finance.initialInvestment', 'رأس المال المستثمر (ر.س)', 50000, 1000000, 5000, 'sar']]],
+    ['مواد التعبئة (مصر)', [['packaging.cartonPriceEGP', 'سعر الكرتون (جنيه)', 30, 70, 1, 'n0'], ['packaging.foamPiecesPerCarton', 'قطع فوم لكل كرتون', 2, 10, 0.1, 'n1']]],
     ['الأسعار', [['shipment.buyPricePerTon', 'سعر شراء الموز (ر.س/طن)', 400, 1000, 5, 'n1'], ['shipment.sellPricePerCarton', 'سعر بيع الكرتون (ر.س)', 35, 65, 0.5, 'n1'], ['shipment.fxEGPperSAR', 'سعر الصرف (جنيه/ريال)', 10, 20, 0.1, 'n1']]],
     ['الكميات والنمو', [['volume.y1TargetContainers', 'شحنات/شهر نهاية السنة 1', 1, 8, 0.5, 'n1'], ['volume.monthlyGrowth', 'النمو الشهري للمبيعات بعد س1', 0, 0.04, 0.001, 'pct1']]],
     ['تكاليف الشحنة', [['shipment.freight', 'تكلفة الشحن (ر.س/شحنة)', 8000, 28000, 250, 'sar'], ['shipment.clearance', 'تخليص وتصديق (ر.س/شحنة)', 2000, 12000, 250, 'sar'],
@@ -288,7 +292,7 @@
   function ctrlValue(key) {
     if (key in state.ctrl) return state.ctrl[key];
     if (key === 'opexScale') return 1;
-    if (key === 'finance.initialInvestment') return res ? res.metrics.capital : 650000;
+    if (key === 'finance.initialInvestment') return E.scenarioParams(state.scn).finance.initialInvestment;
     var p = E.scenarioParams(state.scn), parts = key.split('.'); return p[parts[0]][parts[1]];
   }
   function ctrlFmt(v, f) { return f === 'x' ? n(v, 2) + '×' : fmt(v, f); }
@@ -300,7 +304,7 @@
         var v = ctrlValue(c[0]);
         h += '<div class="ctrl"><label for="i-' + c[0] + '">' + c[1] + '<output id="o-' + c[0] + '">' + ctrlFmt(v, c[5]) + '</output></label>' +
           '<input type="range" id="i-' + c[0] + '" data-key="' + c[0] + '" data-f="' + c[5] + '" min="' + c[2] + '" max="' + c[3] + '" step="' + c[4] + '" value="' + v + '"' + (c[0] === 'finance.initialInvestment' && state.autoCapital ? ' disabled' : '') + '>' +
-          (c[0] === 'finance.initialInvestment' ? '<div class="chk"><input type="checkbox" id="autoCap"' + (state.autoCapital ? ' checked' : '') + '><label for="autoCap">احسب رأس المال المطلوب تلقائياً</label></div>' : '') + '</div>';
+          (c[0] === 'finance.initialInvestment' ? '<div class="chk"><input type="checkbox" id="autoCap"' + (state.autoCapital ? ' checked' : '') + '><label for="autoCap">استخدم رأس المال اللازم للخطة دون قيد</label></div>' : '') + '</div>';
       });
       h += '</fieldset>';
     });
@@ -326,7 +330,7 @@
   var timer;
   function schedule() { clearTimeout(timer); timer = setTimeout(function () { compute(); bindAll(false); syncCapSlider(); }, 90); }
   function setScenario(s) {
-    state.scn = s; state.ctrl = {}; state.autoCapital = true;
+    state.scn = s; state.ctrl = {}; state.autoCapital = false;
     QA('#scenarioPill button').forEach(function (b) { b.classList.toggle('on', b.dataset.scn === s); });
     compute(); buildPanel(); bindAll(true); syncCapSlider();
   }

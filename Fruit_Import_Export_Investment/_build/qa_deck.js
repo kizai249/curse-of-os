@@ -42,8 +42,7 @@ const shots = path.join(__dirname, 'shots'); fs.mkdirSync(shots, { recursive: tr
   // engine parity: deck run with price 45 equals node engine
   const E = require('../01_Investor_Pitch_Deck/engine.js'); const p = E.scenarioParams('base'); p.shipment.sellPricePerCarton = 45;
   out.checks.panelMatchesEngine = Math.abs(E.run(p).metrics.totalNI5y - after) < 0.01;
-  await page.$eval('#autoCap', el => { el.click(); });
-  await page.$eval('input[data-key="finance.initialInvestment"]', el => { el.value = 300000; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await page.$eval('input[data-key="finance.initialInvestment"]', el => { el.value = 60000; el.dispatchEvent(new Event('input', { bubbles: true })); });
   await page.waitForTimeout(400); out.checks.fundingWarningShown = await page.$eval('#warn', e => e.classList.contains('show'));
   await page.screenshot({ path: path.join(shots, 'panel_warning.png') });
   await page.click('#reset'); await page.waitForTimeout(300); await page.click('#panelDone');

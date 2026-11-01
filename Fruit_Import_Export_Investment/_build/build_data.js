@@ -9,7 +9,7 @@ const sens = E.sensitivity(E.scenarioParams('base'));
 const params = {};
 ['conservative', 'base', 'optimistic'].forEach(k => {
   const p = E.scenarioParams(k);
-  p.finance.initialInvestment = scen[k].metrics.requiredCapital;
+  p.finance.initialInvestment = scen[k].metrics.capital;
   params[k] = p;
 });
 const out = {

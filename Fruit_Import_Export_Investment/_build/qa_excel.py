@@ -8,7 +8,7 @@ wb = openpyxl.load_workbook(os.path.join(tmp, 'Financial_Model.xlsx'), data_only
 ws = wb['Monthly_Model']
 hdr = [c.value for c in ws[5]]
 M = D['base']['monthly']
-pairs = {'Shipments': 'shipments', 'Revenue': 'revenue', 'COGS': 'cogs', 'Commission': 'commission', 'Overhead': 'overhead', 'EBITDA': 'ebitda',
+pairs = {'Shipments': 'shipments', 'Cap': 'capacity', 'Revenue': 'revenue', 'COGS': 'cogs', 'Commission': 'commission', 'Overhead': 'overhead', 'EBITDA': 'ebitda',
          'Zakat': 'zakat', 'Net income': 'netIncome', 'Collections': 'collections', 'Supplier payments': 'supplierPayments', 'Dividends': 'dividends',
          'Cash': 'cash', 'AR': 'ar', 'Inventory': 'inventory', 'AP & accruals': 'ap', 'Retained earnings': 'retained', 'CFO': 'cfo'}
 worst = 0; fails = []
@@ -32,7 +32,7 @@ for label, key in (('IRR — book exit (A)', 'irrBook'), ('IRR — multiple exit
                    ('First month with positive EBITDA', 'ebitdaBreakEvenMonth'), ('Minimum month-end cash', 'minCash')):
     xv = xl_metrics.get(label); ev = BM[key]
     if xv is None or abs(xv - ev) > 1e-6 * max(1, abs(ev)): fails.append(('returns', label, xv, ev))
-checks = [(r[0].value, r[1].value) for r in wb['Checks'].iter_rows(min_row=5, max_row=13)]
+checks = [(r[0].value, r[1].value) for r in wb['Checks'].iter_rows(min_row=5, max_row=30) if r[0].value]
 # scenario switch test: set selector to 1 and 3, recalc, compare 5y NI and closing cash with engine scenarios
 scen_res = {}
 for sel, key in ((1, 'conservative'), (3, 'optimistic')):

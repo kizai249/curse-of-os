@@ -41,13 +41,14 @@ def g(p, path):
 A = [
     ('sec', 'Shipment / unit economics — بيانات الشحنة'),
     ('cartons', 'shipment.cartonsPerContainer', 'عدد الكراتين في البراد', 'Cartons per container', 'carton', 'IMAGE', 'High', 'Image: الكرتون 1700'),
-    ('tons', 'shipment.tonsPerContainer', 'وزن الموز في البراد', 'Banana tonnes per container', 'ton', 'IMAGE', 'High', 'Image: 32 طن موز. ~18.8 kg/carton; 32 t exceeds typical 40ft reefer payload (~26–29 t) — verify'),
+    ('cartonKg', 'shipment.cartonKg', 'وزن الكرتون', 'Carton net weight', 'kg', 'CLIENT', 'High', 'Client: 13–14 kg carton ⇒ ~23 t packed vs 32 t bought (pack-out ≈72%)'),
+    ('tons', 'shipment.tonsPerContainer', 'الموز المشترى للبراد (وزن حقل)', 'Bananas bought per container (field weight)', 'ton', 'IMAGE', 'High', 'Image: 32 طن موز (Sudan)'),
     ('buyPrice', 'shipment.buyPricePerTon', 'سعر شراء الطن', 'Purchase price per tonne', 'SAR/t', 'IMAGE (derived)', 'High', '20,400 ÷ 32 = 637.5'),
-    ('packEGP', 'shipment.packagingEGP', 'مواد التعبئة لكل براد (بالجنيه)', 'Packaging per container (EGP)', 'EGP', 'IMAGE (adjusted)', 'High', '114,842 − 7,000 strapping machine (moved to CAPEX)'),
     ('fx', 'shipment.fxEGPperSAR', 'سعر الصرف جنيه/ريال', 'FX rate EGP per SAR', 'EGP/SAR', 'ASSUMPTION (market)', 'Medium', 'Image implies 14.90; Oct-2026 ~52.4 EGP/USD ÷ 3.75 ≈ 14.0'),
     ('treatment', 'shipment.treatment', 'مواد المعالجة', 'Treatment materials', 'SAR', 'IMAGE', 'High', '2 litres'),
-    ('labor', 'shipment.labor', 'العمالة', 'Labour', 'SAR', 'IMAGE', 'Medium', 'Label reads "العمالة / السودان" — meaning unclear'),
-    ('freight', 'shipment.freight', 'شحن البراد', 'Reefer freight', 'SAR', 'IMAGE', 'High', 'Get 3 forwarder quotes'),
+    ('labor', 'shipment.labor', 'العمالة (السودان)', 'Labour (Sudan)', 'SAR', 'IMAGE', 'High', 'Image: العمالة / السودان'),
+    ('coordination', 'shipment.coordination', 'تنسيق/وكيل في السودان', 'Sudan agent / coordination', 'SAR', 'ASSUMPTION', 'Low', 'Per shipment'),
+    ('freight', 'shipment.freight', 'شحن البراد', 'Reefer freight Sudan → Jeddah', 'SAR', 'IMAGE', 'High', 'Port Sudan → Jeddah; get 3 forwarder quotes'),
     ('clearance', 'shipment.clearance', 'تصديق/تخليص/ترحيل', 'Certification, clearance, transfer', 'SAR', 'IMAGE', 'High', ''),
     ('dutyRate', 'shipment.dutyRate', 'نسبة الرسوم الجمركية', 'Customs duty rate', '%', 'ASSUMPTION (GAFTA)', 'Medium', 'GAFTA exempts Arab-origin agri goods; requires certificate of origin'),
     ('localTransport', 'shipment.localTransport', 'نقل داخلي في جدة', 'Local transport (Jeddah)', 'SAR', 'ASSUMPTION', 'Low', 'Not in image'),
@@ -58,19 +59,35 @@ A = [
     ('sellPrice', 'shipment.sellPricePerCarton', 'سعر بيع الكرتون', 'Selling price per carton', 'SAR', 'IMAGE', 'Medium', 'Image: 50 — validate with buyer LOIs'),
     ('delayCost', 'shipment.delayStorageCostPerDay', 'تكلفة يوم التأخير', 'Cost per day of delay', 'SAR/day', 'ASSUMPTION', 'Low', ''),
     ('spoilPerDay', 'shipment.spoilagePerDelayDay', 'تلف إضافي لكل يوم تأخير', 'Extra spoilage per delay day', '%', 'ASSUMPTION', 'Low', ''),
+    ('sec', 'Packaging bill of materials (Egypt, EGP ex-factory) — مواد التعبئة'),
+    ('pkCarton', 'packaging.cartonPriceEGP', 'سعر الكرتون', 'Carton price', 'EGP', 'CLIENT', 'High', 'أرض مصنع'),
+    ('pkBagKg', 'packaging.bagPriceEGPperKg', 'سعر كيلو الأكياس', 'Bags price per kg', 'EGP/kg', 'CLIENT', 'High', 'أرض مصنع'),
+    ('pkBagsPerKg', 'packaging.bagsPerKg', 'عدد الأكياس في الكيلو', 'Bags per kg', 'bags', 'CLIENT', 'Medium', 'تقريباً 40'),
+    ('pkBagsPerCarton', 'packaging.bagsPerCarton', 'أكياس لكل كرتون', 'Bags per carton (incl. spare)', 'bags', 'IMAGE (derived)', 'Medium', '45 kg × 40 ÷ 1,700 ≈ 1.06'),
+    ('pkFoamRoll', 'packaging.foamRollPriceEGP', 'سعر لفة الفوم', 'Foam roll price (100cm×100m, 2mm)', 'EGP', 'CLIENT', 'High', ''),
+    ('pkFoamPcsRoll', 'packaging.foamPiecesPerRoll', 'قطع فوم لكل لفة', 'Foam pieces per roll (50×30 cm)', 'pcs', 'CLIENT', 'High', '666'),
+    ('pkFoamPcsCarton', 'packaging.foamPiecesPerCarton', 'قطع فوم لكل كرتون', 'Foam pieces per carton', 'pcs', 'IMAGE (derived)', 'Low', '15 rolls × 666 ÷ 1,700 ≈ 5.9 — confirm'),
+    ('pkCornerM', 'packaging.cornerPaperEGPperM', 'سعر متر الزوايا', 'Corner paper per metre', 'EGP/m', 'CLIENT', 'High', ''),
+    ('pkCornerMeters', 'packaging.cornerPaperMeters', 'أمتار الزوايا للبراد', 'Corner paper metres per reefer', 'm', 'CLIENT', 'High', '250'),
+    ('pkStrapTon', 'packaging.strapEGPperTon', 'سعر طن الشريط', 'Plastic strap per tonne', 'EGP/t', 'CLIENT', 'High', '27,000'),
+    ('pkStrapKg', 'packaging.strapKg', 'كيلو الشريط للبراد', 'Strap kg per reefer', 'kg', 'CLIENT', 'Medium', '≈20 kg roll'),
+    ('pkClipKg', 'packaging.clipEGPperKg', 'سعر كيلو الكلبسات', 'Steel clips per kg', 'EGP/kg', 'CLIENT', 'High', '45 (image showed 68)'),
+    ('pkClipQty', 'packaging.clipKg', 'كيلو الكلبسات للبراد', 'Clips kg per reefer', 'kg', 'CLIENT', 'Medium', '≈1 kg'),
+    ('pkTransport', 'packaging.transportEGP', 'نقل المواد من مصر للسودان', 'Packaging transport Egypt → Sudan', 'EGP', 'IMAGE', 'Medium', 'النقل من مصري / وأخرى'),
     ('sec', 'Volume plan — خطة الكميات'),
     ('launch', 'volume.launchMonth', 'شهر أول شحنة', 'Launch month', 'month#', 'ASSUMPTION', 'Medium', 'Months 1–2 setup & licensing'),
     ('startC', 'volume.startContainers', 'شحنات أول شهر', 'Containers in launch month', 'cont/mo', 'ASSUMPTION', 'Medium', ''),
     ('y1Target', 'volume.y1TargetContainers', 'شحنات شهرياً نهاية السنة 1', 'Run-rate at month 12', 'cont/mo', 'ASSUMPTION', 'Medium', 'Before seasonality'),
     ('growth', 'volume.monthlyGrowth', 'نمو شهري بعد السنة 1', 'Monthly growth after Y1', '%', 'ASSUMPTION', 'Low', ''),
     ('maxC', 'volume.maxContainers', 'سقف الشحنات الشهرية', 'Max containers per month', 'cont/mo', 'ASSUMPTION', 'Medium', 'Operational capacity cap'),
+    ('cashConstrained', 'volume.cashConstrained', 'الشحن حسب الكاش المتوفر', 'Shipments capped by available cash (TRUE/FALSE)', 'flag', 'POLICY', '-', 'Keeps month-end cash ≥ reserve'),
     ('volShock', 'shocks.volumeChange', 'صدمة الكمية', 'Volume shock', '%', 'SENSITIVITY', '-', ''),
     ('buyShock', 'shocks.buyPriceChange', 'صدمة سعر الشراء', 'Purchase price shock', '%', 'SENSITIVITY', '-', ''),
     ('sellShock', 'shocks.sellPriceChange', 'صدمة سعر البيع', 'Selling price shock', '%', 'SENSITIVITY', '-', ''),
     ('freightShock', 'shocks.freightChange', 'صدمة الشحن', 'Freight shock', '%', 'SENSITIVITY', '-', ''),
     ('sec', 'Cycle timing (days) — دورة العمليات'),
-    ('prepDays', 'timing.prepDays', 'تجهيز وتحميل', 'Preparation & loading', 'days', 'ASSUMPTION', 'Medium', ''),
-    ('transitDays', 'timing.transitDays', 'الشحن', 'Transit', 'days', 'ASSUMPTION', 'Medium', 'Egypt → Jeddah'),
+    ('prepDays', 'timing.prepDays', 'تجهيز وتحميل ونقل لبورتسودان', 'Packing, loading & trucking to Port Sudan', 'days', 'ASSUMPTION', 'Medium', 'Sennar/Kassala → Port Sudan'),
+    ('transitDays', 'timing.transitDays', 'الشحن', 'Sea transit', 'days', 'ASSUMPTION', 'Medium', 'Port Sudan → Jeddah ≈1 day sailing + port'),
     ('clearDays', 'timing.clearanceDays', 'التخليص', 'Clearance', 'days', 'ASSUMPTION', 'Medium', ''),
     ('ripenDays', 'timing.ripeningDays', 'الإنضاج', 'Ripening', 'days', 'ASSUMPTION', 'Medium', ''),
     ('sellDays', 'timing.sellingDays', 'البيع', 'Selling', 'days', 'ASSUMPTION', 'Medium', ''),
@@ -78,7 +95,7 @@ A = [
     ('custDays', 'timing.customerDays', 'مدة تحصيل العملاء', 'Customer payment terms', 'days', 'ASSUMPTION', 'Low', 'Mix of cash market & supermarket credit'),
     ('suppDays', 'timing.supplierDays', 'مدة السداد للمورد', 'Supplier payment terms', 'days', 'ASSUMPTION', 'Medium', 'Cash on loading'),
     ('sec', 'Overheads (monthly SAR) — المصاريف الثابتة'),
-    ('salaries', 'overhead.salaries', 'الرواتب', 'Salaries', 'SAR/mo', 'ASSUMPTION', 'Medium', 'GM 12k, Ops 7k, Sales 5k, Acct 2.5k, Egypt agent 4k'),
+    ('salaries', 'overhead.salaries', 'الرواتب', 'Salaries', 'SAR/mo', 'ASSUMPTION', 'Medium', 'Founder 5k + ops/sales 3.5k (lean)'),
     ('benefits', 'overhead.benefitsRate', 'تأمينات ومزايا', 'GOSI & benefits', '%', 'ASSUMPTION', 'Medium', ''),
     ('rent', 'overhead.rent', 'إيجار مكتب', 'Office rent', 'SAR/mo', 'ASSUMPTION', 'Medium', ''),
     ('utilIT', 'overhead.utilitiesIT', 'اتصالات وأنظمة', 'Utilities, telecom, software', 'SAR/mo', 'ASSUMPTION', 'Medium', ''),
@@ -90,7 +107,7 @@ A = [
     ('preFactor', 'overhead.preLaunchFactor', 'نسبة المصاريف قبل الإطلاق', 'Pre-launch overhead factor', '%', 'ASSUMPTION', 'Medium', ''),
     ('ohGrowth', 'overhead.annualGrowth', 'نمو سنوي للمصاريف', 'Annual overhead growth', '%', 'ASSUMPTION', 'Medium', 'Inflation + hiring'),
     ('sec', 'One-time, CAPEX & deposits — التأسيس والأصول'),
-    ('establish', 'oneTime.establishment', 'تأسيس وتراخيص', 'Establishment & licensing', 'SAR', 'ASSUMPTION', 'Medium', 'CR, chamber, Balady, MEWA licence, SFDA, legal'),
+    ('establish', 'oneTime.establishment', 'تأسيس وتراخيص', 'Establishment & licensing', 'SAR', 'ASSUMPTION', 'Medium', 'Sole establishment: CR, chamber, Balady, MEWA licence, SFDA'),
     ('launchMkt', 'oneTime.launchMarketing', 'تسويق الإطلاق', 'Launch marketing', 'SAR', 'ASSUMPTION', 'Medium', ''),
     ('officeIT', 'capex.officeIT', 'أثاث وتقنية', 'Office & IT', 'SAR', 'ASSUMPTION', 'Medium', ''),
     ('equipment', 'capex.equipment', 'معدات', 'Equipment (pallet jack, loggers)', 'SAR', 'ASSUMPTION', 'Medium', ''),
@@ -98,8 +115,8 @@ A = [
     ('life', 'capex.usefulLifeYears', 'العمر الإنتاجي', 'Useful life', 'years', 'ASSUMPTION', 'Medium', ''),
     ('suppDeposit', 'deposits.supplierDeposit', 'تأمين لدى المورد', 'Supplier deposit', 'SAR', 'ASSUMPTION', 'Low', 'Refundable'),
     ('sec', 'Finance — التمويل والعوائد'),
-    ('capital', 'finance.initialInvestment', 'رأس المال المستثمر', 'Initial investment (engine-computed requirement)', 'SAR', 'ENGINE', 'Medium', 'Min capital keeping cash ≥ reserve, rounded to 25k'),
-    ('discount', 'finance.discountRate', 'معدل الخصم', 'Discount rate (NPV)', '%', 'ASSUMPTION', 'Medium', 'Saudi SME risk premium'),
+    ('capital', 'finance.initialInvestment', 'رأس المال المستثمر', 'Initial investment', 'SAR', 'CLIENT', 'High', 'Fixed by client at SAR 100,000'),
+    ('discount', 'finance.discountRate', 'معدل الخصم', 'Discount rate (NPV)', '%', 'ASSUMPTION', 'Medium', 'SME + Sudan country-risk premium'),
     ('payout', 'finance.payoutRatio', 'نسبة توزيع الأرباح', 'Dividend payout ratio', '%', 'POLICY', '-', 'Of prior-year net profit, subject to reserve'),
     ('divMonth', 'finance.dividendMonth', 'شهر التوزيع', 'Dividend month (of year)', 'month', 'POLICY', '-', 'After year-end close'),
     ('zakat', 'finance.zakatRate', 'نسبة الزكاة', 'Zakat rate', '%', 'REGULATION (simplified)', 'Medium', 'Simplified base: equity − fixed assets − deposits'),
@@ -112,11 +129,11 @@ MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 wb = Workbook()
 # ------------------------------------------------------------------ Cover
 ws = wb.active; ws.title = 'Cover'
-title(ws, 'Fresh Fruit Import — Financial Model (Egypt → Jeddah, Bananas)', 'نموذج مالي متكامل لمدة 5 سنوات — شهري للسنة الأولى، ربع سنوي وسنوي للسنوات التالية')
+title(ws, 'Fresh Fruit Import — Financial Model (Sudanese bananas → Jeddah)', 'نموذج مالي متكامل لمدة 5 سنوات — شهري للسنة الأولى، ربع سنوي وسنوي للسنوات التالية')
 rows = [
     ('How to use', 'Change the yellow cells in "Assumptions". Pick the scenario in Assumptions!C3 (1 Conservative, 2 Base, 3 Optimistic).'),
     ('Engine', 'Monthly_Model mirrors 01_Investor_Pitch_Deck/engine.js formula-for-formula. QA recalculates this file and compares to the engine.'),
-    ('Capital', 'Initial investment per scenario = minimum equity that keeps month-end cash ≥ emergency reserve (engine computed, rounded to 25k).'),
+    ('Capital', 'Initial investment fixed at SAR 100,000. Shipments are capped each month by available cash (Monthly_Model "Cap" column) so month-end cash stays ≥ the reserve.'),
     ('Currency', 'SAR, excluding VAT (VAT 15% is a pass-through; its cash timing is not modelled — see audit report).'),
     ('Timing', 'Flows that occur N days after purchase are split between month INT(N/30) and the next month (linear lag).'),
     ('Status', 'Planning model. Not audited. No figure is a guarantee of return.'),
@@ -136,9 +153,9 @@ ext = [
     ('الفوم / كيلو', 15, 430, 6450, 'EGP', 'High', ''),
     ('ورق تثبيت / كيلو', 250, 24, 6000, 'EGP', 'High', 'Wrapping/fixing paper'),
     ('شريط', 20, 27, 540, 'EGP', 'High', 'Tape rolls'),
-    ('كلبس / كيلو', 1.5, 68, 102, 'EGP', 'High', 'Clips'),
+    ('كلبس / كيلو', 1.5, 68, 102, 'EGP', 'High', 'Client update: 45 EGP/kg, ≈1 kg per reefer (model uses 45)'),
     ('مكنة شد', 1, 7000, 7000, 'EGP', 'High', 'One-off asset → reclassified to CAPEX in model'),
-    ('النقل من مصري / وأخرى', None, None, 15000, 'EGP', 'Medium', '"مصري" may be a place/person name — clarify'),
+    ('النقل من مصري / وأخرى', None, None, 15000, 'EGP', 'High', 'Transport of packaging from Egypt to Sudan (client clarified)'),
 ]
 r = 5
 for it in ext:
@@ -152,8 +169,8 @@ ws.cell(row=r, column=1, value='اجمالي مواد التعبئة بالري�
 ws.cell(row=r, column=6, value=f'=F{pk}/14.9'); ws.cell(row=r, column=7, value=f'=F{r}-D{r}'); ws.cell(row=r, column=8, value='High'); ws.cell(row=r, column=9, value='Implied FX = 114,842 / 7,707.52 = 14.90 EGP per SAR'); r += 2
 header(ws, r, ['Reefer (البراد) — SAR', 'Qty', 'Unit', 'Total (as shown)', 'Currency', 'Recomputed', 'Diff', 'Confidence', 'Notes']); r += 1
 b0 = r
-brad = [('32 طن موز', 32, 'ton', 20400, 'High', '637.5 SAR/ton'), ('مواد المعالجة 2 لتر', 2, 'litre', 350, 'High', 'Treatment (likely ripening/anti-fungal)'),
-        ('العمالة / السودان', None, '', 500, 'Medium', 'Labour; "السودان" meaning unclear'), ('شحن البراد', 1, 'trip', 16000, 'High', 'Reefer freight'),
+brad = [('32 طن موز (السودان)', 32, 'ton', 20400, 'High', '637.5 SAR/ton; bought in Sudan'), ('مواد المعالجة 2 لتر', 2, 'litre', 350, 'High', 'Treatment (likely ripening/anti-fungal)'),
+        ('العمالة / السودان', None, '', 500, 'High', 'Labour in Sudan'), ('شحن البراد', 1, 'trip', 16000, 'High', 'Reefer freight'),
         ('تصديق استيراد/تخليص/ترحيل', 1, '', 6000, 'High', 'Import certification, clearance, transfer'), ('اجمالي مواد التعبئة بالريال', None, '', 7707.52, 'High', 'From packaging table')]
 for it in brad:
     ws.cell(row=r, column=1, value=it[0]); ws.cell(row=r, column=2, value=it[1]); ws.cell(row=r, column=3, value=it[2]); ws.cell(row=r, column=4, value=it[3])
@@ -206,13 +223,14 @@ ws.freeze_panes = 'E6'
 
 # ------------------------------------------------------------------ Unit economics
 ws = wb.create_sheet('Unit_Economics')
-title(ws, 'Unit Economics — اقتصاديات الشحنة الواحدة (Banana | Egypt → Jeddah, KSA)', 'One 40ft reefer / truck shipment. Image figures vs model (with missing costs added).')
+title(ws, 'Unit Economics — اقتصاديات الشحنة الواحدة (Sudanese bananas → Jeddah, KSA; packaging from Egypt)', 'One 40ft reefer / truck shipment. Image figures vs model (with missing costs added).')
 header(ws, 4, ['Line', 'البند', 'Model (active)', 'Per carton', 'Image', 'Payment lag (days)', 'Name'])
 U = [
     ('Fruit', 'الموز', '=tons*buyPrice*(1+buyShock)', 20400, '=suppDays', 'u_fruit'),
-    ('Packaging', 'مواد التعبئة', '=packEGP/fx', 7707.52, '=suppDays', 'u_pack'),
+    ('Packaging (BOM below)', 'مواد التعبئة (التفصيل أدناه)', '=pk_totalEGP/fx', 7707.52, '=suppDays', 'u_pack'),
     ('Treatment', 'مواد المعالجة', '=treatment', 350, 0, 'u_treat'),
-    ('Labour', 'العمالة', '=labor', 500, 0, 'u_labor'),
+    ('Labour (Sudan)', 'العمالة (السودان)', '=labor', 500, 0, 'u_labor'),
+    ('Sudan coordination', 'تنسيق/وكيل السودان', '=coordination', 0, 0, 'u_coord'),
     ('Freight', 'شحن البراد', '=freight*(1+freightShock)', 16000, '=prepDays', 'u_freight'),
     ('Cargo insurance', 'تأمين البضاعة', '=insRate*(u_fruit+u_pack+u_freight)', 0, '=prepDays', 'u_ins'),
     ('Clearance & certification', 'تخليص وتصديق', '=clearance', 6000, '=prepDays+transitDays+delayDays', 'u_clear'),
@@ -237,7 +255,7 @@ def line(label, ar, f, img=None, name=None, fmt=SAR2, bold=False):
     if name:
         ws.cell(row=r, column=7, value=name); wb.defined_names[name] = DefinedName(name, attr_text=f'Unit_Economics!$C${r}')
     r += 1
-line('Landed cost', 'التكلفة واصل', '=SUM(C5:C14)', 50957.52, 'u_landed', bold=True)
+line('Landed cost', 'التكلفة واصل', f'=SUM(C5:C{4+len(U)})', 50957.52, 'u_landed', bold=True)
 line('Spoilage rate', 'نسبة التلف', '=MIN(0.9,spoilage+delayDays*spoilPerDay)', 0, 'u_spoil', PCT)
 line('Cartons sold', 'الكراتين المباعة', '=cartons*(1-u_spoil)', 1700, 'u_cartonsSold', '#,##0')
 line('Selling price / carton', 'سعر البيع', '=sellPrice*(1+sellShock)', 50, 'u_price')
@@ -256,10 +274,12 @@ for nm, f in [('kS', '=INT(Ls)'), ('fS', '=Ls-kS'), ('kC', '=INT(Lc)'), ('fC', '
               ('lagA', '=suppDays/30'), ('lagC', '=prepDays/30'), ('lagD', '=(prepDays+transitDays+delayDays)/30'), ('lagE', '=(prepDays+transitDays+clearDays+delayDays)/30')]:
     line(nm, '', f, None, nm, '0.000')
 line('Cost group A (fruit+packaging @ supplier days)', '', '=u_fruit+u_pack', None, 'costA')
-line('Cost group B (treatment+labour @0)', '', '=u_treat+u_labor', None, 'costB')
+line('Cost group B (treatment+labour+coordination @0)', '', '=u_treat+u_labor+u_coord', None, 'costB')
 line('Cost group C (freight+insurance @prep)', '', '=u_freight+u_ins', None, 'costC')
 line('Cost group D (clearance+duty @arrival)', '', '=u_clear+u_duty', None, 'costD')
 line('Cost group E (local+ripening @after clearance)', '', '=u_local+u_ripen', None, 'costE')
+def wIn(L): return f'IF(INT({L})=0,1-({L}-INT({L})),0)'
+line('Cash needed in purchase month per container', 'نقد الشحنة في شهر الشراء', f'=MAX(1,costA*{wIn("lagA")}+costB+costC*{wIn("lagC")}+costD*{wIn("lagD")}+costE*{wIn("lagE")}-(u_revenue-u_comm)*{wIn("Lc")})', None, 'netOut')
 r += 1
 ws.cell(row=r, column=1, value='Overheads & capital').font = Font(bold=True, color=GREEN); r += 1
 line('Monthly overhead (Y1 base)', 'المصاريف الشهرية', '=salaries*(1+benefits)+rent+utilIT+marketing+travel+insurance+profFees+misc', None, 'ohBase')
@@ -268,12 +288,33 @@ line('Monthly depreciation', 'الإهلاك الشهري', '=capexTotal/(life*1
 line('Emergency reserve', 'احتياطي الطوارئ', '=resMonths*ohBase+resCont*u_landed', None, 'reserve')
 line('Break-even containers / month (Y1)', 'حاويات التعادل شهرياً', '=ohBase/u_contrib', None, 'beCont', '0.00')
 line('Break-even selling price / carton', 'سعر بيع التعادل للكرتون', '=(u_landed/u_cartonsSold)/(1-commRate)', None, 'bePrice')
+r += 1
+ws.cell(row=r, column=1, value='Packaging bill of materials (EGP, Egypt ex-factory) — مواد التعبئة').font = Font(bold=True, color=GREEN); r += 1
+header(ws, r, ['Item', 'البند', 'Qty / shipment', 'Unit', 'Unit price EGP', 'Total EGP', 'Total SAR']); r += 1
+bom = [('Cartons 13–14 kg', 'كراتين', '=cartons', 'carton', '=pkCarton'),
+       ('Bags', 'أكياس', '=cartons*pkBagsPerCarton/pkBagsPerKg', 'kg', '=pkBagKg'),
+       ('Foam separators 2 mm', 'فوم فواصل', '=cartons*pkFoamPcsCarton/pkFoamPcsRoll', 'roll', '=pkFoamRoll'),
+       ('Corner paper', 'زوايا ورق تثبيت', '=pkCornerMeters', 'm', '=pkCornerM'),
+       ('Plastic strap', 'شريط ربط', '=pkStrapKg', 'kg', '=pkStrapTon/1000'),
+       ('Steel clips', 'كلبسات حديد', '=pkClipQty', 'kg', '=pkClipKg'),
+       ('Transport Egypt → Sudan & other', 'نقل المواد للسودان', 1, 'trip', '=pkTransport')]
+b0 = r
+for en, ar, q, u, pr in bom:
+    ws.cell(row=r, column=1, value=en); ws.cell(row=r, column=2, value=ar)
+    ws.cell(row=r, column=3, value=q).number_format = '#,##0.00'; ws.cell(row=r, column=4, value=u)
+    ws.cell(row=r, column=5, value=pr).number_format = '#,##0.00'
+    ws.cell(row=r, column=6, value=f'=C{r}*E{r}').number_format = SAR
+    ws.cell(row=r, column=7, value=f'=F{r}/fx').number_format = SAR2; r += 1
+ws.cell(row=r, column=1, value='Total packaging per shipment').font = BF
+ws.cell(row=r, column=6, value=f'=SUM(F{b0}:F{r-1})').number_format = SAR; ws.cell(row=r, column=7, value=f'=F{r}/fx').number_format = SAR2
+wb.defined_names['pk_totalEGP'] = DefinedName('pk_totalEGP', attr_text=f'Unit_Economics!$F${r}')
+r += 1; ws.cell(row=r, column=1, value='Strapping machine (7,000 EGP) is CAPEX, not a per-shipment cost.').font = Font(italic=True, color='6B6B6B')
 for col, w in zip('ABCDEFG', [44, 24, 16, 12, 14, 16, 14]): ws.column_dimensions[col].width = w
 
 # ------------------------------------------------------------------ Monthly model
 ws = wb.create_sheet('Monthly_Model')
 title(ws, 'Monthly Engine — المحرك الشهري (60 months)', 'Every column is a formula. Mirrors engine.js. Rows 6–65 = months 1–60.')
-cols = ['Month', 'Year', 'MoY', 'Quarter', 'Season', 'Plan base', 'Shipments', 'Sold (cont.)', 'Revenue', 'COGS', 'Gross profit', 'Commission',
+cols = ['Month', 'Year', 'MoY', 'Quarter', 'Season', 'Plan base', 'Plan', 'Known in', 'Known out', 'Cap', 'Shipments', 'Sold (cont.)', 'Revenue', 'COGS', 'Gross profit', 'Commission',
         'Overhead', 'One-time', 'EBITDA', 'CAPEX', 'Depreciation', 'EBIT', 'Zakat', 'Net income',
         'Collections', 'Pay A', 'Pay B', 'Pay C', 'Pay D', 'Pay E', 'Supplier payments', 'Commission paid', 'Zakat paid', 'Equity in', 'Deposits',
         'Cash pre-div', 'Dividends', 'Cash', 'AR', 'Inventory', 'Deposits bal', 'Net FA', 'AP & accruals', 'Commission payable', 'Zakat payable',
@@ -282,11 +323,17 @@ header(ws, 5, cols)
 C = {n: L(i + 1) for i, n in enumerate(cols)}
 F, LST = 6, 65
 def rng(n): return f'${C[n]}${F}:${C[n]}${LST}'
+# Lag lookups use ranges that END at the current row (row 5 = header = month 0), so no formula
+# depends on a later row: this keeps the cash-capped shipment logic free of circular references.
 def distf(col, k, f, r):
-    rg = rng(col); a = C['Month']
-    return (f'(IF(${a}{r}-{k}>=1,INDEX({rg},${a}{r}-{k}),0)*(1-{f})+IF(${a}{r}-{k}-1>=1,INDEX({rg},${a}{r}-{k}-1),0)*{f})')
+    rg = f'${C[col]}$5:${C[col]}{r}'; a = C['Month']
+    return (f'(IF(${a}{r}-{k}>=1,INDEX({rg},${a}{r}-{k}+1),0)*(1-{f})+IF(${a}{r}-{k}-1>=1,INDEX({rg},${a}{r}-{k}),0)*{f})')
 def lagdist(col, lag, r):
     return distf(col, f'INT({lag})', f'({lag}-INT({lag}))', r)
+def priordist(col, lag, r):
+    # same as lagdist but WITHOUT the current month's own shipment (used to size the cash cap)
+    rg = f'${C[col]}$5:${C[col]}{r-1}'; a = C['Month']; k = f'INT({lag})'; f = f'({lag}-INT({lag}))'
+    return (f'(IF(AND({k}>=1,${a}{r}-{k}>=1),INDEX({rg},${a}{r}-{k}+1),0)*(1-{f})+IF(${a}{r}-{k}-1>=1,INDEX({rg},${a}{r}-{k}),0)*{f})')
 for i in range(60):
     r = F + i; p = r - 1; first = (i == 0)
     def c(n): return f'{C[n]}{r}'
@@ -299,7 +346,13 @@ for i in range(60):
     f['Quarter'] = f'=INT(({c("Month")}-1)/3)+1'
     f['Season'] = f'=INDEX(Seasonality,{c("MoY")})'
     f['Plan base'] = f'=IF({c("Month")}<launch,0,IF({c("Month")}<=12,IF(launch>=12,y1Target,startC+(y1Target-startC)*({c("Month")}-launch)/(12-launch)),y1Target*(1+growth)^({c("Month")}-12)))'
-    f['Shipments'] = f'=MAX(0,MIN(maxC,{c("Plan base")})*{c("Season")}*(1+volShock))'
+    f['Plan'] = f'=MAX(0,MIN(maxC,{c("Plan base")})*{c("Season")}*(1+volShock))'
+    f['Known in'] = '=' + priordist('Shipments', 'Lc', r) + '*(u_revenue-u_comm)'
+    f['Known out'] = ('=' + priordist('Shipments', 'lagA', r) + '*costA+' + priordist('Shipments', 'lagC', r) + '*costC+'
+                      + priordist('Shipments', 'lagD', r) + '*costD+' + priordist('Shipments', 'lagE', r) + '*costE')
+    f['Cap'] = (f'=MAX(0,({pv("Cash")}+{c("Equity in")}-{c("CAPEX")}-{c("Deposits")}-{c("Overhead")}-{c("One-time")}'
+                f'-{c("Zakat paid")}+{c("Known in")}-{c("Known out")}-reserve)/netOut)')
+    f['Shipments'] = f'=IF(cashConstrained,MAX(0,MIN({c("Plan")},{c("Cap")})),{c("Plan")})'
     f['Sold (cont.)'] = '=' + distf('Shipments', 'kS', 'fS', r)
     f['Revenue'] = f'={c("Sold (cont.)")}*u_revenue'
     f['COGS'] = f'={c("Sold (cont.)")}*u_landed'
@@ -321,12 +374,12 @@ for i in range(60):
     f['Pay E'] = '=' + lagdist('Shipments', 'lagE', r) + '*costE'
     f['Supplier payments'] = f'=SUM({c("Pay A")}:{c("Pay E")})'
     f['Commission paid'] = '=' + distf('Shipments', 'kC', 'fC', r) + '*u_comm'
-    f['Zakat paid'] = f'=IF({c("Month")}-divMonth>=1,INDEX({rng("Zakat")},{c("Month")}-divMonth),0)'
+    f['Zakat paid'] = f'=IF({c("Month")}-divMonth>=1,INDEX(${C["Zakat"]}$5:${C["Zakat"]}{r-1},{c("Month")}-divMonth+1),0)' if not first else 0
     f['Equity in'] = f'=IF({c("Month")}=1,capital,0)'
     f['Deposits'] = f'=IF({c("Month")}=1,suppDeposit,0)'
     f['Cash pre-div'] = (f'={pv("Cash")}+{c("Collections")}-{c("Supplier payments")}-{c("Commission paid")}-{c("Overhead")}-{c("One-time")}'
                          f'-{c("Zakat paid")}-{c("CAPEX")}-{c("Deposits")}+{c("Equity in")}')
-    prevNI = f'SUMIFS({rng("Net income")},{rng("Year")},{c("Year")}-1)'
+    prevNI = f'SUMIFS(${C["Net income"]}$5:${C["Net income"]}{max(r-1,5)},${C["Year"]}$5:${C["Year"]}{max(r-1,5)},{c("Year")}-1)'
     f['Dividends'] = f'=IF(AND({c("Year")}>=2,{c("MoY")}=divMonth,{prevNI}>0),MAX(0,MIN(payout*{prevNI},{c("Cash pre-div")}-reserve)),0)'
     f['Cash'] = f'={c("Cash pre-div")}-{c("Dividends")}'
     f['AR'] = f'={cum("Revenue")}-{cum("Collections")}'
@@ -352,7 +405,7 @@ for i in range(60):
     f['Cum NI'] = f'={cum("Net income")}'
     for n in cols:
         cell = ws.cell(row=r, column=cols.index(n) + 1, value=f[n])
-        cell.number_format = NUM1 if n in ('Season', 'Plan base', 'Shipments', 'Sold (cont.)') else ('0' if n in ('Month', 'Year', 'MoY', 'Quarter') else SAR)
+        cell.number_format = NUM1 if n in ('Season', 'Plan base', 'Plan', 'Cap', 'Shipments', 'Sold (cont.)') else ('0' if n in ('Month', 'Year', 'MoY', 'Quarter') else SAR)
 ws.freeze_panes = 'B6'
 for i in range(len(cols)): ws.column_dimensions[L(i + 1)].width = 12
 for n in ('BS check', 'Cash tie check'):
@@ -581,6 +634,7 @@ checks = [
     ('Capital is not counted as revenue', f'=SUM(Monthly_Model!{rng("Revenue")})=SUMPRODUCT(Monthly_Model!{rng("Sold (cont.)")})*u_revenue'),
     ('Annual net income = sum of monthly', f'=ROUND(SUM(Annual_Statements!C16:G16)-SUM(Monthly_Model!{rng("Net income")}),2)=0'),
     ('Cash never below zero', f'=MIN(Monthly_Model!{rng("Cash")})>=0'),
+    ('Shipments never exceed the plan', f'=SUMPRODUCT((Monthly_Model!{rng("Shipments")}>Monthly_Model!{rng("Plan")}+0.000001)*1)=0'),
     ('Cash stays ≥ emergency reserve (funding adequate)', f'=MIN(Monthly_Model!{rng("Cash")})>=reserve-0.01'),
     ('Base: 5y net income matches engine.js (±1 SAR) — valid when scenario = 2', f'=OR(ScenarioSel<>2,ABS(SUM(Monthly_Model!{rng("Net income")})-{B["totalNI5y"]:.4f})<1)'),
     ('Base: closing cash matches engine.js (±1 SAR) — valid when scenario = 2', f'=OR(ScenarioSel<>2,ABS(INDEX(Monthly_Model!{rng("Cash")},60)-{B["endCash"]:.4f})<1)'),

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fresh Fruit Import — Investor Deck</title>
-<meta name="description" content="Interactive investor pitch deck: Egyptian bananas imported to Jeddah. All figures computed live by one financial engine.">
+<meta name="description" content="Interactive investor pitch deck: Sudanese bananas imported to Jeddah, capital SAR 100,000. All figures computed live by one financial engine.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <div><span>أدنى رصيد نقدي</span><b data-k="m.minCash" data-f="k"></b></div>
     <div><span>استرداد نقدي (شهر)</span><b data-k="m.cashPaybackMonth" data-f="mo"></b></div>
     <div><span>تعادل (حاوية/شهر)</span><b data-k="m.breakEvenContainersY1" data-f="n1"></b></div>
-    <div><span>رأس المال المطلوب</span><b data-k="m.requiredCapital" data-f="k"></b></div>
+    <div><span>رأس المال المستثمر</span><b data-k="m.capital" data-f="k"></b></div>
   </div>
   <div class="warn" id="warn"></div>
   <div class="ctrls" id="ctrls"></div>
@@ -70,7 +70,7 @@
     <g class="orbit">
       <path d="M120 470 C 220 300, 420 250, 520 150" stroke="url(#gl)" stroke-width="2" fill="none" stroke-dasharray="6 8"/>
       <circle cx="120" cy="470" r="9" fill="#2E9E74"/><circle cx="520" cy="150" r="9" fill="#C59A3E"/>
-      <text x="96" y="505" fill="#CFE7DA" font-size="16" font-family="Plex Arabic">مصر</text>
+      <text x="96" y="505" fill="#CFE7DA" font-size="16" font-family="Plex Arabic">السودان</text>
       <text x="500" y="128" fill="#E3C27A" font-size="16" font-family="Plex Arabic">جدة</text>
     </g>
     <g transform="translate(250 230) rotate(-18)">
@@ -81,12 +81,12 @@
     </g>
   </svg>
   <div style="max-width:880px; margin-top:80px">
-    <div class="kicker">Fresh Fruit Import · Egypt → Jeddah</div>
-    <h1>استيراد الموز المصري<br><span>إلى سوق جدة</span></h1>
-    <p class="lead" style="margin-top:20px">فرصة تجارية قصيرة الدورة مبنية على بيانات تكلفة فعلية لشحنة واحدة، ومحوّلة إلى نموذج مالي متكامل لمدة 5 سنوات بثلاثة سيناريوهات.</p>
+    <div class="kicker">Fresh Fruit Import · Sudan → Jeddah</div>
+    <h1>استيراد الموز السوداني<br><span>إلى سوق جدة</span></h1>
+    <p class="lead" style="margin-top:20px">فرصة تجارية قصيرة الدورة برأس مال 100 ألف ريال: موز من السودان عبر بورتسودان، ومواد تعبئة من مصر، وبيع في جدة — مبنية على تكلفة شحنة فعلية ونموذج مالي لمدة 5 سنوات.</p>
   </div>
   <div class="meta">
-    <div class="kpi"><div class="l">رأس المال المطلوب</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div></div>
+    <div class="kpi"><div class="l">رأس المال</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div></div>
     <div class="kpi"><div class="l">IRR للمساهمين (أساسي)</div><div class="v"><span class="count" data-k="m.irrBook" data-f="pct"></span></div></div>
     <div class="kpi"><div class="l">استرداد رأس المال نقدياً</div><div class="v"><span data-k="m.cashPaybackMonth" data-f="mo"></span><small>شهر</small></div></div>
     <div class="small" style="align-self:flex-end; max-width:300px">مسودة للنقاش — أكتوبر 2026 · سرّي<br>الأرقام توقعات وليست عوائد مضمونة</div>
@@ -100,18 +100,18 @@
   <div class="body g-64">
     <div class="col">
       <div class="kpis g4" style="display:grid">
-        <div class="kpi"><div class="l">رأس المال</div><div class="v"><span class="count" data-k="m.capital" data-f="k"></span></div><div class="s">ثابت + عامل + احتياطي</div></div>
+        <div class="kpi"><div class="l">رأس المال</div><div class="v"><span class="count" data-k="m.capital" data-f="k"></span></div><div class="s">ثابت — النمو من الأرباح</div></div>
         <div class="kpi"><div class="l">إيرادات السنة 2</div><div class="v"><span class="count" data-k="y.1.revenue" data-f="m"></span></div><div class="s"><span data-k="y.1.shipments" data-f="n0"></span> شحنة</div></div>
         <div class="kpi"><div class="l">صافي ربح 5 سنوات</div><div class="v"><span class="count" data-k="m.totalNI5y" data-f="m"></span></div><div class="s">بعد الزكاة</div></div>
         <div class="kpi"><div class="l">IRR</div><div class="v"><span class="count" data-k="m.irrBook" data-f="pct"></span></div><div class="s">تخارج بالقيمة الدفترية</div></div>
       </div>
       <div class="card">
         <ul class="ticks">
-          <li><b>النشاط:</b> شراء الموز من مزارع مصر، تعبئته في كراتين (1,700 كرتون/شحنة)، شحنه مبرّداً إلى جدة، إنضاجه وبيعه لتجار الجملة والأسواق المركزية والتجزئة.</li>
+          <li><b>النشاط:</b> شراء الموز من مزارع السودان (سنار وكسلا)، تعبئته في كراتين 13–14 كجم بمواد من مصر (1,700 كرتون/شحنة)، شحنه مبرّداً من بورتسودان إلى جدة، إنضاجه وبيعه بالجملة.</li>
           <li><b>الميزة الاقتصادية:</b> دورة نقدية قصيرة ≈ <b class="num" data-k="m.ccc" data-f="n0"></b> يوماً ⇐ رأس المال يدور ≈ <b class="num" data-k="m.cyclesPerYear" data-f="n1"></b> مرات سنوياً.</li>
           <li><b>تصحيح جوهري:</b> «صافي الربح» في الصورة (34,042 ر.س/شحنة) هو ربح قبل المصاريف الثابتة والتلف والتخزين والعمولة. بعد إضافتها تصبح مساهمة الشحنة <b class="num" data-k="u.contribution" data-f="sar"></b> ر.س.</li>
           <li><b>نقطة التعادل:</b> <b class="num" data-k="m.breakEvenContainersY1" data-f="n1"></b> شحنة شهرياً لتغطية المصاريف الثابتة · أول شهر EBITDA موجب: الشهر <b class="num" data-k="m.ebitdaBreakEvenMonth" data-f="mo"></b>.</li>
-          <li><b>أكبر المخاطر:</b> سعر البيع والتلف وانتظام توريد الموز المصري؛ السيناريو المتحفظ يحقق خسارة — ولذلك نقترح ضوابط إيقاف خسارة واضحة.</li>
+          <li><b>أكبر المخاطر:</b> الوضع في السودان (الحرب، البنوك، الموانئ)، وسعر البيع، والتحصيل: مع 100 ألف فقط، تأخر التحصيل يوقف الشحن. السيناريو المتحفظ يخسر — لذلك قاعدة إيقاف خسارة واضحة.</li>
         </ul>
       </div>
     </div>
@@ -123,11 +123,11 @@
 <!-- 3 INVESTMENT OPPORTUNITY -->
 <section class="slide dark" data-title="الفرصة الاستثمارية">
   <div class="head"><div><div class="kicker"><span class="idx">03</span>Investment Opportunity</div><h2>الفرصة الاستثمارية</h2><div class="rule"></div></div>
-    <p class="lead">تمويل رأس مال عامل لتجارة سلعة سريعة الدوران، مع احتياطي نقدي يحمي استمرارية العمليات.</p></div>
+    <p class="lead">100 ألف ريال تكفي لتأسيس المنشأة وتمويل أول شحنة مع احتياطي؛ وبعدها ينمو حجم الشحن من الأرباح المعاد استثمارها فقط.</p></div>
   <div class="body g3">
     <div class="col">
-      <div class="kpi"><div class="l">إجمالي الاستثمار المطلوب</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div><div class="s">أدنى رأس مال يُبقي النقد فوق الاحتياطي في كل شهر</div></div>
-      <div class="kpi"><div class="l">الحد الأدنى للتذكرة الاستثمارية</div><div class="v"><small>ر.س</small><span data-k="inv.minimumTicket" data-f="sar"></span></div><div class="s">حتى 8 مستثمرين كحد أقصى</div></div>
+      <div class="kpi"><div class="l">إجمالي الاستثمار المطلوب</div><div class="v"><small>ر.س</small><span class="count" data-k="m.capital" data-f="sar"></span></div><div class="s">الشحنات محكومة بالكاش المتوفر: لا شحنة إلا إذا بقي الاحتياطي</div></div>
+      <div class="kpi"><div class="l">الحد الأدنى للتذكرة الاستثمارية</div><div class="v"><small>ر.س</small><span data-k="inv.minimumTicket" data-f="sar"></span></div><div class="s">حتى 4 مستثمرين كحد أقصى</div></div>
       <div class="kpi"><div class="l">صافي القيمة الحالية @ <span data-k="p.finance.discountRate" data-f="pct0"></span></div><div class="v"><small>ر.س</small><span class="count" data-k="m.npvBook" data-f="sar"></span></div></div>
     </div>
     <div class="card fill"><h3>استخدامات الأموال</h3><div class="chart"><canvas id="c-uses-d"></canvas></div></div>
@@ -144,23 +144,23 @@
         <div class="small">محسوبة من التدفقات الموزعة + القيمة الدفترية في السنة 5 (سيناريو حالي).</div></div>
     </div>
   </div>
-  <div class="foot"><span class="src">الحد الأدنى للتذكرة = رأس المال ÷ 8 مقرّباً. معدل الخصم افتراض لمخاطر المنشآت الصغيرة في السعودية.</span><span>03</span></div>
+  <div class="foot"><span class="src">الحد الأدنى للتذكرة = رأس المال ÷ 4. معدل الخصم 20% يشمل علاوة مخاطر السودان (افتراض).</span><span>03</span></div>
 </section>
 
 <!-- 4 BUSINESS OVERVIEW -->
 <section class="slide beige" data-title="نظرة عامة">
   <div class="head"><div><div class="kicker"><span class="idx">04</span>Business Overview</div><h2>نظرة عامة على المشروع</h2><div class="rule"></div></div>
-    <p class="lead">شركة سعودية للتجارة في الفواكه الطازجة، تبدأ بمنتج واحد ومسار واحد مُثبت التكلفة، ثم تتوسع بعد التحقق من السوق.</p></div>
+    <p class="lead">منشأة سعودية صغيرة لتجارة الفواكه الطازجة، تبدأ بمنتج واحد ومسار واحد مُثبت التكلفة وفريق خفيف، ثم تتوسع من أرباحها.</p></div>
   <div class="body g3">
-    <div class="card"><h3>المنتج</h3><p>موز مصري (أصناف كافندش الشائعة) في كراتين ≈ <b class="num" data-k="p.unitKg" data-f="n1"></b> كجم، يصل أخضر ويُنضج في جدة قبل البيع.</p>
-      <div class="kpi" style="margin-top:14px"><div class="l">لكل شحنة</div><div class="v"><span data-k="p.shipment.cartonsPerContainer" data-f="sar"></span><small>كرتون</small></div><div class="s"><span data-k="p.shipment.tonsPerContainer" data-f="n0"></span> طن (حسب الصورة — يحتاج تحقق من حمولة البراد)</div></div></div>
-    <div class="card"><h3>المسار</h3><p>مزارع ومحطات تعبئة في مصر ← نقل مبرّد (بحري/بري-عبّارة) ← ميناء جدة ← غرف إنضاج ← سوق الجملة والتجزئة.</p>
+    <div class="card"><h3>المنتج</h3><p>موز سوداني في كراتين 13–14 كجم، يُشحن أخضر ويُنضج في جدة قبل البيع. نشتري 32 طن (وزن حقل) ونعبّئ ≈ <b class="num" data-k="u.packedTons" data-f="n1"></b> طن.</p>
+      <div class="kpi" style="margin-top:14px"><div class="l">لكل شحنة</div><div class="v"><span data-k="p.shipment.cartonsPerContainer" data-f="sar"></span><small>كرتون</small></div><div class="s">نسبة التعبئة ≈ <span data-k="u.packOut" data-f="pct0"></span> من وزن الحقل (تحتاج تأكيد)</div></div></div>
+    <div class="card"><h3>المسار</h3><p>مزارع سنار/كسلا ← تعبئة في السودان (مواد من مصر) ← بورتسودان ← خط ملاحي قصير (≈ يوم) ← ميناء جدة ← غرف إنضاج ← سوق الجملة.</p>
       <div class="kpi" style="margin-top:14px"><div class="l">من الشراء حتى البيع</div><div class="v"><span data-k="m.inventoryDays" data-f="n0"></span><small>يوم</small></div><div class="s">شامل الإنضاج والبيع</div></div></div>
     <div class="card"><h3>العملاء المستهدفون</h3>
       <ul class="ticks sm"><li>تجار الجملة في السوق المركزي بجدة (نقدي/قصير الأجل)</li><li>سلاسل التجزئة والهايبر ماركت (آجل 30–60 يوم)</li><li>الفنادق والمطاعم والتموين (HORECA)</li><li>موزعو المدن القريبة (مكة، الطائف)</li></ul>
       <p class="small" style="margin-top:10px">لا توجد خطابات نوايا من عملاء حتى الآن — أولوية قبل الإغلاق.</p></div>
   </div>
-  <div class="foot"><span class="src">الفريق المقترح (ضمن المصاريف): مدير عام، مدير عمليات ولوجستيات، مندوب مبيعات، محاسب، منسق توريد في مصر.</span><span>04</span></div>
+  <div class="foot"><span class="src">الفريق (ضمن المصاريف): المؤسس، مساعد عمليات ومبيعات، محاسب خارجي، ووكيل/منسق في السودان بأجر لكل شحنة.</span><span>04</span></div>
 </section>
 
 <!-- 5 BUSINESS MODEL -->
@@ -170,16 +170,16 @@
   <div class="body g-64">
     <div class="card fill"><h3>اقتصاديات الكرتون الواحد (ر.س)</h3><div class="chart"><canvas id="c-waterfall"></canvas></div></div>
     <div class="col">
-      <div class="kpis g2" style="display:grid">
+      <div class="kpis g4" style="display:grid;gap:10px">
         <div class="kpi"><div class="l">سعر البيع/كرتون</div><div class="v"><span data-k="u.price" data-f="n2"></span></div></div>
         <div class="kpi"><div class="l">تكلفة الكرتون المباع</div><div class="v"><span data-k="u.landedPerSoldCarton" data-f="n2"></span></div></div>
         <div class="kpi"><div class="l">هامش الربح الإجمالي</div><div class="v"><span data-k="u.grossMargin" data-f="pct"></span></div></div>
         <div class="kpi"><div class="l">مساهمة الشحنة</div><div class="v"><span data-k="u.contribution" data-f="k"></span></div></div>
       </div>
-      <div class="card"><h3>مصادر الإيراد</h3><ul class="ticks sm"><li>بيع الموز المُنضج بالكرتون (المصدر الوحيد في النموذج).</li><li>فرص لاحقة غير مُدرجة: خدمات إنضاج للغير، منتجات موسمية أخرى من مصر.</li></ul></div>
+      <div class="card"><h3>مواد التعبئة لكل شحنة (من مصر، أرض مصنع)</h3><table class="tight"><thead><tr><th>البند</th><th class="n">الكمية</th><th class="n">جنيه</th><th class="n">ريال</th></tr></thead><tbody id="bomTable"></tbody></table></div>
     </div>
   </div>
-  <div class="foot"><span class="src">التكلفة تشمل تكاليف الصورة + تكاليف ناقصة أضفناها: إنضاج وتخزين، نقل داخلي، تأمين، تلف <span data-k="u.spoilage" data-f="pct0"></span>.</span><span>05</span></div>
+  <div class="foot"><span class="src">التكلفة تشمل تكاليف الصورة + تكاليف ناقصة أضفناها: إنضاج وتخزين، نقل داخلي، تأمين، تنسيق في السودان، تلف <span data-k="u.spoilage" data-f="pct0"></span>. مكنة الشد (7,000 جنيه) أصل ثابت.</span><span>05</span></div>
 </section>
 
 <!-- 6 MARKET OPPORTUNITY -->
@@ -194,12 +194,12 @@
     <div class="card"><h3>محركات الطلب</h3><ul class="ticks sm">
       <li>نمو السكان والوافدين وارتفاع استهلاك الفواكه الطازجة.</li>
       <li>المواسم: رمضان والحج والعمرة ترفع الطلب في جدة ومكة.</li>
-      <li>حساسية سعرية في شريحة الجملة ⇐ مساحة للموز المصري الأقل سعراً من العلامات الفاخرة.</li>
-      <li>قرب مصر الجغرافي ⇐ دورة أقصر من الإكوادور والفلبين.</li></ul></div>
+      <li>حساسية سعرية في شريحة الجملة ⇐ مساحة لموز اقتصادي أقل سعراً من العلامات الفاخرة.</li>
+      <li>بورتسودان على الضفة المقابلة لجدة ⇐ رحلة بحرية ≈ يوم وخطوط ملاحية جديدة منذ 2025.</li></ul></div>
     <div class="card"><h3>ما لا نعرفه بعد (يجب التحقق)</h3><ul class="ticks sm">
-      <li>الحجم بالطن ونصيب مصر من واردات الموز السعودية.</li>
-      <li>أسعار الجملة الفعلية للموز المصري في جدة على مدار السنة.</li>
-      <li>تقويم حصاد الموز المصري بالشهر.</li>
+      <li>حجم واردات السعودية من الموز بالطن ونصيب السودان منها (صغير جداً تاريخياً).</li>
+      <li>سعر الجملة الفعلي للموز السوداني في جدة على مدار السنة.</li>
+      <li>قدرة المزارع السودانية على توريد منتظم في ظل الحرب.</li>
       <li>متطلبات الهيئة والوزارة الحالية لكل شحنة.</li></ul>
       <p class="small" style="margin-top:8px">لم نخترع أرقام سوق — هذه فجوات معلنة.</p></div>
   </div>
@@ -209,16 +209,16 @@
 <!-- 7 TARGET MARKETS -->
 <section class="slide" data-title="الأسواق والدول">
   <div class="head"><div><div class="kicker"><span class="idx">07</span>Target Markets &amp; Countries</div><h2>الأسواق والدول المستهدفة</h2><div class="rule"></div></div>
-    <p class="lead">اخترنا مصر كبلد منشأ وجدة كسوق أول بناءً على المسافة والإعفاء الجمركي العربي وتوفر بيانات تكلفة فعلية.</p></div>
+    <p class="lead">السودان كبلد منشأ (أقرب مصدر موز لجدة وتكلفة شراء منخفضة)، ومصر لمواد التعبئة، وجدة كسوق أول — مع مخاطر بلد عالية يجب إدارتها.</p></div>
   <div class="body g-64">
     <div class="card"><h3>مقارنة بلدان المنشأ (تقييم نوعي)</h3>
-      <table><thead><tr><th>المعيار</th><th>مصر</th><th>الهند</th><th>الفلبين</th><th>الإكوادور</th></tr></thead><tbody>
-        <tr><td>مدة الشحن إلى جدة</td><td><span class="tag g">أيام</span></td><td><span class="tag a">1–2 أسبوع</span></td><td><span class="tag r">3+ أسابيع</span></td><td><span class="tag r">4+ أسابيع</span></td></tr>
-        <tr><td>الرسوم الجمركية</td><td><span class="tag g">0% (اتفاقية التجارة العربية) *</span></td><td><span class="tag a">تعرفة الخليج</span></td><td><span class="tag a">تعرفة الخليج</span></td><td><span class="tag a">تعرفة الخليج</span></td></tr>
-        <tr><td>الشريحة السعرية</td><td>اقتصادية</td><td>اقتصادية</td><td>متميزة</td><td>متميزة</td></tr>
-        <tr><td>عمر الرف والجودة</td><td><span class="tag a">متوسط</span></td><td><span class="tag a">متوسط</span></td><td><span class="tag g">مرتفع</span></td><td><span class="tag g">مرتفع</span></td></tr>
-        <tr><td>توفر بيانات تكلفة لدينا</td><td><span class="tag g">نعم (الصورة)</span></td><td><span class="tag r">لا</span></td><td><span class="tag r">لا</span></td><td><span class="tag r">لا</span></td></tr>
-        <tr><td>الموسمية</td><td><span class="tag a">انخفاض صيفي (افتراض)</span></td><td>على مدار السنة</td><td>على مدار السنة</td><td>على مدار السنة</td></tr>
+      <table><thead><tr><th>المعيار</th><th>السودان</th><th>مصر</th><th>الهند</th><th>الفلبين/الإكوادور</th></tr></thead><tbody>
+        <tr><td>مدة الشحن إلى جدة</td><td><span class="tag g">≈ يوم بحراً</span></td><td><span class="tag g">أيام</span></td><td><span class="tag a">1–2 أسبوع</span></td><td><span class="tag r">3–4+ أسابيع</span></td></tr>
+        <tr><td>الرسوم الجمركية</td><td><span class="tag g">0% عربي *</span></td><td><span class="tag g">0% عربي *</span></td><td><span class="tag a">تعرفة الخليج</span></td><td><span class="tag a">تعرفة الخليج</span></td></tr>
+        <tr><td>الشريحة السعرية</td><td>اقتصادية</td><td>اقتصادية</td><td>اقتصادية</td><td>متميزة</td></tr>
+        <tr><td>مخاطر البلد</td><td><span class="tag r">عالية (حرب، بنوك)</span></td><td><span class="tag g">منخفضة</span></td><td><span class="tag g">منخفضة</span></td><td><span class="tag g">منخفضة</span></td></tr>
+        <tr><td>توفر بيانات تكلفة لدينا</td><td><span class="tag g">نعم (الصورة)</span></td><td><span class="tag a">التعبئة فقط</span></td><td><span class="tag r">لا</span></td><td><span class="tag r">لا</span></td></tr>
+        <tr><td>الموسمية</td><td><span class="tag a">شح نوفمبر–فبراير</span></td><td>—</td><td>على مدار السنة</td><td>على مدار السنة</td></tr>
       </tbody></table>
       <p class="small" style="margin-top:10px">* تتطلب شهادة منشأ عربية معتمدة — يُؤكد مع مخلّص جمركي مرخّص.</p></div>
     <div class="col">
@@ -226,7 +226,7 @@
         <li><b>المرحلة 1 — جدة:</b> السوق المركزي + التجزئة (أقرب ميناء).</li>
         <li><b>المرحلة 2 — مكة والطائف:</b> نفس مركز التوزيع.</li>
         <li><b>المرحلة 3 — الرياض والشرقية:</b> بعد إثبات الهامش ووجود غرف إنضاج.</li></ul></div>
-      <div class="card"><h3>بلد منشأ بديل للصيف</h3><p class="small">لتغطية انخفاض توريد الموز المصري صيفاً يمكن دراسة الهند كمصدر تكميلي — غير مُدرج في الأرقام حتى الحصول على عروض أسعار.</p></div>
+      <div class="card"><h3>خطة بديلة</h3><p class="small">إذا تعطل التوريد من السودان (الحرب أو الميناء) أو في شح نوفمبر–فبراير، يمكن دراسة الموز المصري أو الهندي كمصدر بديل — غير مُدرج في الأرقام حتى الحصول على عروض أسعار.</p></div>
     </div>
   </div>
   <div class="foot"><span class="src">التقييم نوعي وليس رقمياً. مدد الشحن تقريبية حسب المسافة البحرية.</span><span>07</span></div>
@@ -235,28 +235,28 @@
 <!-- 8 SEASONAL -->
 <section class="slide beige" data-title="المحفظة والموسمية">
   <div class="head"><div><div class="kicker"><span class="idx">08</span>Fruit Portfolio &amp; Seasonal Strategy</div><h2>محفظة الفواكه وتقويم المواسم</h2><div class="rule"></div></div>
-    <p class="lead">لا نفترض توفر الموز بنفس الكمية طوال العام: النموذج يطبق مؤشراً موسمياً يخفض الشحنات صيفاً.</p></div>
+    <p class="lead">لا نفترض توفر الموز بنفس الكمية طوال العام: الموز السوداني يشح من نوفمبر إلى فبراير، والنموذج يخفض الشحنات في هذه الأشهر.</p></div>
   <div class="body" style="grid-template-rows:auto 1fr">
     <div class="card"><div class="heat" id="heat"></div>
-      <div class="small" style="margin-top:12px;display:flex;gap:24px;flex-wrap:wrap"><span><span class="tag g">أخضر</span> الموز — داخل النموذج المالي (رقم = مؤشر الكمية)</span><span><span class="tag a">ذهبي</span> فواكه مستقبلية — خارج النموذج حتى الحصول على عروض أسعار</span></div></div>
+      <div class="small" style="margin-top:12px;display:flex;gap:24px;flex-wrap:wrap"><span><span class="tag g">أخضر</span> الموز — داخل النموذج المالي (رقم = مؤشر الكمية)</span><span><span class="tag a">ذهبي</span> مواسم طلب مرتفع في جدة (غير محسوبة في الأسعار)</span></div></div>
     <div class="body g3" style="gap:20px">
-      <div class="card"><h3>الشراء</h3><p class="small">تكثيف الشحنات من أكتوبر إلى مارس، وخفضها 40–50% في يونيو–أغسطس حيث تزيد الحرارة من التلف ويقل المعروض (افتراض يُتحقق منه مع المزارعين).</p></div>
+      <div class="card"><h3>الشراء</h3><p class="small">تكثيف الشحنات من مارس إلى أكتوبر، وخفضها 30–40% من نوفمبر إلى فبراير حيث يشح الموز السوداني وترتفع أسعاره (دراسة FAO/AGRIS؛ النسب افتراض).</p></div>
       <div class="card"><h3>البيع</h3><p class="small">رمضان (فبراير–مارس 2027 تقريباً) وموسم العمرة يرفعان الطلب في جدة ومكة؛ لا نرفع السعر في النموذج — أي زيادة موسمية هي فرصة إضافية.</p></div>
-      <div class="card"><h3>التنويع</h3><p class="small">البرتقال المصري يبدأ تصديره عادة في ديسمبر، والمانجو يصل للسعودية من يونيو بذروة يوليو–نوفمبر، والبطيخ مارس–سبتمبر — تغطي الفجوة الصيفية للموز.</p></div>
+      <div class="card"><h3>التنويع</h3><p class="small">المانجو السوداني منتج معروف تاريخياً في السوق الخليجي، ويمكن أن يكمل الموز — غير مُدرج في الأرقام حتى الحصول على عروض أسعار وجدول مواسم موثق.</p></div>
     </div>
   </div>
-  <div class="foot"><span class="src">مواسم المانجو والبطيخ والبرتقال: FoodBusinessMEA، FreshPlaza (2025)، AboutMSR. موسمية الموز المصري: افتراض محلل منخفض الثقة.</span><span>08</span></div>
+  <div class="foot"><span class="src">شح الموز السوداني نوفمبر–فبراير: دراسة كفاءة إنتاج وتسويق الموز في السودان (FAO AGRIS). نسب الانخفاض افتراض محلل.</span><span>08</span></div>
 </section>
 
 <!-- 9 SUPPLY CHAIN -->
 <section class="slide" data-title="سلسلة الإمداد">
   <div class="head"><div><div class="kicker"><span class="idx">09</span>Supply Chain &amp; Operations</div><h2>سلسلة الإمداد والعمليات</h2><div class="rule"></div></div>
-    <p class="lead">سلسلة تبريد متصلة من محطة التعبئة إلى غرفة الإنضاج. كل يوم تأخير = تلف إضافي وتكلفة تخزين.</p></div>
+    <p class="lead">مواد التعبئة تُشترى من مصر وتُنقل للسودان، والموز يُعبأ هناك ويُشحن مبرّداً من بورتسودان. كل يوم تأخير = تلف إضافي وتكلفة تخزين.</p></div>
   <div class="body" style="grid-template-rows:auto auto 1fr; gap:20px">
     <div class="chain" id="chain">
-      <div class="step"><span class="d" data-k="p.timing.supplierDays" data-f="d"></span><div class="n">1</div><h4>الشراء</h4><p>عقد مع مزرعة/محطة تعبئة؛ الدفع عند التحميل</p></div>
-      <div class="step"><span class="d" data-k="p.timing.prepDays" data-f="d"></span><div class="n">2</div><h4>التعبئة</h4><p>كراتين، فوم، أكياس، معالجة، تبريد أولي 13–14°م</p></div>
-      <div class="step"><span class="d" data-k="p.timing.transitDays" data-f="d"></span><div class="n">3</div><h4>الشحن</h4><p>براد مبرّد؛ تسجيل حرارة مستمر</p></div>
+      <div class="step"><span class="d" data-k="p.timing.supplierDays" data-f="d"></span><div class="n">1</div><h4>الشراء</h4><p>مزارع سنار/كسلا؛ الدفع عند التحميل</p></div>
+      <div class="step"><span class="d" data-k="p.timing.prepDays" data-f="d"></span><div class="n">2</div><h4>التعبئة والنقل</h4><p>تعبئة بمواد مصرية، ثم نقل مبرّد إلى بورتسودان</p></div>
+      <div class="step"><span class="d" data-k="p.timing.transitDays" data-f="d"></span><div class="n">3</div><h4>الشحن</h4><p>بورتسودان ← جدة؛ تسجيل حرارة مستمر</p></div>
       <div class="step"><span class="d" data-k="p.timing.clearanceDays" data-f="d"></span><div class="n">4</div><h4>التخليص</h4><p>فسح نباتي، شهادة منشأ، منصة فسح</p></div>
       <div class="step"><span class="d" data-k="p.timing.ripeningDays" data-f="d"></span><div class="n">5</div><h4>الإنضاج</h4><p>غرف إيثيلين مؤجرة في جدة</p></div>
       <div class="step"><span class="d" data-k="p.timing.sellingDays" data-f="d"></span><div class="n">6</div><h4>البيع</h4><p>جملة وتجزئة وفنادق</p></div>
@@ -267,7 +267,7 @@
       <div class="card"><h3>المتطلبات التنظيمية (السعودية)</h3><ul class="ticks sm">
         <li>سجل تجاري يتضمن نشاط تجارة المواد الغذائية + حساب لدى هيئة الغذاء والدواء.</li>
         <li>ترخيص استيراد خضار وفواكه من وزارة البيئة والمياه والزراعة.</li>
-        <li>شهادة صحة نباتية، شهادة منشأ، شهادة مطابقة من جهة معتمدة، فاتورة وقائمة تعبئة.</li>
+        <li>شهادة صحة نباتية سودانية، شهادة منشأ عربية، شهادة مطابقة، فاتورة وقائمة تعبئة.</li>
         <li>التخليص عبر منصة فسح (هيئة الزكاة والضريبة والجمارك) بواسطة مخلّص مرخّص.</li></ul></div>
       <div class="card"><h3>التخزين والتوزيع</h3><ul class="ticks sm">
         <li>نموذج «خفيف الأصول»: تأجير غرف إنضاج وتبريد بدل بنائها في البداية.</li>
@@ -286,7 +286,7 @@
     <div class="card"><h3>المنافسون</h3><table><thead><tr><th>الفئة</th><th>الموقع</th></tr></thead><tbody>
       <tr><td>علامات عالمية (موز فلبيني/إكوادوري)</td><td>جودة ثابتة، سعر أعلى</td></tr>
       <tr><td>مستوردو الموز الهندي</td><td>سعر منخفض، منافس مباشر</td></tr>
-      <tr><td>تجار يستوردون من مصر</td><td>نفس المنتج — المنافسة على السعر والعلاقات</td></tr>
+      <tr><td>تجار الموز المصري واليمني والسوداني</td><td>شريحة سعرية مشابهة — المنافسة على السعر والعلاقات</td></tr>
       <tr><td>سلاسل التجزئة (استيراد مباشر)</td><td>قوة شرائية كبيرة</td></tr></tbody></table></div>
     <div class="card"><h3>ما نملكه</h3><ul class="ticks sm">
       <li>تكلفة فعلية مفصلة لشحنة كاملة (من الصورة).</li>
@@ -312,9 +312,9 @@
     <div class="col">
       <div class="card fill" style="flex:1"><h3>مكونات التكلفة واصل (ر.س/شحنة)</h3><div class="chart"><canvas id="c-cost"></canvas></div></div>
       <div class="card"><table><thead><tr><th>الفاكهة</th><th>المنشأ</th><th>البيع</th><th class="n">إيرادات س1</th><th class="n">إيرادات س5</th><th>الحالة</th></tr></thead><tbody>
-        <tr><td>موز</td><td>مصر</td><td>جدة، السعودية</td><td class="n" data-k="y.0.revenue" data-f="m"></td><td class="n" data-k="y.4.revenue" data-f="m"></td><td><span class="tag g">في النموذج</span></td></tr>
-        <tr><td>برتقال</td><td>مصر</td><td>جدة/الرياض</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">بانتظار عروض أسعار</span></td></tr>
-        <tr><td>مانجو</td><td>مصر</td><td>جدة</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">بانتظار عروض أسعار</span></td></tr></tbody></table></div>
+        <tr><td>موز</td><td>السودان</td><td>جدة، السعودية</td><td class="n" data-k="y.0.revenue" data-f="m"></td><td class="n" data-k="y.4.revenue" data-f="m"></td><td><span class="tag g">في النموذج</span></td></tr>
+        <tr><td>موز (بديل)</td><td>مصر</td><td>جدة</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">خطة بديلة</span></td></tr>
+        <tr><td>مانجو</td><td>السودان</td><td>جدة</td><td class="n">—</td><td class="n">—</td><td><span class="tag a">بانتظار عروض أسعار</span></td></tr></tbody></table></div>
     </div>
   </div>
   <div class="foot"><span class="src">مكنة الشد (7,000 جنيه) نُقلت من تكلفة الشحنة إلى الأصول الثابتة. سعر الصرف <span data-k="p.shipment.fxEGPperSAR" data-f="n2"></span> جنيه/ريال (الصورة استخدمت 14.90).</span><span>11</span></div>
@@ -323,7 +323,7 @@
 <!-- 12 CAPITAL REQUIREMENTS -->
 <section class="slide beige" data-title="متطلبات رأس المال">
   <div class="head"><div><div class="kicker"><span class="idx">12</span>Capital Requirements</div><h2>متطلبات رأس المال: المصادر والاستخدامات</h2><div class="rule"></div></div>
-    <p class="lead">رأس المال محسوب من التدفق النقدي الشهري: أدنى مبلغ يمنع النقد من النزول تحت الاحتياطي في أي شهر خلال 5 سنوات.</p></div>
+    <p class="lead">رأس المال ثابت 100 ألف ريال. كل شهر يشحن المشروع فقط ما يسمح به الكاش بعد المصاريف والاحتياطي — فلا ينزل النقد تحت الاحتياطي.</p></div>
   <div class="body g-46">
     <div class="card"><h3>الاستخدامات (ر.س)</h3><table><thead><tr><th>البند</th><th>النوع</th><th class="n">المبلغ</th></tr></thead><tbody id="usesTable"></tbody></table></div>
     <div class="col">
@@ -332,11 +332,11 @@
         <div class="kpi"><div class="l">رأس مال عامل</div><div class="v"><span data-k="d.workCap" data-f="k"></span></div></div>
         <div class="kpi"><div class="l">احتياطي</div><div class="v"><span data-k="d.reserveCap" data-f="k"></span></div></div>
       </div>
-      <div class="card fill" style="flex:1"><h3>أدنى نقطة نقدية: الشهر <span class="num" data-k="uses.troughMonth" data-f="n0"></span></h3><div class="chart"><canvas id="c-uses"></canvas></div></div>
-      <p class="small">المصادر: 100% حقوق ملكية من المستثمرين/المؤسس. لا قروض بنكية في النموذج الأساسي (يمكن إضافة تمويل تجاري لاحقاً لتقليل الحاجة لرأس المال).</p>
+      <div class="card fill" style="flex:1"><h3>توزيع الـ 100 ألف حتى أول شحنة</h3><div class="chart"><canvas id="c-uses"></canvas></div></div>
+      <p class="small">المصادر: 100% حقوق ملكية (100 ألف). لا قروض. لتنفيذ الخطة دون أي تأخير يلزم ≈ <b class="num" data-k="m.requiredCapital" data-f="sar"></b> ر.س؛ مع 100 ألف ينمو الحجم من الأرباح.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">التفكيك عند أدنى نقطة تدفق نقدي تراكمي قبل التمويل. «التقريب» = الفرق حتى أقرب 25 ألف.</span><span>12</span></div>
+  <div class="foot"><span class="src">التوزيع محسوب من المحرك: كل ما يلي أول شحنة يُموَّل من التدفقات النقدية للشحنات نفسها.</span><span>12</span></div>
 </section>
 
 <!-- 13 FINANCIAL FORECAST -->
@@ -441,7 +441,8 @@
       <tr><td>انقطاع التوريد / الموسمية</td><td><span class="tag a">متوسط</span></td><td>موردان على الأقل، مصدر بديل صيفي</td></tr>
       <tr><td>قيود استيراد / متبقيات مبيدات</td><td><span class="tag a">متوسط</span></td><td>فحص مختبري قبل الشحن، شهادة مطابقة</td></tr>
       <tr><td>تأخر التحصيل</td><td><span class="tag a">متوسط</span></td><td>سقف ائتمان لكل عميل، نقدي في السوق المركزي</td></tr>
-      <tr><td>سعر صرف الجنيه</td><td><span class="tag g">منخفض</span></td><td>التسعير بالريال/الدولار مع المورد</td></tr>
+      <tr><td>الحرب في السودان (توريد، موانئ، بنوك)</td><td><span class="tag r">عالٍ</span></td><td>موردان، دفع عبر قنوات نظامية، بديل مصري</td></tr>
+      <tr><td>سعر صرف الجنيه (التعبئة)</td><td><span class="tag g">منخفض</span></td><td>شراء التعبئة بكميات وتثبيت السعر</td></tr>
       <tr><td>مخاطر التنفيذ (فريق جديد)</td><td><span class="tag a">متوسط</span></td><td>بدء تدريجي، قاعدة إيقاف خسارة بعد 9 أشهر</td></tr></tbody></table>
       <p class="small" style="margin-top:8px">قاعدة الإيقاف المقترحة: إذا كانت مساهمة الشحنة الفعلية &lt; <b class="num" data-k="d.stopLoss" data-f="sar"></b> ر.س لثلاث شحنات متتالية، يتوقف التوسع ويُعاد التقييم.</p></div>
   </div>
@@ -470,9 +471,9 @@
   <div class="head"><div><div class="kicker"><span class="idx">20</span>Growth Strategy</div><h2>استراتيجية النمو المرحلية</h2><div class="rule"></div></div>
     <p class="lead">كل مرحلة مشروطة بتحقيق مؤشرات المرحلة السابقة — لا توسع قبل إثبات الهامش.</p></div>
   <div class="body g4">
-    <div class="card"><div class="kicker">Phase 1 · M1–12</div><h3>إثبات النموذج</h3><ul class="ticks sm"><li>موز مصري ← جدة</li><li>حتى <span class="num" data-k="p.volume.y1TargetContainers" data-f="n0"></span> شحنات/شهر</li><li>هدف: تلف ≤ <span class="num" data-k="p.shipment.spoilageRate" data-f="pct0"></span>، سعر ≥ <span class="num" data-k="p.shipment.sellPricePerCarton" data-f="n0"></span> ر.س</li></ul></div>
+    <div class="card"><div class="kicker">Phase 1 · M1–12</div><h3>إثبات النموذج</h3><ul class="ticks sm"><li>موز سوداني ← جدة</li><li>حتى <span class="num" data-k="p.volume.y1TargetContainers" data-f="n0"></span> شحنات/شهر</li><li>هدف: تلف ≤ <span class="num" data-k="p.shipment.spoilageRate" data-f="pct0"></span>، سعر ≥ <span class="num" data-k="p.shipment.sellPricePerCarton" data-f="n0"></span> ر.س</li></ul></div>
     <div class="card"><div class="kicker">Phase 2 · Y2</div><h3>التوسع الجغرافي</h3><ul class="ticks sm"><li>مكة، الطائف، سلاسل التجزئة</li><li>نمو <span class="num" data-k="p.volume.monthlyGrowth" data-f="pct1"></span> شهرياً</li><li>عقد سنوي مع مشغل إنضاج</li></ul></div>
-    <div class="card"><div class="kicker">Phase 3 · Y3</div><h3>تنويع المنتجات</h3><ul class="ticks sm"><li>برتقال ومانجو وبطيخ من مصر</li><li>تغطية الفجوة الصيفية</li><li>غير مُدرج في الأرقام</li></ul></div>
+    <div class="card"><div class="kicker">Phase 3 · Y3</div><h3>تنويع المنتجات</h3><ul class="ticks sm"><li>مانجو سوداني + مصدر موز بديل</li><li>تغطية الفجوة الصيفية</li><li>غير مُدرج في الأرقام</li></ul></div>
     <div class="card"><div class="kicker">Phase 4 · Y4–5</div><h3>الأصول والرياض</h3><ul class="ticks sm"><li>غرف إنضاج مملوكة (دراسة جدوى منفصلة)</li><li>الرياض والشرقية</li><li>سقف <span class="num" data-k="p.volume.maxContainers" data-f="n0"></span> شحنات/شهر</li></ul></div>
   </div>
   <div class="foot"><span class="src">الأرقام المالية تشمل المرحلتين 1 و2 فقط (موز). المراحل 3 و4 خيارات نمو غير محسوبة.</span><span>20</span></div>

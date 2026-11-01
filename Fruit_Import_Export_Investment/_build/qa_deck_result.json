@@ -9,16 +9,16 @@
   "gridOpen": true,
   "gridJump": "13 / 22",
   "panelRecompute": {
-   "before": 2573178,
-   "after": 653351,
+   "before": 1926592,
+   "after": 919320,
    "changed": true,
    "panelShowsNew": true
   },
   "panelMatchesEngine": true,
   "fundingWarningShown": true,
-  "scenario_conservative": -697859,
-  "scenario_optimistic": 6188731,
-  "scenario_base": 2573178,
+  "scenario_conservative": -912103,
+  "scenario_optimistic": 4887421,
+  "scenario_base": 1926592,
   "resp_laptop": {
    "reader": false,
    "horizontalScroll": false
@@ -35,6 +35,6 @@
    "reader": true,
    "horizontalScroll": false
   },
-  "pdfBytes": 2020044
+  "pdfBytes": 2032222
  }
 }
