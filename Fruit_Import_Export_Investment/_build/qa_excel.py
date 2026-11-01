@@ -68,7 +68,11 @@ scen_res = {}
 for sel, key in ((1, 'conservative'), (3, 'optimistic')):
     w = load_wb(os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'))
     w['Assumptions']['C3'] = sel
-    t2 = tempfile.mkdtemp(); src = os.path.join(t2, 'in.xlsx'); w.save(src)
+    t2 = tempfile.mkdtemp(); src = os.path.join(t2, 'in.xlsx')
+    try:
+        w.save(src)
+    except OSError as e:
+        fail(f'could not save scenario copy {src}: {e}')
     recalc(src, os.path.join(t2, 'o'))
     w2 = load_wb(os.path.join(t2, 'o', 'in.xlsx'), data_only=True)['Monthly_Model']
     ni = sum((w2.cell(row=6 + i, column=hdr.index('Net income') + 1).value or 0) for i in range(60))
@@ -78,5 +82,10 @@ for sel, key in ((1, 'conservative'), (3, 'optimistic')):
     if abs(ni - e['totalNI5y']) > 1 or abs(cash - e['endCash']) > 1: fails.append(('scenario', key, ni, e['totalNI5y']))
 res = {'returns_vs_engine': {k: v for k, v in xl_metrics.items() if k}, 'scenario_switch': scen_res, 'cells_compared': len(pairs) * 60, 'max_abs_diff_SAR': worst, 'mismatches': fails[:10], 'formula_errors': errs[:20], 'checks': checks}
 print(json.dumps(res, ensure_ascii=False, indent=1))
-json.dump(res, open(os.path.join(ROOT, '_build', 'qa_excel_result.json'), 'w'), ensure_ascii=False, indent=1)
+_res_path = os.path.join(ROOT, '_build', 'qa_excel_result.json')
+try:
+    with open(_res_path, 'w') as fh:
+        json.dump(res, fh, ensure_ascii=False, indent=1)
+except OSError as e:
+    fail(f'could not write {_res_path}: {e}')
 sys.exit(1 if fails or errs or not all(c[1] is True for c in checks) else 0)
