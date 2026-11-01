@@ -1,10 +1,40 @@
 """QA: recalculate Financial_Model.xlsx in LibreOffice and compare every monthly value with engine.js output."""
 import json, os, subprocess, sys, tempfile, openpyxl
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = json.load(open(os.path.join(ROOT, '_build', 'model_output.json')))
+
+
+def fail(msg):
+    print(f'qa_excel: {msg}', file=sys.stderr); sys.exit(2)
+
+
+def recalc(src, outdir):
+    """Recalculate a workbook with LibreOffice headless; exit with a clear message on failure."""
+    try:
+        subprocess.run(['soffice', '--headless', '--calc', '--convert-to', 'xlsx', '--outdir', outdir, src], check=True, capture_output=True, timeout=300)
+    except FileNotFoundError:
+        fail('LibreOffice (soffice) is not installed')
+    except subprocess.TimeoutExpired:
+        fail(f'LibreOffice timed out recalculating {src}')
+    except subprocess.CalledProcessError as e:
+        fail(f'LibreOffice failed on {src}: {e.stderr.decode(errors="replace")[:300]}')
+
+
+def load_wb(path, **kw):
+    try:
+        return openpyxl.load_workbook(path, **kw)
+    except (OSError, KeyError, ValueError) as e:
+        fail(f'could not open {path}: {e}')
+
+
+_data_path = os.path.join(ROOT, '_build', 'model_output.json')
+try:
+    with open(_data_path) as fh:
+        D = json.load(fh)
+except (OSError, json.JSONDecodeError) as e:
+    fail(f'could not read {_data_path} (run build_data.js first): {e}')
 tmp = tempfile.mkdtemp()
-subprocess.run(['soffice', '--headless', '--calc', '--convert-to', 'xlsx', '--outdir', tmp, os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx')], check=True, capture_output=True, timeout=300)
-wb = openpyxl.load_workbook(os.path.join(tmp, 'Financial_Model.xlsx'), data_only=True)
+recalc(os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'), tmp)
+wb = load_wb(os.path.join(tmp, 'Financial_Model.xlsx'), data_only=True)
 ws = wb['Monthly_Model']
 hdr = [c.value for c in ws[5]]
 M = D['base']['monthly']
@@ -36,11 +66,11 @@ checks = [(r[0].value, r[1].value) for r in wb['Checks'].iter_rows(min_row=5, ma
 # scenario switch test: set selector to 1 and 3, recalc, compare 5y NI and closing cash with engine scenarios
 scen_res = {}
 for sel, key in ((1, 'conservative'), (3, 'optimistic')):
-    w = openpyxl.load_workbook(os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'))
+    w = load_wb(os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'))
     w['Assumptions']['C3'] = sel
     t2 = tempfile.mkdtemp(); src = os.path.join(t2, 'in.xlsx'); w.save(src)
-    subprocess.run(['soffice', '--headless', '--calc', '--convert-to', 'xlsx', '--outdir', os.path.join(t2, 'o'), src], check=True, capture_output=True, timeout=300)
-    w2 = openpyxl.load_workbook(os.path.join(t2, 'o', 'in.xlsx'), data_only=True)['Monthly_Model']
+    recalc(src, os.path.join(t2, 'o'))
+    w2 = load_wb(os.path.join(t2, 'o', 'in.xlsx'), data_only=True)['Monthly_Model']
     ni = sum((w2.cell(row=6 + i, column=hdr.index('Net income') + 1).value or 0) for i in range(60))
     cash = w2.cell(row=65, column=hdr.index('Cash') + 1).value
     e = D['scenarios'][key]['metrics']

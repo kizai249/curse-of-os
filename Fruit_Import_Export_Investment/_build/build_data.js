@@ -18,6 +18,11 @@ const out = {
     monthly: base.R },
   scenarios: scen, sensitivity: sens
 };
-fs.writeFileSync(path.join(__dirname, 'model_output.json'), JSON.stringify(out, null, 1));
-// a small JS file so static HTML documents can embed the same snapshot without fetch()
+const outPath = path.join(__dirname, 'model_output.json');
+try {
+  fs.writeFileSync(outPath, JSON.stringify(out, null, 1));
+} catch (err) {
+  console.error(`build_data: could not write ${outPath}: ${err.message}`);
+  process.exit(1);
+}
 console.log('capital', base.metrics.capital, 'IRR', base.metrics.irrBook.toFixed(4), 'NI5y', Math.round(base.metrics.totalNI5y));

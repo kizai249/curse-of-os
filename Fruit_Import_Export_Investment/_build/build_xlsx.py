@@ -8,7 +8,27 @@ from openpyxl.utils import get_column_letter as L
 from openpyxl.formatting.rule import CellIsRule
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = json.load(open(os.path.join(ROOT, '_build', 'model_output.json'), encoding='utf-8'))
+import sys
+
+
+def fail(msg):
+    print(f'build_xlsx: {msg}', file=sys.stderr); sys.exit(1)
+
+
+def save_workbook(book, path):
+    try:
+        book.save(path)
+    except OSError as e:
+        fail(f'could not save {path}: {e}')
+    print('saved', path)
+
+
+_data_path = os.path.join(ROOT, '_build', 'model_output.json')
+try:
+    with open(_data_path, encoding='utf-8') as fh:
+        D = json.load(fh)
+except (OSError, json.JSONDecodeError) as e:
+    fail(f'could not read {_data_path} (run build_data.js first): {e}')
 P = D['params']
 SC = ['conservative', 'base', 'optimistic']
 
@@ -654,7 +674,7 @@ for rr in range(1, 40):
     if ann.cell(row=rr, column=1).value == 'Revenue':
         wb['Capital_Cycle'].cell(row=wb['Capital_Cycle'].max_row, column=3).value = f'=Annual_Statements!D{rr}/capital'; break
 
-out = os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'); wb.save(out); print('saved', out)
+save_workbook(wb, os.path.join(ROOT, '02_Financial_Model', 'Financial_Model.xlsx'))
 
 # ================================================================== Assumptions register
 wr = Workbook(); ws = wr.active; ws.title = 'Assumptions_Register'
@@ -701,4 +721,4 @@ miss = [('Supplier identity & contracts', 'Supply security, quality, payment ter
 for i, m in enumerate(miss):
     for j, v in enumerate(m): ws2.cell(row=5 + i, column=1 + j, value=v)
 for col, w in zip('ABCD', [40, 40, 44, 10]): ws2.column_dimensions[col].width = w
-out2 = os.path.join(ROOT, '05_Documentation', 'Assumptions_Register.xlsx'); wr.save(out2); print('saved', out2)
+save_workbook(wr, os.path.join(ROOT, '05_Documentation', 'Assumptions_Register.xlsx'))
