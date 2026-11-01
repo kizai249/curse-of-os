@@ -93,10 +93,6 @@ def heading(s, ar, en, y=0.55):
     text(s, 0.6, y + 0.78, 12.1, 0.4, en, 14, "stone", False, "r", False)
 
 
-def pattern(s, y=4.6, h=2.9, opacity_img="damani_pattern_white-on-green.svg"):
-    pass  # vector pattern is not supported natively; slides use the PNG pattern instead
-
-
 def presentation():
     prs = Presentation()
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
