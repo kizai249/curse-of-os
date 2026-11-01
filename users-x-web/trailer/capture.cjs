@@ -1,4 +1,4 @@
-// usage (from users-x-web/trailer): node capture.cjs <outDir> <t1,t2,...>   OR   node capture.cjs <outDir> range <startFrame> <endFrame>
+// usage: node capture.cjs <outDir> <t1,t2,...>   OR   node capture.cjs <outDir> range <startFrame> <endFrame>
 const { chromium } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..'); // serve users-x-web/ so ../assets resolves
@@ -12,7 +12,7 @@ const mime = { '.html': 'text/html', '.js': 'text/javascript', '.png': 'image/pn
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('console', m => { if (m.type() === 'error') console.error('PAGE', m.text()); });
   page.on('pageerror', e => console.error('PAGEERR', e.message));
-  await page.goto(`http://127.0.0.1:${port}/trailer/trailer.html`);
+  await page.goto(`http://127.0.0.1:${port}/trailer/${process.env.PAGE || "trailer.html"}`);
   await page.waitForFunction('window.READY === true', null, { timeout: 60000 });
   const el = await page.$('#stage');
   let jobs = [];

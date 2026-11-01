@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>USERS-X Trailer v2</title>
+<style>
+@font-face{font-family:Kufam;font-weight:800;src:url(../assets/fonts/kufam-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Kufam;font-weight:800;src:url(../assets/fonts/kufam-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:SpaceMono;font-weight:700;src:url(../assets/fonts/space-mono-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:Blaka;font-weight:400;src:url(../assets/fonts/blaka-arabic-400-normal.woff2) format('woff2')}
+@font-face{font-family:Changa;font-weight:800;src:url(../assets/fonts/changa-arabic-800-normal.woff2) format('woff2')}
+@font-face{font-family:Marhey;font-weight:700;src:url(../assets/fonts/marhey-arabic-700-normal.woff2) format('woff2')}
+@font-face{font-family:Handjet;font-weight:700;src:url(../assets/fonts/handjet-latin-700-normal.woff2) format('woff2')}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1920px;height:1080px;background:#000}
+#stage canvas{position:absolute;inset:0;width:1920px;height:1080px}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="stage"><canvas id="gl" width="1920" height="1080"></canvas><canvas id="ov" width="1920" height="1080"></canvas></div>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+// ---------- timing: everything sits on a 140 BPM grid ----------
+const W = 1920, H = 1080, BPM = 140, BEAT = 60 / BPM, BAR = BEAT * 4;
+const OFF = Number(new URLSearchParams(location.search).get('off') || 0); // first downbeat of the music track
+const DUR = 30;
+// section starts, in bars after the first downbeat
+const SEC = { tunnel: 0, worlds: 4, cards: 8, words: 12, logo: 14, end: 17.5 };
+const tb = bars => OFF + bars * BAR;
+const C = { bone: '#F4F4F1', void: '#0B0B0F', cyan: '#00DEE6', mag: '#F54BF7', shade: '#33354C' };
+const GRID = ['WWW.........WWW','WWWW.......WWWW','WWDDW.....WDDWW','.WDWWW...WWWDW.','..WWWWW.WWWWW..','...WWWWWWWWW...','....WWWMWWW....','.....WMMMW.....','....WWWMWWW....','...WWWWWWWWW...','..WWWWW.WWWWW..','.WDWWW...WWWDW.','WWDDW.....WDDWW','WWWW.......WWWW','WWW.........WWW'];
+const CELLS = []; GRID.forEach((row, r) => [...row].forEach((ch, c) => { if (ch !== '.') CELLS.push({ r, c, ch }); }));
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eo = x => 1 - Math.pow(1 - x, 3);
+const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// beat helpers: phase within the current beat, and a decaying "hit" on every beat
+const beatPos = t => (t - OFF) / BEAT;
+const hit = (t, k = 7) => { const p = beatPos(t); return p < 0 ? 0 : Math.exp(-(p - Math.floor(p)) * BEAT * k); };
+
+// ---------- three ----------
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: false, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+const camera = new THREE.PerspectiveCamera(70, W / H, 0.1, 800);
+
+// --- scene A: checker ribbon road + neon tubes (ref: neon checker tunnel)
+const sceneA = new THREE.Scene(); sceneA.background = new THREE.Color(0x020205); sceneA.fog = new THREE.Fog(0x020205, 60, 220);
+function checkerTex(n = 8) {
+  const c = document.createElement('canvas'); c.width = c.height = 512; const x = c.getContext('2d');
+  const s = 512 / n; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { x.fillStyle = (i + j) % 2 ? '#060608' : '#6E6E74'; x.fillRect(i * s, j * s, s, s); }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+const R = rng(11);
+const roadPts = []; for (let i = 0; i < 40; i++) roadPts.push(new THREE.Vector3(Math.sin(i * .55) * 18 + Math.sin(i * .21) * 10, Math.sin(i * .37) * 6, -i * 22));
+const roadCurve = new THREE.CatmullRomCurve3(roadPts);
+function ribbonGeo(curve, width, segs) {
+  const pos = [], uv = [], idx = []; const up = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i <= segs; i++) {
+    const u = i / segs, p = curve.getPointAt(u), tg = curve.getTangentAt(u);
+    const side = new THREE.Vector3().crossVectors(tg, up).normalize().multiplyScalar(width / 2);
+    pos.push(p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z);
+    uv.push(0, u * curve.getLength() / width, 1, u * curve.getLength() / width);
+    if (i < segs) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals(); return g;
+}
+const road = new THREE.Mesh(ribbonGeo(roadCurve, 14, 900), new THREE.MeshBasicMaterial({ map: checkerTex(), side: THREE.DoubleSide }));
+sceneA.add(road);
+// side ribbons (thin checker strips that twist through space)
+for (let k = 0; k < 7; k++) {
+  const pts = []; const ox = (R() - .5) * 70, oy = (R() - .2) * 40, ph = R() * 6;
+  for (let i = 0; i < 30; i++) pts.push(new THREE.Vector3(ox + Math.sin(i * .4 + ph) * 20, oy + Math.cos(i * .33 + ph) * 12, -i * 28 + 30));
+  const m = new THREE.Mesh(ribbonGeo(new THREE.CatmullRomCurve3(pts), 3, 500), new THREE.MeshBasicMaterial({ map: checkerTex(2), side: THREE.DoubleSide, color: 0x9a9aa4 }));
+  sceneA.add(m);
+}
+// neon tubes + orbs — the glow comes from bloom on bright basic materials
+const NEON = [0xF54BF7, 0x00DEE6, 0xF54BF7, 0x00DEE6, 0xFFD23F, 0x7B5CFF];
+const tubes = [];
+for (let k = 0; k < 26; k++) {
+  const pts = []; const ox = (R() - .5) * 90, oy = (R() - .3) * 50, ph = R() * 6, f = .2 + R() * .3;
+  for (let i = 0; i < 24; i++) pts.push(new THREE.Vector3(ox + Math.sin(i * f + ph) * (10 + R() * 20), oy + Math.cos(i * f * 1.3 + ph) * (6 + R() * 10), -i * 36 + 40));
+  const m = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 400, .18 + R() * .35, 8), new THREE.MeshBasicMaterial({ color: NEON[k % NEON.length] }));
+  m.material.color.multiplyScalar(2.2); sceneA.add(m); tubes.push(m);
+}
+const orbG = new THREE.SphereGeometry(.5, 16, 12);
+for (let k = 0; k < 140; k++) { const m = new THREE.Mesh(orbG, new THREE.MeshBasicMaterial({ color: new THREE.Color(NEON[k % NEON.length]).multiplyScalar(2.5) })); m.position.set((R() - .5) * 120, (R() - .2) * 60, -R() * 800 + 40); m.scale.setScalar(.4 + R() * 1.4); sceneA.add(m); }
+
+// --- scene C: game cards in a flowing helix (ref: card ribbon)
+const sceneC = new THREE.Scene(); sceneC.background = new THREE.Color(0x030306);
+sceneC.add(new THREE.AmbientLight(0xffffff, .5));
+const keyC = new THREE.DirectionalLight(0xffffff, 1.5); keyC.position.set(-6, 8, 10); sceneC.add(keyC);
+const rimC1 = new THREE.PointLight(0xF54BF7, 400, 0, 1.6); rimC1.position.set(10, 2, -4); sceneC.add(rimC1);
+const rimC2 = new THREE.PointLight(0x00DEE6, 400, 0, 1.6); rimC2.position.set(-10, -3, -2); sceneC.add(rimC2);
+const cards = []; const cardGroup = new THREE.Group(); sceneC.add(cardGroup);
+
+// --- scene D: marbled fluid backdrop (ref: liquid violet/orange swirl)
+const sceneD = new THREE.Scene(); const camD = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const fluidMat = new THREE.ShaderMaterial({
+  uniforms: { uT: { value: 0 }, uA: { value: new THREE.Color(0x2a0a6b) }, uB: { value: new THREE.Color(0xF54BF7) }, uC: { value: new THREE.Color(0xff5a1f) } },
+  vertexShader: 'varying vec2 v; void main(){ v = uv; gl_Position = vec4(position.xy, 0., 1.); }',
+  fragmentShader: `uniform float uT; uniform vec3 uA,uB,uC; varying vec2 v;
+  float h(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+  float n(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x), mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x), f.y); }
+  float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<5;i++){ s+=a*n(p); p*=2.02; a*=.5; } return s; }
+  void main(){ vec2 p = (v-.5)*vec2(3.2,1.8);
+    vec2 q = vec2(fbm(p+uT*.15), fbm(p+vec2(5.2,1.3)-uT*.12));
+    vec2 r = vec2(fbm(p+4.*q+vec2(1.7,9.2)+uT*.2), fbm(p+4.*q+vec2(8.3,2.8)));
+    float f = fbm(p+4.*r);
+    float bands = sin(f*28.+uT*1.5)*.5+.5;
+    vec3 col = mix(uA, uB, smoothstep(.2,.8,f)); col = mix(col, uC, smoothstep(.55,.95,r.x)*.8);
+    col *= .35+.45*bands; gl_FragColor = vec4(col, 1.); }`
+});
+sceneD.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), fluidMat));
+
+// --- bloom pipeline (one composer, scene swapped per section)
+const composer = new EffectComposer(renderer);
+const rpass = new RenderPass(sceneA, camera); composer.addPass(rpass);
+const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 1.1, .5, .8); composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// ---------- 2D overlay ----------
+const ov = document.getElementById('ov'); const g = ov.getContext('2d');
+const loadImg = s => new Promise((r, j) => { const i = new Image(); i.onload = () => r(i); i.onerror = () => j(new Error('image failed: ' + s)); i.src = s; });
+const IMG = {};
+const WORLDS = [
+  { img: 'curse-of-os-world.jpg', name: 'لعنة أوس', font: 'Blaka', w: '400', verb: 'اهرب', accent: '#A3121F', fg: '#E9DFCF' },
+  { img: 'choice-room-world.jpg', name: 'غرفة الاختيار', font: 'Changa', w: '800', verb: 'اختار', accent: '#E5283A', fg: '#EDECE8' },
+  { img: 'last-standing-world.jpg', name: 'آخر من يصمد', font: 'Changa', w: '800', verb: 'اصمد', accent: '#FFC400', fg: '#F2EDE4' },
+  { img: 'asia-journey-world.jpg', name: 'مشوار آسيا', font: 'Marhey', w: '700', verb: 'العب', accent: '#2BD67B', fg: '#FFFFFF' },
+];
+
+function drawSymbol(cx, cy, size, alpha = 1) {
+  const s = size / 15; g.save(); g.globalAlpha = alpha; g.imageSmoothingEnabled = false;
+  const x0 = Math.round(cx - size / 2), y0 = Math.round(cy - size / 2);
+  CELLS.forEach(o => { g.fillStyle = o.ch === 'W' ? C.bone : o.ch === 'D' ? C.shade : C.mag; g.fillRect(x0 + Math.floor(o.c * s), y0 + Math.floor(o.r * s), Math.ceil(s), Math.ceil(s)); });
+  g.restore();
+}
+function stamp(str, x, y, font, fill, scale = 1, alpha = 1, stroke = null, rot = 0) {
+  g.save(); g.translate(x, y); g.rotate(rot); g.scale(scale, scale); g.globalAlpha = alpha; g.font = font; g.direction = /[\u0600-\u06FF]/.test(str) ? 'rtl' : 'ltr'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (stroke) { g.lineJoin = 'round'; g.lineWidth = stroke[1]; g.strokeStyle = stroke[0]; g.strokeText(str, 0, 0); }
+  g.fillStyle = fill; g.fillText(str, 0, 0); g.restore();
+}
+function cover(img, zoom, px, py) { const sc = Math.max(W / img.width, H / img.height) * zoom; const w = img.width * sc, h = img.height * sc; g.drawImage(img, (W - w) / 2 + px, (H - h) / 2 + py, w, h); }
+// speed lines radiating from centre (manga impact)
+function speedLines(t, color, n = 70, alpha = .5) {
+  const r = rng(Math.floor(t * 24) + 3); g.save(); g.globalAlpha = alpha; g.fillStyle = color;
+  for (let i = 0; i < n; i++) { const a = r() * Math.PI * 2, r0 = 380 + r() * 300, len = 300 + r() * 900, w = 2 + r() * 10;
+    g.beginPath(); g.moveTo(W / 2 + Math.cos(a) * r0, H / 2 + Math.sin(a) * r0); g.lineTo(W / 2 + Math.cos(a + w / 900) * (r0 + len), H / 2 + Math.sin(a + w / 900) * (r0 + len)); g.lineTo(W / 2 + Math.cos(a - w / 900) * (r0 + len), H / 2 + Math.sin(a - w / 900) * (r0 + len)); g.fill(); }
+  g.restore();
+}
+// chromatic split: redraw the frame twice, offset and tinted
+function chroma(px) {
+  if (px < 1) return; const snap = document.createElement('canvas'); snap.width = W; snap.height = H; snap.getContext('2d').drawImage(ov, 0, 0);
+  g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .55;
+  g.filter = 'sepia(1) saturate(8) hue-rotate(280deg)'; g.drawImage(snap, -px, 0);
+  g.filter = 'sepia(1) saturate(8) hue-rotate(140deg)'; g.drawImage(snap, px, 0); g.restore();
+}
+const noiseTiles = []; for (let n = 0; n < 4; n++) { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const d = x.createImageData(256, 256); const r = rng(50 + n); for (let i = 0; i < d.data.length; i += 4) { const v = r() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); noiseTiles.push(c); }
+
+function makeCardTexture(w) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 720; const x = c.getContext('2d');
+  x.fillStyle = '#0B0B0F'; x.fillRect(0, 0, 512, 720);
+  const img = IMG[w.img]; const sc = 720 / img.height; x.drawImage(img, (512 - img.width * sc) / 2, 0, img.width * sc, 720);
+  const gr = x.createLinearGradient(0, 720, 0, 300); gr.addColorStop(0, 'rgba(11,11,15,.95)'); gr.addColorStop(1, 'rgba(11,11,15,0)'); x.fillStyle = gr; x.fillRect(0, 0, 512, 720);
+  x.strokeStyle = w.accent; x.lineWidth = 14; x.strokeRect(7, 7, 498, 706);
+  x.font = `${w.w} 74px ${w.font}`; x.fillStyle = w.fg; x.textAlign = 'center'; x.fillText(w.name, 256, 640);
+  x.fillStyle = w.accent; x.fillRect(196, 662, 120, 6);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+
+// ---------- sections ----------
+function renderTunnel(t) { // bars 0–4: fly along the checker road
+  const p = prog(t, 0, tb(SEC.worlds)); const u = .02 + p * .55 + hit(t) * .002;
+  const pos = roadCurve.getPointAt(u), look = roadCurve.getPointAt(Math.min(1, u + .03));
+  camera.fov = 72 + hit(t, 9) * 6; camera.position.set(pos.x, pos.y + 3.2, pos.z); camera.lookAt(look.x, look.y + 1.5, look.z);
+  camera.rotateZ(Math.sin(t * .9) * .18); // banking
+  tubes.forEach((m, i) => { m.material.color.setHex(NEON[(i + Math.floor(beatPos(t))) % NEON.length]).multiplyScalar(1.1 + hit(t) * 1.4); });
+  bloom.strength = .75 + hit(t) * .7; rpass.scene = sceneA; rpass.camera = camera; camera.updateProjectionMatrix(); composer.render();
+}
+function renderCards(t) { // bars 8–12: helix of game cards sweeping past camera
+  const p = prog(t, tb(SEC.cards), tb(SEC.words));
+  const N = cards.length, spin = (t - tb(SEC.cards)) * 1.1;
+  cards.forEach((m, i) => { const a = i * .42 + spin, y = (i - N / 2) * .55 + Math.sin(t * .8) * .5;
+    m.position.set(Math.cos(a) * 5.2, y, Math.sin(a) * 5.2); m.lookAt(0, y, 0); m.rotateY(Math.PI); m.rotateX(-.25); });
+  const ca = lerp(-.4, .6, eio(p));
+  camera.fov = 45; camera.position.set(Math.sin(ca) * 11, lerp(4, -3, eio(p)), Math.cos(ca) * 11); camera.lookAt(0, lerp(1, -1, p), 0);
+  rimC1.intensity = 160 + hit(t) * 420; rimC2.intensity = 160 + hit(t, 5) * 300;
+  bloom.strength = .55 + hit(t) * .5; rpass.scene = sceneC; rpass.camera = camera; camera.updateProjectionMatrix(); composer.render();
+}
+function renderFluid(t) { fluidMat.uniforms.uT.value = t * 1.4 + hit(t) * .6; bloom.strength = .25; rpass.scene = sceneD; rpass.camera = camD; composer.render(); }
+function clearGL() { renderer.setClearColor(0x000000, 1); renderer.clear(); }
+
+function overlayTunnel(t) {
+  const bp = beatPos(t);
+  // bar 2–3: one word per beat, stamped big; bar 3: "يوزرز إكس" tease
+  const words = ['جاهز؟', 'الواقع', 'صار', 'لعبة'];
+  if (bp >= 8 && bp < 16) { const i = Math.floor(bp - 8) % 4, f = bp - Math.floor(bp); const s = 1.35 - .35 * eo(clamp(f * 3));
+    stamp(words[i], W / 2, H / 2, '800 260px Kufam', i === 3 ? C.mag : C.bone, s, 1, ['#0B0B0F', 18]); }
+  if (bp < 8) { const a = clamp(bp / 2) * (1 - clamp((bp - 6.5) / 1.5)); stamp('USERS-X  PRESENTS', W / 2, H - 130, '700 34px SpaceMono', C.cyan, 1, a, ['#000', 8]); }
+}
+function overlayWorlds(t) { // bars 4–8: 4 worlds x 1 bar, cut + punch on each beat
+  const bp = beatPos(t) - SEC.worlds * 4; const wi = Math.min(3, Math.floor(bp / 4)), w = WORLDS[wi]; const lb = bp - wi * 4, f = lb - Math.floor(lb);
+  const r = rng(Math.floor(bp) * 7 + 1); const shake = hit(t, 10) * 22;
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+  g.save(); g.translate((r() - .5) * shake, (r() - .5) * shake);
+  const zoom = 1.08 + Math.floor(lb) * .07 + hit(t, 8) * .12; cover(IMG[w.img], zoom, Math.sin(lb) * 30, 0); g.restore();
+  // duotone accent wash
+  g.save(); g.globalCompositeOperation = 'color'; g.globalAlpha = .35; g.fillStyle = w.accent; g.fillRect(0, 0, W, H); g.restore();
+  const vg = g.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.75)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
+  speedLines(t, w.fg, 60, .25 + hit(t) * .35);
+  // beat 0: world name; beats 1–3: the verb slams in, bigger each time
+  if (Math.floor(lb) === 0) stamp(w.name, W / 2, H / 2, `${w.w} 230px ${w.font}`, w.fg, 1.25 - .25 * eo(clamp(f * 3)), 1, ['#000', 16]);
+  else { const k = Math.floor(lb); stamp(w.verb, W / 2 + (k === 2 ? -260 : k === 3 ? 260 : 0), H / 2 + (k - 2) * 40, `800 ${200 + k * 50}px Kufam`, k === 3 ? C.mag : w.fg, 1.3 - .3 * eo(clamp(f * 3)), 1, ['#000', 20], (k - 2) * -.06); }
+  stamp(`0${wi + 1}/04`, 150, 110, '700 54px Handjet', w.accent, 1, .95);
+  // white flash frame on each new world
+  if (lb < .12) { g.fillStyle = `rgba(255,255,255,${1 - lb / .12})`; g.fillRect(0, 0, W, H); }
+}
+function overlayCards(t) {
+  const bp = beatPos(t) - SEC.cards * 4;
+  if (bp > 9) { const f = bp - Math.floor(bp); const a = clamp((bp - 9) / 1);
+    stamp('أربع عوالم. لاعب واحد: أنت.', W / 2, H - 150, '800 92px Kufam', C.bone, 1 + hit(t, 9) * .04, a, ['#0B0B0F', 12]); }
+}
+function overlayWords(t) { // bars 12–14 over the fluid: final message, beat-stamped
+  const bp = beatPos(t) - SEC.words * 4; const f = bp - Math.floor(bp);
+  if (bp < 4) { stamp('اللعبة بدأت.', W / 2, H / 2 - 40, '800 250px Kufam', C.bone, 1.2 - .2 * eo(clamp(bp * 3)), 1, ['#0B0B0F', 22]);
+    stamp('THE GAME HAS STARTED.', W / 2, H / 2 + 150, '700 46px SpaceMono', C.bone, 1, clamp((bp - 1) / .5), ['#0B0B0F', 10]); }
+  else { stamp('قرارك.', W / 2, H / 2 - 40, '800 330px Kufam', C.mag, 1.25 - .25 * eo(clamp((bp - 4) * 3)), 1, ['#0B0B0F', 26]);
+    stamp('YOUR CHOICE.', W / 2, H / 2 + 170, '700 50px SpaceMono', C.bone, 1, clamp((bp - 5) / .5), ['#0B0B0F', 10]); speedLines(t, C.bone, 50, .18 + hit(t) * .3); }
+}
+function overlayLogo(t) {
+  g.fillStyle = C.void; g.fillRect(0, 0, W, H);
+  const bp = beatPos(t) - SEC.logo * 4; const land = eo(clamp(bp / .5));
+  // pulse rings behind the mark (the only glow; the mark itself stays flat)
+  for (let k = 0; k < 3; k++) { const q = ((bp - k * .33) % 1 + 1) % 1; g.save(); g.globalAlpha = (1 - q) * .35 * clamp(bp); g.strokeStyle = k % 2 ? C.cyan : C.mag; g.lineWidth = 6; g.strokeRect(W / 2 - 200 - q * 500, H / 2 - 120 - 200 - q * 500, 400 + q * 1000, 400 + q * 1000); g.restore(); }
+  const size = lerp(900, 330, land); drawSymbol(W / 2, H / 2 - 120, size, clamp(bp * 4));
+  const wr = eo(prog(bp, 2, 3)); if (wr > 0) { const img = IMG['usersx-wordmark.png'], ww = 720, hh = ww * img.height / img.width; g.save(); g.beginPath(); g.rect(W / 2 - ww / 2 + ww * (1 - wr), H / 2 + 120, ww * wr, hh + 10); g.clip(); g.drawImage(img, W / 2 - ww / 2, H / 2 + 125, ww, hh); g.restore(); }
+  const end = prog(t, DUR - .9, DUR); if (end > 0) { g.fillStyle = `rgba(0,0,0,${end})`; g.fillRect(0, 0, W, H); }
+}
+
+function render(t) {
+  g.clearRect(0, 0, W, H);
+  if (t < tb(SEC.worlds)) { renderTunnel(t); overlayTunnel(t); }
+  else if (t < tb(SEC.cards)) { clearGL(); overlayWorlds(t); }
+  else if (t < tb(SEC.words)) { renderCards(t); overlayCards(t); }
+  else if (t < tb(SEC.logo)) { renderFluid(t); overlayWords(t); }
+  else { clearGL(); overlayLogo(t); }
+  // pre-roll before the first downbeat: black with a cyan scanline
+  if (t < OFF) { g.fillStyle = '#000'; g.fillRect(0, 0, W, H); }
+  chroma(hit(t, 12) * 14);
+  const f = Math.floor(t * 24); g.save(); g.globalAlpha = .07; g.globalCompositeOperation = 'overlay'; g.fillStyle = g.createPattern(noiseTiles[f % 4], 'repeat'); g.translate((f * 37) % 256, (f * 91) % 256); g.fillRect(-256, -256, W + 512, H + 512); g.restore();
+}
+window.renderAt = t => { render(t); return true; };
+window.TIMING = { BPM, BEAT, BAR, SEC, DUR };
+(async () => {
+  const names = ['usersx-wordmark.png', ...WORLDS.map(w => w.img)];
+  (await Promise.all(names.map(n => loadImg((n.startsWith('usersx') ? '../assets/logo/' : '../assets/games/') + n)))).forEach((im, i) => IMG[names[i]] = im);
+  await Promise.all(['800 100px Kufam', '700 20px SpaceMono', '400 100px Blaka', '800 100px Changa', '700 100px Marhey', '700 20px Handjet'].map(f => document.fonts.load(f, 'ابجد ABC 01')));
+  const geo = new THREE.PlaneGeometry(2.2, 3.1);
+  for (let i = 0; i < 28; i++) { const w = WORLDS[i % 4]; const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: makeCardTexture(w), roughness: .35, metalness: .1, side: THREE.DoubleSide })); cardGroup.add(m); cards.push(m); }
+  render(0); window.READY = true;
+})();
+</script>
+</body>
+</html>
