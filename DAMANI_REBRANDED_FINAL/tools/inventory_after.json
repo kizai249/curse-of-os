@@ -1,0 +1,2074 @@
+[
+ {
+  "file": ".gitignore",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/01_Brand_Book/Damani_Brand_Book.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/01_Brand_Book/Damani_Brand_Guidelines.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/01_Brand_Book/Damani_Brand_Presentation.pptx",
+  "kind": "pptx",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/01_Brand_Book/source/Damani_Brand_Book.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/01_Brand_Book/source/Damani_Brand_Guidelines.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_arabic_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_arabic_primary.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_bilingual_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_bilingual_primary.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_english_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_english_primary.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_symbol_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_symbol_primary.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_vertical_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PDF/damani_vertical_primary.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_primary_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_arabic_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_primary_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_bilingual_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_primary_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_english_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_mark_black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_mark_green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_mark_white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_primary_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_symbol_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_primary_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/PNG/damani_vertical_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_arabic_mono-black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_arabic_mono-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_arabic_primary.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_arabic_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_arabic_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_bilingual_mono-black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_bilingual_mono-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_bilingual_primary.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_bilingual_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_bilingual_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_english_mono-black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_english_mono-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_english_primary.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_english_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_english_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_mark_black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_mark_green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_mark_white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_symbol_mono-black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_symbol_mono-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_symbol_primary.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_symbol_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_symbol_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_vertical_mono-black.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_vertical_mono-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_vertical_primary.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_vertical_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/SVG/damani_vertical_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/android_adaptive_background.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/android_adaptive_background_432.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/android_adaptive_foreground.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/android_adaptive_foreground_432.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/android_play_512.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/apple_touch_icon_180.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/damani_app_icon_rounded_1024.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/damani_app_icon_square_1024.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/favicon.ico",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/favicon.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/favicon_16.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/favicon_32.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/favicon_48.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/ios_120.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/ios_152.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/ios_167.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/ios_180.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/ios_appstore_1024.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/pwa_192.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/02_Logos/app_icon/pwa_512.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/03_Color_System/damani_colors.json",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/03_Color_System/damani_contrast_report.csv",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/03_Color_System/damani_palette.gpl",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/OFL.txt",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/TYPOGRAPHY.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-Black.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-Bold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-ExtraBold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-ExtraLight.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-Light.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-Medium.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/04_Typography/fonts/Tajawal-Regular.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_fade-white-on-green.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_fade-white-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_green-on-paper.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_green-on-white.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_tint-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_transparent-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/05_Graphic_Elements/patterns/damani_pattern_white-on-green.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/damani-icons-sprite.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-alert.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-bell.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-calendar.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-camera.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-check-circle.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-document.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-expiry.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-folder.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-home.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-lock.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-plus.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-product.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-receipt.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-renew.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-scan.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-search.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-service.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-share.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-shield-check.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-store.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-timeline.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-user.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-warranty.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/06_Icons/svg/dm-icon-x-circle.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/illustration_empty_scan.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/illustration_lifecycle_ring.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/illustration_passport_stack.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/source/illustration_empty_scan.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/source/illustration_lifecycle_ring.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/07_Illustrations/source/illustration_passport_stack.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/08_3D_Assets/3D_ART_DIRECTION.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/08_3D_Assets/3d_direction_preview_css.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/08_3D_Assets/source/3d_direction_preview_css.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/MOTION_SPEC.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/damani_logo_reveal_seal_1920x1080.mp4",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/damani_logo_reveal_seal_640.gif",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t0.2s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t0.7s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t1.1s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t1.6s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t2.2s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/keyframes/seal_t3.5s.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/09_Motion_Assets/source/logo_reveal_seal.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_01_launch.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_02_onboarding.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_03_login.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_04_dashboard_light.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_05_dashboard_dark.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_06_warranty_detail.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_07_empty_state.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_08_notifications.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/app_09_scan_receipt.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/banner_1200x628.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/banner_160x600.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/banner_300x250.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/banner_728x90.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/email_01_header.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/email_02_signature.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_01_launch.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_02_onboarding.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_03_login.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_04_dashboard_light.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_05_dashboard_dark.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_06_warranty_detail.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_07_empty_state.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_08_notifications.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/app_09_scan_receipt.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/banner_1200x628.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/banner_160x600.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/banner_300x250.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/banner_728x90.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/email_01_header.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/email_02_signature.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_1.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_2.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_3.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_4.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/store_google_play_feature_1024x500.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/source/web_01_landing_page.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/store_app_store_screenshot_1.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/store_app_store_screenshot_2.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/store_app_store_screenshot_3.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/store_app_store_screenshot_4.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/store_google_play_feature_1024x500.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/10_Digital_Applications/web_01_landing_page.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/business_card_back.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/business_card_back.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/business_card_front.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/business_card_front.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/document_cover_a4.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/document_cover_a4.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/folder_flat.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/letterhead_a4.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/letterhead_a4.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/presentation_content_16x9.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/presentation_cover_16x9.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/presentation_divider_16x9.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/business_card_back.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/business_card_front.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/document_cover_a4.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/folder_flat.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/letterhead_a4.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/presentation_content_16x9.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/presentation_cover_16x9.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/presentation_divider_16x9.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/source/staff_id_card.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/staff_id_card.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/11_Corporate_Identity/staff_id_card.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/instagram_post_01_launch.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/instagram_post_02_tip.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/instagram_post_03_feature.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/instagram_story_01_download.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/instagram_story_02_quiz.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/linkedin_post_1200x627.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/profile_avatar_1080.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/profile_linkedin_cover_1584x396.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/profile_x_header_1500x500.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/instagram_post_01_launch.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/instagram_post_02_tip.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/instagram_post_03_feature.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/instagram_story_01_download.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/instagram_story_02_quiz.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/linkedin_post_1200x627.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/profile_avatar_1080.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/profile_linkedin_cover_1584x396.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/profile_x_header_1500x500.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/source/x_post_1600x900.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/12_Social_Media/x_post_1600x900.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/campaign_key_visual_16x9.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/event_backdrop_3x2.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/merch_tote_bag_flat.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/outdoor_billboard_2x1.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/rollup_banner_85x200.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/source/campaign_key_visual_16x9.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/source/event_backdrop_3x2.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/source/merch_tote_bag_flat.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/source/outdoor_billboard_2x1.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/13_Mockups/source/rollup_banner_85x200.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/14_Templates/Damani_Presentation_Template.pptx",
+  "kind": "pptx",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/14_Templates/source/template_instagram_post_blank.html",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/14_Templates/template_instagram_post_blank.png",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/15_Technical_Documentation/DESIGN_SYSTEM.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/15_Technical_Documentation/design-tokens/damani.tokens.css",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/15_Technical_Documentation/design-tokens/damani.tokens.json",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damani_Brand_System/README.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Brand_Assets.zip",
+  "kind": "zip",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Brand_Book.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Brand_Guidelines.pdf",
+  "kind": "pdf",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Brand_Presentation.pptx",
+  "kind": "pptx",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Design_System.zip",
+  "kind": "zip",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/Damani_Logo_Package.zip",
+  "kind": "zip",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "dist/README.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/book_a.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/book_b.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/book_kit.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_all.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_applications.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_book.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_docs.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_exports.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_foundation.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_logos.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_motion.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/build_pptx.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/common.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/components.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/extract_logo.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/OFL.txt",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Black.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Bold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-ExtraBold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-ExtraLight.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Light.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Medium.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Regular.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/qa_book.mjs",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref_page04_logo_components.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/render.mjs",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/tokens.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ }
+]

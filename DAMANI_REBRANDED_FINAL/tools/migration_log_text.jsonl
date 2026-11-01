@@ -1,0 +1,16 @@
+{"file": "src/book_a.py", "replacements": {"Damanati_Brand_Identity_Final.pdf": 1, "ضماناتي": 13, "Damanati": 7}}
+{"file": "src/book_b.py", "replacements": {"Damanaty": 2, "ضماناتي": 7, "Damanati": 6, "damanati": 9}}
+{"file": "src/book_kit.py", "replacements": {"ضماناتي": 1, "Damanati": 2}}
+{"file": "src/build_all.py", "replacements": {"Damanati": 8}}
+{"file": "src/build_applications.py", "replacements": {"ضماناتي": 13, "Damanati": 2, "damanati": 5}}
+{"file": "src/build_book.py", "replacements": {"Damanati": 3}}
+{"file": "src/build_docs.py", "replacements": {"Damanati_Brand_Identity_Final.pdf": 1, "ضماناتي": 2, "Damanati": 9, "damanati": 9}}
+{"file": "src/build_exports.py", "replacements": {"damanati": 11}}
+{"file": "src/build_foundation.py", "replacements": {"Damanati": 2, "damanati": 7}}
+{"file": "src/build_logos.py", "replacements": {"ضماناتي": 3, "Damanati": 7, "damanati": 2}}
+{"file": "src/build_motion.py", "replacements": {"Damanati": 1, "damanati": 2}}
+{"file": "src/build_pptx.py", "replacements": {"ضماناتي": 3, "Damanati": 3, "damanati": 15}}
+{"file": "src/common.py", "replacements": {"Damanati": 3, "damanati": 2}}
+{"file": "src/components.py", "replacements": {"Damanati": 1}}
+{"file": "src/extract_logo.py", "replacements": {"Damanati_Brand_Identity_Final.pdf": 1, "Damanati": 1}}
+{"file": "src/tokens.py", "replacements": {"Damanati_Brand_Identity_Final.pdf": 1, "Damanati": 4}}

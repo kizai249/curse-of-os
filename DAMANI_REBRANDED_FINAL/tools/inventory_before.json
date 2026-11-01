@@ -1,0 +1,2667 @@
+[
+ {
+  "file": ".gitignore",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/01_Brand_Book/Damanati_Brand_Book.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 179,
+  "samples": [
+   "rand Identity Book‬‬  \f‫‪Damanati · Brand Book v2.0‬‬  ‫‪ ",
+   "e original artwork),‬‬  ‫ضماناتي · دليل الهوية الكامل‬  ‫",
+   "approval).‬‬  ‫‪02‬‬  \f‫‪Damanati · Brand Book v2.0‬‬  ‫‪ "
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/01_Brand_Book/Damanati_Brand_Guidelines.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 75,
+  "samples": [
+   "rand Identity Book‬‬  \f‫‪Damanati · Brand Guidelines v2.0‬",
+   "e original artwork),‬‬  ‫ضماناتي · إرشادات االستخدام المخ",
+   "r approval).‬‬  ‫‪02‬‬  \fDamanati · Brand Guidelines v2.0 "
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/01_Brand_Book/Damanati_Brand_Presentation.pptx",
+  "kind": "pptx",
+  "name_hit": true,
+  "content_hits": 25,
+  "samples": [
+   " name=\"Picture 1\" descr=\"damanati_pattern_fade-white-on-gr",
+   " name=\"Picture 2\" descr=\"damanati_bilingual_reversed-on-gr",
+   "awal\"/></a:rPr><a:t>هوية ضماناتي 2.0</a:t></a:r></a:p><a:"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/01_Brand_Book/source/Damanati_Brand_Book.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 409,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - Brand Book</title><sty",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/01_Brand_Book/source/Damanati_Brand_Guidelines.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 173,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - Brand Guidelines</titl",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_arabic_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_arabic_primary.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_bilingual_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_bilingual_primary.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_english_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_english_primary.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_symbol_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_symbol_primary.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_vertical_mono-black.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PDF/damanati_vertical_primary.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_primary_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_arabic_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_primary_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_bilingual_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_primary_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_english_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_mark_black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_mark_green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_mark_white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_primary_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_symbol_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_mono-black_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_mono-white_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_primary_2048h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_primary_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_reversed-on-dark_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/PNG/damanati_vertical_reversed-on-green_512h.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_arabic_mono-black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي - Arabic lockup\"><title>",
+   " - Arabic lockup\"><title>ضماناتي - Arabic lockup</title><"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_arabic_mono-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي - Arabic lockup\"><title>",
+   " - Arabic lockup\"><title>ضماناتي - Arabic lockup</title><"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_arabic_primary.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي - Arabic lockup\"><title>",
+   " - Arabic lockup\"><title>ضماناتي - Arabic lockup</title><"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_arabic_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي - Arabic lockup\"><title>",
+   " - Arabic lockup\"><title>ضماناتي - Arabic lockup</title><"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_arabic_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي - Arabic lockup\"><title>",
+   " - Arabic lockup\"><title>ضماناتي - Arabic lockup</title><"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_bilingual_mono-black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - bilingual loc",
+   "img\" aria-label=\"ضماناتي Damanati - bilingual lockup\"><tit",
+   "bilingual lockup\"><title>ضماناتي Damanati - bilingual loc"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_bilingual_mono-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - bilingual loc",
+   "img\" aria-label=\"ضماناتي Damanati - bilingual lockup\"><tit",
+   "bilingual lockup\"><title>ضماناتي Damanati - bilingual loc"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_bilingual_primary.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - bilingual loc",
+   "img\" aria-label=\"ضماناتي Damanati - bilingual lockup\"><tit",
+   "bilingual lockup\"><title>ضماناتي Damanati - bilingual loc"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_bilingual_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - bilingual loc",
+   "img\" aria-label=\"ضماناتي Damanati - bilingual lockup\"><tit",
+   "bilingual lockup\"><title>ضماناتي Damanati - bilingual loc"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_bilingual_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - bilingual loc",
+   "img\" aria-label=\"ضماناتي Damanati - bilingual lockup\"><tit",
+   "bilingual lockup\"><title>ضماناتي Damanati - bilingual loc"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_english_mono-black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati - English lockup\"><title",
+   "- English lockup\"><title>Damanati - English lockup</title>"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_english_mono-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati - English lockup\"><title",
+   "- English lockup\"><title>Damanati - English lockup</title>"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_english_primary.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati - English lockup\"><title",
+   "- English lockup\"><title>Damanati - English lockup</title>"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_english_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati - English lockup\"><title",
+   "- English lockup\"><title>Damanati - English lockup</title>"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_english_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati - English lockup\"><title",
+   "- English lockup\"><title>Damanati - English lockup</title>"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_mark_black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati mark\"><title>Damanati ma",
+   "l=\"Damanati mark\"><title>Damanati mark</title><path d=\"M 6"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_mark_green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati mark\"><title>Damanati ma",
+   "l=\"Damanati mark\"><title>Damanati mark</title><path d=\"M 6"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_mark_white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati mark\"><title>Damanati ma",
+   "l=\"Damanati mark\"><title>Damanati mark</title><path d=\"M 6"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_symbol_mono-black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati symbol\"><title>Damanati ",
+   "\"Damanati symbol\"><title>Damanati symbol</title><path d=\"M"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_symbol_mono-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati symbol\"><title>Damanati ",
+   "\"Damanati symbol\"><title>Damanati symbol</title><defs><mas"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_symbol_primary.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati symbol\"><title>Damanati ",
+   "\"Damanati symbol\"><title>Damanati symbol</title><path d=\"M"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_symbol_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati symbol\"><title>Damanati ",
+   "\"Damanati symbol\"><title>Damanati symbol</title><path d=\"M"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_symbol_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "\" role=\"img\" aria-label=\"Damanati symbol\"><title>Damanati ",
+   "\"Damanati symbol\"><title>Damanati symbol</title><path d=\"M"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_vertical_mono-black.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - vertical lock",
+   "img\" aria-label=\"ضماناتي Damanati - vertical lockup\"><titl",
+   " vertical lockup\"><title>ضماناتي Damanati - vertical lock"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_vertical_mono-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - vertical lock",
+   "img\" aria-label=\"ضماناتي Damanati - vertical lockup\"><titl",
+   " vertical lockup\"><title>ضماناتي Damanati - vertical lock"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_vertical_primary.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - vertical lock",
+   "img\" aria-label=\"ضماناتي Damanati - vertical lockup\"><titl",
+   " vertical lockup\"><title>ضماناتي Damanati - vertical lock"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_vertical_reversed-on-dark.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - vertical lock",
+   "img\" aria-label=\"ضماناتي Damanati - vertical lockup\"><titl",
+   " vertical lockup\"><title>ضماناتي Damanati - vertical lock"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/SVG/damanati_vertical_reversed-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 4,
+  "samples": [
+   "\" role=\"img\" aria-label=\"ضماناتي Damanati - vertical lock",
+   "img\" aria-label=\"ضماناتي Damanati - vertical lockup\"><titl",
+   " vertical lockup\"><title>ضماناتي Damanati - vertical lock"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/android_adaptive_background.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/android_adaptive_background_432.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/android_adaptive_foreground.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/android_adaptive_foreground_432.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/android_play_512.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/apple_touch_icon_180.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/damanati_app_icon_rounded_1024.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/damanati_app_icon_square_1024.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/favicon.ico",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/favicon.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/favicon_16.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/favicon_32.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/favicon_48.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/ios_120.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/ios_152.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/ios_167.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/ios_180.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/ios_appstore_1024.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/pwa_192.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/02_Logos/app_icon/pwa_512.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/03_Color_System/damanati_colors.json",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "\"approved\",     \"name\": \"Damanati Green\",     \"nameAr\": \"ا",
+   " \"usage\": \"Tint/shade of Damanati Green for UI states, cha",
+   " \"usage\": \"Tint/shade of Damanati Green for UI states, cha"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/03_Color_System/damanati_contrast_report.csv",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/03_Color_System/damanati_palette.gpl",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "GIMP Palette Name: Damanati Columns: 4 #  47 125 107",
+   "Columns: 4 #  47 125 107\tDamanati Green (approved) 255 255"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/OFL.txt",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/TYPOGRAPHY.md",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 1,
+  "samples": [
+   "ote:** the English word \"Damanati\" inside the logo is Myri"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-Black.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-Bold.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-ExtraBold.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-ExtraLight.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-Light.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-Medium.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/04_Typography/fonts/Tajawal-Regular.ttf",
+  "kind": "binary",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_fade-white-on-green.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_fade-white-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_green-on-paper.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_green-on-white.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_tint-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_transparent-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/05_Graphic_Elements/patterns/damanati_pattern_white-on-green.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/damanati-icons-sprite.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-alert.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-bell.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-calendar.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-camera.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-check-circle.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-document.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-expiry.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-folder.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-home.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-lock.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-plus.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-product.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-receipt.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-renew.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-scan.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-search.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-service.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-share.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-shield-check.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-store.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-timeline.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-user.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-warranty.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/06_Icons/svg/dm-icon-x-circle.svg",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/illustration_empty_scan.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/illustration_lifecycle_ring.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/illustration_passport_stack.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/source/illustration_empty_scan.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - illustration_empty_sca",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/source/illustration_lifecycle_ring.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - illustration_lifecycle",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/07_Illustrations/source/illustration_passport_stack.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - illustration_passport_",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/08_3D_Assets/3D_ART_DIRECTION.md",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 1,
+  "samples": [
+   "al vector (`02_Logos/SVG/damanati_symbol_primary.svg`) onl"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/08_3D_Assets/3d_direction_preview_css.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/08_3D_Assets/source/3d_direction_preview_css.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - 3d_direction_preview_c",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/MOTION_SPEC.md",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "l\" logo reveal - Files: `damanati_logo_reveal_seal_1920x10",
+   "(H.264, 30 fps, 3.6 s), `damanati_logo_reveal_seal_640.gif"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/damanati_logo_reveal_seal_1920x1080.mp4",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/damanati_logo_reveal_seal_640.gif",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t0.2s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t0.7s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t1.1s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t1.6s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t2.2s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/keyframes/seal_t3.5s.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/09_Motion_Assets/source/logo_reveal_seal.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - Seal logo reveal</titl",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_01_launch.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_02_onboarding.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_03_login.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_04_dashboard_light.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_05_dashboard_dark.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_06_warranty_detail.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_07_empty_state.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_08_notifications.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/app_09_scan_receipt.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/banner_1200x628.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/banner_160x600.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/banner_300x250.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/banner_728x90.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/email_01_header.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/email_02_signature.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_01_launch.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_01_launch</title><",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_02_onboarding.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_02_onboarding</tit",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_03_login.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_03_login</title><s",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_04_dashboard_light.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_04_dashboard_light",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_05_dashboard_dark.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_05_dashboard_dark<",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_06_warranty_detail.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_06_warranty_detail",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_07_empty_state.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_07_empty_state</ti",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_08_notifications.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 11,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_08_notifications</",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/app_09_scan_receipt.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - app_09_scan_receipt</t",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/banner_1200x628.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - banner_1200x628</title",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/banner_160x600.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - banner_160x600</title>",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/banner_300x250.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - banner_300x250</title>",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/banner_728x90.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - banner_728x90</title><",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/email_01_header.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - email_01_header</title",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/email_02_signature.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - email_02_signature</ti",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_1.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - store_app_store_screen",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_2.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - store_app_store_screen",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_3.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - store_app_store_screen",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/store_app_store_screenshot_4.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - store_app_store_screen",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/store_google_play_feature_1024x500.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - store_google_play_feat",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/source/web_01_landing_page.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 19,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - web_01_landing_page</t",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/store_app_store_screenshot_1.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/store_app_store_screenshot_2.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/store_app_store_screenshot_3.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/store_app_store_screenshot_4.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/store_google_play_feature_1024x500.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/10_Digital_Applications/web_01_landing_page.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/business_card_back.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 1,
+  "samples": [
+   "‬  +966 5X XXX XXXX name@damanati.sa  \f‫الرياض‪ ،‬المملكة "
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/business_card_back.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/business_card_front.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/business_card_front.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/document_cover_a4.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 2,
+  "samples": [
+   "‫ملف تعريفي · ‪2026‬‬  ‫ضماناتي‬ ‫نحفظ حقك بعد الشراء‬ ‫",
+   "راء‬ ‫‪Company Profile · Damanati‬‬  \f"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/document_cover_a4.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/folder_flat.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/letterhead_a4.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 1,
+  "samples": [
+   "لكة العربية السعودية‬  ‫‪damanati.sa‬‬  ‫‪+966 XX XXX XXXX"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/letterhead_a4.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/presentation_content_16x9.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/presentation_cover_16x9.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/presentation_divider_16x9.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/business_card_back.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - business_card_back</ti",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/business_card_front.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - business_card_front</t",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/document_cover_a4.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 12,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - document_cover_a4</tit",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/folder_flat.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 12,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - folder_flat</title><st",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/letterhead_a4.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 11,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - letterhead_a4</title><",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/presentation_content_16x9.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 11,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - presentation_content_1",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/presentation_cover_16x9.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - presentation_cover_16x",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/presentation_divider_16x9.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - presentation_divider_1",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/source/staff_id_card.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - staff_id_card</title><",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/staff_id_card.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/11_Corporate_Identity/staff_id_card.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/instagram_post_01_launch.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/instagram_post_02_tip.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/instagram_post_03_feature.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/instagram_story_01_download.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/instagram_story_02_quiz.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/linkedin_post_1200x627.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/profile_avatar_1080.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/profile_linkedin_cover_1584x396.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/profile_x_header_1500x500.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/instagram_post_01_launch.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - instagram_post_01_laun",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/instagram_post_02_tip.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - instagram_post_02_tip<",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/instagram_post_03_feature.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - instagram_post_03_feat",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/instagram_story_01_download.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 12,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - instagram_story_01_dow",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/instagram_story_02_quiz.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - instagram_story_02_qui",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/linkedin_post_1200x627.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - linkedin_post_1200x627",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/profile_avatar_1080.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 8,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - profile_avatar_1080</t",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/profile_linkedin_cover_1584x396.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - profile_linkedin_cover",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/profile_x_header_1500x500.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - profile_x_header_1500x",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/source/x_post_1600x900.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - x_post_1600x900</title",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/12_Social_Media/x_post_1600x900.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/campaign_key_visual_16x9.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/event_backdrop_3x2.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/merch_tote_bag_flat.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/outdoor_billboard_2x1.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/rollup_banner_85x200.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/source/campaign_key_visual_16x9.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 11,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - campaign_key_visual_16",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/source/event_backdrop_3x2.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 32,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - event_backdrop_3x2</ti",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/source/merch_tote_bag_flat.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - merch_tote_bag_flat</t",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/source/outdoor_billboard_2x1.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - outdoor_billboard_2x1<",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/13_Mockups/source/rollup_banner_85x200.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 10,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - rollup_banner_85x200</",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/14_Templates/Damanati_Presentation_Template.pptx",
+  "kind": "pptx",
+  "name_hit": true,
+  "content_hits": 5,
+  "samples": [
+   " name=\"Picture 1\" descr=\"damanati_pattern_fade-white-on-gr",
+   " name=\"Picture 2\" descr=\"damanati_bilingual_reversed-on-gr",
+   " name=\"Picture 2\" descr=\"damanati_symbol_primary_512h.png\""
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/14_Templates/source/template_instagram_post_blank.html",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 9,
+  "samples": [
+   "a charset=\"utf-8\"><title>Damanati - template_instagram_pos",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-",
+   "///home/user/curse-of-os/damanati-brand/src/fonts/Tajawal-"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/14_Templates/template_instagram_post_blank.png",
+  "kind": "raster",
+  "name_hit": true,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "Damanati_Brand_System/15_Technical_Documentation/DESIGN_SYSTEM.md",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 14,
+  "samples": [
+   "# Damanati design system · نظام الت",
+   " Tokens - `design-tokens/damanati.tokens.json` — W3C Desig",
+   "tatus`. - `design-tokens/damanati.tokens.css` — CSS custom"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/15_Technical_Documentation/design-tokens/damanati.tokens.css",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 1,
+  "samples": [
+   "/* Damanati design tokens - generate"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/15_Technical_Documentation/design-tokens/damanati.tokens.json",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 11,
+  "samples": [
+   "{   \"$description\": \"Damanati design tokens. status: a",
+   " \"color\",       \"name\": \"Damanati Green\",       \"nameAr\": ",
+   " \"usage\": \"Tint/shade of Damanati Green for UI states, cha"
+  ]
+ },
+ {
+  "file": "Damanati_Brand_System/README.md",
+  "kind": "text",
+  "name_hit": true,
+  "content_hits": 12,
+  "samples": [
+   "# Damanati Brand System v2.0 · نظام",
+   " System v2.0 · نظام هوية ضماناتي  مكتبة أصول هوية **ضمانا",
+   "اناتي  مكتبة أصول هوية **ضماناتي** (Damanati). الشعار وال"
+  ]
+ },
+ {
+  "file": "dist/Damanati_Brand_Assets.zip",
+  "kind": "zip",
+  "name_hit": true,
+  "content_hits": 1878,
+  "samples": [
+   "[name] Damanati_Brand_System/01_Brand_Bo",
+   "[name] and_System/01_Brand_Book/Damanati_Brand_Book.pdf",
+   "[Damanati_Brand_System/01_Brand_Book/Damanati_Brand_Book.pdf] rand Identity Book‬‬  \f‫‪Damanati · Brand Book v2.0‬‬  ‫‪ "
+  ]
+ },
+ {
+  "file": "dist/Damanati_Brand_Book.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 179,
+  "samples": [
+   "rand Identity Book‬‬  \f‫‪Damanati · Brand Book v2.0‬‬  ‫‪ ",
+   "e original artwork),‬‬  ‫ضماناتي · دليل الهوية الكامل‬  ‫",
+   "approval).‬‬  ‫‪02‬‬  \f‫‪Damanati · Brand Book v2.0‬‬  ‫‪ "
+  ]
+ },
+ {
+  "file": "dist/Damanati_Brand_Guidelines.pdf",
+  "kind": "pdf",
+  "name_hit": true,
+  "content_hits": 75,
+  "samples": [
+   "rand Identity Book‬‬  \f‫‪Damanati · Brand Guidelines v2.0‬",
+   "e original artwork),‬‬  ‫ضماناتي · إرشادات االستخدام المخ",
+   "r approval).‬‬  ‫‪02‬‬  \fDamanati · Brand Guidelines v2.0 "
+  ]
+ },
+ {
+  "file": "dist/Damanati_Brand_Presentation.pptx",
+  "kind": "pptx",
+  "name_hit": true,
+  "content_hits": 25,
+  "samples": [
+   " name=\"Picture 1\" descr=\"damanati_pattern_fade-white-on-gr",
+   " name=\"Picture 2\" descr=\"damanati_bilingual_reversed-on-gr",
+   "awal\"/></a:rPr><a:t>هوية ضماناتي 2.0</a:t></a:r></a:p><a:"
+  ]
+ },
+ {
+  "file": "dist/Damanati_Design_System.zip",
+  "kind": "zip",
+  "name_hit": true,
+  "content_hits": 98,
+  "samples": [
+   "[name] Damanati_Brand_System/15_Technica",
+   "[Damanati_Brand_System/15_Technical_Documentation/DESIGN_SYSTEM.md] # Damanati design system · نظام الت",
+   "[Damanati_Brand_System/15_Technical_Documentation/DESIGN_SYSTEM.md]  Tokens - `design-tokens/damanati.tokens.json` — W3C Desig"
+  ]
+ },
+ {
+  "file": "dist/Damanati_Logo_Package.zip",
+  "kind": "zip",
+  "name_hit": true,
+  "content_hits": 253,
+  "samples": [
+   "[name] Damanati_Brand_System/02_Logos/PD",
+   "[name] rand_System/02_Logos/PDF/damanati_arabic_mono-black.pdf",
+   "[name] Damanati_Brand_System/02_Logos/PD"
+  ]
+ },
+ {
+  "file": "dist/README.md",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 12,
+  "samples": [
+   "# Damanati Brand System v2.0 · نظام",
+   " System v2.0 · نظام هوية ضماناتي  مكتبة أصول هوية **ضمانا",
+   "اناتي  مكتبة أصول هوية **ضماناتي** (Damanati). الشعار وال"
+  ]
+ },
+ {
+  "file": "src/book_a.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 21,
+  "samples": [
+   "لإصدار 2.0 ما يغيّر هوية ضماناتي، بل يكمّلها. الشعار والأ",
+   "2.0 does not replace the Damanati identity; it completes i",
+   "لمرفقة <span class=\"en\">(Damanati_Brand_System/)</span>.</"
+  ]
+ },
+ {
+  "file": "src/book_b.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 24,
+  "samples": [
+   "t:16px\"><span class=\"en\">Damanati · ضماناتي</span></div>  ",
+   "an class=\"en\">Damanati · ضماناتي</span></div>       <div ",
+   "100%\" class=\"en\">https://damanati</div></div>     <p class"
+  ]
+ },
+ {
+  "file": "src/book_kit.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 3,
+  "samples": [
+   "rial page system for the Damanati brand book (A4 landscape",
+   "      f'<span class=\"en\">Damanati · {edition_en} v2.0</spa",
+   " f'<div class=\"ft\"><span>ضماناتي · {edition}</span><span "
+  ]
+ },
+ {
+  "file": "src/build_all.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 8,
+  "samples": [
+   "\"\"\"Regenerate the whole Damanati brand system and the del",
+   "           zf.write(f, f\"Damanati_Brand_System/{f.relative",
+   "  DIST.mkdir()     _zip(\"Damanati_Brand_Assets.zip\", [\"\"])"
+  ]
+ },
+ {
+  "file": "src/build_applications.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 20,
+  "samples": [
+   "html = page_html(body, f\"Damanati - {name}\",              ",
+   "صوّر الفاتورة مرة وحدة، وضماناتي يحفظها ويرتبها ويذكّرك ق",
+   "=\"font:800 26px Tajawal\">ضماناتي</h1></div>     <div clas"
+  ]
+ },
+ {
+  "file": "src/build_book.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 3,
+  "samples": [
+   "html = page_html(body, f\"Damanati - {edition_en}\", BOOK_CS",
+   "(book)     render(book, \"Damanati_Brand_Book\")     guide =",
+   "TLES))     render(book, \"Damanati_Brand_Guidelines\", guide"
+  ]
+ },
+ {
+  "file": "src/build_docs.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 21,
+  "samples": [
+   "ote:** the English word \"Damanati\" inside the logo is Myri",
+   "al vector (`02_Logos/SVG/damanati_symbol_primary.svg`) onl",
+   "l\" logo reveal - Files: `damanati_logo_reveal_seal_1920x10"
+  ]
+ },
+ {
+  "file": "src/build_exports.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 11,
+  "samples": [
+   "xist_ok=True)     (ai / \"damanati_app_icon_square_1024.svg",
+   "on_svg(1024))     (ai / \"damanati_app_icon_rounded_1024.sv",
+   "os_appstore_1024.png\": (\"damanati_app_icon_square_1024.svg"
+  ]
+ },
+ {
+  "file": "src/build_foundation.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 9,
+  "samples": [
+   "exist_ok=True)     (d / \"damanati.tokens.json\").write_text",
+   "tokens_json())     (d / \"damanati.tokens.css\").write_text(",
+   "ens.css\").write_text(\"/* Damanati design tokens - generate"
+  ]
+ },
+ {
+  "file": "src/build_logos.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 12,
+  "samples": [
+   "\"\"\"Build the Damanati logo package (SVG) from ",
+   "solve().parent.parent / \"Damanati_Brand_System\" / \"02_Logo",
+   "s = {         \"symbol\": \"Damanati symbol\",         \"arabic"
+  ]
+ },
+ {
+  "file": "src/build_motion.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 3,
+  "samples": [
+   "te_text(page_html(body, \"Damanati - Seal logo reveal\", f\"h",
+   "eck=True)     mp4 = d / \"damanati_logo_reveal_seal_1920x10",
+   "eck=True)     gif = d / \"damanati_logo_reveal_seal_640.gif"
+  ]
+ },
+ {
+  "file": "src/build_pptx.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 21,
+  "samples": [
+   "(s, 0.6, 7.02, 6, 0.3, f\"ضماناتي · {label}\", 10, \"stone\")",
+   "4.6, h=2.9, opacity_img=\"damanati_pattern_white-on-green.s",
+   "lements\" / \"patterns\" / \"damanati_pattern_fade-white-on-gr"
+  ]
+ },
+ {
+  "file": "src/common.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 5,
+  "samples": [
+   "nd SVG helpers for every Damanati build script.\"\"\" import ",
+   "SRC.parent OUT = ROOT / \"Damanati_Brand_System\" LOGOS = OU",
+   ").\"\"\"     s = (LOGOS / f\"damanati_{name}.svg\").read_text()"
+  ]
+ },
+ {
+  "file": "src/components.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 1,
+  "samples": [
+   "\"\"\"Reusable Damanati UI / graphic components "
+  ]
+ },
+ {
+  "file": "src/extract_logo.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 2,
+  "samples": [
+   "\"\"\"Extract the approved Damanati logo artwork as clean st",
+   "e 4 (\"مكونات الشعار\") of Damanati_Brand_Identity_Final.pdf"
+  ]
+ },
+ {
+  "file": "src/fonts/OFL.txt",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Black.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Bold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-ExtraBold.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-ExtraLight.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Light.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Medium.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/fonts/Tajawal-Regular.ttf",
+  "kind": "binary",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/qa_book.mjs",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-01.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-02.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-03.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-04.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-05.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-06.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-07.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-08.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-09.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-10.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-11.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-12.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-13.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-14.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-15.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-16.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-17.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-18.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-19.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-20.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref-21.jpg",
+  "kind": "raster",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/reference/ref_page04_logo_components.svg",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/render.mjs",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 0,
+  "samples": []
+ },
+ {
+  "file": "src/tokens.py",
+  "kind": "text",
+  "name_hit": false,
+  "content_hits": 5,
+  "samples": [
+   "ngle source of truth for Damanati design tokens.  status: ",
+   "e reference brand guide (Damanati_Brand_Identity_Final.pdf",
+   "= {     \"green-600\": _c(\"Damanati Green\", BASE_GREEN, \"app"
+  ]
+ }
+]
