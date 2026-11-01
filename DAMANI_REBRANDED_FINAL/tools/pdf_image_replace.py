@@ -75,4 +75,9 @@ def main(src, dst, edited_dir):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    if len(sys.argv) != 4:
+        raise SystemExit(__doc__)
+    try:
+        main(*sys.argv[1:4])
+    except (OSError, ValueError) as e:  # unreadable PDF/image, failed write, corrupt data
+        raise SystemExit(f"image replace failed: {e}")

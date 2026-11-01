@@ -256,6 +256,8 @@ if __name__ == "__main__":
         spec = json.load(fh)
     for item in spec:
         img = cv2.imread(item["src"], cv2.IMREAD_COLOR)
+        if img is None:
+            raise SystemExit(f"cannot read image {item['src']}")
         log = []
         for i, occ in enumerate(item["occ"]):
             try:
@@ -263,5 +265,6 @@ if __name__ == "__main__":
             except ValueError as e:
                 info = {"skipped": str(e), "box": occ["box"]}
             log.append(info)
-        cv2.imwrite(item["out"], img)
+        if not cv2.imwrite(item["out"], img):
+            raise SystemExit(f"cannot write image {item['out']}")
         print(json.dumps({"src": item["src"], "edits": log}, ensure_ascii=False))
