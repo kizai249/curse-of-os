@@ -240,10 +240,9 @@ def apply(img, occ, debug=None):
         img.astype(np.float32) * (1 - bandw) + back.astype(np.float32) * bandw
     ).astype(np.uint8)
     if debug:
-        cv2.imwrite(
-            debug + "_crop.png",
-            np.vstack([crop, cv2.cvtColor(mask * 255, cv2.COLOR_GRAY2BGR), edited]),
-        )
+        sheet = np.vstack([crop, cv2.cvtColor(mask * 255, cv2.COLOR_GRAY2BGR), edited])
+        if not cv2.imwrite(debug + "_crop.png", sheet):
+            raise SystemExit(f"cannot write debug image {debug}_crop.png")
     return res, {
         "cut": [int(c1), int(c2)],
         "removed_px": int(c2 - c1),
