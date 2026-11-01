@@ -252,8 +252,11 @@ def apply(img, occ, debug=None):
 
 
 if __name__ == "__main__":
-    with open(sys.argv[1]) as fh:
-        spec = json.load(fh)
+    try:
+        with open(sys.argv[1]) as fh:
+            spec = json.load(fh)
+    except (OSError, json.JSONDecodeError) as e:
+        raise SystemExit(f"cannot read spec {sys.argv[1]}: {e}")
     for item in spec:
         img = cv2.imread(item["src"], cv2.IMREAD_COLOR)
         if img is None:
