@@ -16,7 +16,7 @@ export const DISCLAIMER =
 
 export const ERRORS: Record<string, string> = {
   STAFF_ONLY: "ما عندك صلاحية لهذي العملية.",
-  ADMIN_ONLY: "هذي العملية لمسؤول USERS-X فقط.",
+  ADMIN_ONLY: "هذي العملية لمسؤول USER-X فقط.",
   PARTNER_ONLY: "هذي العملية لمسؤول الشريك.",
   MFA_REQUIRED: "فعّل التحقق الثنائي لحسابك ثم سجّل الدخول من جديد.",
   INVALID_FIELD: "فيه حقل غير صحيح.",

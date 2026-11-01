@@ -1,8 +1,8 @@
-# تريلر يوزرز إكس
+# تريلر يوزر إكس
 
 تريلر مدته 45 ثانية، مبني بالكود بالكامل: Three.js للمشاهد الثلاثية، وCanvas للنصوص والشعار، وصوت مركّب بـ Python. ما فيه أي عينات أو لقطات جاهزة من خارج المشروع.
 
-**الملف النهائي:** `dist/USERS-X-Trailer-1080p.mp4`، بمقاس 1920×1080 و24 إطار في الثانية، فيديو H.264 وصوت AAC ستيريو بتردد 48 كيلوهرتز، والحجم قرابة 30 ميجا.
+**الملف النهائي:** `dist/USER-X-Trailer-1080p.mp4`، بمقاس 1920×1080 و24 إطار في الثانية، فيديو H.264 وصوت AAC ستيريو بتردد 48 كيلوهرتز، والحجم قرابة 30 ميجا.
 
 ## المقاطع
 
@@ -38,7 +38,7 @@ python3 audio.py score.wav
 ffmpeg -framerate 24 -i frames/%05d.jpg -c:v libx264 -preset slow -b:v 5M -pass 1 -pix_fmt yuv420p -an -f null /dev/null
 ffmpeg -framerate 24 -i frames/%05d.jpg -i score.wav \
   -c:v libx264 -preset slow -b:v 5M -maxrate 8M -bufsize 10M -pass 2 -pix_fmt yuv420p -profile:v high \
-  -movflags +faststart -c:a aac -b:a 192k -shortest dist/USERS-X-Trailer-1080p.mp4
+  -movflags +faststart -c:a aac -b:a 192k -shortest dist/USER-X-Trailer-1080p.mp4
 ```
 
 لمعاينة إطارات محددة: `node capture.cjs preview 6.2,16,35.4`.
@@ -56,7 +56,7 @@ ffmpeg -framerate 24 -i frames/%05d.jpg -i score.wav \
 
 ## النسخة الثانية (v2)
 
-**الملف:** `dist/USERS-X-Trailer-v2-1080p.mp4`، مدته 30 ثانية، بدقة 1920×1080 و24 إطار في الثانية.
+**الملف:** `dist/USER-X-Trailer-v2-1080p.mp4`، مدته 30 ثانية، بدقة 1920×1080 و24 إطار في الثانية.
 
 بنيت هذي النسخة على خمس فيديوهات مرجعية. أخذت منها:
 - قطعات سريعة على الإيقاع.

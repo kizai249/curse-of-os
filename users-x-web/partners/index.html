@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}</style></head><body>
-<title>يوزرز إكس للشركاء</title>
+<title>يوزر إكس للشركاء</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,7 +215,7 @@ p { margin: 0; }
 
 <div id="app" dir="rtl" lang="ar">
   <header class="bar">
-    <div class="brand"><span id="brandX"></span><img src="assets/usersx-wordmark-sm.png" alt="يوزرز إكس" width="98" height="32"><b lang="en" dir="ltr">PARTNERS</b></div>
+    <div class="brand"><span id="brandX"></span><img src="assets/usersx-wordmark-sm.png" alt="يوزر إكس" width="89" height="32"><b lang="en" dir="ltr">PARTNERS</b></div>
     <span class="counter" id="counter" aria-hidden="true">01/13</span>
     <button class="chip-btn" type="button" id="voiceBtn" aria-pressed="true">صوت: <span id="voiceLabel">—</span></button>
   </header>
@@ -244,8 +244,8 @@ p { margin: 0; }
   <section class="start" id="start" aria-labelledby="startTitle">
     <div style="display:grid;gap:14px;justify-items:center">
       <div class="start__x" id="startX"></div>
-      <p class="eyebrow" lang="en" dir="ltr">USERS-X · PARTNER DECK 2026</p>
-      <h1 id="startTitle">عرض يوزرز إكس <em>للشركاء</em></h1>
+      <p class="eyebrow" lang="en" dir="ltr">USER-X · PARTNER DECK 2026</p>
+      <h1 id="startTitle">عرض يوزر إكس <em>للشركاء</em></h1>
       <p>عرض فيه ألعاب، ومقدّم ساخر اسمه نقطة. الصوت يشتغل بعد ما تضغط</p>
       <button class="btn btn--x" type="button" id="startBtn">اضغط <span class="kbd">X</span> عشان تبدأ</button>
       <button class="btn" type="button" id="startMuted">ابدأ بدون صوت</button>
@@ -257,7 +257,7 @@ p { margin: 0; }
 (function () {
   'use strict';
 
-  /* ===== Contact details — fill only with confirmed USERS-X details ===== */
+  /* ===== Contact details — fill only with confirmed USER-X details ===== */
   var CONTACT = { email: '', phone: '+966565952065' }; // [PLACEHOLDER] empty = shows a clear placeholder, never a fake address
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -505,7 +505,7 @@ p { margin: 0; }
 
   var SCENES = [
     { id: 'hello', label: 'البداية',
-      html: '<div class="wrap split"><div style="display:grid;gap:16px"><p class="eyebrow" lang="en" dir="ltr">USERS-X · FOR PARTNERS</p><h1>جمهورك يحضر.<br><em>خلّه يلعب.</em></h1><p class="lead">يوزرز إكس تصمّم وتشغّل تجارب تفاعلية هجينة — على الجوال وفي المكان بنفس اللحظة — وتعطي الجهات تفاعل تقدر تقيسه.</p><p class="note">هذا العرض نفسه لعبة: خمس ألعاب صغيرة، ونقاطك تنحسب للنهاية.</p></div><div class="hero-x" style="justify-self:center">' + symbolSVG(true) + '</div></div>',
+      html: '<div class="wrap split"><div style="display:grid;gap:16px"><p class="eyebrow" lang="en" dir="ltr">USER-X · FOR PARTNERS</p><h1>جمهورك يحضر.<br><em>خلّه يلعب.</em></h1><p class="lead">يوزر إكس تصمّم وتشغّل تجارب تفاعلية هجينة — على الجوال وفي المكان بنفس اللحظة — وتعطي الجهات تفاعل تقدر تقيسه.</p><p class="note">هذا العرض نفسه لعبة: خمس ألعاب صغيرة، ونقاطك تنحسب للنهاية.</p></div><div class="hero-x" style="justify-self:center">' + symbolSVG(true) + '</div></div>',
       lines: ['هلا والله بالشريك! أنا نقطة… مدير العلاقات، والتسويق، والمونتاج، وأحياناً أوزّع الماي.',
               'أدري إنك شفت ألف عرض فيه كلمة «تفاعل»… هذا غير. هنا إنت اللي بتلعب. حرفياً.',
               'اضغط «التالي» تحت، أو الأسهم في الكيبورد. وإذا زهقت مني، فيه زر يكتمني… بس بزعل.'] },
@@ -739,9 +739,9 @@ p { margin: 0; }
         $('#cEmail', root).innerHTML = CONTACT.email ? '<span dir="ltr">' + CONTACT.email + '</span>' : ph;
         $('#cPhone', root).innerHTML = CONTACT.phone ? '<span dir="ltr">' + CONTACT.phone + '</span>' : ph;
         $('#copyMsg', root).addEventListener('click', function () {
-          var msg = 'هلا فريق يوزرز إكس، شفنا عرض الشركاء ونبي اجتماع قصير نحدد فيه الفروع والموسم.\nالجهة: [اسم الجهة]\nالمسؤول: [الاسم]\nعدد الفروع: [__]';
+          var msg = 'هلا فريق يوزر إكس، شفنا عرض الشركاء ونبي اجتماع قصير نحدد فيه الفروع والموسم.\nالجهة: [اسم الجهة]\nالمسؤول: [الاسم]\nعدد الفروع: [__]';
           var r = $('#copyRes', root);
-          function ok() { r.textContent = 'انسخت الرسالة. أرسلها عبر قنوات يوزرز إكس الرسمية.'; SFX.good(); Av.wave(); }
+          function ok() { r.textContent = 'انسخت الرسالة. أرسلها عبر قنوات يوزر إكس الرسمية.'; SFX.good(); Av.wave(); }
           function no() { r.textContent = msg; }
           try { navigator.clipboard.writeText(msg).then(ok, no); } catch (e) { no(); }
         });
@@ -769,7 +769,7 @@ p { margin: 0; }
     var s = SCENES[i], el = $$('.scene', stage)[i];
     el.innerHTML = s.html; el.hidden = false; el.scrollTop = 0;
     el.classList.remove('is-in'); void el.offsetWidth; el.classList.add('is-in');
-    try { if (s.mount) s.mount(el, s); } catch (e) { console.warn('[USERS-X] scene failed', s.id, e); }
+    try { if (s.mount) s.mount(el, s); } catch (e) { console.warn('[USER-X] scene failed', s.id, e); }
     $$('button', dots).forEach(function (b, n) { if (n === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); if (n < i) b.classList.add('is-seen'); });
     $('#counter').textContent = String(i + 1).padStart(2, '0') + '/' + String(SCENES.length).padStart(2, '0');
     $('#prevBtn').disabled = i === 0; $('#nextBtn').disabled = i === SCENES.length - 1;

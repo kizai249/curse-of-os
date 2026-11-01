@@ -167,7 +167,7 @@ export function staffAccounts(root: HTMLElement, scope: Scope, role: Role): void
     h("label", {}, "الدور", h("select", { name: "role" },
       h("option", { value: "branch_staff" }, "موظف فرع"),
       role === "usersx_admin" ? h("option", { value: "partner_admin" }, "مسؤول شريك") : null,
-      role === "usersx_admin" ? h("option", { value: "usersx_admin" }, "مسؤول USERS-X") : null)),
+      role === "usersx_admin" ? h("option", { value: "usersx_admin" }, "مسؤول USER-X") : null)),
     role === "usersx_admin" ? h("label", {}, "العلامة", h("select", { name: "brandId" }, ...scope.brands.map((b) => h("option", { value: b.brandId }, b.name.ar)))) : null,
     h("label", {}, "الفرع (لموظف الفرع)", h("select", { name: "branchId" }, h("option", { value: "" }, "—"), ...scope.branches.map((b) => h("option", { value: b.branchId }, b.name.ar)))),
     h("button", { type: "submit" }, "إنشاء الحساب"));

@@ -1,7 +1,7 @@
 /*
- * USERS-X · D-PAD X symbol
+ * USER-X · D-PAD X symbol
  * Exact 15×15 pixel grid sampled from the official symbol in
- * "USERS-X Brand Presentation 2026", page 7 (نظام الشعار — الرمز).
+ * "USER-X Brand Presentation 2026", page 7 (نظام الشعار — الرمز).
  *   W = Bone White #F4F4F1   D = shade #33354C (arrow notch)   M = Pulse Magenta #F54BF7
  * Never rotate this grid by 45° (brand rule: it turns into "+").
  * Used by script.js (interactive logo + intro assembly) and tools/export-assets.mjs.

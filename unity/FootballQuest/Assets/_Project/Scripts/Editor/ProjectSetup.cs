@@ -22,7 +22,7 @@ namespace FootballQuest.EditorTools
     /// </summary>
     public static class ProjectSetup
     {
-        public const string CompanyName = "USERS-X";
+        public const string CompanyName = "USER-X";
         public const string ProductName = "Football Quest";
         // TODO(owner): تأكيد معرّف الحزمة النهائي قبل إنشاء تطبيقي Firebase وحسابات المتجرين.
         public const string ApplicationId = "com.usersx.footballquest";

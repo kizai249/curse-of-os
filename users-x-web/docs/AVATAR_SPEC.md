@@ -1,6 +1,6 @@
-# «نقطة · NUQTA» — USERS-X guide avatar spec
+# «نقطة · NUQTA» — USER-X guide avatar spec
 
-Original character made for this experience. It is a proposal: the name and look need USERS-X approval.
+Original character made for this experience. It is a proposal: the name and look need USER-X approval.
 
 ## Concept
 - **Name:** نقطة (Nuqta, "point"), from the brand line «كل لاعب هو نقطة التقاطع».

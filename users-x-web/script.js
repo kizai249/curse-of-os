@@ -1,5 +1,5 @@
 /*
- * USERS-X · Cinematic interactive experience — orchestration
+ * USER-X · Cinematic interactive experience — orchestration
  * Vanilla JS, no dependencies. Each module is started through safeStart() so a
  * failure in one scene never takes down the rest of the page.
  * Debug/test hooks live on window.__ux (read-only state, no behaviour changes).
@@ -29,7 +29,7 @@
     catch (err) {
       UX.errors.push(name + ': ' + (err && err.message));
       UX.modules[name] = false;
-      if (window.console) console.warn('[USERS-X] module "' + name + '" failed and was skipped:', err);
+      if (window.console) console.warn('[USER-X] module "' + name + '" failed and was skipped:', err);
     }
   }
 
@@ -99,7 +99,7 @@
           this.loadFiles();
         }
         return Promise.resolve(this.ctx.resume()).then(function () { self.startAmbience(); return true; }, function () { return false; });
-      } catch (e) { console.warn('[USERS-X] audio unavailable:', e); return Promise.resolve(false); }
+      } catch (e) { console.warn('[USER-X] audio unavailable:', e); return Promise.resolve(false); }
     },
     disable: function () { this.stopAmbience(); if (this.ctx && this.ctx.state === 'running') this.ctx.suspend(); },
     loadFiles: function () {
@@ -109,7 +109,7 @@
         fetch(url).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
           .then(function (buf) { return new Promise(function (res, rej) { self.ctx.decodeAudioData(buf, res, rej); }); })
           .then(function (decoded) { self.buffers[name] = decoded; })
-          .catch(function (err) { self.missing.push(name); console.info('[USERS-X] audio "' + name + '" not available (' + (err && err.message) + ') — using built-in synth.'); });
+          .catch(function (err) { self.missing.push(name); console.info('[USER-X] audio "' + name + '" not available (' + (err && err.message) + ') — using built-in synth.'); });
       });
     },
     tone: function (o) {
@@ -149,7 +149,7 @@
           var src = this.ctx.createBufferSource(); src.buffer = this.buffers[name]; src.connect(this.master); src.start();
         } else if (this.synth[name]) this.synth[name](this);
         this.played.push(name);
-      } catch (e) { console.warn('[USERS-X] sound "' + name + '" failed:', e); }
+      } catch (e) { console.warn('[USER-X] sound "' + name + '" failed:', e); }
     },
     startAmbience: function () {
       if (this.amb || !this.ctx) return;
@@ -565,7 +565,7 @@
     state: 'idle', reveals: 0, ignored: 0, tl: new Timeline(), cooldownUntil: 0,
     init: function () {
       this.stage = $('#logoStage'); this.btn = $('#logoBtn'); this.arms = $('#logoArms'); this.msg = $('#logoMsg');
-      if (window.USERSX_SYMBOL) $('#logoArt').innerHTML = window.USERSX_SYMBOL.svg({ grouped: true, depth: true, title: 'رمز يوزرز إكس — زر الاتجاهات' });
+      if (window.USERSX_SYMBOL) $('#logoArt').innerHTML = window.USERSX_SYMBOL.svg({ grouped: true, depth: true, title: 'رمز يوزر إكس — زر الاتجاهات' });
       var self = this;
       this.btn.addEventListener('pointerenter', function () { if (self.state === 'idle') self.set('hover'); });
       this.btn.addEventListener('pointerleave', function () { if (self.state === 'hover' || self.state === 'pressed') self.set('idle'); });
@@ -654,7 +654,7 @@
   var Guide = {
     init: function () {
       var self = this;
-      this.avatar = new Avatar($('#avatarMain'), { title: 'نقطة — دليل يوزرز إكس' });
+      this.avatar = new Avatar($('#avatarMain'), { title: 'نقطة — دليل يوزر إكس' });
       avatars.push(this.avatar);
       this.bubble = $('#avatarBubble'); this.sr = $('#avatarSay'); this.tap = 0; this.greeted = false;
       $('#avatarBtn').addEventListener('click', function () {
@@ -741,7 +741,7 @@
    * Add a game: push an object to GAMES (see README › Adding a game).
    * ------------------------------------------------------------------ */
   // Every game is its own world (Brand Presentation 2026 · pp.13–20): own palette,
-  // font, mood and art. The frame around it (logo, nav, HUD) stays USERS-X.
+  // font, mood and art. The frame around it (logo, nav, HUD) stays USER-X.
   var GAMES = [
     {
       id: 'curse-of-os', title: 'لعنة أوس', titleEn: 'CURSE OF OS',
@@ -995,7 +995,7 @@
         this.cleanup = fx.mount(stage, g) || null;
         UX.activeEffect = g.effect;
       } catch (err) {
-        console.warn('[USERS-X] effect failed, showing static art:', err);
+        console.warn('[USER-X] effect failed, showing static art:', err);
         stage.className = 'fx-stage fx-fallback';
         UX.activeEffect = 'fallback';
       }
@@ -1075,7 +1075,7 @@
         p.innerHTML = '';
         var a = document.createElement('a'); a.href = 'mailto:' + CONFIG.contact.email; a.textContent = CONFIG.contact.email; a.dir = 'ltr'; p.appendChild(a);
       } else {
-        p.innerHTML = '<span class="placeholder">[بريد يوزرز إكس الرسمي — يُضاف بعد الاعتماد]</span>';
+        p.innerHTML = '<span class="placeholder">[بريد يوزر إكس الرسمي — يُضاف بعد الاعتماد]</span>';
       }
       if (CONFIG.social.length) {
         ul.innerHTML = '';
@@ -1127,7 +1127,7 @@
         $('#' + bad[0]).focus();
         return false;
       }
-      var subject = '[USERS-X] ' + TYPE_LABEL[type] + ' — ' + name;
+      var subject = '[USER-X] ' + TYPE_LABEL[type] + ' — ' + name;
       var body = 'النوع: ' + TYPE_LABEL[type] + '\nالاسم: ' + name + '\nالبريد: ' + email + (org ? '\nالجهة: ' + org : '') + '\n\n' + msg;
       $('#composedText').value = 'الموضوع: ' + subject + '\n\n' + body;
       $('#composed').hidden = false;
@@ -1141,7 +1141,7 @@
         try { window.location.href = href; } catch (e) { /* user can use the link */ }
       } else {
         link.hidden = true;
-        this.status.textContent = 'رسالتك جاهزة — بس ما انرسلت. بريد الاستقبال الرسمي ما انضاف للموقع للحين، انسخ النص وأرسله عبر قنوات يوزرز إكس الرسمية.';
+        this.status.textContent = 'رسالتك جاهزة — بس ما انرسلت. بريد الاستقبال الرسمي ما انضاف للموقع للحين، انسخ النص وأرسله عبر قنوات يوزر إكس الرسمية.';
         this.status.classList.add('is-warn');
       }
       Sound.play('select');

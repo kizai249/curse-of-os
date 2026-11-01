@@ -1,4 +1,4 @@
-"""USERS-X trailer score — original, fully synthesised (no samples).
+"""USER-X trailer score — original, fully synthesised (no samples).
 Cue times match the T table in trailer.html."""
 import numpy as np, wave, sys
 

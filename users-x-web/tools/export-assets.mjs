@@ -13,8 +13,8 @@ const symbol = require(join(root, 'assets/logo/symbol.js'));
 const avatar = require(join(root, 'assets/avatar/nuqta.js'));
 
 const files = {
-  'assets/logo/usersx-symbol.svg': symbol.svg({ title: 'USERS-X' }),
-  'assets/avatar/nuqta.svg': avatar.svg({ title: 'نقطة — دليل يوزرز إكس', still: true })
+  'assets/logo/usersx-symbol.svg': symbol.svg({ title: 'USER-X' }),
+  'assets/avatar/nuqta.svg': avatar.svg({ title: 'نقطة — دليل يوزر إكس', still: true })
 };
 for (const [file, svg] of Object.entries(files)) {
   writeFileSync(join(root, file), svg + '\n');

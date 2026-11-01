@@ -1,4 +1,4 @@
-// USERS-X experience — executed browser acceptance tests (Playwright + Chromium).
+// USER-X experience — executed browser acceptance tests (Playwright + Chromium).
 // Run: node users-x-web/tests/e2e.cjs [screenshotDir]
 // Serves the folder itself on a free port; no build step, no dependencies besides Playwright.
 const { chromium } = require('playwright');

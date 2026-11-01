@@ -1,5 +1,5 @@
 /*
- * «نقطة · NUQTA» — original USERS-X guide avatar (pixel art, SVG).
+ * «نقطة · NUQTA» — original USER-X guide avatar (pixel art, SVG).
  * Name from the brand line «كل لاعب هو نقطة التقاطع».
  * Every part is a list of pixel rectangles [x, y, w, h, colour]. Parts that
  * carry the die-cut sticker edge get a 1px Void line + 2px Bone edge, and the

@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="utf-8">
-<title>USERS-X Trailer v2</title>
+<title>USER-X Trailer v2</title>
 <style>
 @font-face{font-family:Kufam;font-weight:800;src:url(../assets/fonts/kufam-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
 @font-face{font-family:Kufam;font-weight:800;src:url(../assets/fonts/kufam-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF}
@@ -202,11 +202,11 @@ function clearGL() { renderer.setClearColor(0x000000, 1); renderer.clear(); }
 
 function overlayTunnel(t) {
   const bp = beatPos(t);
-  // bar 2–3: one word per beat, stamped big; bar 3: "يوزرز إكس" tease
+  // bar 2–3: one word per beat, stamped big; bar 3: "يوزر إكس" tease
   const words = ['جاهز؟', 'الواقع', 'صار', 'لعبة'];
   if (bp >= 8 && bp < 16) { const i = Math.floor(bp - 8) % 4, f = bp - Math.floor(bp); const s = 1.35 - .35 * eo(clamp(f * 3));
     stamp(words[i], W / 2, H / 2, '800 260px Kufam', i === 3 ? C.mag : C.bone, s, 1, ['#0B0B0F', 18]); }
-  if (bp < 8) { const a = clamp(bp / 2) * (1 - clamp((bp - 6.5) / 1.5)); stamp('USERS-X  PRESENTS', W / 2, H - 130, '700 34px SpaceMono', C.cyan, 1, a, ['#000', 8]); }
+  if (bp < 8) { const a = clamp(bp / 2) * (1 - clamp((bp - 6.5) / 1.5)); stamp('USER-X  PRESENTS', W / 2, H - 130, '700 34px SpaceMono', C.cyan, 1, a, ['#000', 8]); }
 }
 function overlayWorlds(t) { // bars 4–8: 4 worlds x 1 bar, cut + punch on each beat
   const bp = beatPos(t) - SEC.worlds * 4; const wi = Math.min(3, Math.floor(bp / 4)), w = WORLDS[wi]; const lb = bp - wi * 4, f = lb - Math.floor(lb);
