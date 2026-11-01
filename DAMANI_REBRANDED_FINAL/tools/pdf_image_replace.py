@@ -28,7 +28,10 @@ def no_predictor(xobj):
 
 
 def main(src, dst, edited_dir):
-    reader = PdfReader(src)
+    try:
+        reader = PdfReader(src)
+    except (OSError, ValueError) as e:
+        raise SystemExit(f"cannot read PDF {src}: {e}")
     writer = PdfWriter(clone_from=reader)
     log = []
     for f in sorted(Path(edited_dir).glob("p*_*.png")):
@@ -41,7 +44,10 @@ def main(src, dst, edited_dir):
         if key not in xobjects:
             raise SystemExit(f"{f.name}: page {page_no} has no image {name}")
         xobj = xobjects[key].get_object()
-        img = Image.open(f).convert("RGB")
+        try:
+            img = Image.open(f).convert("RGB")
+        except OSError as e:
+            raise SystemExit(f"cannot read edited image {f}: {e}")
         w, h = int(xobj["/Width"]), int(xobj["/Height"])
         if img.size != (w, h):
             raise SystemExit(
@@ -69,8 +75,11 @@ def main(src, dst, edited_dir):
                 "bytes_after": len(data),
             }
         )
-    with open(dst, "wb") as fh:
-        writer.write(fh)
+    try:
+        with open(dst, "wb") as fh:
+            writer.write(fh)
+    except OSError as e:
+        raise SystemExit(f"cannot write {dst}: {e}")
     print(json.dumps(log, indent=1))
 
 
