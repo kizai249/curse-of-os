@@ -1,9 +1,19 @@
 // Cross-file consistency checks + generates Investment_Model_Audit_Report.md and README.md
 const fs = require('fs'); const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
-const D = JSON.parse(fs.readFileSync(path.join(__dirname, 'model_output.json'), 'utf8'));
-const QX = JSON.parse(fs.readFileSync(path.join(__dirname, 'qa_excel_result.json'), 'utf8'));
-const QD = JSON.parse(fs.readFileSync(path.join(__dirname, 'qa_deck_result.json'), 'utf8'));
+const SCRIPT = 'build_audit';
+function fail(msg) { console.error(`${SCRIPT}: ${msg}`); process.exit(1); }
+function readJSON(file) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch (err) { fail(`could not read ${file}: ${err.message}`); }
+}
+function writeOut(file, text) {
+  try { fs.writeFileSync(file, text); }
+  catch (err) { fail(`could not write ${file}: ${err.message}`); }
+}
+const D = readJSON(path.join(__dirname, 'model_output.json'));
+const QX = readJSON(path.join(__dirname, 'qa_excel_result.json'));
+const QD = readJSON(path.join(__dirname, 'qa_deck_result.json'));
 const M = D.base.metrics, U = D.base.unit, Y = D.base.years, P = D.params.base, S = D.scenarios, SE = D.sensitivity;
 const n = (v, d = 0) => (+v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const sar = v => n(Math.round(v) || 0); const pct = (v, d = 1) => v == null ? 'n/a' : n(v * 100, d) + '%';
@@ -16,7 +26,8 @@ const docs = {
 };
 const keys = { capital: sar(M.capital), irr: M.irrBook == null ? 'غير متاح' : pct(M.irrBook) };
 const consistency = Object.entries(docs).map(([name, f]) => {
-  const t = fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';
+  let t = '';
+  try { t = fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; } catch (err) { fail(`could not read ${f}: ${err.message}`); }
   return { name, capital: t.includes(keys.capital), irr: name.includes('proposal') ? true : t.includes(keys.irr) };
 });
 const xlIRR = QX.returns_vs_engine['IRR — book exit (A)'];
@@ -148,7 +159,7 @@ const audit = `# Investment Model Audit Report — تقرير تدقيق الن�
 - راتب المؤسس متواضع (5,000 ر.س) لتناسب رأس المال؛ أي زيادة ترفع نقطة التعادل.
 - قيمة التخارج بالمضاعف افتراض منخفض الثقة.
 `;
-fs.writeFileSync(path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.md'), audit);
+writeOut(path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.md'), audit);
 
 const readme = `# Fresh Fruit Import & Export — Investment Package
 
@@ -204,6 +215,6 @@ cd Fruit_Import_Export_Investment && bash _build/build_all.sh
 
 > هذه الحزمة توقعات مبنية على افتراضات معلنة، وليست عرضاً للأوراق المالية ولا ضماناً لأي عائد.
 `;
-fs.writeFileSync(path.join(ROOT, '05_Documentation/README.md'), readme);
+writeOut(path.join(ROOT, '05_Documentation/README.md'), readme);
 console.log('audit+readme written; consistency', consOK, JSON.stringify(consistency));
 if (!consOK || !qxOK || qdErr) process.exitCode = 1;

@@ -3,7 +3,17 @@
 const fs = require('fs'); const path = require('path');
 const E = require('../01_Investor_Pitch_Deck/engine.js');
 const ROOT = path.resolve(__dirname, '..');
-const D = JSON.parse(fs.readFileSync(path.join(__dirname, 'model_output.json'), 'utf8'));
+const SCRIPT = 'build_docs';
+function fail(msg) { console.error(`${SCRIPT}: ${msg}`); process.exit(1); }
+function readJSON(file) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch (err) { fail(`could not read ${file}: ${err.message}`); }
+}
+function writeOut(file, text) {
+  try { fs.writeFileSync(file, text); }
+  catch (err) { fail(`could not write ${file}: ${err.message}`); }
+}
+const D = readJSON(path.join(__dirname, 'model_output.json'));
 const B = D.base, M = B.metrics, U = B.unit, Y = B.years, Qt = B.quarters, R = B.monthly, P = D.params.base, S = D.scenarios, SE = D.sensitivity, INV = B.investor;
 const TODAY = '31 أكتوبر 2026';
 const avgSeason = P.volume.seasonality.reduce((a, b) => a + b, 0) / 12;
@@ -411,7 +421,7 @@ if (require.main === module) {
     const fontFrom = (dir) => path.relative(dir, path.join(ROOT, '01_Investor_Pitch_Deck/assets/fonts')).split(path.sep).join('/');
     const out = [];
     const fsDir = path.join(ROOT, '03_Feasibility_Study');
-    fs.writeFileSync(path.join(fsDir, 'Feasibility_Study.html'), feasibility(fontFrom(fsDir)));
+    writeOut(path.join(fsDir, 'Feasibility_Study.html'), feasibility(fontFrom(fsDir)));
     const tmp = path.join(__dirname, 'html'); fs.mkdirSync(tmp, { recursive: true });
     const jobs = [
       [path.join(fsDir, 'Feasibility_Study.html'), path.join(fsDir, 'Feasibility_Study.pdf')],
@@ -423,7 +433,7 @@ if (require.main === module) {
     if (fs.existsSync(audit)) jobs.push([path.join(tmp, 'audit.html'), path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.pdf'), doc('Investment Model Audit Report', fontFrom(tmp), '<div class="page">' + mdToHtml(fs.readFileSync(audit, 'utf8')) + '</div>')]);
     const b = await chromium.launch();
     for (const [html, pdf, content] of jobs) {
-      if (content) fs.writeFileSync(html, content);
+      if (content) writeOut(html, content);
       const pg = await b.newPage(); const errs = []; pg.on('pageerror', e => errs.push(e.message));
       await pg.goto('file://' + html); await pg.waitForTimeout(500);
       await pg.pdf({ path: pdf, format: 'A4', printBackground: true, margin: { top: '16mm', bottom: '16mm', left: '14mm', right: '14mm' }, displayHeaderFooter: true, headerTemplate: '<span></span>', footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#888"><span class="pageNumber"></span> / <span class="totalPages"></span></div>' });
@@ -432,5 +442,5 @@ if (require.main === module) {
     }
     await b.close();
     console.log(JSON.stringify(out, null, 1));
-  })();
+  })().catch(err => fail(`PDF generation failed: ${err.message}`));
 }
