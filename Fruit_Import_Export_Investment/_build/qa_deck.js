@@ -70,7 +70,7 @@ try { fs.mkdirSync(shots, { recursive: true }); } catch (err) { fail(`could not 
   await pp.goto(url + '?print=1'); await pp.waitForTimeout(1500);
   const pdfPath = path.resolve(__dirname, '../04_Investor_Materials/Investor_Pitch_Deck.pdf');
   await pp.pdf({ path: pdfPath, width: '1600px', height: '900px', printBackground: true, preferCSSPageSize: true });
-  out.checks.pdfBytes = fs.statSync(pdfPath).size;
+  try { out.checks.pdfBytes = fs.statSync(pdfPath).size; } catch (err) { fail(`PDF not written ${pdfPath}: ${err.message}`); }
   await b.close();
   const resPath = path.join(__dirname, 'qa_deck_result.json');
   try { fs.writeFileSync(resPath, JSON.stringify(out, null, 1)); } catch (err) { fail(`could not write ${resPath}: ${err.message}`); }

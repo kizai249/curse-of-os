@@ -442,7 +442,7 @@ if (require.main === module) {
       const pg = await b.newPage(); const errs = []; pg.on('pageerror', e => errs.push(e.message));
       await pg.goto('file://' + html); await pg.waitForTimeout(500);
       await pg.pdf({ path: pdf, format: 'A4', printBackground: true, margin: { top: '16mm', bottom: '16mm', left: '14mm', right: '14mm' }, displayHeaderFooter: true, headerTemplate: '<span></span>', footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#888"><span class="pageNumber"></span> / <span class="totalPages"></span></div>' });
-      out.push({ pdf: path.relative(ROOT, pdf), bytes: fs.statSync(pdf).size, errors: errs });
+      out.push({ pdf: path.relative(ROOT, pdf), bytes: (() => { try { return fs.statSync(pdf).size; } catch (err) { fail(`PDF not written ${pdf}: ${err.message}`); } })(), errors: errs });
       await pg.close();
     }
     await b.close();
