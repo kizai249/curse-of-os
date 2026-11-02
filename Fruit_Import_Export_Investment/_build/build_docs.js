@@ -9,6 +9,10 @@ function readJSON(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
   catch (err) { fail(`could not read ${file}: ${err.message}`); }
 }
+function readText(file) {
+  try { return fs.readFileSync(file, 'utf8'); }
+  catch (err) { fail(`could not read ${file}: ${err.message}`); }
+}
 function writeOut(file, text) {
   try { fs.writeFileSync(file, text); }
   catch (err) { fail(`could not write ${file}: ${err.message}`); }
@@ -422,7 +426,8 @@ if (require.main === module) {
     const out = [];
     const fsDir = path.join(ROOT, '03_Feasibility_Study');
     writeOut(path.join(fsDir, 'Feasibility_Study.html'), feasibility(fontFrom(fsDir)));
-    const tmp = path.join(__dirname, 'html'); fs.mkdirSync(tmp, { recursive: true });
+    const tmp = path.join(__dirname, 'html');
+    try { fs.mkdirSync(tmp, { recursive: true }); } catch (err) { fail(`could not create ${tmp}: ${err.message}`); }
     const jobs = [
       [path.join(fsDir, 'Feasibility_Study.html'), path.join(fsDir, 'Feasibility_Study.pdf')],
       [path.join(tmp, 'exec.html'), path.join(ROOT, '04_Investor_Materials/Investor_Executive_Summary.pdf'), execSummary(fontFrom(tmp))],
@@ -430,7 +435,7 @@ if (require.main === module) {
       [path.join(tmp, 'sources.html'), path.join(ROOT, '05_Documentation/Sources_And_References.pdf'), sourcesDoc(fontFrom(tmp))]
     ];
     const audit = path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.md');
-    if (fs.existsSync(audit)) jobs.push([path.join(tmp, 'audit.html'), path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.pdf'), doc('Investment Model Audit Report', fontFrom(tmp), '<div class="page">' + mdToHtml(fs.readFileSync(audit, 'utf8')) + '</div>')]);
+    if (fs.existsSync(audit)) jobs.push([path.join(tmp, 'audit.html'), path.join(ROOT, '05_Documentation/Investment_Model_Audit_Report.pdf'), doc('Investment Model Audit Report', fontFrom(tmp), '<div class="page">' + mdToHtml(readText(audit)) + '</div>')]);
     const b = await chromium.launch();
     for (const [html, pdf, content] of jobs) {
       if (content) writeOut(html, content);

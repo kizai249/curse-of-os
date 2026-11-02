@@ -2,7 +2,9 @@
 const { chromium } = require('playwright');
 const path = require('path'); const fs = require('fs');
 const url = 'file://' + path.resolve(__dirname, '../01_Investor_Pitch_Deck/index.html');
-const shots = path.join(__dirname, 'shots'); fs.mkdirSync(shots, { recursive: true });
+function fail(msg) { console.error(`qa_deck: ${msg}`); process.exit(1); }
+const shots = path.join(__dirname, 'shots');
+try { fs.mkdirSync(shots, { recursive: true }); } catch (err) { fail(`could not create ${shots}: ${err.message}`); }
 (async () => {
   const b = await chromium.launch(); const out = { errors: [], checks: {} };
   const page = await b.newPage({ viewport: { width: 1600, height: 900 } });
@@ -70,6 +72,7 @@ const shots = path.join(__dirname, 'shots'); fs.mkdirSync(shots, { recursive: tr
   await pp.pdf({ path: pdfPath, width: '1600px', height: '900px', printBackground: true, preferCSSPageSize: true });
   out.checks.pdfBytes = fs.statSync(pdfPath).size;
   await b.close();
-  fs.writeFileSync(path.join(__dirname, 'qa_deck_result.json'), JSON.stringify(out, null, 1));
+  const resPath = path.join(__dirname, 'qa_deck_result.json');
+  try { fs.writeFileSync(resPath, JSON.stringify(out, null, 1)); } catch (err) { fail(`could not write ${resPath}: ${err.message}`); }
   console.log(JSON.stringify(out, null, 1));
-})();
+})().catch(err => fail(`browser test or PDF export failed: ${err.message}`));
