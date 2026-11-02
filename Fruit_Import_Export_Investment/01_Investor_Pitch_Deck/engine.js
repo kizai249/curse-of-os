@@ -27,7 +27,7 @@
     return {
       meta: { startYear: 2027, startMonth: 1, currency: 'SAR', scenario: 'base', origin: 'Sudan' },
       shipment: {
-        cartonsPerContainer: 1700,      // IMG
+        cartonsPerContainer: 1260,      // CLIENT correction (image showed 1,700 — wrong)
         cartonKg: 13.5,                 // CLIENT: carton holds 13–14 kg
         tonsPerContainer: 32,           // IMG: 32 t bananas bought (field weight)
         buyPricePerTon: 637.5,          // IMG: 20,400 / 32 (SAR, paid in Sudan)
@@ -52,10 +52,10 @@
         cartonPriceEGP: 44,             // per carton
         bagPriceEGPperKg: 110,          // per kg of bags
         bagsPerKg: 40,                  // ≈40 bags per kg
-        bagsPerCarton: 45 * 40 / 1700,  // image buys 45 kg = 1,800 bags ≈ 1 bag/carton + 6% spare
+        bagsPerCarton: 45 * 40 / 1260,  // image buys 45 kg = 1,800 bags per shipment (kept) ⇒ ≈1.43 bags/carton (confirm)
         foamRollPriceEGP: 430,          // roll 100 cm × 100 m, 2 mm
         foamPiecesPerRoll: 666,         // at 50 × 30 cm
-        foamPiecesPerCarton: 15 * 666 / 1700, // image buys 15 rolls ⇒ ≈5.9 pieces per carton (confirm)
+        foamPiecesPerCarton: 15 * 666 / 1260, // image buys 15 rolls per shipment (kept) ⇒ ≈7.9 pieces per carton (confirm)
         cornerPaperEGPperM: 24,         // per metre
         cornerPaperMeters: 250,         // per reefer
         strapEGPperTon: 27000,          // plastic strap

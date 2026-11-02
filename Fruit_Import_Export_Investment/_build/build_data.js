@@ -25,4 +25,4 @@ try {
   console.error(`build_data: could not write ${outPath}: ${err.message}`);
   process.exit(1);
 }
-console.log('capital', base.metrics.capital, 'IRR', base.metrics.irrBook.toFixed(4), 'NI5y', Math.round(base.metrics.totalNI5y));
+console.log('capital', base.metrics.capital, 'IRR', (base.metrics.irrBook == null ? 'n/a' : base.metrics.irrBook.toFixed(4)), 'NI5y', Math.round(base.metrics.totalNI5y));

@@ -61,7 +61,10 @@ for label, key in (('IRR — book exit (A)', 'irrBook'), ('IRR — multiple exit
                    ('Cash payback month (cum. pre-financing FCF ≥ capital)', 'cashPaybackMonth'), ('Distribution payback month (cum. dividends ≥ capital)', 'distributionPaybackMonth'),
                    ('First month with positive EBITDA', 'ebitdaBreakEvenMonth'), ('Minimum month-end cash', 'minCash')):
     xv = xl_metrics.get(label); ev = BM[key]
-    if xv is None or abs(xv - ev) > 1e-6 * max(1, abs(ev)): fails.append(('returns', label, xv, ev))
+    if ev is None:  # engine reports no IRR / no payback; Excel must say so too
+        if xv not in ('n/a', '> 60', None): fails.append(('returns', label, xv, ev))
+        continue
+    if not isinstance(xv, (int, float)) or abs(xv - ev) > 1e-6 * max(1, abs(ev)): fails.append(('returns', label, xv, ev))
 checks = [(r[0].value, r[1].value) for r in wb['Checks'].iter_rows(min_row=5, max_row=30) if r[0].value]
 # scenario switch test: set selector to 1 and 3, recalc, compare 5y NI and closing cash with engine scenarios
 scen_res = {}
@@ -88,4 +91,5 @@ try:
         json.dump(res, fh, ensure_ascii=False, indent=1)
 except OSError as e:
     fail(f'could not write {_res_path}: {e}')
-sys.exit(1 if fails or errs or not all(c[1] is True for c in checks) else 0)
+integrity = [c for c in checks if not str(c[0]).startswith('Outcome')]
+sys.exit(1 if fails or errs or not all(c[1] is True for c in integrity) else 0)

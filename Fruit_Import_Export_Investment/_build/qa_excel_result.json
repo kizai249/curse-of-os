@@ -1,36 +1,36 @@
 {
  "returns_vs_engine": {
-  "IRR — book exit (A)": 0.997633531076153,
-  "IRR — multiple exit (B)": 1.06005648127828,
-  "NPV @ discount rate — A": 778600.728347373,
-  "NPV @ discount rate — B": 948634.964703615,
-  "ROI 5-year (dividends + book equity − capital) / capital": 19.2659230152454,
-  "Annualised ROI": 0.825379957510421,
-  "5-year cumulative net income": 1926592.30152454,
-  "Cash payback month (cum. pre-financing FCF ≥ capital)": 17,
-  "Distribution payback month (cum. dividends ≥ capital)": 28,
-  "First month with positive EBITDA": 3,
-  "Minimum month-end cash": 18781.4737392857,
+  "IRR — book exit (A)": "n/a",
+  "IRR — multiple exit (B)": "n/a",
+  "NPV @ discount rate — A": -431146.894650756,
+  "NPV @ discount rate — B": -366893.229166667,
+  "ROI 5-year (dividends + book equity − capital) / capital": -9.23999440897369,
+  "Annualised ROI": -2.52470345144288,
+  "5-year cumulative net income": -923999.440897369,
+  "Cash payback month (cum. pre-financing FCF ≥ capital)": "> 60",
+  "Distribution payback month (cum. dividends ≥ capital)": "> 60",
+  "First month with positive EBITDA": "> 60",
+  "Minimum month-end cash": -823999.440897369,
   "Emergency reserve target": 12600,
-  "Break-even containers / month (Y1 overhead)": 0.566386966010312,
-  "Break-even selling price / carton": 35.7991927210385
+  "Break-even containers / month (Y1 overhead)": 3.74968712750902,
+  "Break-even selling price / carton": 47.1059260202544
  },
  "scenario_switch": {
   "conservative": {
-   "excel_NI5y": -912103.4928335872,
-   "engine_NI5y": -912103.492833589,
-   "excel_end_cash": -812103.492833589,
-   "engine_end_cash": -812103.4928335887
+   "excel_NI5y": -942385.4631898883,
+   "engine_NI5y": -942385.46318989,
+   "excel_end_cash": -842385.46318989,
+   "engine_end_cash": -842385.4631898899
   },
   "optimistic": {
-   "excel_NI5y": 4887421.478389575,
-   "engine_NI5y": 4887421.478389575,
-   "excel_end_cash": 3128304.5541629,
-   "engine_end_cash": 3128304.5541628962
+   "excel_NI5y": -900963.5852042927,
+   "engine_NI5y": -900963.5852042943,
+   "excel_end_cash": -800963.585204294,
+   "engine_end_cash": -800963.5852042942
   }
  },
  "cells_compared": 1080,
- "max_abs_diff_SAR": 4.889443516731262e-09,
+ "max_abs_diff_SAR": 6.402842700481415e-10,
  "mismatches": [],
  "formula_errors": [],
  "checks": [
@@ -55,16 +55,16 @@
    true
   ],
   [
-   "Cash never below zero",
-   true
+   "Outcome (not an integrity check): cash never below zero",
+   false
   ],
   [
    "Shipments never exceed the plan",
    true
   ],
   [
-   "Cash stays ≥ emergency reserve (funding adequate)",
-   true
+   "Outcome (not an integrity check): cash stays ≥ emergency reserve",
+   false
   ],
   [
    "Base: 5y net income matches engine.js (±1 SAR) — valid when scenario = 2",

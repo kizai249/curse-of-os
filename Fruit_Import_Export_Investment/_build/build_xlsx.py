@@ -60,7 +60,7 @@ def g(p, path):
 # name, json path, arabic, english, unit, source, confidence, note
 A = [
     ('sec', 'Shipment / unit economics — بيانات الشحنة'),
-    ('cartons', 'shipment.cartonsPerContainer', 'عدد الكراتين في البراد', 'Cartons per container', 'carton', 'IMAGE', 'High', 'Image: الكرتون 1700'),
+    ('cartons', 'shipment.cartonsPerContainer', 'عدد الكراتين في البراد', 'Cartons per container', 'carton', 'CLIENT', 'High', 'Image: الكرتون 1700'),
     ('cartonKg', 'shipment.cartonKg', 'وزن الكرتون', 'Carton net weight', 'kg', 'CLIENT', 'High', 'Client: 13–14 kg carton ⇒ ~23 t packed vs 32 t bought (pack-out ≈72%)'),
     ('tons', 'shipment.tonsPerContainer', 'الموز المشترى للبراد (وزن حقل)', 'Bananas bought per container (field weight)', 'ton', 'IMAGE', 'High', 'Image: 32 طن موز (Sudan)'),
     ('buyPrice', 'shipment.buyPricePerTon', 'سعر شراء الطن', 'Purchase price per tonne', 'SAR/t', 'IMAGE (derived)', 'High', '20,400 ÷ 32 = 637.5'),
@@ -83,10 +83,10 @@ A = [
     ('pkCarton', 'packaging.cartonPriceEGP', 'سعر الكرتون', 'Carton price', 'EGP', 'CLIENT', 'High', 'أرض مصنع'),
     ('pkBagKg', 'packaging.bagPriceEGPperKg', 'سعر كيلو الأكياس', 'Bags price per kg', 'EGP/kg', 'CLIENT', 'High', 'أرض مصنع'),
     ('pkBagsPerKg', 'packaging.bagsPerKg', 'عدد الأكياس في الكيلو', 'Bags per kg', 'bags', 'CLIENT', 'Medium', 'تقريباً 40'),
-    ('pkBagsPerCarton', 'packaging.bagsPerCarton', 'أكياس لكل كرتون', 'Bags per carton (incl. spare)', 'bags', 'IMAGE (derived)', 'Medium', '45 kg × 40 ÷ 1,700 ≈ 1.06'),
+    ('pkBagsPerCarton', 'packaging.bagsPerCarton', 'أكياس لكل كرتون', 'Bags per carton (incl. spare)', 'bags', 'IMAGE (derived)', 'Medium', '45 kg × 40 ÷ 1,260 ≈ 1.43 (image bag quantity kept — confirm)'),
     ('pkFoamRoll', 'packaging.foamRollPriceEGP', 'سعر لفة الفوم', 'Foam roll price (100cm×100m, 2mm)', 'EGP', 'CLIENT', 'High', ''),
     ('pkFoamPcsRoll', 'packaging.foamPiecesPerRoll', 'قطع فوم لكل لفة', 'Foam pieces per roll (50×30 cm)', 'pcs', 'CLIENT', 'High', '666'),
-    ('pkFoamPcsCarton', 'packaging.foamPiecesPerCarton', 'قطع فوم لكل كرتون', 'Foam pieces per carton', 'pcs', 'IMAGE (derived)', 'Low', '15 rolls × 666 ÷ 1,700 ≈ 5.9 — confirm'),
+    ('pkFoamPcsCarton', 'packaging.foamPiecesPerCarton', 'قطع فوم لكل كرتون', 'Foam pieces per carton', 'pcs', 'IMAGE (derived)', 'Low', '15 rolls × 666 ÷ 1,260 ≈ 7.9 (image roll quantity kept — confirm)'),
     ('pkCornerM', 'packaging.cornerPaperEGPperM', 'سعر متر الزوايا', 'Corner paper per metre', 'EGP/m', 'CLIENT', 'High', ''),
     ('pkCornerMeters', 'packaging.cornerPaperMeters', 'أمتار الزوايا للبراد', 'Corner paper metres per reefer', 'm', 'CLIENT', 'High', '250'),
     ('pkStrapTon', 'packaging.strapEGPperTon', 'سعر طن الشريط', 'Plastic strap per tonne', 'EGP/t', 'CLIENT', 'High', '27,000'),
@@ -168,7 +168,7 @@ ws = wb.create_sheet('Extracted_Data')
 title(ws, 'Extracted Project Information — البيانات المستخرجة من الصورة', 'Source: client image (packaging table in EGP, reefer cost table in SAR). Values transcribed exactly; checks recomputed.')
 header(ws, 4, ['Item (AR)', 'Qty', 'Unit price', 'Total (as shown)', 'Currency', 'Recomputed', 'Diff', 'Confidence', 'Notes'])
 ext = [
-    ('الكرتون', 1700, 44, 74800, 'EGP', 'High', ''),
+    ('الكرتون', 1700, 44, 74800, 'EGP', 'High', 'Client correction: the right quantity is 1,260 cartons (55,440 EGP); model uses 1,260'),
     ('الكيس / كيلو', 45, 110, 4950, 'EGP', 'High', 'Plastic bags by kg'),
     ('الفوم / كيلو', 15, 430, 6450, 'EGP', 'High', ''),
     ('ورق تثبيت / كيلو', 250, 24, 6000, 'EGP', 'High', 'Wrapping/fixing paper'),
@@ -537,14 +537,14 @@ for j in range(6):
     ws[f'{col}9'] = f'={col}5' + ('+G6' if j == 5 else ''); ws[f'{col}10'] = f'={col}5' + ('+G8' if j == 5 else '')
 for rr in range(5, 11):
     for cc in range(2, 8): ws.cell(row=rr, column=cc).number_format = SAR
-K = [('IRR — book exit (A)', '=IRR(B9:G9)', PCT), ('IRR — multiple exit (B)', '=IRR(B10:G10)', PCT),
+K = [('IRR — book exit (A)', '=IFERROR(IRR(B9:G9),"n/a")', PCT), ('IRR — multiple exit (B)', '=IFERROR(IRR(B10:G10),"n/a")', PCT),
      ('NPV @ discount rate — A', '=B9+NPV(discount,C9:G9)', SAR), ('NPV @ discount rate — B', '=B10+NPV(discount,C10:G10)', SAR),
      ('ROI 5-year (dividends + book equity − capital) / capital', '=(SUM(C5:G5)+G6-capital)/capital', PCT),
      ('Annualised ROI', '=((SUM(C5:G5)+G6)/capital)^(1/5)-1', PCT),
      ('5-year cumulative net income', f'=SUM(Monthly_Model!{rng("Net income")})', SAR),
      ('Cash payback month (cum. pre-financing FCF ≥ capital)', f'=IF(_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("Cum FCF")},">="&capital)=0,"> 60",_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("Cum FCF")},">="&capital))', '0'),
      ('Distribution payback month (cum. dividends ≥ capital)', f'=IF(_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("Cum dividends")},">="&capital)=0,"> 60",_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("Cum dividends")},">="&capital))', '0'),
-     ('First month with positive EBITDA', f'=_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("EBITDA")},">0",Monthly_Model!{rng("Month")},">="&launch)', '0'),
+     ('First month with positive EBITDA', f'=IF(_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("EBITDA")},">0",Monthly_Model!{rng("Month")},">="&launch)=0,"> 60",_xlfn.MINIFS(Monthly_Model!{rng("Month")},Monthly_Model!{rng("EBITDA")},">0",Monthly_Model!{rng("Month")},">="&launch))', '0'),
      ('Minimum month-end cash', f'=MIN(Monthly_Model!{rng("Cash")})', SAR),
      ('Emergency reserve target', '=reserve', SAR),
      ('Break-even containers / month (Y1 overhead)', '=beCont', '0.00'),
@@ -624,7 +624,7 @@ for cc in 'BCD': ws.column_dimensions[cc].width = 18
 # ------------------------------------------------------------------ Sensitivity snapshot
 ws = wb.create_sheet('Sensitivity')
 SE = D['sensitivity']
-title(ws, 'Sensitivity Analysis — تحليل الحساسية (engine snapshot, base capital held constant)', f"Capital held at SAR {SE['capitalHeld']:,.0f}. Base 5y NI = {SE['base']['ni5y']:,.0f}; base IRR = {SE['base']['irr']:.1%}")
+title(ws, 'Sensitivity Analysis — تحليل الحساسية (engine snapshot, base capital held constant)', f"Capital held at SAR {SE['capitalHeld']:,.0f}. Base 5y NI = {SE['base']['ni5y']:,.0f}; base IRR = {('n/a' if SE['base']['irr'] is None else format(SE['base']['irr'], '.1%'))}")
 header(ws, 4, ['Shock', 'الصدمة', 'Contribution / container', '5y net income', 'Δ vs base', 'Y2 net income', 'NPV (book)', 'IRR (book)', 'Min cash', 'Capital needed'])
 r = 5
 for x in SE['rows']:
@@ -653,9 +653,9 @@ checks = [
     ('Cash flow ties to balance-sheet cash every month', f'=AND(MAX(Monthly_Model!{rng("Cash tie check")})=0,MIN(Monthly_Model!{rng("Cash tie check")})=0)'),
     ('Capital is not counted as revenue', f'=SUM(Monthly_Model!{rng("Revenue")})=SUMPRODUCT(Monthly_Model!{rng("Sold (cont.)")})*u_revenue'),
     ('Annual net income = sum of monthly', f'=ROUND(SUM(Annual_Statements!C16:G16)-SUM(Monthly_Model!{rng("Net income")}),2)=0'),
-    ('Cash never below zero', f'=MIN(Monthly_Model!{rng("Cash")})>=0'),
+    ('Outcome (not an integrity check): cash never below zero', f'=MIN(Monthly_Model!{rng("Cash")})>=0'),
     ('Shipments never exceed the plan', f'=SUMPRODUCT((Monthly_Model!{rng("Shipments")}>Monthly_Model!{rng("Plan")}+0.000001)*1)=0'),
-    ('Cash stays ≥ emergency reserve (funding adequate)', f'=MIN(Monthly_Model!{rng("Cash")})>=reserve-0.01'),
+    ('Outcome (not an integrity check): cash stays ≥ emergency reserve', f'=MIN(Monthly_Model!{rng("Cash")})>=reserve-0.01'),
     ('Base: 5y net income matches engine.js (±1 SAR) — valid when scenario = 2', f'=OR(ScenarioSel<>2,ABS(SUM(Monthly_Model!{rng("Net income")})-{B["totalNI5y"]:.4f})<1)'),
     ('Base: closing cash matches engine.js (±1 SAR) — valid when scenario = 2', f'=OR(ScenarioSel<>2,ABS(INDEX(Monthly_Model!{rng("Cash")},60)-{B["endCash"]:.4f})<1)'),
 ]

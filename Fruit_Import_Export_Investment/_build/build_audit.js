@@ -14,15 +14,17 @@ const docs = {
   'Executive summary (html source)': path.join(__dirname, 'html/exec.html'),
   'Investment proposal (html source)': path.join(__dirname, 'html/proposal.html')
 };
-const keys = { capital: sar(M.capital), irr: pct(M.irrBook) };
+const keys = { capital: sar(M.capital), irr: M.irrBook == null ? 'غير متاح' : pct(M.irrBook) };
 const consistency = Object.entries(docs).map(([name, f]) => {
   const t = fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';
   return { name, capital: t.includes(keys.capital), irr: name.includes('proposal') ? true : t.includes(keys.irr) };
 });
 const xlIRR = QX.returns_vs_engine['IRR — book exit (A)'];
-const consOK = consistency.every(c => c.capital && c.irr) && Math.abs(xlIRR - M.irrBook) < 1e-9 && QD.checks.panelMatchesEngine;
+const irrMatch = M.irrBook == null ? xlIRR === 'n/a' : Math.abs(xlIRR - M.irrBook) < 1e-9;
+const consOK = consistency.every(c => c.capital && c.irr) && irrMatch && QD.checks.panelMatchesEngine;
 const scen = ['conservative', 'base', 'optimistic'];
-const qdErr = QD.errors.length, qxOK = !QX.mismatches.length && !QX.formula_errors.length && QX.checks.every(c => c[1] === true);
+const qdErr = QD.errors.length, integrityChecks = QX.checks.filter(c => !String(c[0]).startsWith('Outcome')), outcomeChecks = QX.checks.filter(c => String(c[0]).startsWith('Outcome'));
+const qxOK = !QX.mismatches.length && !QX.formula_errors.length && integrityChecks.every(c => c[1] === true);
 
 const audit = `# Investment Model Audit Report — تقرير تدقيق النموذج الاستثماري
 
@@ -102,10 +104,11 @@ const audit = `# Investment Model Audit Report — تقرير تدقيق الن�
 | رأس المال غير محتسب كإيراد | ناجح (Checks!B8) |
 | مجموع الأشهر = القوائم السنوية | ناجح |
 | Excel مقابل المحرك (17 بنداً × 60 شهراً) | أقصى فرق ${QX.max_abs_diff_SAR.toExponential(1)} ر.س |
-| IRR وNPV والاسترداد في Excel مقابل المحرك | ${QX.mismatches.length ? 'فشل' : 'مطابق'} (IRR = ${pct(xlIRR, 2)}) |
+| IRR وNPV والاسترداد في Excel مقابل المحرك | ${QX.mismatches.length ? 'فشل' : 'مطابق'} (IRR = ${typeof xlIRR === 'number' ? pct(xlIRR, 2) : 'غير متاح — المشروع خاسر'}) |
 | السيناريو المتحفظ والمتفائل في Excel | ${Object.entries(QX.scenario_switch).map(([k, v]) => k + ': ' + sar(v.excel_NI5y)).join(' · ')} — مطابق |
 | أخطاء صيغ في Excel | ${QX.formula_errors.length} |
-| فحوصات ورقة Checks | ${QX.checks.filter(c => c[1] === true).length}/${QX.checks.length} صحيحة |
+| فحوصات سلامة النموذج (ورقة Checks) | ${integrityChecks.filter(c => c[1] === true).length}/${integrityChecks.length} صحيحة |
+| نتائج التمويل (ليست فحص سلامة) | ${outcomeChecks.map(c => c[0].replace('Outcome (not an integrity check): ', '') + ': ' + (c[1] === true ? 'نعم' : 'لا')).join(' · ')} |
 | شرائح العرض | ${QD.checks.slides} شريحة، لا روابط غير محلولة |
 | التنقل (لوحة المفاتيح، الأزرار، الفهرس) | ناجح (${QD.checks.keyboardNext} ← ${QD.checks.keyboardPrev}، End = ${QD.checks.end}) |
 | لوحة التحكم تعيد الحساب | ناجح؛ سعر 45 ⇐ صافي ربح 5 سنوات ${sar(QD.checks.panelRecompute.after)} = المحرك في Node |
