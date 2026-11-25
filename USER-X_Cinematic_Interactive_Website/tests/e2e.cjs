@@ -19,7 +19,8 @@ const quiet = () => {};
 
 (async () => {
   const offline = await listen(createApp({ env: {}, kb, log: quiet }));
-  const aiStub = { enabled: true, reply: async (m) => ({ reply: 'هلا! هذا رد من الذكاء الاصطناعي. تبي أجهّز لك طلب؟', lang: 'ar', intent: 'player', action: 'open_booking', game_id: 'choice-room', mood: 'excited' }) };
+  const aiCalls = [];
+  const aiStub = { enabled: true, reply: async (m, context) => (aiCalls.push(context), { reply: 'هلا! هذا رد من الذكاء الاصطناعي. تبي أجهّز لك طلب؟', lang: 'ar', intent: 'player', action: 'open_booking', game_id: 'choice-room', mood: 'excited' }) };
   const ai = await listen(createApp({ env: {}, kb, ai: aiStub, log: quiet }));
   const broken = await listen(createApp({ env: {}, kb, ai: { enabled: true, reply: async () => { throw new Error('upstream down'); } }, log: quiet }));
   const browser = await chromium.launch();
@@ -49,16 +50,55 @@ const quiet = () => {};
     await close(p);
   });
 
-  await test('intro plays on first visit, skips on a returning visit (no tracking beyond local storage)', async () => {
+  await test('intro: the film starts by itself, ends by itself and lands on the site (no click)', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const p = await ctx.newPage();
-    await p.goto(url(offline), { waitUntil: 'networkidle' });
-    assert(!(await p.locator('#intro').isHidden()), 'intro visible on first visit');
-    await p.click('#skipIntro'); await p.waitForTimeout(400);
-    const p2 = await ctx.newPage();
-    await p2.goto(url(offline), { waitUntil: 'networkidle' });
-    await p2.waitForTimeout(300);
-    assert(await p2.locator('#intro').isHidden(), 'intro skipped for a returning visitor');
+    const errs = []; p.on('pageerror', (e) => errs.push(e.message));
+    await p.goto(url(offline), { waitUntil: 'domcontentloaded' });
+    await p.waitForFunction(() => document.querySelector('#cinema canvas'), null, { timeout: 4000 });
+    assert(!(await p.locator('#intro').isHidden()), 'film visible on entry');
+    assert(await p.locator('#enterBtn').count() === 0, 'no enter button any more');
+    assert(!(await p.locator('#introHint').isHidden()), 'tap-for-sound hint shown while silent');
+    await p.waitForFunction(() => document.querySelector('#intro').dataset.shot === '3' || document.querySelector('#cinema').dataset.shot === '3', null, { timeout: 6000 });
+    await p.waitForFunction(() => window.__ux.introPhase === 'done', null, { timeout: 16000 });
+    assert(await p.locator('#intro').isHidden(), 'film closed itself');
+    assert(!errs.length, errs.join(' | '));
+    // same tab reload: straight in; a new visit (new session) plays it again
+    await p.reload({ waitUntil: 'networkidle' }); await p.waitForTimeout(300);
+    assert(await p.locator('#intro').isHidden(), 'no replay on reload in the same tab');
+    const ctx2 = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const p2 = await ctx2.newPage();
+    await p2.goto(url(offline), { waitUntil: 'domcontentloaded' });
+    await p2.waitForTimeout(400);
+    assert(!(await p2.locator('#intro').isHidden()), 'a new visit opens with the film again');
+    await ctx.close(); await ctx2.close();
+  });
+
+  await test('intro: first tap turns the score on; skip leaves at once; Escape skips', async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const p = await ctx.newPage();
+    await p.goto(url(offline), { waitUntil: 'domcontentloaded' });
+    await p.waitForFunction(() => document.querySelector('#cinema canvas'));
+    await p.mouse.click(640, 400);
+    await p.waitForFunction(() => document.getElementById('introHint').hidden, null, { timeout: 3000 });
+    assert(await p.getAttribute('#introSound', 'aria-pressed') === 'true', 'sound on after the first tap');
+    assert(await p.evaluate(() => window.__ux.introPhase) !== 'done', 'a tap does not skip the film');
+    await p.keyboard.press('Escape');
+    await p.waitForFunction(() => window.__ux.introPhase === 'done', null, { timeout: 2000 });
+    const ctx2 = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const p2 = await ctx2.newPage();
+    await p2.goto(url(offline), { waitUntil: 'domcontentloaded' });
+    await p2.click('#skipIntro');
+    await p2.waitForFunction(() => window.__ux.introPhase === 'done', null, { timeout: 2000 });
+    await ctx.close(); await ctx2.close();
+  });
+
+  await test('intro: reduced motion shows a still logo and still enters by itself', async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    await p.goto(url(offline), { waitUntil: 'domcontentloaded' });
+    await p.waitForFunction(() => document.querySelector('.cin__logo.is-static'), null, { timeout: 3000 });
+    await p.waitForFunction(() => window.__ux.introPhase === 'done', null, { timeout: 6000 });
     await ctx.close();
   });
 
@@ -257,22 +297,72 @@ const quiet = () => {};
   await test('voice: toggle persists; stop button hidden when silent; site works with sound off', async () => {
     const p = await open(offline);
     await p.click('#nqLaunch');
+    assert(await p.getAttribute('#nqVoice', 'aria-pressed') === 'true', 'on by default');
     await p.click('#nqVoice');
-    assert(await p.getAttribute('#nqVoice', 'aria-pressed') === 'true', 'on');
-    assert(await p.evaluate(() => JSON.parse(localStorage.getItem('ux.nq.voice'))) === true, 'stored');
-    await p.click('#nqVoice');
+    assert(await p.getAttribute('#nqVoice', 'aria-pressed') === 'false', 'off');
+    assert(await p.evaluate(() => JSON.parse(localStorage.getItem('ux.nq.voiceOn'))) === false, 'stored');
     assert(await p.locator('#nqStop').isHidden(), 'stop hidden');
     await close(p);
   });
 
-  await test('trailer: video is not downloaded until opened; dialog opens and closes', async () => {
+  await test('old trailer is gone: no button, no dialog, no video requests', async () => {
     const p = await open(offline);
-    assert(!p.requests.some((u) => /\.mp4/.test(u)), 'no mp4 before click');
-    await p.click('#trailerBtn');
-    assert(await p.locator('#trailer').isVisible(), 'dialog open');
-    assert(/user-x-trailer-960\.mp4$/.test(await p.getAttribute('#trailerVideo', 'src')), 'desktop source');
-    await p.click('#trailerClose');
-    assert(await p.locator('#trailer').isHidden(), 'closed');
+    assert(await p.locator('#trailerBtn, #trailer, video').count() === 0, 'trailer markup removed');
+    assert(!p.requests.some((u) => /\.(mp4|webm)(\?|$)/.test(u)), 'no video requested');
+    await close(p);
+  });
+
+  await test('Nuqta: walks off and comes back; walks to a game card the visitor lingers on', async () => {
+    const p = await open(offline);
+    await p.waitForFunction(() => window.__nuqta.roam.visible());
+    await p.waitForFunction(() => !window.__nuqta.roam.busy, null, { timeout: 8000 }); // entrance run done
+    await p.evaluate(() => window.__nuqta.roam.wander());
+    await p.waitForFunction(() => document.getElementById('roamBody').classList.contains('is-walk'), null, { timeout: 2000 });
+    await p.waitForFunction(() => !window.__nuqta.roam.busy, null, { timeout: 20000 });
+    const home = await p.evaluate(() => Math.abs(window.__nuqta.roam.x - window.__nuqta.roam.home) < 2);
+    assert(home, 'came back home');
+    await p.evaluate(() => { const d = window.__nuqta.directorApi; d.lastAt = 0; document.getElementById('games').scrollIntoView({ behavior: 'instant' }); });
+    await p.waitForSelector('.game-card[data-id="curse-of-os"]');
+    await p.hover('.game-card[data-id="curse-of-os"]');
+    await p.waitForFunction(() => window.__nuqta.director.includes('game:curse-of-os'), null, { timeout: 3000 });
+    assert(await p.evaluate(() => window.__nuqta.antics.includes('goto')), 'walked to the card');
+    await p.waitForFunction(() => /لعنة أوس/.test(document.querySelector('#roamBubble .bubble__text').textContent), null, { timeout: 8000 });
+    await close(p);
+  });
+
+  await test('Nuqta: idle tip, one per section; poking him reacts; he never blocks the page', async () => {
+    const p = await open(offline);
+    await p.waitForFunction(() => window.__nuqta.roam.visible());
+    await p.waitForFunction(() => !window.__nuqta.roam.busy, null, { timeout: 8000 });
+    await p.evaluate(() => { const d = window.__nuqta.directorApi; clearTimeout(d.idleId); d.remark('tip:faq', 'x'); d.lastAt = 0; d.remark('tip:faq', 'again'); });
+    assert(await p.evaluate(() => window.__nuqta.director.filter((k) => k === 'tip:faq').length) === 1, 'tip once');
+    await p.evaluate(() => { window.__nuqta.roam.busy = false; });
+    const box = await p.locator('#roamAvatar').boundingBox();
+    await p.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    assert(await p.evaluate(() => window.__nuqta.director.includes('poke')), 'poke registered');
+    assert(await p.evaluate(() => getComputedStyle(document.getElementById('roam')).pointerEvents) === 'none', 'strip never takes clicks');
+    await close(p);
+  });
+
+  await test('Nuqta voice: on by default, silent until the first gesture, never during the intro', async () => {
+    const p = await open(offline);
+    assert(await p.evaluate(() => window.__nuqta.prefs.voice) === true, 'voice default on');
+    assert(await p.evaluate(() => { const t = window.__nuqta.talk; t.lastSpoken = 0; return window.__ux.introPhase === 'done' && t.canSpeak(); }), 'can speak after the skip click');
+    await p.evaluate(() => { window.__nuqta.talk.lastSpoken = Date.now(); });
+    assert(!(await p.evaluate(() => window.__nuqta.talk.canSpeak())), 'throttled right after speaking');
+    await close(p);
+  });
+
+  await test('chat sends page context; the server only accepts allowlisted values', async () => {
+    aiCalls.length = 0;
+    const p = await open(ai);
+    await p.evaluate(() => { const d = window.__nuqta.directorApi; d.scene = 'games'; d.visited = ['universe', 'games']; d.game = 'curse-of-os'; });
+    await p.click('#nqLaunch');
+    await p.fill('#nqText', 'وش تنصحني؟');
+    await p.press('#nqText', 'Enter');
+    await p.waitForFunction(() => window.__nuqta.last && window.__nuqta.last.mode === 'ai', null, { timeout: 5000 });
+    const c = aiCalls[aiCalls.length - 1] || '';
+    assert(/"games" section/.test(c) && /curse-of-os/.test(c) && /universe, games/.test(c), 'context reached the model: ' + c);
     await close(p);
   });
 

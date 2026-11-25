@@ -1,0 +1,72 @@
+/* USER-X cinematic intro — layout and type for the film in intro/cinema.js */
+.intro .cin { position: absolute; inset: 0; overflow: hidden; background: var(--void); transform: translate(var(--shake-x, 0), var(--shake-y, 0)); }
+.cin__cv { position: absolute; inset: 0; display: block; }
+.cin.is-out { animation: cin-out 600ms steps(6) forwards; }
+@keyframes cin-out { to { opacity: 0; } }
+
+/* white flash on cuts */
+.cin__flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+
+/* shot 1 · small credit */
+.cin__presents { position: absolute; left: 50%; top: calc(50% + 9vmin); transform: translateX(-50%); margin: 0; font-family: var(--f-label); letter-spacing: .5em; font-size: clamp(.7rem, 1.4vw, .95rem); color: var(--bone); opacity: 0; transition: opacity 260ms steps(3); white-space: nowrap; }
+.cin__presents small { color: var(--muted); font-size: inherit; }
+.cin__presents.is-on { opacity: 1; }
+
+/* shot 3 · worlds as hard-cut panels, then a GTA-style cover mosaic */
+.cin__panels { position: absolute; inset: 0; pointer-events: none; }
+.cin__panel { position: absolute; inset: 0; margin: 0; opacity: 0; overflow: hidden; }
+.cin__panel.is-on { opacity: 1; }
+.cin__panel img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); filter: contrast(1.12) saturate(1.15); }
+.cin__panel.is-on img { animation: cin-push 900ms cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes cin-push { from { transform: scale(1.45) translateX(4%); } to { transform: scale(1.12); } }
+.cin__panel figcaption { position: absolute; inset: auto 6vw 9vh auto; display: grid; justify-items: end; gap: 4px; text-align: end; }
+.cin__panel b { font-size: clamp(2.6rem, 9vw, 7.5rem); line-height: 1; color: var(--fg); text-shadow: 0 6px 0 rgba(0,0,0,.45); }
+.cin__panel span { font-family: var(--f-label); letter-spacing: .4em; font-size: clamp(.7rem, 1.5vw, 1rem); color: var(--a); background: rgba(0,0,0,.55); padding: 4px 10px; }
+.cin__panel.is-on figcaption { animation: cin-cap 500ms steps(5) both; }
+@keyframes cin-cap { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+/* mosaic: four diagonal slices, each world in its own frame */
+.cin__panel.is-mosaic { inset: auto; width: 50%; height: 50%; border: 4px solid var(--void); }
+.cin__panel.is-mosaic:nth-child(1) { top: 0; right: 0; } .cin__panel.is-mosaic:nth-child(2) { top: 0; left: 0; }
+.cin__panel.is-mosaic:nth-child(3) { bottom: 0; right: 0; } .cin__panel.is-mosaic:nth-child(4) { bottom: 0; left: 0; }
+.cin__panel.is-mosaic figcaption { inset: auto 16px 14px auto; }
+.cin__panel.is-mosaic b { font-size: clamp(1.4rem, 3.6vw, 3rem); }
+.cin__panel.is-mosaic span { display: none; }
+.cin__panel.is-mosaic img { animation: none; transform: scale(1.06); }
+
+/* shot 4 · the line, slammed word by word with an RGB split */
+.cin__type { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+.cin__w { grid-area: 1 / 1; margin: 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(3.4rem, 15vw, 12rem); line-height: 1; color: var(--bone); opacity: 0; position: relative; }
+.cin__w3 { color: var(--magenta); }
+.cin__w.is-on { animation: cin-slam 380ms cubic-bezier(.2, .9, .1, 1) both; }
+.cin__w1.is-on { animation: cin-slam 380ms cubic-bezier(.2, .9, .1, 1) both, cin-away 1ms 580ms forwards; }
+.cin__w2.is-on { animation: cin-slam 380ms cubic-bezier(.2, .9, .1, 1) both, cin-away 1ms 430ms forwards; }
+@keyframes cin-slam { 0% { opacity: 0; transform: scale(2.6); filter: blur(10px); } 60% { opacity: 1; transform: scale(.96); filter: blur(0); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes cin-away { to { opacity: 0; } }
+.cin__w::before, .cin__w::after { content: attr(data-text); position: absolute; inset: 0; opacity: 0; }
+.cin__w.is-on::before { color: var(--cyan); animation: cin-rgb 260ms steps(3) 2; }
+.cin__w.is-on::after { color: var(--magenta); animation: cin-rgb 260ms steps(3) reverse 2; }
+.cin__w3.is-on::after { color: var(--cyan); }
+@keyframes cin-rgb { 0% { opacity: .9; transform: translate(-8px, 2px); } 50% { opacity: .9; transform: translate(6px, -3px); } 100% { opacity: 0; transform: none; } }
+
+/* shot 5 · wordmark and tagline under the assembled symbol (drawn on canvas) */
+.cin__logo { position: absolute; left: 50%; top: calc(50% + 1vmin); transform: translateX(-50%); display: grid; justify-items: center; gap: 14px; width: min(460px, 76vw); opacity: 0; pointer-events: none; }
+.cin__logo img { width: 100%; height: auto; clip-path: inset(0 100% 0 0); }
+.cin__logo.is-on { opacity: 1; }
+.cin__logo.is-on img { animation: cin-reveal 520ms steps(8) forwards; }
+.cin__logo.is-static img { animation: none; clip-path: none; }
+@keyframes cin-reveal { to { clip-path: inset(0 0 0 0); } }
+.cin__tag { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: clamp(1rem, 2.4vw, 1.4rem); color: var(--bone); opacity: 0; letter-spacing: .02em; }
+.cin__logo.is-sweep .cin__tag { animation: px-fade 400ms steps(4) forwards; }
+@keyframes px-fade { to { opacity: 1; } }
+
+/* controls over the film */
+.intro__tools { z-index: 5; }
+.intro__hint { position: absolute; z-index: 5; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); margin: 0; padding: 6px 14px; border-radius: 999px; background: rgba(11,11,15,.7); border: 1px solid var(--shade); color: var(--muted); font-size: .85rem; animation: hint-blink 1.4s steps(2) infinite; white-space: nowrap; }
+.intro__hint[hidden] { display: none; }
+@keyframes hint-blink { 50% { opacity: .45; } }
+
+@media (max-width: 700px) {
+  .cin__panel figcaption { inset: auto 18px 16vh auto; }
+}
+.reduce-motion .cin { transform: none; }
+.reduce-motion .intro__hint { animation: none; }

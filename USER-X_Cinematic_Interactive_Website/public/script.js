@@ -360,70 +360,57 @@
    * 01 · Intro — Signal → Awakening → Reveal → Invitation (~3.7s)
    * ------------------------------------------------------------------ */
   var Intro = {
-    el: null, tl: new Timeline(), active: false,
+    el: null, active: false, film: null,
     init: function () {
       this.el = $('#intro');
       if (!this.el) return;
-      this.buildSymbol();
       var self = this;
-      $('#enterBtn').addEventListener('click', function () { self.leave(true); });
       $('#skipIntro').addEventListener('click', function () { self.leave(false); });
-      $('#introSound').addEventListener('click', function () { setSound(!Settings.sound); });
-      document.addEventListener('keydown', function (e) {
-        if (!self.active) return;
-        if ((e.key === 'x' || e.key === 'X') && !e.metaKey && !e.ctrlKey && !e.altKey) { e.preventDefault(); self.leave(true); }
-      });
-      // Skip automatically for deep links and returning visits in this session.
+      $('#introSound').addEventListener('click', function (e) { e.stopPropagation(); setSound(!Settings.sound); self.syncScore(); });
+      // Browsers only allow sound after a gesture: the first touch / key / click during the film turns it on.
+      this.unlock = function (e) {
+        if (!self.active || (e.target && e.target.closest && e.target.closest('#skipIntro, #introSound'))) return;
+        if (e.type === 'keydown' && e.key === 'Escape') { self.leave(false); return; }
+        if (!Settings.sound) setSound(true);
+        self.syncScore();
+      };
+      ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, self.unlock, { passive: true }); });
+      // Deep links skip; so does a reload in the same tab. Every new visit opens with the film.
       var deep = location.hash && location.hash !== '#intro' && document.getElementById(location.hash.slice(1));
-      if (deep || session.get('introSeen') || store.get('introSeen', false)) { this.hide(); return; } // returning visitors skip; replay from the menu
+      if (deep || session.get('introSeen')) { this.hide(); return; }
       this.play();
     },
-    buildSymbol: function () {
-      var host = $('#introSymbol'); if (!host) return;
-      if (!window.USERSX_SYMBOL) { host.innerHTML = '<img class="intro__fallback" src="assets/logo/usersx-symbol.svg" alt="">'; this.el.classList.add('is-static'); return; }
-      var dirs = { tl: [-1, -1], tr: [1, -1], bl: [-1, 1], br: [1, 1], core: [0, -1] };
-      var colours = window.USERSX_SYMBOL.COLORS, html = '';
-      window.USERSX_SYMBOL.cells().forEach(function (c, i) {
-        var d = dirs[c.region], far = 6 + Math.random() * 10;
-        if (c.region === 'core') d = [(Math.random() < 0.5 ? -1 : 1), (Math.random() < 0.5 ? -1 : 1)];
-        html += '<i class="intro__px" style="--x:' + c.x + ';--y:' + c.y + ';--c:' + colours[c.c] +
-          ';--dx:' + (d[0] * far * 100).toFixed(0) + '%;--dy:' + (d[1] * far * 100).toFixed(0) + '%;--d:' + (Math.random() * 360).toFixed(0) + 'ms"></i>';
-      });
-      html += '<div class="intro__final">' + window.USERSX_SYMBOL.svg({ grouped: true, depth: true }) + '</div>';
-      host.innerHTML = html;
+    syncScore: function () {
+      if (!this.film) return;
+      var hint = $('#introHint');
+      if (Settings.sound && Sound.ctx) { this.film.unmute(); if (hint) hint.hidden = true; }
+      else { this.film.mute(); if (hint) hint.hidden = false; }
     },
-    phase: function (p) { this.el.setAttribute('data-phase', p); UX.introPhase = p; },
     play: function () {
       var self = this;
-      this.tl.cancel();
+      if (this.film) this.film.destroy();
       this.active = true;
-      this.el.hidden = false;
-      this.el.classList.remove('is-leaving');
+      this.el.hidden = false; this.el.classList.remove('is-leaving');
+      this.phase('film');
       document.body.classList.add('is-locked');
       setInert(true);
-      if (reduced()) {
-        this.phase('invite');
-        $('#enterBtn').focus();
-        return;
-      }
-      this.phase('signal');
+      var hint = $('#introHint'); if (hint) hint.hidden = !!Settings.sound;
+      if (!window.UXCinema) { this.leave(false); return; } // film script missing: go straight in
+      this.film = new window.UXCinema.Film($('#cinema'), {
+        reduced: reduced(),
+        audioCtx: function () { return Settings.sound && Sound.ctx && Sound.ctx.state === 'running' ? Sound.ctx : null; }
+      });
+      this.film.play(function () { self.leave(false); });
+      if (Settings.sound) Sound.enable().then(function () { self.syncScore(); });
       $('#skipIntro').focus({ preventScroll: true });
-      this.tl
-        .at(700, function () { self.phase('awaken'); Sound.play('outroPulse'); })
-        .at(1500, function () { self.phase('reveal'); })
-        .at(2500, function () { self.phase('depth'); Sound.play('reveal'); })
-        .at(3100, function () {
-          self.phase('invite');
-          var f = document.activeElement;
-          if (!f || f === document.body || f.id === 'skipIntro') $('#enterBtn').focus({ preventScroll: true });
-        });
     },
+    phase: function (p) { this.el.setAttribute('data-phase', p); UX.introPhase = p; },
     leave: function (withCue) {
       if (!this.active) return;
       var self = this;
-      this.tl.cancel();
       this.active = false;
-      session.set('introSeen', '1'); store.set('introSeen', true);
+      if (this.film) { this.film.destroy(); this.film = null; }
+      session.set('introSeen', '1');
       if (withCue) Sound.play('intro');
       setInert(false);
       document.body.classList.remove('is-locked');
@@ -445,6 +432,7 @@
     }
   };
   UX.intro = Intro;
+  UX.setSound = function (on) { setSound(on); };
 
   function setInert(on) {
     ['#main', '#hud', '.footer', '#dock'].forEach(function (sel) {

@@ -17,15 +17,15 @@
   var store = UX.store || { get: function (k, f) { return f; }, set: function () {} };
   var reduced = UX.reduced || function () { return false; };
   var brain = new window.NuqtaBrain.Brain();
-  var NQ = window.__nuqta = { log: [], errors: [], antics: [], mode: 'offline', health: { ai: false, tts: false } };
+  var NQ = window.__nuqta = { log: [], errors: [], antics: [], director: [], spoken: [], mode: 'offline', health: { ai: false, tts: false } };
 
   function settle(name, fn) { try { return fn(); } catch (e) { NQ.errors.push(name + ': ' + e.message); console.warn('[Nuqta]', name, e); } }
 
   var Prefs = {
     antics: store.get('nq.antics', 'calm'),
-    voice: store.get('nq.voice', false),
+    voice: store.get('nq.voiceOn', true), // on by default; it can only speak after the visitor's first tap or key
     volume: store.get('nq.volume', 70),
-    save: function () { store.set('nq.antics', this.antics); store.set('nq.voice', this.voice); store.set('nq.volume', this.volume); }
+    save: function () { store.set('nq.antics', this.antics); store.set('nq.voiceOn', this.voice); store.set('nq.volume', this.volume); }
   };
   NQ.prefs = Prefs;
 
@@ -87,7 +87,7 @@
       // so the left edge is the emptiest place on screen.
       var l = document.getElementById('nqLaunch'), r = l && l.getBoundingClientRect();
       this.home = r && r.width ? Math.min(window.innerWidth - (this.el.offsetWidth || 64) - 8, r.right + 10) : 18;
-      if (instant) this.moveTo(this.home, true);
+      if (instant) { clearInterval(this.walkId); if (this.body) this.body.classList.remove('is-walk'); this.moveTo(this.home, true); }
     },
     moveTo: function (x, instant) {
       this.x = x;
@@ -97,6 +97,7 @@
     // Stepped run (pixel feel): ~16 frames/s, legs flap via CSS .is-run, facing via .is-left.
     run: function (toX, done) {
       var self = this, from = this.x, dist = toX - from, steps = Math.max(6, Math.round(Math.abs(dist) / 38)), i = 0;
+      clearInterval(this.walkId); clearInterval(this.runId); this.body.classList.remove('is-walk'); // one movement at a time
       this.body.classList.add('is-run'); this.body.classList.toggle('is-left', dist < 0);
       this.el.style.transition = 'none';
       var id = setInterval(function () {
@@ -105,6 +106,7 @@
         self.el.style.transform = 'translate3d(' + Math.round(self.x) + 'px,0,0)';
         if (i >= steps) { clearInterval(id); self.body.classList.remove('is-run'); if (done) done(); }
       }, 62);
+      this.runId = id;
       return id;
     },
     act: function (name) {
@@ -122,13 +124,13 @@
     },
     // Run off one edge and come back in from the other (a "scene transition" run).
     lap: function (line) {
-      if (!this.visible() || this.busy || reduced()) { if (line) this.say(line); return; }
+      if (!this.visible() || this.busy || reduced()) { if (line) Talk.line(line); return; }
       var self = this, w = this.el.offsetWidth || 64;
       this.busy = true; this.lastRun = Date.now(); NQ.antics.push('run');
       this.run(-w - 10, function () {
         self.moveTo(window.innerWidth + 10, true);
         setTimeout(function () {
-          self.run(self.home, function () { self.busy = false; if (line) self.say(line); self.act('jump'); });
+          self.run(self.home, function () { self.busy = false; if (line) Talk.line(line); self.act('jump'); });
         }, 140);
       });
     },
@@ -145,15 +147,15 @@
     // First appearance: runs in from the far edge and says hello (static when reduced motion).
     enter: function () {
       if (!this.visible()) return;
-      var self = this, hello = 'هلا! أنا نقطة. إذا احتجتني، أنا جنب «اسأل نقطة».';
-      if (reduced()) { this.say(hello); return; }
+      var self = this, hello = Director.hello();
+      if (reduced()) { Talk.line(hello, 4200); return; }
       this.busy = true; this.moveTo(window.innerWidth + 10, true);
-      setTimeout(function () { self.run(self.home, function () { self.busy = false; self.act('wave'); self.say(hello, 4200); }); }, 400);
+      setTimeout(function () { self.run(self.home, function () { self.busy = false; self.act('wave'); Talk.line(hello, 4200); }); }, 400);
     },
     celebrate: function () {
       if (!this.enabled) return;
       var self = this; this.busy = false;
-      this.say('يا سلام! أرسلها، والفريق يرد عليك. أنا متحمس أكثر منك.', 4200);
+      Talk.line('يا سلام! أرسلها، والفريق يرد عليك. أنا متحمس أكثر منك.', 4200);
       this.act('dance');
       if (UX.sound) UX.sound.play('win');
       setTimeout(function () { self.busy = false; self.act('jump'); }, 1600);
@@ -172,7 +174,7 @@
       this.seen[id] = true;
       var line = SCENE_LINES[id];
       if (Prefs.antics === 'lively' && Date.now() - this.lastRun > 7000 && id !== 'universe') this.lap(line);
-      else if (line && Prefs.antics !== 'off') this.say(line);
+      else if (line && Prefs.antics !== 'off') Talk.line(line);
     },
     // Background antics: rare, never while the chat or a dialog is open.
     schedule: function () {
@@ -180,18 +182,195 @@
       var wait = (lively ? 16000 : 42000) + Math.random() * (lively ? 14000 : 30000);
       this.timer = setTimeout(function () {
         if (self.visible() && !Chat.open && !document.hidden && !document.querySelector('dialog[open]')) {
-          var pool = lively ? ['jump', 'spin', 'dance', 'fall', 'wave', 'peek', 'look', 'quip', 'lap'] : ['wave', 'look', 'peek', 'quip'];
+          var pool = lively ? ['jump', 'spin', 'dance', 'fall', 'wave', 'peek', 'look', 'quip', 'lap', 'wander', 'wander'] : ['wave', 'look', 'peek', 'quip', 'wander', 'wander'];
           var pick = pool[Math.floor(Math.random() * pool.length)];
           if (pick === 'peek') self.peek();
           else if (pick === 'look') { self.avatar.look(-1, -1); setTimeout(function () { self.avatar.look(1, 0); }, 700); setTimeout(function () { self.avatar.look(0, 0); }, 1500); }
           else if (pick === 'quip') self.say(IDLE_QUIPS[Math.floor(Math.random() * IDLE_QUIPS.length)]);
           else if (pick === 'lap') self.lap();
+          else if (pick === 'wander') self.wander();
           else self.act(pick);
         }
         self.schedule();
       }, wait);
     }
   };
+  /* ---------------------------------------------------------------- *
+   * Walking — slower stepped steps; wander off and come back; go to things
+   * ---------------------------------------------------------------- */
+  Roam.lane = function (x) { var w = this.el.offsetWidth || 64; return Math.max(8, Math.min(window.innerWidth - w - 8, x)); };
+  Roam.walk = function (toX, done) {
+    var self = this, from = this.x, dist = toX - from, steps = Math.min(70, Math.max(4, Math.round(Math.abs(dist) / 13))), i = 0;
+    clearInterval(this.walkId); clearInterval(this.runId); this.body.classList.remove('is-run');
+    this.body.classList.add('is-walk'); this.body.classList.toggle('is-left', dist < 0);
+    this.el.style.transition = 'none';
+    this.walkId = setInterval(function () {
+      i++; self.x = from + dist * (i / steps);
+      self.el.style.transform = 'translate3d(' + Math.round(self.x) + 'px,0,0)';
+      if (i >= steps) { clearInterval(self.walkId); self.body.classList.remove('is-walk'); if (done) done(); }
+    }, 95);
+  };
+  // Stroll somewhere along the bottom, look around, stroll home.
+  Roam.wander = function () {
+    if (!this.visible() || this.busy || reduced()) return;
+    var self = this, w = window.innerWidth, to = this.lane(w * (0.2 + Math.random() * 0.6));
+    this.busy = true; NQ.antics.push('wander');
+    this.walk(to, function () {
+      self.avatar.look(-1, -1); setTimeout(function () { self.avatar.look(1, -1); }, 900);
+      setTimeout(function () { self.avatar.look(0, 0); self.walk(self.home, function () { self.busy = false; self.body.classList.remove('is-left'); }); }, 2600 + Math.random() * 2000);
+    });
+  };
+  // Walk under something on screen, look up at it, say the line, then walk home.
+  Roam.goTo = function (el, line) {
+    if (!this.visible() || this.busy) return;
+    var self = this, r = el.getBoundingClientRect(), cx = r.left + r.width / 2;
+    if (reduced()) { this.avatar.lookAt(cx, r.top + r.height / 2); Talk.line(line); return; }
+    this.busy = true; NQ.antics.push('goto');
+    this.walk(this.lane(cx - (this.el.offsetWidth || 64) / 2), function () {
+      self.avatar.lookAt(cx, r.top + r.height / 2); self.act('point'); self.busy = true;
+      Talk.line(line);
+      setTimeout(function () { self.avatar.look(0, 0); self.walk(self.home, function () { self.busy = false; self.body.classList.remove('is-left'); }); }, 5200);
+    });
+  };
+
+  /* ---------------------------------------------------------------- *
+   * Talk — a bubble, and Nuqta's voice when it is on (after the first tap; never mid-intro; sparingly)
+   * ---------------------------------------------------------------- */
+  var Talk = {
+    activated: false, lastSpoken: 0,
+    canSpeak: function (force) {
+      var act = this.activated || !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
+      return Prefs.voice && act && !Chat.open && !document.hidden && UX.introPhase === 'done' &&
+        (force || (!Voice.speaking && Date.now() - this.lastSpoken > 9000));
+    },
+    line: function (text, hold, force) {
+      if (!Roam.visible() || !text) return;
+      Roam.say(text, hold);
+      if (this.canSpeak(force)) { this.lastSpoken = Date.now(); NQ.spoken.push(text); Voice.speak(text, 'ar'); }
+    }
+  };
+  NQ.talk = Talk;
+
+  /* ---------------------------------------------------------------- *
+   * Director — notices what the visitor does and reacts once, at the right moment
+   * ---------------------------------------------------------------- */
+  var TIPS = {
+    universe: 'نصيحة صغيرة: انزل على مهلك… كل قسم فيه شي يتحرك.',
+    symbol: 'جرّب الأسهم اللي في الرمز. كل سهم يفتح لك باب.',
+    guide: 'تبي تعرفني أكثر؟ اضغط «اسأل نقطة» واسألني أي شي.',
+    about: 'الفكرة ببساطة: إنت اللي تحرّك القصة، مو تتفرّج عليها.',
+    games: 'وقّف على أي لعبة أو اضغطها، أعطيك رأيي فيها.',
+    brands: 'عندك علامة؟ هنا تشوف كيف تصير حملتك تجربة يلعبها جمهورك.',
+    process: 'هذي الخطوات من أول رسالة لين يوم التجربة. واضحة، صح؟',
+    why: 'محتار؟ اسألني تحت، وأختصر لك الموضوع بجملتين.',
+    faq: 'ما لقيت سؤالك؟ اكتبه لي في «اسأل نقطة».',
+    contact: 'عبّ الطلب وأجهّز لك رسالة واتساب جاهزة. الحجز يتأكد لما يرد عليك الفريق.',
+    end: 'تبي ترجع لأي قسم؟ القائمة فوق تختصر عليك.'
+  };
+  var GAME_LINES = {
+    'curse-of-os': 'لعنة أوس… رعب نفسي للكبار، وجايّة قريب بعد التراخيص. أنا شخصياً أنام والنور شغّال.',
+    'choice-room': 'غرفة الاختيار قالب جاهز نخصّصه لكم. قرارات، وفرق، وكل اختيار له ثمن.',
+    'last-standing': 'آخر من يصمد لسا قيد التطوير. تحدّي جماعي… وأنا أول واحد يطلع.',
+    'asia-journey': 'مشوار آسيا قيد البناء، والإطلاق المخطط له ديسمبر 2026.'
+  };
+  var POKES = ['هيه! هذا خشمي.', 'تبي سالفة أطول؟ اضغط «اسأل نقطة».', 'لو أتكلم وتبيني أسكت، اضغطني وأسكت.', 'أنا مربّع ماجنتا لابس هودي. أدري، شكلي يجنن.', 'تبي أوريك لعبة؟ انزل لقسم التجارب.'];
+
+  var Director = {
+    scene: 'universe', visited: [], game: '', lastAt: 0, once: {}, visits: 1, idleId: null,
+    gap: function () { return Prefs.antics === 'lively' ? 9000 : 18000; },
+    free: function () {
+      return Roam.visible() && !Roam.busy && !Chat.open && !document.hidden && !document.querySelector('dialog[open]') &&
+        Date.now() - this.lastAt > this.gap();
+    },
+    remark: function (key, text, el) {
+      if (!text || this.once[key] || !this.free()) return false;
+      this.once[key] = true; this.lastAt = Date.now(); NQ.director.push(key);
+      if (el) Roam.goTo(el, text); else Talk.line(text);
+      return true;
+    },
+    hello: function () {
+      var h = new Date().getHours();
+      var part = h < 5 ? 'سهران؟ ' : h < 12 ? 'صباح الخير! ' : h < 17 ? 'هلا والله! ' : 'مساء الخير! ';
+      return part + (this.visits > 1 ? 'رجعت لنا؟ نوّرت. لو احتجتني، أنا جنب «اسأل نقطة».' : 'أنا نقطة، مضيفك هنا. لو احتجتني، أنا جنب «اسأل نقطة».');
+    },
+    context: function () {
+      return { scene: this.scene, visited: this.visited.slice(0, 11), game: this.game, returning: this.visits > 1, hour: new Date().getHours() };
+    },
+    idle: function () {
+      var self = this;
+      clearTimeout(this.idleId);
+      this.idleId = setTimeout(function () { self.remark('tip:' + self.scene, TIPS[self.scene]); }, 14000);
+    },
+    init: function () {
+      var self = this;
+      var v = +store.get('nq.visits', 0) || 0;
+      try { if (!sessionStorage.getItem('nq.counted')) { v += 1; store.set('nq.visits', v); sessionStorage.setItem('nq.counted', '1'); } } catch (e) { v = Math.max(v, 1); }
+      this.visits = Math.max(1, v);
+      // first gesture anywhere = the browser now lets Nuqta speak
+      ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { Talk.activated = true; }, { passive: true, once: true }); });
+      document.addEventListener('ux:scene', function (e) {
+        var id = e.detail; if (!TIPS[id] && id !== 'universe') return;
+        self.scene = id; if (self.visited.indexOf(id) < 0) self.visited.push(id);
+        self.idle();
+      });
+      var lastMove = 0;
+      ['scroll', 'pointermove', 'keydown'].forEach(function (ev) {
+        window.addEventListener(ev, function () { var n = Date.now(); if (n - lastMove > 400) { lastMove = n; self.idle(); } }, { passive: true });
+      });
+      // racing through the page
+      var marks = [];
+      window.addEventListener('scroll', function () {
+        var n = Date.now(); marks.push([n, window.scrollY]);
+        while (marks.length && n - marks[0][0] > 1000) marks.shift();
+        if (marks.length > 1 && Math.abs(marks[marks.length - 1][1] - marks[0][1]) > window.innerHeight * 2.5) self.remark('fast', 'على مهلك! السرعة حلوة، بس التفاصيل أحلى.');
+      }, { passive: true });
+      // lingering on a game card
+      var dwell = null;
+      document.addEventListener('pointerover', function (e) {
+        var card = e.target.closest && e.target.closest('.game-card[data-id]');
+        if (!card || card === dwell) return;
+        dwell = card; clearTimeout(self.dwellId);
+        self.dwellId = setTimeout(function () {
+          var id = card.getAttribute('data-id'); self.game = id;
+          self.remark('game:' + id, GAME_LINES[id], window.innerWidth >= 640 ? card : null);
+        }, 700);
+      });
+      document.addEventListener('pointerout', function (e) {
+        if (dwell && !(e.relatedTarget && dwell.contains(e.relatedTarget))) { dwell = null; clearTimeout(self.dwellId); }
+      });
+      document.addEventListener('focusin', function (e) {
+        var card = e.target.closest && e.target.closest('.game-card[data-id]'); if (card) self.game = card.getAttribute('data-id');
+        if (e.target.closest && e.target.closest('#contactForm')) {
+          clearTimeout(self.formId);
+          self.formId = setTimeout(function () { self.remark('form', 'متردد؟ عادي. اكتب اللي تعرفه بس، والفريق يكمّل معك على الواتساب.'); }, 20000);
+        }
+      });
+      document.addEventListener('input', function (e) {
+        if (e.target.closest && e.target.closest('#contactForm')) {
+          clearTimeout(self.formId);
+          self.formId = setTimeout(function () { self.remark('form', 'متردد؟ عادي. اكتب اللي تعرفه بس، والفريق يكمّل معك على الواتساب.'); }, 20000);
+        }
+      });
+      // the pointer leaves through the top of the window (desktop): once
+      document.addEventListener('mouseout', function (e) {
+        if (!e.relatedTarget && e.clientY <= 0 && UX.introPhase === 'done') {
+          if (self.remark('exit', 'رايح؟ قبل لا تروح… «اسأل نقطة» يجاوبك بثواني.')) Roam.act('wave');
+        }
+      });
+      // poke Nuqta: hush him if he is talking, else he reacts
+      var av = $('#roamAvatar');
+      if (av) av.addEventListener('click', function () {
+        if (!Roam.visible()) return;
+        Talk.activated = true; NQ.director.push('poke');
+        if (Voice.speaking) { Voice.stop(); Roam.say('تمام، سكتّ.', 1800); return; }
+        Talk.line(POKES[Math.floor(Math.random() * POKES.length)], 3200, true);
+        Roam.busy = false; Roam.act(Math.random() < 0.5 ? 'jump' : 'spin');
+      });
+      this.idle();
+    }
+  };
+  NQ.directorApi = Director;
+
   NQ.roam = Roam;
 
   /* ---------------------------------------------------------------- *
@@ -394,7 +573,7 @@
       if (!NQ.health.ai) return offline('not-configured');
       var ctrl = window.AbortController ? new AbortController() : null;
       var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 25000);
-      return fetch('api/nuqta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history }), signal: ctrl && ctrl.signal })
+      return fetch('api/nuqta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history, context: Director.context() }), signal: ctrl && ctrl.signal })
         .then(function (r) {
           clearTimeout(t);
           if (r.status === 429) return r.json().then(function (j) { return { reply: 'شوي شوي علي! خذ نفس ' + (j.retryAfterS || 10) + ' ثواني وارجع اسألني.', lang: self.lastLang, action: 'none', intent: self.lastIntent, game_id: '', mood: 'cheeky', mode: 'ai' }; });
@@ -473,25 +652,8 @@
     if (guide) guide.addEventListener('change', function () { setTimeout(function () { Roam.apply(); }, 0); });
   }
 
-  // Trailer: the video loads only when the dialog opens; phones get the 640p file.
-  function wireTrailer() {
-    var btn = $('#trailerBtn'), dlg = $('#trailer'), v = $('#trailerVideo');
-    if (!btn || !dlg || !v || typeof dlg.showModal !== 'function') { if (btn) btn.hidden = true; return; }
-    btn.addEventListener('click', function () {
-      if (!v.src) v.src = 'assets/video/user-x-trailer-' + (window.innerWidth < 700 ? '640' : '960') + '.mp4';
-      dlg.showModal(); Voice.stop();
-      if (UX.sound && UX.sound.duck) UX.sound.duck(0.0005);
-      v.play().catch(function () { /* autoplay blocked: controls are visible */ });
-    });
-    var close = function () { v.pause(); if (dlg.open) dlg.close(); };
-    $('#trailerClose').addEventListener('click', close);
-    dlg.addEventListener('close', function () { v.pause(); if (UX.sound && UX.sound.duck) UX.sound.duck(0.05); btn.focus(); });
-    dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });
-    v.addEventListener('error', function () { var n = $('.trailer__note', dlg); if (n) n.textContent = 'ما قدرنا نشغّل الفيديو الحين. جرّب مرة ثانية لاحقاً.'; });
-  }
 
   function boot() {
-    settle('trailer', wireTrailer);
     setMode('offline');
     settle('chat', function () { Chat.init(); });
     settle('settings', wireSettings);
@@ -500,6 +662,7 @@
       var f = $('#faqAsk'); if (!f) return;
       f.addEventListener('submit', function (e) { e.preventDefault(); var i = $('#faqInput'); var q = i.value; i.value = ''; Chat.toggle(true); Chat.send(q); });
     });
+    settle('director', function () { Director.init(); });
     settle('roam', function () {
       Roam.init();
       // start roaming only after the intro is gone (or was skipped)

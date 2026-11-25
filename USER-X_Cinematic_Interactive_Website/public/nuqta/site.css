@@ -84,6 +84,9 @@
 .roam__avatar svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .35)); }
 .roam__body.is-left .roam__avatar { transform: scaleX(-1); }
 .roam__body.is-run .roam__avatar { animation: nq-run 250ms steps(2) infinite; }
+.roam__body.is-walk .roam__avatar { animation: nq-run 380ms steps(2) infinite; }
+/* Nuqta can be poked (only he is clickable — the strip he walks on never takes a click) */
+@media (min-width: 640px) and (pointer: fine) { .roam__avatar { pointer-events: auto; cursor: pointer; } }
 @keyframes nq-run { 50% { translate: 0 -5px; rotate: -6deg; } }
 .roam__body.is-jump { animation: nq-jump 520ms steps(6); }
 @keyframes nq-jump { 40% { translate: 0 -34px; } 70% { translate: 0 -8px; } }
@@ -167,14 +170,6 @@
 }
 .reduce-motion .roam__body, .reduce-motion .roam__avatar { animation: none !important; }
 @media (forced-colors: active) { .nq-chat, .nq-launch { border: 2px solid CanvasText; } }
-
-/* Trailer dialog */
-.trailer { width: min(980px, calc(100vw - 24px)); padding: 0; border: 2px solid var(--shade); border-radius: 16px; background: var(--void); color: var(--bone); box-shadow: 8px 8px 0 var(--magenta), 12px 12px 0 var(--cyan); }
-.trailer::backdrop { background: rgba(5, 5, 8, .86); }
-.trailer__bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 2px solid var(--line); }
-.trailer__title { margin: 0; font-family: var(--f-display); font-size: 1rem; }
-.trailer video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
-.trailer__note { margin: 0; padding: 8px 12px; font-size: .8rem; color: var(--muted); }
 
 /* The "stack" reveal slides a chapter in from the side; clip it so phones never get a sideways scroll. */
 .about { overflow-x: clip; }

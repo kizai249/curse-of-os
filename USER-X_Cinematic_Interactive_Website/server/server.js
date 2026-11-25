@@ -3,7 +3,7 @@
  * USER-X cinematic site server — zero framework, one dependency (@anthropic-ai/sdk).
  *   GET  /                 static site from ../public (security headers, caching)
  *   GET  /api/health       which optional services are configured (no secrets)
- *   POST /api/nuqta        { messages:[{role,content}] } -> Nuqta's reply (Claude)
+ *   POST /api/nuqta        { messages:[{role,content}], context? } -> Nuqta's reply (Claude)
  *   POST /api/tts          { text } -> audio/mpeg (ElevenLabs, optional)
  * Every key stays here; the browser never sees one. Without keys the site runs in
  * offline mode: Nuqta answers from the knowledge base in the browser.
@@ -14,7 +14,7 @@ const path = require('path');
 const zlib = require('zlib');
 const { NuqtaAI } = require('./lib/nuqta-ai');
 const kbLib = require('./lib/kb');
-const { RateLimiter, DailyCap, cleanMessages } = require('./lib/guards');
+const { RateLimiter, DailyCap, cleanMessages, cleanContext } = require('./lib/guards');
 const { makeTTS } = require('./lib/tts');
 
 const PUBLIC = path.join(__dirname, '..', 'public');
@@ -90,7 +90,7 @@ function createApp(opts = {}) {
       const body = await readJson(req);
       const messages = cleanMessages(body.messages);
       try {
-        const out = await ai.reply(messages);
+        const out = await ai.reply(messages, cleanContext(body.context));
         if (out.usage) log('nuqta', `in=${out.usage.in} out=${out.usage.out} cached=${out.usage.cached}`);
         const { usage, ...publicOut } = out;
         return send(res, 200, { mode: 'ai', ...publicOut });

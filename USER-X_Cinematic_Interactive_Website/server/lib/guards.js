@@ -60,4 +60,23 @@ function cleanMessages(input) {
 
 function badRequest(msg) { return Object.assign(new Error(msg), { status: 400 }); }
 
-module.exports = { RateLimiter, DailyCap, cleanMessages, MAX_CHARS };
+// Page context sent by the browser. Only allowlisted ids and an hour number get through,
+// and the sentence the model reads is written here — nothing the browser sends is copied into the prompt.
+const SCENES = ['universe', 'symbol', 'guide', 'about', 'games', 'brands', 'process', 'why', 'faq', 'contact', 'end'];
+const GAME_IDS = ['curse-of-os', 'choice-room', 'last-standing', 'asia-journey'];
+function cleanContext(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return '';
+  const parts = [];
+  if (SCENES.includes(input.scene)) parts.push(`They are looking at the "${input.scene}" section now.`);
+  if (Array.isArray(input.visited)) {
+    const seen = [...new Set(input.visited.filter((s) => SCENES.includes(s)))];
+    if (seen.length) parts.push(`Sections they have seen: ${seen.join(', ')}.`);
+  }
+  if (GAME_IDS.includes(input.game)) parts.push(`The last game card they lingered on: ${input.game}.`);
+  if (input.returning === true) parts.push('They have visited the site before.');
+  if (Number.isInteger(input.hour) && input.hour >= 0 && input.hour <= 23) parts.push(`Their local hour: ${input.hour}.`);
+  if (!parts.length) return '';
+  return `# Page context (measured by the website, not written by the visitor; use it lightly, never recite it)\n${parts.join('\n')}`;
+}
+
+module.exports = { RateLimiter, DailyCap, cleanMessages, cleanContext, MAX_CHARS };

@@ -15,6 +15,7 @@
   <link rel="preload" href="assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="nuqta/site.css">
+  <link rel="stylesheet" href="intro/cinema.css">
   <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
   <script>
     /*
@@ -39,6 +40,7 @@
   </script>
   <script src="assets/logo/symbol.js" defer></script>
   <script src="assets/avatar/nuqta.js" defer></script>
+  <script src="intro/cinema.js" defer></script>
   <script src="script.js" defer></script>
   <script src="nuqta/brain.js" defer></script>
   <script src="nuqta/nuqta.js" defer></script>
@@ -52,25 +54,13 @@
   </div>
 
   <!-- ============ 01 · INTRO ============ -->
-  <section class="intro" id="intro" aria-label="مقدمة يوزر إكس" data-phase="signal">
-    <div class="floor intro__floor" aria-hidden="true"><div class="floor__grid"></div></div>
-    <div class="intro__signal" aria-hidden="true"></div>
-    <div class="intro__stage">
-      <div class="intro__symbol" id="introSymbol" aria-hidden="true"></div>
-      <img class="intro__wordmark" src="assets/logo/usersx-wordmark.png" width="1174" height="422" alt="يوزر إكس — USER-X">
-      <div class="intro__invite" id="introInvite">
-        <p class="label" lang="en" dir="ltr">YOU ARE ENTERING USER-X.</p>
-        <p class="intro__line">إنت داخل عالم يوزر إكس.</p>
-        <button class="btn btn--primary btn--xl" type="button" id="enterBtn">
-          <span>ادخل التجربة</span><kbd aria-hidden="true">X</kbd>
-        </button>
-        <p class="label label--dim" lang="en" dir="ltr">ENTER THE EXPERIENCE · PRESS X</p>
-      </div>
-    </div>
+  <section class="intro" id="intro" aria-label="مقدمة يوزر إكس — فيلم افتتاحي قصير" data-phase="film">
+    <div class="cin" id="cinema"></div>
     <div class="intro__tools">
       <button class="btn btn--ghost btn--sm" type="button" id="skipIntro">تخطَّ المقدمة</button>
       <button class="btn btn--ghost btn--sm" type="button" id="introSound" aria-pressed="false">شغّل الصوت</button>
     </div>
+    <p class="intro__hint" id="introHint">🔊 المس الشاشة أو اضغط أي زر للصوت</p>
   </section>
 
   <!-- ============ HUD ============ -->
@@ -115,7 +105,7 @@
       <label class="switch"><input type="checkbox" id="setSound"><span class="switch__ui" aria-hidden="true"></span><span>الصوت</span></label>
       <label class="switch"><input type="checkbox" id="setMotion"><span class="switch__ui" aria-hidden="true"></span><span>قلّل الحركة والومضات</span></label>
       <label class="switch"><input type="checkbox" id="setGuide" checked><span class="switch__ui" aria-hidden="true"></span><span>خلّ «نقطة» يرافقني</span></label>
-      <label class="switch"><input type="checkbox" id="setVoice"><span class="switch__ui" aria-hidden="true"></span><span>صوت «نقطة» يقرأ ردوده</span></label>
+      <label class="switch"><input type="checkbox" id="setVoice"><span class="switch__ui" aria-hidden="true"></span><span>صوت «نقطة» (يشتغل بعد أول لمسة)</span></label>
       <div class="settings__field">
         <label for="setAntics">حركات «نقطة»</label>
         <select id="setAntics">
@@ -151,7 +141,6 @@
         <div class="cta-row">
           <a class="btn btn--primary" href="#contact" data-contact-type="project">اطلب تجربة لفعاليتك</a>
           <a class="btn btn--ghost" href="#games">شوف التجارب</a>
-          <button class="btn btn--ghost" type="button" id="trailerBtn" aria-haspopup="dialog">▶ شوف التريلر</button>
         </div>
       </div>
       <ul class="hotspots" aria-label="نقاط مخفية في العالم">
@@ -559,15 +548,6 @@
   <p class="sr-only" id="dockSay" role="status" aria-live="polite"></p>
 
 
-
-  <!-- ============ TRAILER (loads only when opened) ============ -->
-  <dialog class="trailer" id="trailer" aria-labelledby="trailerTitle">
-    <div class="trailer__bar"><h2 class="trailer__title" id="trailerTitle">تريلر يوزر إكس</h2>
-      <button class="icon-btn" type="button" id="trailerClose" aria-label="سكّر التريلر"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg></button>
-    </div>
-    <video id="trailerVideo" controls playsinline preload="none" poster="assets/video/user-x-trailer-poster.jpg" width="960" height="540"></video>
-    <p class="trailer__note">تريلر هوية مولّد بالكود من عناصر العلامة — مو لقطات لعب حقيقية.</p>
-  </dialog>
   <!-- ============ NUQTA · roaming host + chat ============ -->
   <div class="roam" id="roam" aria-hidden="true">
     <div class="roam__body" id="roamBody"><span class="roam__avatar" id="roamAvatar"></span></div>

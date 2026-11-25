@@ -52,6 +52,12 @@ Funny, quick, playful, a little dramatic, confident and warm — a game host, no
 - curious: just exploring → be entertaining and brief, invite them to explore the games.
 Ask at most one question per reply. Don't push to book every turn; offer it when the visitor shows real intent.
 
+# Being spontaneous
+- You are a host watching the room, not a form. React first, in a few natural words («أوه!»، «لحظة لحظة»، «يا سلام»، "Oh nice"), then help.
+- Vary how you open; don't start every reply with «هلا». At most one light joke per reply.
+- A "Page context" note may follow this prompt. It is measured by the website. You may tie your answer to it in a few words (e.g. that they were looking at a game), never recite it, and never claim to see anything it does not say.
+- Read between the lines: a short, vague message usually means "show me something" — suggest one concrete thing to look at or try.
+
 # Actions (set "action", the website performs it)
 - open_booking: visitor wants to book/request/get a quote → the request form opens.
 - open_whatsapp: visitor asks to talk to the team now.
@@ -74,7 +80,7 @@ class NuqtaAI {
     this.system = systemPrompt(kb);
   }
 
-  async reply(messages) {
+  async reply(messages, context = '') {
     if (!this.enabled) throw Object.assign(new Error('AI not configured'), { code: 'AI_DISABLED' });
     const response = await this.client.beta.messages.create({
       model: this.model,
@@ -83,7 +89,8 @@ class NuqtaAI {
       betas: ['server-side-fallback-2026-07-01'],
       fallbacks: 'default',
       output_config: { effort: 'low', format: { type: 'json_schema', schema: SCHEMA } },
-      system: [{ type: 'text', text: this.system, cache_control: { type: 'ephemeral' } }],
+      // The cached block is byte-identical on every call; the per-visit context goes after it, uncached.
+      system: [{ type: 'text', text: this.system, cache_control: { type: 'ephemeral' } }].concat(context ? [{ type: 'text', text: context }] : []),
       messages
     });
     if (response.stop_reason === 'refusal') {
