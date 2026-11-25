@@ -256,20 +256,27 @@
   /* ---------------- QR ---------------- */
   function qrMatrix(url) {
     var Q = window.qrcode; if (!Q) return null;
-    Q.stringToBytes = Q.stringToBytesFuncs['UTF-8'];
-    var q = Q(0, 'Q'); q.addData(url, 'Byte'); q.make();
-    return q;
+    try {
+      Q.stringToBytes = Q.stringToBytesFuncs['UTF-8'];
+      var q = Q(0, 'Q'); q.addData(url, 'Byte'); q.make();
+      return q;
+    } catch (e) { App.errors.push('qr: ' + e.message); return null; } // e.g. an address too long for a QR
   }
   function qrSvg(q, quiet) {
     var n = q.getModuleCount(), s = n + quiet * 2, d = '';
     for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) if (q.isDark(y, x)) d += 'M' + (x + quiet) + ' ' + (y + quiet) + 'h1v1h-1z';
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + s + ' ' + s + '" shape-rendering="crispEdges" width="' + s * 10 + '" height="' + s * 10 + '"><rect width="100%" height="100%" fill="#FFFFFF"/><path fill="#0B0B0F" d="' + d + '"/></svg>';
   }
+  // returns false when the browser refuses (old browser, blocked download): the caller shows the link instead
   function download(blob, name) {
-    var a = document.createElement('a'), u = URL.createObjectURL(blob);
-    a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+    try {
+      var a = document.createElement('a'), u = URL.createObjectURL(blob);
+      a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+      return true;
+    } catch (e) { App.errors.push('download: ' + e.message); return false; }
   }
+  function qrFail() { $('#qrUrl').textContent = App.qrUrl + '  ·  ' + (App.lang === 'ar' ? 'ما قدرت أنزّل الملف — صوّر الشاشة أو استخدم npm run qr' : 'Download failed — take a screenshot or use npm run qr'); }
   function openQr() {
     var url = cardUrl(), q = qrMatrix(url), box = $('#qrBox');
     App.qrUrl = url;
@@ -283,9 +290,10 @@
     var q = qrMatrix(App.qrUrl); if (!q) return;
     var n = q.getModuleCount(), quiet = 4, scale = Math.floor(2048 / (n + quiet * 2)), size = (n + quiet * 2) * scale;
     var cv = document.createElement('canvas'); cv.width = cv.height = size;
-    var g = cv.getContext('2d'); g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, size, size); g.fillStyle = '#0B0B0F';
+    var g = cv.getContext('2d'); if (!g || !cv.toBlob) { qrFail(); return; }
+    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, size, size); g.fillStyle = '#0B0B0F';
     for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) if (q.isDark(y, x)) g.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
-    cv.toBlob(function (b) { if (b) download(b, 'userx-khalid-hamida-qr.png'); }, 'image/png');
+    cv.toBlob(function (b) { if (!b || !download(b, 'userx-khalid-hamida-qr.png')) qrFail(); }, 'image/png');
   }
 
   /* ---------------- dialogs ---------------- */
@@ -357,7 +365,7 @@
       $('#qrBtn').addEventListener('click', openQr);
       $('#qrClose').addEventListener('click', function () { closeDialog($('#qrSheet')); });
       $('#qrPng').addEventListener('click', qrPng);
-      $('#qrSvg').addEventListener('click', function () { var q = qrMatrix(App.qrUrl); if (q) download(new Blob([qrSvg(q, 4)], { type: 'image/svg+xml' }), 'userx-khalid-hamida-qr.svg'); });
+      $('#qrSvg').addEventListener('click', function () { var q = qrMatrix(App.qrUrl); if (!q || !download(new Blob([qrSvg(q, 4)], { type: 'image/svg+xml' }), 'userx-khalid-hamida-qr.svg')) qrFail(); });
       $('#secretClose').addEventListener('click', function () { closeDialog($('#secret')); });
       $$('dialog').forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) closeDialog(d); }); });
     });
