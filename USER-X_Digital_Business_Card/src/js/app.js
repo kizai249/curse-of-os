@@ -283,11 +283,12 @@
     box.innerHTML = q ? qrSvg(q, 4) : '';
     $('#qrUrl').textContent = url;
     $('#qrWarn').hidden = !isPreviewUrl(url);
+    if (!q) qrFail();
     openDialog($('#qrSheet'));
     track('qr_opened', { preview: isPreviewUrl(url) });
   }
   function qrPng() {
-    var q = qrMatrix(App.qrUrl); if (!q) return;
+    var q = qrMatrix(App.qrUrl); if (!q) { qrFail(); return; }
     var n = q.getModuleCount(), quiet = 4, scale = Math.floor(2048 / (n + quiet * 2)), size = (n + quiet * 2) * scale;
     var cv = document.createElement('canvas'); cv.width = cv.height = size;
     var g = cv.getContext('2d'); if (!g || !cv.toBlob) { qrFail(); return; }
