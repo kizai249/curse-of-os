@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>يوزر إكس · USER-X</title>
+  <meta name="description" content="يوزر إكس — شركة ترفيه تفاعلي في جدة. نصمّم ونشغّل تجارب وألعاب هجينة للشلّة والعلامات والفعاليات. ما تتفرّج، إنت اللعبة.">
+  <meta property="og:title" content="يوزر إكس · USER-X">
+  <meta property="og:description" content="ما تتفرّج. إنت اللعبة. تجارب تفاعلية هجينة للشلّة والعلامات والفعاليات في السعودية.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0B0B0F">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/logo/usersx-symbol.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/kufam-arabic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nuqta/site.css">
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  <script>
+    /*
+     * USER-X site configuration — every unconfirmed detail lives here.
+     * Fill these only with details USER-X has confirmed (README › Placeholders).
+     */
+    window.USERSX_CONFIG = {
+      contact: {
+        email: '',           // [PLACEHOLDER] official inbox — not confirmed yet.
+        phone: '+966565952065',
+        whatsapp: '966565952065',
+        city: 'جدة'
+      },
+      social: [
+        // [PLACEHOLDER] add confirmed accounts only, e.g. { label: 'إنستقرام', url: 'https://…' }
+      ],
+      audio: {
+        // Optional licensed/original files. Missing or broken files fall back to the built-in synth.
+        // e.g. intro: 'assets/audio/intro-ambience.mp3'
+      }
+    };
+  </script>
+  <script src="assets/logo/symbol.js" defer></script>
+  <script src="assets/avatar/nuqta.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="nuqta/brain.js" defer></script>
+  <script src="nuqta/nuqta.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#universe">تخطَّ للمحتوى</a>
+
+  <div class="bg" aria-hidden="true">
+    <canvas class="bg__stars" id="stars"></canvas>
+    <div class="bg__haze"></div>
+  </div>
+
+  <!-- ============ 01 · INTRO ============ -->
+  <section class="intro" id="intro" aria-label="مقدمة يوزر إكس" data-phase="signal">
+    <div class="floor intro__floor" aria-hidden="true"><div class="floor__grid"></div></div>
+    <div class="intro__signal" aria-hidden="true"></div>
+    <div class="intro__stage">
+      <div class="intro__symbol" id="introSymbol" aria-hidden="true"></div>
+      <img class="intro__wordmark" src="assets/logo/usersx-wordmark.png" width="1174" height="422" alt="يوزر إكس — USER-X">
+      <div class="intro__invite" id="introInvite">
+        <p class="label" lang="en" dir="ltr">YOU ARE ENTERING USER-X.</p>
+        <p class="intro__line">إنت داخل عالم يوزر إكس.</p>
+        <button class="btn btn--primary btn--xl" type="button" id="enterBtn">
+          <span>ادخل التجربة</span><kbd aria-hidden="true">X</kbd>
+        </button>
+        <p class="label label--dim" lang="en" dir="ltr">ENTER THE EXPERIENCE · PRESS X</p>
+      </div>
+    </div>
+    <div class="intro__tools">
+      <button class="btn btn--ghost btn--sm" type="button" id="skipIntro">تخطَّ المقدمة</button>
+      <button class="btn btn--ghost btn--sm" type="button" id="introSound" aria-pressed="false">شغّل الصوت</button>
+    </div>
+  </section>
+
+  <!-- ============ HUD ============ -->
+  <header class="hud" id="hud">
+    <a class="hud__brand" href="#universe" aria-label="يوزر إكس — بداية العالم">
+      <img src="assets/logo/usersx-symbol.svg" alt="" width="30" height="30">
+      <img src="assets/logo/usersx-wordmark-sm.png" alt="" class="hud__wordmark" width="89" height="32">
+    </a>
+
+    <nav class="hud__nav" id="sceneNav" aria-label="مشاهد التجربة">
+      <ol class="scenes" id="sceneList">
+        <li><a href="#intro" data-scene="intro" data-replay="intro"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">01</span><span class="scenes__label">المقدمة</span></a></li>
+        <li><a href="#universe" data-scene="universe"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">02</span><span class="scenes__label">العالم</span></a></li>
+        <li><a href="#symbol" data-scene="symbol"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">03</span><span class="scenes__label">الرمز</span></a></li>
+        <li><a href="#guide" data-scene="guide"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">04</span><span class="scenes__label">نقطة</span></a></li>
+        <li><a href="#about" data-scene="about"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">05</span><span class="scenes__label">مين إحنا</span></a></li>
+        <li><a href="#games" data-scene="games"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">06</span><span class="scenes__label">التجارب</span></a></li>
+        <li><a href="#brands" data-scene="brands"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">07</span><span class="scenes__label">للجهات</span></a></li>
+        <li><a href="#process" data-scene="process"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">08</span><span class="scenes__label">كيف نشتغل</span></a></li>
+        <li><a href="#why" data-scene="why"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">09</span><span class="scenes__label">ليش إحنا</span></a></li>
+        <li><a href="#faq" data-scene="faq"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">10</span><span class="scenes__label">أسئلة</span></a></li>
+        <li><a href="#contact" data-scene="contact"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">11</span><span class="scenes__label">احجز</span></a></li>
+        <li><a href="#end" data-scene="end" data-replay="outro"><span class="scenes__dot" aria-hidden="true"></span><span class="scenes__num">12</span><span class="scenes__label">قرارك</span></a></li>
+      </ol>
+    </nav>
+
+    <div class="hud__actions">
+      <span class="hud__counter" id="sceneCounter" aria-hidden="true">02/12</span>
+      <button class="icon-btn" type="button" id="soundBtn" aria-pressed="false" aria-label="الصوت مقفل — اضغط للتشغيل">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path class="ico-speaker" d="M2 6h3l4-3v10l-4-3H2z"/><path class="ico-waves" d="M11 5h1v1h-1zM12 6h1v4h-1zM11 10h1v1h-1zM13 4h1v1h-1zM14 5h1v6h-1zM13 11h1v1h-1z"/><path class="ico-mute" d="M11 6h1v1h-1zM12 7h1v1h-1zM13 8h1v1h-1zM14 9h1v1h-1zM14 6h1v1h-1zM13 7h1v1h-1zM12 8h1v1h-1zM11 9h1v1h-1z"/></svg>
+      </button>
+      <button class="icon-btn" type="button" id="settingsBtn" aria-expanded="false" aria-controls="settings" aria-label="الإعدادات">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M7 1h2v2h2v2h2v2h2v2h-2v2h-2v2H9v2H7v-2H5v-2H3V9H1V7h2V5h2V3h2zM7 6v4h2V6z"/></svg>
+      </button>
+      <button class="icon-btn hud__menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="sceneList" aria-label="قائمة المشاهد">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 3h12v2H2zM2 7h12v2H2zM2 11h12v2H2z"/></svg>
+      </button>
+    </div>
+
+    <div class="settings" id="settings" role="dialog" aria-modal="false" aria-labelledby="settingsTitle" hidden>
+      <h2 class="settings__title" id="settingsTitle">الإعدادات</h2>
+      <label class="switch"><input type="checkbox" id="setSound"><span class="switch__ui" aria-hidden="true"></span><span>الصوت</span></label>
+      <label class="switch"><input type="checkbox" id="setMotion"><span class="switch__ui" aria-hidden="true"></span><span>قلّل الحركة والومضات</span></label>
+      <label class="switch"><input type="checkbox" id="setGuide" checked><span class="switch__ui" aria-hidden="true"></span><span>خلّ «نقطة» يرافقني</span></label>
+      <label class="switch"><input type="checkbox" id="setVoice"><span class="switch__ui" aria-hidden="true"></span><span>صوت «نقطة» يقرأ ردوده</span></label>
+      <div class="settings__field">
+        <label for="setAntics">حركات «نقطة»</label>
+        <select id="setAntics">
+          <option value="lively">حيوي — يركض ويفاجئك</option>
+          <option value="calm" selected>هادي — حركات خفيفة</option>
+          <option value="off">بدون حركات</option>
+        </select>
+      </div>
+      <div class="settings__field">
+        <label for="setVolume">مستوى الصوت</label>
+        <input type="range" id="setVolume" min="0" max="100" value="70">
+      </div>
+      <div class="settings__row">
+        <button class="btn btn--ghost btn--sm" type="button" id="replayIntro">أعد المقدمة</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="replayOutroSettings">أعد المشهد الأخير</button>
+      </div>
+      <p class="settings__note" id="soundNote">الصوت مقفل افتراضياً وما يشتغل إلا بضغطتك.</p>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ 02 · UNIVERSE ============ -->
+    <section class="scene universe" id="universe" data-scene="universe" aria-labelledby="universe-title">
+      <div class="floor universe__floor" aria-hidden="true"><div class="floor__grid"></div></div>
+      <div class="universe__sticker parallax" data-depth="18" aria-hidden="true">
+        <img src="assets/logo/usersx-sticker.png" width="891" height="891" alt="">
+      </div>
+      <div class="universe__copy parallax" data-depth="6">
+        <p class="label" lang="en" dir="ltr">INTERACTIVE ENTERTAINMENT · KSA</p>
+        <h1 class="display" id="universe-title" tabindex="-1">ما تتفرّج.<br>إنت <em>اللعبة.</em></h1>
+        <p class="label label--en" lang="en" dir="ltr">WE BUILD EXPERIENCES THAT PULL YOU IN.</p>
+        <p class="lead">نصمّم تجارب وتحديات تفاعلية بطابع نفسي وتنافسي للشركات والجهات والفعاليات في السعودية — يعيشها جيل زد بنفسه، في المكان وعلى الجوال بنفس اللحظة.</p>
+        <div class="cta-row">
+          <a class="btn btn--primary" href="#contact" data-contact-type="project">اطلب تجربة لفعاليتك</a>
+          <a class="btn btn--ghost" href="#games">شوف التجارب</a>
+          <button class="btn btn--ghost" type="button" id="trailerBtn" aria-haspopup="dialog">▶ شوف التريلر</button>
+        </div>
+      </div>
+      <ul class="hotspots" aria-label="نقاط مخفية في العالم">
+        <li class="hotspot" style="--x: 22%; --y: 78%">
+          <button type="button" class="hotspot__btn" aria-expanded="false" aria-controls="hs-1"><span class="sr-only">الرؤية</span></button>
+          <div class="hotspot__card" id="hs-1" hidden><p class="label" lang="en">VISION</p><p>كل فعالية في السعودية يكون فيها لاعب، مو جمهور.</p></div>
+        </li>
+        <li class="hotspot" style="--x: 52%; --y: 88%">
+          <button type="button" class="hotspot__btn" aria-expanded="false" aria-controls="hs-2"><span class="sr-only">النموذج الهجين</span></button>
+          <div class="hotspot__card" id="hs-2" hidden><p class="label" lang="en">HYBRID</p><p>رقمي على الجوال وحضوري في المكان — وكل جولة تترك أثر.</p></div>
+        </li>
+        <li class="hotspot" style="--x: 80%; --y: 74%">
+          <button type="button" class="hotspot__btn" aria-expanded="false" aria-controls="hs-3"><span class="sr-only">المقياس</span></button>
+          <div class="hotspot__card" id="hs-3" hidden><p class="label" lang="en">MEASURABLE</p><p>نحوّل الحضور لمشاركين، ونعطي الجهات تفاعل تقدر تقيسه.</p></div>
+        </li>
+      </ul>
+      <a class="scroll-cue" href="#symbol"><span>كمّل</span><span aria-hidden="true" class="scroll-cue__arrow"></span></a>
+    </section>
+
+    <!-- ============ 03 · INTERACTIVE SYMBOL ============ -->
+    <section class="scene symbol-scene" id="symbol" data-scene="symbol" aria-labelledby="symbol-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">03 · THE SYMBOL</p>
+        <h2 class="h2" id="symbol-title">زر اتجاهات مايل… <em>صار X.</em></h2>
+        <p class="scene__intro">اضغط الرمز وشوف وش يخبّي. كل سهم فيه خيار.</p>
+      </div>
+      <div class="logo-stage" id="logoStage" data-state="idle">
+        <button class="logo-btn" type="button" id="logoBtn" aria-expanded="false" aria-controls="logoArms" aria-describedby="logoHint">
+          <span class="sr-only">رمز يوزر إكس التفاعلي — اضغط للكشف</span>
+          <span class="logo-btn__art" id="logoArt"><img src="assets/logo/usersx-symbol.svg" alt="" width="15" height="15"></span>
+        </button>
+        <nav class="logo-arms" id="logoArms" aria-label="اختر اتجاه" hidden>
+          <a class="logo-arm" data-dir="tl" href="#games"><span class="label" lang="en" dir="ltr">↖ PLAY</span><span>التجارب</span></a>
+          <a class="logo-arm" data-dir="tr" href="#about"><span class="label" lang="en" dir="ltr">↗ STORY</span><span>مين إحنا</span></a>
+          <a class="logo-arm" data-dir="br" href="#why"><span class="label" lang="en" dir="ltr">↘ WHY</span><span>ليش إحنا</span></a>
+          <a class="logo-arm" data-dir="bl" href="#contact"><span class="label" lang="en" dir="ltr">↙ CONNECT</span><span>تواصل</span></a>
+        </nav>
+      </div>
+      <p class="logo-msg" id="logoMsg" aria-live="polite"></p>
+      <p class="hint" id="logoHint">يشتغل بالماوس واللمس والكيبورد (Enter). بعد الكشف تنقّل بين الأسهم بأزرار الاتجاهات، و Esc يرجّعه.</p>
+    </section>
+
+    <!-- ============ 04 · AVATAR ============ -->
+    <section class="scene guide" id="guide" data-scene="guide" aria-labelledby="guide-title">
+      <div class="guide__stage">
+        <div class="floor guide__floor" aria-hidden="true"><div class="floor__grid"></div></div>
+        <button class="avatar-btn" type="button" id="avatarBtn" aria-label="كلّم نقطة">
+          <span class="avatar" id="avatarMain"><img src="assets/avatar/nuqta.svg" alt="" width="310" height="410"></span>
+        </button>
+        <div class="bubble" id="avatarBubble" hidden><span class="bubble__text" aria-hidden="true"></span></div>
+        <p class="sr-only" id="avatarSay" role="status" aria-live="polite"></p>
+      </div>
+      <div class="guide__copy">
+        <p class="label" lang="en" dir="ltr">04 · YOUR GUIDE</p>
+        <h2 class="h2" id="guide-title">هذا <em>نقطة</em>.</h2>
+        <p>دليلك في عالم يوزر إكس. اسمه من جملتنا: «كل لاعب هو نقطة التقاطع». لابس هودي العلامة، وفي قلبه مربّع ماجنتا — المربّع اللي يمثّلك إنت.</p>
+        <div class="cta-row">
+          <button class="btn btn--primary" type="button" data-avatar="wave">سلّم عليه</button>
+          <button class="btn btn--ghost" type="button" data-avatar="talk">وش تسوون؟</button>
+          <button class="btn btn--ghost" type="button" data-avatar="card" aria-expanded="false" aria-controls="avatarCard">بطاقة الشخصية</button>
+        </div>
+        <dl class="stat-card" id="avatarCard" hidden>
+          <div><dt>الدور</dt><dd>دليل · مضيف</dd></div>
+          <div><dt>الخامة</dt><dd>بكسل حاد + ستيكر مقصوص</dd></div>
+          <div><dt>الألوان</dt><dd>Bone · Void · Cyan · Magenta</dd></div>
+          <div><dt>القلب</dt><dd>مربّع اللاعب — إنت</dd></div>
+          <div><dt>LV</dt><dd class="num">01</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ 05 · WHAT IS USER-X ============ -->
+    <section class="scene about" id="about" data-scene="about" aria-labelledby="about-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">05 · WHAT IS USER-X?</p>
+        <h2 class="h2" id="about-title">وش هي <em>يوزر إكس</em>؟</h2>
+      </div>
+      <ol class="chapters">
+        <li class="chapter chapter--who" data-reveal="wipe">
+          <span class="chapter__lv num">LV 01</span>
+          <h3 class="h3">مين إحنا</h3>
+          <p class="chapter__big">الترفيه تعوّد يحطّك في الكرسي ويطلب منك تتفرّج. إحنا نعطيك يد التحكم.</p>
+          <p>يوزر إكس شركة ترفيه تفاعلي في السعودية، هويتها «زر الاتجاهات» — ستريت وير × ريترو بكسل.</p>
+        </li>
+        <li class="chapter chapter--what" data-reveal="assemble">
+          <span class="chapter__lv num">LV 02</span>
+          <h3 class="h3">وش نسوي</h3>
+          <p>نصمّم ونشغّل تجارب تفاعلية هجينة: رقمي على الجوال وحضوري في المكان — وكل جولة تترك أثر.</p>
+          <ul class="ticks">
+            <li>تجارب وتحديات بطابع نفسي وتنافسي</li>
+            <li>قوالب ألعاب جاهزة تنلعب في فعالية أو أونلاين</li>
+            <li>تطبيق لاعب: دخول بالجوال أو كود الفعالية، تذكرة رقمية، جولات حيّة بعدّاد</li>
+          </ul>
+        </li>
+        <li class="chapter chapter--who-for" data-reveal="stack">
+          <span class="chapter__lv num">LV 03</span>
+          <h3 class="h3">لمين نشتغل</h3>
+          <div class="split">
+            <div><p class="label" lang="en">PLAYERS</p><p>جيل زد في السعودية — يلعب مع شلّته، وينافس، ويبي يكون جزء من اللحظة.</p></div>
+            <div><p class="label" lang="en">PARTNERS</p><p>الشركات والجهات والفعاليات اللي تبي جمهورها يشارك، مو بس يحضر.</p></div>
+          </div>
+        </li>
+        <li class="chapter chapter--vision" data-reveal="type">
+          <span class="chapter__lv num">LV 04</span>
+          <h3 class="h3">رؤيتنا</h3>
+          <p class="chapter__quote">كل فعالية في السعودية يكون فيها <em>لاعب</em>، مو جمهور.</p>
+        </li>
+        <li class="chapter chapter--how" data-reveal="grid">
+          <span class="chapter__lv num">LV 05</span>
+          <h3 class="h3">طريقتنا</h3>
+          <ol class="steps">
+            <li><span class="num">01</span><b>القصة</b><span>نبدأ بفكرة تشد اللاعب من أول ثانية.</span></li>
+            <li><span class="num">02</span><b>التصميم</b><span>هوية بكسل حادة ولغة ألعاب يفهمها الجيل.</span></li>
+            <li><span class="num">03</span><b>التقنية</b><span>الجوال والمكان يشتغلون بنفس اللحظة.</span></li>
+            <li><span class="num">04</span><b>القياس</b><span>تفاعل الجمهور يتحوّل لأرقام تقدر الجهة تقيسها.</span></li>
+          </ol>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ 06 · GAME UNIVERSE ============ -->
+    <section class="scene games" id="games" data-scene="games" aria-labelledby="games-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">06 · GAME UNIVERSE</p>
+        <h2 class="h2" id="games-title">التجارب</h2>
+        <p class="scene__intro">يوزر إكس هي المنصة — وكل لعبة عالم بحاله: لها خطها وألوانها وخاماتها. اختر عالم وادخله.</p>
+      </div>
+      <div class="chips" role="group" aria-label="تصفية التجارب" id="gameFilters">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">الكل</button>
+        <button type="button" class="chip" data-filter="horror" aria-pressed="false">رعب نفسي</button>
+        <button type="button" class="chip" data-filter="teams" aria-pressed="false">فرق</button>
+        <button type="button" class="chip" data-filter="group" aria-pressed="false">جماعي</button>
+        <button type="button" class="chip" data-filter="sports" aria-pressed="false">رياضة</button>
+      </div>
+      <ul class="game-grid" id="gameGrid" aria-live="polite">
+        <!-- rendered by script.js from GAMES; noscript list below -->
+      </ul>
+      <noscript>
+        <ul class="game-grid game-grid--static">
+          <li class="game-card"><h3>لعنة أوس</h3><p>رعب نفسي · هجين</p></li>
+          <li class="game-card"><h3>غرفة الاختيار</h3><p>قرارات · فرق</p></li>
+          <li class="game-card"><h3>آخر من يصمد</h3><p>تحدي · جماعي</p></li>
+          <li class="game-card"><h3>مشوار آسيا</h3><p>كورة · جولات — قريباً</p></li>
+        </ul>
+      </noscript>
+      <div class="game-detail" id="gameDetail" role="region" aria-labelledby="gdTitle" hidden>
+        <div class="game-detail__bar">
+          <button class="btn btn--ghost btn--sm" type="button" id="gdBack">→ رجوع للتجارب</button>
+          <div class="game-detail__nav">
+            <button class="icon-btn" type="button" id="gdPrev" aria-label="التجربة السابقة">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M6 3h2v2h2v2h2v2h-2v2H8v2H6v-2h2V9h2V7H8V5H6z"/></svg>
+            </button>
+            <span class="num" id="gdIndex">1/4</span>
+            <button class="icon-btn" type="button" id="gdNext" aria-label="التجربة التالية">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M10 3H8v2H6v2H4v2h2v2h2v2h2v-2H8V9H6V7h2V5h2z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="game-detail__body">
+          <div class="fx-stage" id="fxStage" aria-hidden="true"></div>
+          <div class="game-detail__info">
+            <p class="label" id="gdGenre"></p>
+            <h3 class="h2" id="gdTitle" tabindex="-1"></h3>
+            <p class="game-detail__premise" id="gdPremise"></p>
+            <div class="game-stats" id="gdStats"></div>
+            <dl class="facts" id="gdFacts"></dl>
+            <p class="game-warning" id="gdWarn" hidden></p>
+            <div class="cta-row">
+              <a class="btn btn--primary" href="#contact" id="gdCta">اطلب هالتجربة لفعاليتك</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============ 07 · FOR BRANDS ============ -->
+    <section class="scene brands" id="brands" data-scene="brands" aria-labelledby="brands-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">07 · GAMES FOR BRANDS</p>
+        <h2 class="h2" id="brands-title">جمهورك يحضر. <em>خلّه يلعب.</em></h2>
+        <p class="scene__intro">بدل ما الجوال يسرق انتباه جمهورك، يصير الجوال هو اللعبة نفسها — وهويتكم تدخل في قصة التجربة بدل ما تكون إعلان على الجنب.</p>
+      </div>
+      <ul class="svc-grid">
+        <li class="svc" data-reveal="assemble"><span class="svc__ico" aria-hidden="true">01</span><h3 class="h3">قوالب ألعاب جاهزة</h3><p>تجارب أساسية تنبني مرة وحدة وتتخصّص لكل عميل — تكلفة أقل ووقت أسرع، في الفعالية أو أونلاين.</p></li>
+        <li class="svc" data-reveal="assemble"><span class="svc__ico" aria-hidden="true">02</span><h3 class="h3">تجارب مخصّصة</h3><p>قصة وقواعد وهوية لحدث واحد: إطلاق منتج، مؤتمر، أو يوم فريق.</p></li>
+        <li class="svc" data-reveal="assemble"><span class="svc__ico" aria-hidden="true">03</span><h3 class="h3">ألعاب إعلانية</h3><p>ألعاب جوال مرتبطة بموسم أو شريك: رمز فرع يومي، قسائم تنسترد مرة وحدة، وتحديات تعاونية مع الشلّة.</p></li>
+        <li class="svc" data-reveal="assemble"><span class="svc__ico" aria-hidden="true">04</span><h3 class="h3">تقارير للرعاة</h3><p>عدد اللاعبين، مدة التفاعل، القرارات، ونسب الإكمال — أرقام مجمّعة تقدر تحطها في التقرير.</p></li>
+      </ul>
+      <div class="pkg-row" aria-label="طرق الشغل معنا">
+        <article class="pkg"><p class="label" lang="en">START SMALL</p><h3 class="h3">تجربة فرع</h3><ul class="ticks"><li>فرع أو فرعين</li><li>رمز فرع يومي وقسائم</li><li>تقرير نهاية التجربة</li></ul><p class="pkg__price">السعر: نحدده معك حسب المدة</p></article>
+        <article class="pkg pkg--hot"><p class="label" lang="en">SEASON</p><h3 class="h3">حملة موسم كامل</h3><ul class="ticks"><li>كل فروعك المشاركة</li><li>زيارات محققة وقسائم وسلسلة زيارات</li><li>لوحة شركاء وتقارير يومية مجمّعة</li></ul><p class="pkg__price">السعر: حسب عدد الفروع والمدة</p></article>
+        <article class="pkg"><p class="label" lang="en">YOUR WORLD</p><h3 class="h3">عالم لعبة خاص</h3><ul class="ticks"><li>قالب من عوالمنا بهوية فعاليتك</li><li>للشركات والفعاليات الجماعية</li><li>تشغيل في المكان أو أونلاين</li></ul><p class="pkg__price">السعر: حسب الفعالية</p></article>
+      </div>
+      <div class="targets">
+        <p class="label" lang="en">FIRST-PILOT TARGETS · NOT PAST RESULTS</p>
+        <dl class="targets__grid">
+          <div><dt class="num">60%+</dt><dd>من مسوحات رموز الفروع زيارات محققة</dd></div>
+          <div><dt class="num">40%+</dt><dd>من القسائم تنسترد</dd></div>
+          <div><dt class="num">35% / 15%</dt><dd>لاعبين يرجعون في اليوم ١ واليوم ٧</dd></div>
+          <div><dt class="num">3+</dt><dd>متوسط اللاعبين في الجولة الجماعية</dd></div>
+        </dl>
+        <p class="targets__note">هذي أهداف التجربة الأولى المكتوبة في وثائق المنتج، مو نتائج سابقة. تنراجع بعد أول ٧ أيام من الإطلاق.</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn--primary" href="#contact" data-book="corporate">اطلب تجربة لعلامتك</a>
+        <button class="btn btn--ghost" type="button" data-ask="نبي لعبة لعلامتنا، وش تقترح؟">اسأل نقطة عن فكرة لعلامتك</button>
+      </div>
+    </section>
+
+    <!-- ============ 08 · HOW IT WORKS ============ -->
+    <section class="scene process" id="process" data-scene="process" aria-labelledby="process-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">08 · HOW IT WORKS</p>
+        <h2 class="h2" id="process-title">كيف <em>نشتغل</em></h2>
+      </div>
+      <div class="tracks" role="tablist" aria-label="اختر مسارك">
+        <button type="button" class="chip" role="tab" id="tabPlayers" aria-selected="true" aria-controls="trackPlayers">أنا لاعب</button>
+        <button type="button" class="chip" role="tab" id="tabB2B" aria-selected="false" aria-controls="trackB2B" tabindex="-1">أنا جهة / فعالية</button>
+      </div>
+      <ol class="track" id="trackPlayers" role="tabpanel" aria-labelledby="tabPlayers">
+        <li><span class="num">01</span><b>اكتشف</b><span>تصفّح العوالم واختر التجربة اللي تناسبك وتناسب شلّتك.</span></li>
+        <li><span class="num">02</span><b>اطلب</b><span>أرسل طلبك للفريق على الواتساب — الحجز يتأكد من الفريق مباشرة.</span></li>
+        <li><span class="num">03</span><b>ادخل</b><span>بالجوال أو كود الفعالية، وتذكرتك الرقمية فيها الفريق والوقت.</span></li>
+        <li><span class="num">04</span><b>العب</b><span>جولات حيّة بعدّاد، وقرارات تنقفل بعد ما تختار.</span></li>
+        <li><span class="num">05</span><b>نافس</b><span>مستويات وشارات وسجلّ ترجع له.</span></li>
+      </ol>
+      <ol class="track" id="trackB2B" role="tabpanel" aria-labelledby="tabB2B" hidden>
+        <li><span class="num">01</span><b>الموجز</b><span>قولوا لنا عن الفعالية والجمهور والهدف.</span></li>
+        <li><span class="num">02</span><b>الفكرة</b><span>نرجع لكم بفكرة تجربة وتقدير مبدئي.</span></li>
+        <li><span class="num">03</span><b>التخصيص</b><span>القصة والألوان والجوائز والرسائل تنبني حولكم.</span></li>
+        <li><span class="num">04</span><b>التجهيز</b><span>القالب والتطبيق والشاشات.</span></li>
+        <li><span class="num">05</span><b>التشغيل</b><span>فريقنا يدير الجولات على الأرض أو أونلاين.</span></li>
+        <li><span class="num">06</span><b>القياس</b><span>تقرير واضح بأرقام التفاعل للجهة والرعاة.</span></li>
+      </ol>
+      <div class="ecosystem" aria-label="منظومة وحدة، أربع شاشات">
+        <p class="label" lang="en">ONE ENGINE · FOUR SCREENS</p>
+        <ul><li>تطبيق اللاعب<small>الدخول · القرار · السجل</small></li><li>الحضور في المكان<small>ألغاز · أبواب · طاقم</small></li><li>شاشة المسرح<small>عدّاد · متصدرين</small></li><li>لوحة الجهة والرعاة<small>مؤشرات · تقرير</small></li></ul>
+        <p class="ecosystem__note">٧٠٪ رقمي · ٣٠٪ حضوري — كل قرار يوصل للأربع شاشات بنفس اللحظة.</p>
+      </div>
+      <div class="trust">
+        <div><h3 class="h3">البيانات داخل المملكة</h3><p>بيانات اللعب والمحافظ والقسائم في منطقة الدمام السحابية.</p></div>
+        <div><h3 class="h3">تقارير مجمّعة</h3><p>الشريك يشوف أرقام مجمّعة، مو بيانات أشخاص.</p></div>
+        <div><h3 class="h3">حماية القاصرين</h3><p>بوابة عمر: أقل من ١٥ سنة ما يسجّل، ومن ١٥ إلى ١٧ بقيود.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ 09 · WHY ============ -->
+    <section class="scene why" id="why" data-scene="why" aria-labelledby="why-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">09 · WHY USER-X?</p>
+        <h2 class="h2" id="why-title">ليش <em>يوزر إكس</em>؟</h2>
+        <p class="why__meter" aria-hidden="true"><span class="num">LV <span id="whyLv">00</span>/05</span><span class="why__bar"><span id="whyBar"></span></span></p>
+      </div>
+      <ol class="why__list" id="whyList">
+        <li class="why__item" data-fx="player"><span class="why__icon" aria-hidden="true"></span><div><h3 class="h3">لاعب، مو جمهور</h3><p>كل شخص في الفعالية يصير جزء من اللعبة — يقرّر ويأثّر.</p></div></li>
+        <li class="why__item" data-fx="hybrid"><span class="why__icon" aria-hidden="true"></span><div><h3 class="h3">هجين بنفس اللحظة</h3><p>الجوال والمكان يشتغلون مع بعض: تلعب في القاعة وتشوف أثرك على الشاشة.</p></div></li>
+        <li class="why__item" data-fx="measure"><span class="why__icon" aria-hidden="true"></span><div><h3 class="h3">تفاعل تقدر تقيسه</h3><p>الجهة تطلع بأرقام واضحة عن المشاركة، مو بس انطباع.</p></div></li>
+        <li class="why__item" data-fx="gen"><span class="why__icon" aria-hidden="true"></span><div><h3 class="h3">بلغة الجيل</h3><p>طابع نفسي وتنافسي، وهوية ألعاب يحسّها جيل زد من أول نظرة.</p></div></li>
+        <li class="why__item" data-fx="scale"><span class="why__icon" aria-hidden="true"></span><div><h3 class="h3">قوالب تتشكّل لك</h3><p>قوالب ألعاب جاهزة تتكيّف مع فعاليتك — حضورياً أو أونلاين.</p></div></li>
+      </ol>
+    </section>
+
+
+    <!-- ============ 10 · FAQ ============ -->
+    <section class="scene faq" id="faq" data-scene="faq" aria-labelledby="faq-title">
+      <div class="scene__head">
+        <p class="label" lang="en" dir="ltr">10 · STRAIGHT TALK</p>
+        <h2 class="h2" id="faq-title">أسئلة… <em>وأجوبة صريحة.</em></h2>
+        <p class="scene__intro">ما لقيت سؤالك؟ اسأل «نقطة» مباشرة — وإذا ما يعرف، بيقولك إنه ما يعرف.</p>
+      </div>
+      <div class="status-board" aria-label="وش جاهز ووش قريب">
+        <div class="status-row"><b>غرفة الاختيار</b><span class="tag tag--ok">قالب جاهز نخصّصه</span></div>
+        <div class="status-row"><b>مشوار آسيا · Football Quest</b><span class="tag tag--build">قيد البناء · الإطلاق مخطط ديسمبر 2026</span></div>
+        <div class="status-row"><b>آخر من يصمد</b><span class="tag tag--build">قيد التطوير</span></div>
+        <div class="status-row"><b>لعنة أوس</b><span class="tag tag--soon">قريباً · بعد التراخيص</span></div>
+      </div>
+      <div class="faq-list" id="faqList"><!-- rendered from knowledge/faq.json + key entries --></div>
+      <form class="faq-ask" id="faqAsk">
+        <label for="faqInput" class="sr-only">اسأل نقطة</label>
+        <input id="faqInput" type="text" maxlength="300" placeholder="اكتب سؤالك لـ«نقطة»…" autocomplete="off">
+        <button class="btn btn--primary btn--sm" type="submit">اسأل</button>
+      </form>
+    </section>
+
+    <!-- ============ 11 · CONTACT & BOOKING ============ -->
+    <section class="scene contact" id="contact" data-scene="contact" aria-labelledby="contact-title">
+      <div class="portal" id="portal" data-state="idle" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><i></i>
+      </div>
+      <div class="contact__copy">
+        <p class="label" lang="en" dir="ltr">11 · BOOK · ASK · PARTNER</p>
+        <h2 class="h2" id="contact-title">كل تجربة عظيمة <em>تبدأ بتواصل.</em></h2>
+        <p class="lead">اختر نوع طلبك، ونجهّز لك رسالة واتساب للفريق. الحجز يتأكد لما يرد عليك الفريق — ما فيه تأكيد تلقائي.</p>
+        <div class="contact-options" role="group" aria-label="وش نوع طلبك؟">
+          <button type="button" class="option" data-type="booking" aria-pressed="false"><span class="num">A</span><b>حجز تجربة</b><span>لي ولشلّتي</span></button>
+          <button type="button" class="option" data-type="corporate" aria-pressed="false"><span class="num">B</span><b>لعبة لعلامتنا</b><span>حملة أو تجربة مخصّصة</span></button>
+          <button type="button" class="option" data-type="event" aria-pressed="false"><span class="num">C</span><b>فعالية</b><span>مؤتمر، معرض، إطلاق، موسم</span></button>
+          <button type="button" class="option" data-type="partnership" aria-pressed="false"><span class="num">D</span><b>شراكة</b><span>جهة أو وكالة تبي تتعاون</span></button>
+        </div>
+        <div class="direct-row">
+          <a class="btn btn--ghost" id="waDirect" href="https://wa.me/966565952065" target="_blank" rel="noopener">واتساب مباشر</a>
+          <a class="btn btn--ghost" href="tel:+966565952065"><span dir="ltr">+966 56 595 2065</span></a>
+          <span class="direct-city">جدة · المملكة العربية السعودية</span>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm" novalidate hidden aria-labelledby="formTitle">
+        <h3 class="h3" id="formTitle">جهّز طلبك</h3>
+        <p class="form-note">نستخدم بياناتك بس عشان يرد عليك الفريق. الموقع ما يحفظها — الرسالة تنفتح في واتساب عندك وإنت اللي ترسلها.</p>
+        <div class="field">
+          <label for="fType">نوع الطلب</label>
+          <select id="fType" name="type">
+            <option value="booking">حجز تجربة</option>
+            <option value="corporate">لعبة لعلامتنا</option>
+            <option value="event">فعالية</option>
+            <option value="custom">لعبة مخصّصة</option>
+            <option value="partnership">شراكة</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fName">اسمك <span aria-hidden="true">*</span></label>
+          <input id="fName" name="name" type="text" autocomplete="name" required maxlength="80" aria-describedby="eName">
+          <p class="field__error" id="eName"></p>
+        </div>
+        <div class="field">
+          <label for="fPhone">جوالك <span aria-hidden="true">*</span></label>
+          <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" required maxlength="20" placeholder="05xxxxxxxx" aria-describedby="ePhone">
+          <p class="field__error" id="ePhone"></p>
+        </div>
+        <div class="field">
+          <label for="fExp">التجربة اللي تهمك</label>
+          <select id="fExp" name="experience">
+            <option value="">لسه ما قررت — ساعدوني</option>
+            <option value="choice-room">غرفة الاختيار</option>
+            <option value="curse-of-os">لعنة أوس (قريباً · +18)</option>
+            <option value="last-standing">آخر من يصمد (قيد التطوير)</option>
+            <option value="asia-journey">مشوار آسيا · Football Quest (قيد البناء)</option>
+            <option value="custom">تجربة مخصّصة</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fCount">عدد المشاركين</label>
+            <input id="fCount" name="count" type="number" min="1" max="100000" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="fDate">التاريخ المفضّل</label>
+            <input id="fDate" name="date" type="date">
+          </div>
+        </div>
+        <div class="field" data-for="corporate event custom partnership">
+          <label for="fOrg">الجهة أو الشركة</label>
+          <input id="fOrg" name="org" type="text" autocomplete="organization" maxlength="100">
+        </div>
+        <div class="field" data-for="event">
+          <label for="fEventType">نوع الفعالية</label>
+          <select id="fEventType" name="eventType">
+            <option value="">—</option><option>فعالية شركة</option><option>مؤتمر أو معرض</option><option>إطلاق منتج</option><option>موسم أو مهرجان</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fMsg">وش في بالك؟</label>
+          <textarea id="fMsg" name="message" rows="3" maxlength="600"></textarea>
+        </div>
+        <div class="cta-row">
+          <button class="btn btn--primary" type="submit" id="fSubmit">جهّز رسالة الواتساب</button>
+          <button class="btn btn--ghost" type="button" id="fCancel">إلغاء</button>
+        </div>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        <div class="composed" id="composed" hidden>
+          <label for="composedText" class="composed__label">نص الرسالة</label>
+          <textarea id="composedText" rows="7" readonly></textarea>
+          <div class="cta-row">
+            <a class="btn btn--primary btn--sm" id="waLink" href="#" target="_blank" rel="noopener">افتح واتساب وأرسل</a>
+            <button class="btn btn--ghost btn--sm" type="button" id="copyBtn">انسخ الرسالة</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ 09 · END (outro trigger) ============ -->
+    <section class="scene end" id="end" data-scene="end" aria-labelledby="end-title">
+      <div class="floor end__floor" aria-hidden="true"><div class="floor__grid"></div></div>
+      <p class="label" lang="en" dir="ltr">THE GAME HAS STARTED</p>
+      <h2 class="h2" id="end-title">ما دخلت عشان تتفرّج.</h2>
+      <p class="lead end__lead">دخلت عشان تختار اللعبة. والخطوة الجاية… قرارك.</p>
+      <div class="cta-row end__cta"><a class="btn btn--primary" href="#contact" data-book="booking">احجز تجربة</a><a class="btn btn--ghost" href="#contact" data-book="corporate">لعبة لعلامتك</a></div>
+      <p class="credits" lang="en" dir="ltr">USER-X · INTERACTIVE ENTERTAINMENT · JEDDAH, KSA</p>
+      <button class="btn btn--ghost btn--sm end__replay" type="button" id="replayOutro">أعد المشهد الأخير</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="assets/logo/usersx-symbol.svg" alt="" width="20" height="20">
+    <p><span lang="en" dir="ltr">© 2026 USER-X · EVERY USER IS THE X</span> · <span>جدة</span> · <a href="tel:+966565952065" dir="ltr">+966 56 595 2065</a></p>
+  </footer>
+
+  <!-- Guide dock (contextual, dismissible) -->
+  <aside class="dock" id="dock" aria-label="نقطة — الدليل" hidden>
+    <div class="dock__bubble" id="dockBubble" hidden><span class="bubble__text" aria-hidden="true"></span></div>
+    <span class="dock__avatar" id="avatarDock"></span>
+    <button class="dock__close" type="button" id="dockClose" aria-label="اخفِ الدليل">×</button>
+  </aside>
+  <p class="sr-only" id="dockSay" role="status" aria-live="polite"></p>
+
+
+
+  <!-- ============ TRAILER (loads only when opened) ============ -->
+  <dialog class="trailer" id="trailer" aria-labelledby="trailerTitle">
+    <div class="trailer__bar"><h2 class="trailer__title" id="trailerTitle">تريلر يوزر إكس</h2>
+      <button class="icon-btn" type="button" id="trailerClose" aria-label="سكّر التريلر"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg></button>
+    </div>
+    <video id="trailerVideo" controls playsinline preload="none" poster="assets/video/user-x-trailer-poster.jpg" width="960" height="540"></video>
+    <p class="trailer__note">تريلر هوية مولّد بالكود من عناصر العلامة — مو لقطات لعب حقيقية.</p>
+  </dialog>
+  <!-- ============ NUQTA · roaming host + chat ============ -->
+  <div class="roam" id="roam" aria-hidden="true">
+    <div class="roam__body" id="roamBody"><span class="roam__avatar" id="roamAvatar"></span></div>
+    <div class="roam__bubble" id="roamBubble" hidden><span class="bubble__text"></span></div>
+  </div>
+  <button class="nq-launch" type="button" id="nqLaunch" aria-expanded="false" aria-controls="nqChat">
+    <span class="nq-launch__face" aria-hidden="true"></span><span class="nq-launch__label">اسأل نقطة</span>
+  </button>
+  <section class="nq-chat" id="nqChat" role="dialog" aria-modal="false" aria-labelledby="nqTitle" hidden>
+    <header class="nq-chat__head">
+      <span class="nq-chat__avatar" id="nqChatAvatar" aria-hidden="true"></span>
+      <div><h2 class="nq-chat__title" id="nqTitle">نقطة</h2><p class="nq-chat__mode" id="nqMode">يجهّز نفسه…</p></div>
+      <div class="nq-chat__tools">
+        <button class="icon-btn" type="button" id="nqVoice" aria-pressed="false" aria-label="تشغيل صوت نقطة">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z"/><path class="ico-waves" d="M11 5h1v1h-1zM12 6h1v4h-1zM11 10h1v1h-1z"/></svg>
+        </button>
+        <button class="icon-btn" type="button" id="nqStop" aria-label="أوقف الكلام" hidden>
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M4 4h8v8H4z"/></svg>
+        </button>
+        <button class="icon-btn" type="button" id="nqClose" aria-label="سكّر المحادثة">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg>
+        </button>
+      </div>
+    </header>
+    <ol class="nq-log" id="nqLog" aria-live="polite"></ol>
+    <div class="nq-quick" id="nqQuick" role="group" aria-label="اقتراحات سريعة">
+      <button type="button" data-q="وش هي يوزر إكس؟">وش هي يوزر إكس؟</button>
+      <button type="button" data-q="أبي ألعب مع شلّتي، وش تنصحني؟">ألعب مع شلّتي</button>
+      <button type="button" data-q="عندنا علامة تجارية ونبي لعبة لحملتنا">لعبة لعلامتنا</button>
+      <button type="button" data-q="عندي فعالية، وش يناسبها؟">عندي فعالية</button>
+      <button type="button" data-q="كيف أحجز؟">كيف أحجز؟</button>
+      <button type="button" data-q="What is USER-X?" lang="en" dir="ltr">English</button>
+    </div>
+    <form class="nq-input" id="nqForm">
+      <label for="nqText" class="sr-only">رسالتك لنقطة</label>
+      <input id="nqText" type="text" maxlength="600" autocomplete="off" placeholder="اكتب لنقطة…">
+      <button class="icon-btn" type="button" id="nqMic" aria-pressed="false" aria-label="تكلّم بصوتك" hidden>
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M6 1h4v8H6zM4 7h1v2h1v1h4V9h1V7h1v3h-1v1H9v2h2v2H5v-2h2v-2H5v-1H4z"/></svg>
+      </button>
+      <button class="btn btn--primary btn--sm" type="submit">أرسل</button>
+    </form>
+    <p class="nq-chat__foot">نقطة يجاوب من معلومات يوزر إكس المؤكدة بس. الأسعار والحجوزات يأكدها الفريق على الواتساب.</p>
+  </section>
+
+  <!-- ============ OUTRO ============ -->
+  <dialog class="outro" id="outro" aria-labelledby="outroTitle" aria-describedby="outroLines">
+    <div class="floor outro__floor" aria-hidden="true"><div class="floor__grid"></div></div>
+    <div class="outro__top">
+      <button class="btn btn--ghost btn--sm" type="button" id="outroSkip">تخطَّ</button>
+      <button class="icon-btn" type="button" id="outroClose" aria-label="سكّر المشهد">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg>
+      </button>
+    </div>
+    <div class="outro__signal" aria-hidden="true"></div>
+    <div class="outro__avatar" id="avatarOutro" aria-hidden="true"></div>
+    <div class="outro__lines" id="outroLines">
+      <p class="outro__line" data-step="1"><span class="ar">شفت العالم.</span><span class="en" lang="en" dir="ltr">YOU'VE SEEN THE WORLD.</span></p>
+      <p class="outro__line" data-step="2"><span class="ar">الحين دورك.</span><span class="en" lang="en" dir="ltr">NOW IT'S YOUR TURN.</span></p>
+      <p class="outro__line outro__line--speak" data-step="3"><span class="ar">اللعبة بدأت.</span><span class="en" lang="en" dir="ltr">THE GAME HAS STARTED.</span></p>
+      <h2 class="outro__line outro__final" data-step="4" id="outroTitle" tabindex="-1"><span class="ar">قرارك.</span><span class="en" lang="en" dir="ltr">YOUR CHOICE.</span></h2>
+    </div>
+    <div class="outro__choices" data-step="5" role="group" aria-label="اختر خطوتك الجاية">
+      <button type="button" class="choice" data-choice="play"><span class="label" lang="en" dir="ltr">ENTER THE GAME</span><b>ادخل اللعبة</b><span class="choice__hint">نموذج مصغّر توضيحي</span></button>
+      <button type="button" class="choice" data-choice="explore"><span class="label" lang="en" dir="ltr">EXPLORE OUR WORLD</span><b>استكشف عالمنا</b><span class="choice__hint">ارجع للتجارب</span></button>
+      <button type="button" class="choice" data-choice="create"><span class="label" lang="en" dir="ltr">CREATE SOMETHING WITH US</span><b>اصنع شي معنا</b><span class="choice__hint">افتح بوابة التواصل</span></button>
+    </div>
+    <div class="outro__after" data-step="5">
+      <button class="btn btn--ghost btn--sm" type="button" id="outroReplay">أعد المشهد</button>
+    </div>
+  </dialog>
+
+  <!-- ============ PLAYABLE PROTOTYPE ============ -->
+  <dialog class="play" id="play" aria-labelledby="playTitle">
+    <div class="play__head">
+      <div>
+        <p class="label" lang="en" dir="ltr">PROTOTYPE · NOT A RELEASED GAME</p>
+        <h2 class="h2" id="playTitle">اختر باب واحد</h2>
+      </div>
+      <button class="icon-btn" type="button" id="playClose" aria-label="سكّر النموذج">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg>
+      </button>
+    </div>
+    <p class="play__note">تجربة مصغّرة توضّح فكرة «اختر باب واحد» من تصميم تطبيق يوزر إكس. مو لعبة كاملة ولا منشورة.</p>
+    <div class="play__hud">
+      <span class="num">ROUND <b id="playRound">1</b>/3</span>
+      <span class="num play__timer" id="playTimer" aria-hidden="true">00:10</span>
+      <span class="num">نقاط <b id="playScore">0</b></span>
+    </div>
+    <p class="play__prompt" id="playPrompt">الباب الثاني ينقفل للأبد.</p>
+    <div class="play__doors" id="playDoors">
+      <button type="button" class="door door--right" data-door="right"><span class="num">01</span><b>الباب الأيمن</b></button>
+      <button type="button" class="door door--left" data-door="left"><span class="num">02</span><b>الباب الأيسر</b></button>
+    </div>
+    <p class="play__result" id="playResult" role="status" aria-live="polite"></p>
+    <div class="play__end" id="playEnd" hidden>
+      <button class="btn btn--primary" type="button" id="playAgain">العب مرة ثانية</button>
+      <a class="btn btn--ghost" href="#contact" id="playContact" data-contact-type="project">اطلب تجربة كاملة لفعاليتك</a>
+    </div>
+  </dialog>
+</body>
+</html>

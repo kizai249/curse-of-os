@@ -1,0 +1,154 @@
+{
+ "topic": "company",
+ "entries": [
+  {
+   "id": "what-is",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "USERS-X.html (الموقع السابق المرفوع)"
+   ],
+   "keywords": [
+    "يوزر إكس",
+    "وش هي",
+    "وش انتم",
+    "مين انتم",
+    "what is user-x",
+    "who are you",
+    "about",
+    "شركة",
+    "تعريف"
+   ],
+   "answer_ar": "يوزر إكس شركة ترفيه تفاعلي في السعودية. نصمّم ونشغّل تجارب وتحديات تفاعلية بطابع نفسي وتنافسي للشركات والجهات والفعاليات — رقمي على الجوال وحضوري في المكان بنفس اللحظة. جملتنا: ما تتفرّج… إنت اللعبة.",
+   "answer_en": "USER-X is an interactive entertainment company in Saudi Arabia. We design and run hybrid interactive experiences and challenges with a psychological, competitive edge for companies, organisations and events — on the phone and in the venue at the same moment. You don't watch. You are the game."
+  },
+  {
+   "id": "name",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "كتاب الهوية 2026"
+   ],
+   "keywords": [
+    "الاسم",
+    "معنى الاسم",
+    "ليش اسمكم",
+    "name meaning",
+    "x",
+    "اكس"
+   ],
+   "answer_ar": "الاسم مبني على فكرة: «يوزر» هم الناس، و«إكس» هي اللحظة اللي تتقاطع فيها خياراتهم. والشعار زر اتجاهات مايل صار X: كل سهم خيار، والمربّع الماجنتا في القلب هو إنت. جملتنا: كل لاعب هو نقطة التقاطع.",
+   "answer_en": "\"User\" is the people, and \"X\" is the moment their choices cross. The logo is a tilted D-pad that became an X: each arrow is a choice, and the magenta square at its heart is you. Every player is the point of intersection."
+  },
+  {
+   "id": "vision",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "رؤية",
+    "رؤيتكم",
+    "vision",
+    "هدف"
+   ],
+   "answer_ar": "رؤيتنا: كل فعالية في السعودية يكون فيها لاعب، مو جمهور.",
+   "answer_en": "Our vision: every event in Saudi Arabia has players, not an audience."
+  },
+  {
+   "id": "mission",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "رسالة",
+    "mission",
+    "وش تسوون",
+    "what do you do"
+   ],
+   "answer_ar": "نحوّل الحضور لمشاركين: نصمّم ونشغّل تجارب هجينة — الجوال والمكان بنفس اللحظة — ونعطي الجهات تفاعل تقدر تقيسه.",
+   "answer_en": "We turn attendees into participants: hybrid experiences (phone + venue at the same moment) and engagement partners can measure."
+  },
+  {
+   "id": "audience",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "USERS-X.html (الموقع السابق المرفوع)"
+   ],
+   "keywords": [
+    "لمين",
+    "جمهور",
+    "جيل زد",
+    "gen z",
+    "target",
+    "who is it for"
+   ],
+   "answer_ar": "نشتغل لجهتين: اللاعبين — جيل زد في السعودية اللي يبي يعيش التجربة ويشاركها — والشركاء: الشركات والجهات والفعاليات اللي تبي جمهورها يشارك، مو بس يحضر.",
+   "answer_en": "Two sides: players — Saudi Gen Z who want to live and share the experience — and partners: companies, organisations and events that want their audience to take part, not just attend."
+  },
+  {
+   "id": "hybrid",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "هجين",
+    "70/30",
+    "رقمي",
+    "حضوري",
+    "hybrid",
+    "how does it work"
+   ],
+   "answer_ar": "نموذجنا هجين: جزء رقمي على جوال اللاعب (دخول بكود الفعالية أو رقم الجوال، تذكرة رقمية، جولات حيّة بعدّاد) وجزء حضوري في المكان (ألغاز، أبواب، طاقم). تقريباً ٧٠٪ رقمي و٣٠٪ حضوري، وكل قرار يوصل للتطبيق وشاشة المسرح ولوحة الجهة بنفس اللحظة.",
+   "answer_en": "Hybrid model: a digital part on the player's phone (join with an event code or phone number, digital ticket, live timed rounds) and an in-venue part (puzzles, doors, crew). Roughly 70% digital / 30% physical; every decision reaches the app, the stage screen and the partner dashboard at once."
+  },
+  {
+   "id": "location",
+   "status": "confirmed",
+   "source": [
+    "تعليمات المالك (نوفمبر 2026)"
+   ],
+   "keywords": [
+    "وين",
+    "موقع",
+    "مكان",
+    "المدينة",
+    "جدة",
+    "where",
+    "location",
+    "city",
+    "jeddah",
+    "riyadh",
+    "الرياض"
+   ],
+   "answer_ar": "موقعنا في جدة، المملكة العربية السعودية. التجارب تنشغّل في مكان الفعالية نفسها أو أونلاين حسب الاتفاق.",
+   "answer_en": "We are based in Jeddah, Saudi Arabia. Experiences run at the event venue itself or online, as agreed.",
+   "note": "المواد الأقدم (الموقع وعرض الشركاء) كانت تقول «الرياض». المالك أكّد جدة في نوفمبر 2026."
+  },
+  {
+   "id": "history",
+   "status": "missing",
+   "source": [],
+   "keywords": [
+    "تاريخ",
+    "متى تأسست",
+    "founded",
+    "history",
+    "كم سنة",
+    "عملاء",
+    "clients",
+    "partners list",
+    "جوائز",
+    "awards"
+   ],
+   "answer_ar": "ما عندي معلومات مؤكدة عن تاريخ التأسيس أو قائمة عملاء أو جوائز، وما راح أخترع شي. الفريق يقدر يجاوبك مباشرة على الواتساب.",
+   "answer_en": "I don't have confirmed information about founding date, client list or awards, and I won't make it up. The team can answer directly on WhatsApp."
+  }
+ ]
+}

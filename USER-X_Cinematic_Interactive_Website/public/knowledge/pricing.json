@@ -1,0 +1,73 @@
+{
+ "topic": "pricing",
+ "packages": [
+  {
+   "id": "branch",
+   "name_ar": "تجربة فرع",
+   "tag_ar": "ابدأ صغير",
+   "items_ar": [
+    "فرع أو فرعين",
+    "رمز فرع يومي وقسائم",
+    "تقرير نهاية التجربة"
+   ],
+   "price_ar": "نحدده معك حسب المدة"
+  },
+  {
+   "id": "season",
+   "name_ar": "حملة موسم كامل",
+   "tag_ar": "الموسم",
+   "items_ar": [
+    "كل فروعك المشاركة",
+    "زيارات محققة وقسائم وسلسلة زيارات",
+    "لوحة شركاء وتقارير يومية مجمّعة"
+   ],
+   "price_ar": "حسب عدد الفروع والمدة"
+  },
+  {
+   "id": "world",
+   "name_ar": "عالم لعبة خاص",
+   "tag_ar": "عالمك",
+   "items_ar": [
+    "قالب من عوالمنا بهوية فعاليتك",
+    "للشركات والفعاليات الجماعية",
+    "تشغيل في المكان أو أونلاين"
+   ],
+   "price_ar": "حسب الفعالية"
+  }
+ ],
+ "entries": [
+  {
+   "id": "price",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "سعر",
+    "اسعار",
+    "كم",
+    "تكلفة",
+    "بكم",
+    "price",
+    "cost",
+    "how much",
+    "باقات",
+    "packages"
+   ],
+   "answer_ar": "ما فيه أسعار منشورة. عندنا ثلاث طرق: تجربة فرع (السعر حسب المدة)، حملة موسم كامل (حسب عدد الفروع والمدة)، وعالم لعبة خاص (حسب الفعالية). الفريق يعطيك تقدير مبدئي بعد ما يعرف تفاصيلك — أرسل لهم على الواتساب.",
+   "answer_en": "No published prices. Three ways to work together: branch pilot (priced by duration), full-season campaign (by branches and duration), private game world (per event). The team gives an initial estimate once they know your details — message them on WhatsApp."
+  },
+  {
+   "id": "ticket-price",
+   "status": "missing",
+   "source": [],
+   "keywords": [
+    "سعر التذكرة",
+    "تذكرة",
+    "ticket price"
+   ],
+   "answer_ar": "سعر تذاكر التجارب للأفراد غير معلن عندي. لعنة أوس مثلاً تنطلق بتذاكر بعد التراخيص. اسأل الفريق على الواتساب وبيبلغونك.",
+   "answer_en": "Individual ticket prices aren't published. Curse of OS will be ticketed after licensing. Ask the team on WhatsApp."
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "topic": "brand",
+ "name_ar": "يوزر إكس",
+ "name_en": "USER-X",
+ "line_ar": "كل لاعب هو نقطة التقاطع",
+ "tagline_ar": "ما تتفرّج. إنت اللعبة.",
+ "colors": {
+  "bone": "#F4F4F1",
+  "void": "#0B0B0F",
+  "cyan": "#00DEE6",
+  "magenta": "#F54BF7"
+ },
+ "fonts": [
+  "Kufam",
+  "IBM Plex Sans Arabic",
+  "Handjet",
+  "Space Mono"
+ ],
+ "character": {
+  "name_ar": "نقطة",
+  "name_en": "Nuqta",
+  "origin_ar": "اسمه من جملة «كل لاعب هو نقطة التقاطع». لابس هودي العلامة، وفي قلبه مربّع ماجنتا يمثّلك إنت."
+ },
+ "entries": [
+  {
+   "id": "nuqta",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "نقطة",
+    "مين انت",
+    "who are you nuqta",
+    "اسمك"
+   ],
+   "answer_ar": "أنا نقطة، دليلك في عالم يوزر إكس. اسمي من جملتنا «كل لاعب هو نقطة التقاطع»، والمربّع الماجنتا اللي في قلبي يمثّلك إنت… لا تتحمس، هو مربّع بس.",
+   "answer_en": "I'm Nuqta, your guide in the USER-X world. My name comes from \"every player is the point of intersection\", and the magenta square in my chest is you… don't get excited, it's just a square."
+  }
+ ]
+}

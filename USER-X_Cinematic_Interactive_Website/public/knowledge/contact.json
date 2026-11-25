@@ -1,0 +1,35 @@
+{
+ "topic": "contact",
+ "phone": "+966565952065",
+ "phone_display": "+966 56 595 2065",
+ "whatsapp": "966565952065",
+ "city_ar": "جدة، المملكة العربية السعودية",
+ "city_en": "Jeddah, Saudi Arabia",
+ "email": null,
+ "email_note": "البريد الرسمي غير مؤكد بعد (العنوان في المواد السابقة كان مؤقت).",
+ "entries": [
+  {
+   "id": "contact",
+   "status": "confirmed",
+   "source": [
+    "تعليمات المالك (نوفمبر 2026)"
+   ],
+   "keywords": [
+    "تواصل",
+    "رقم",
+    "جوال",
+    "واتساب",
+    "اتصال",
+    "contact",
+    "phone",
+    "whatsapp",
+    "call",
+    "email",
+    "ايميل",
+    "بريد"
+   ],
+   "answer_ar": "تقدر تكلمنا على الواتساب أو الجوال: ‎+966 56 595 2065، وموقعنا جدة. البريد الرسمي ما تأكد عندي بعد.",
+   "answer_en": "WhatsApp or call: +966 56 595 2065. We are in Jeddah. The official email isn't confirmed yet."
+  }
+ ]
+}

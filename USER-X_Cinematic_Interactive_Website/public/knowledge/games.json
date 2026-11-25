@@ -1,0 +1,102 @@
+{
+ "topic": "games",
+ "note": "الحالات حسب قسم «وش جاهز… ووش قريب» في عرض الشركاء (الأحدث). الموقع السابق كان يعرض لعنة أوس «مباشر» — اعتمدنا الأحفظ.",
+ "games": [
+  {
+   "id": "curse-of-os",
+   "title_ar": "لعنة أوس",
+   "title_en": "Curse of OS",
+   "status": "soon",
+   "status_ar": "قريباً — تنطلق بعد التراخيص",
+   "genre_ar": "رعب نفسي · غموض · هجين 70/30",
+   "players": "4–6",
+   "duration_min": 90,
+   "age": "+18",
+   "tagline_ar": "اللغز ما ينحل… يتورث.",
+   "premise_ar": "طفل محبوس في نظام عمره أجيال ترك لكم فخ. ٩٠ دقيقة، من ٤ إلى ٦ لاعبين، وباب واحد يطلعكم.",
+   "how_ar": "فكّوا الشيفرة قبل ما تنطفي الشمعة — «اسمي مكتوب على الباب… بس ناقصه حرف». ٣ فصول وتلميح واحد للفريق.",
+   "warning_ar": "أجواء رعب نفسي وأصوات مفاجئة. للكبار +18 فقط.",
+   "best_for_ar": "الشلّة والتحدي الليلي وتجارب بتذاكر",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ]
+  },
+  {
+   "id": "choice-room",
+   "title_ar": "غرفة الاختيار",
+   "title_en": "The Choice Room",
+   "status": "template",
+   "status_ar": "قالب جاهز نخصّصه للجهة",
+   "genre_ar": "قرارات · فرق · ضغط نفسي",
+   "players": "فريقين",
+   "rounds": "12 قرار في الجولة",
+   "per_decision": "30 ثانية",
+   "tagline_ar": "بابين. قرار واحد.",
+   "premise_ar": "فريقين، بابين، وقرار واحد يتاخذ خلال ٣٠ ثانية. اللي يختار غلط… يطلع.",
+   "how_ar": "كل جولة ١٢ قرار، ولكل قرار ٣٠ ثانية: الباب 01 أو الباب 02.",
+   "best_for_ar": "فرق الشركات والفعاليات الجماعية وبناء الفريق",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ]
+  },
+  {
+   "id": "last-standing",
+   "title_ar": "آخر من يصمد",
+   "title_en": "Last One Standing",
+   "status": "in-development",
+   "status_ar": "قيد التطوير",
+   "genre_ar": "تحمّل · جماعي · إقصاء",
+   "players": "16",
+   "stages": 5,
+   "round": "00:59",
+   "tagline_ar": "كل دقيقة تطلع لاعب.",
+   "premise_ar": "١٦ لاعب على الأرض، وكل دقيقة يطلع واحد… واحد بس يصمد للآخر.",
+   "how_ar": "اضغط وثبّت — إذا رفعت إصبعك عن الشاشة تطلع. خمس مراحل والعدّاد ما يرحم.",
+   "best_for_ar": "الفعاليات الكبيرة والتحدي الجماهيري",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ]
+  },
+  {
+   "id": "asia-journey",
+   "title_ar": "مشوار آسيا",
+   "title_en": "Football Quest",
+   "status": "building",
+   "status_ar": "قيد البناء — الإطلاق مخطط ديسمبر 2026 قبل الموسم الكروي في يناير",
+   "genre_ar": "كورة · جوال · تعاوني",
+   "tagline_ar": "منتخبنا يجمعنا.",
+   "premise_ar": "امشِ خريطة المباريات مع شلّتك، مباراة بعد مباراة.",
+   "how_ar": "العب المباراة، اجمع العملات، وافتح قسائم تنصرف في فروع الشركاء. لعبة غير رسمية: بدون شعارات أو لاعبين حقيقيين.",
+   "best_for_ar": "العلامات اللي عندها فروع وتبي زيارات محققة وقسائم مستردة",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)",
+    "كتاب الهوية 2026"
+   ]
+  }
+ ],
+ "entries": [
+  {
+   "id": "games-list",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "التجارب",
+    "الالعاب",
+    "وش عندكم",
+    "games",
+    "experiences",
+    "list"
+   ],
+   "answer_ar": "عندنا أربع عوالم: لعنة أوس (رعب نفسي +18، قريباً بعد التراخيص)، غرفة الاختيار (قالب قرارات للفرق، جاهز نخصّصه)، آخر من يصمد (تحدي جماهيري، قيد التطوير)، ومشوار آسيا — Football Quest (لعبة جوال كورة، قيد البناء والإطلاق مخطط ديسمبر 2026).",
+   "answer_en": "Four worlds: Curse of OS (18+ psychological horror, coming after licensing), The Choice Room (decision template for teams, ready to customise), Last One Standing (crowd challenge, in development) and Asia Journey — Football Quest (football phone game, in build, launch planned December 2026)."
+  }
+ ]
+}

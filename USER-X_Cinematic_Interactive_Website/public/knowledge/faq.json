@@ -1,0 +1,70 @@
+{
+ "topic": "faq",
+ "entries": [
+  {
+   "id": "faq-online",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "USERS-X.html (الموقع السابق المرفوع)"
+   ],
+   "keywords": [
+    "اونلاين",
+    "عن بعد",
+    "online",
+    "remote"
+   ],
+   "answer_ar": "نعم، القوالب تنعاش في الفعالية أو أونلاين حسب الاتفاق.",
+   "answer_en": "Yes — templates run at the venue or online, as agreed."
+  },
+  {
+   "id": "faq-size",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "كم شخص",
+    "عدد",
+    "لاعبين",
+    "players",
+    "how many people",
+    "group size"
+   ],
+   "answer_ar": "يختلف حسب التجربة: لعنة أوس ٤–٦ لاعبين، آخر من يصمد ١٦ لاعب على الأرض، غرفة الاختيار فريقين، ومتوسط الجولة الجماعية في حملات الفروع ٣+ لاعبين. للفعاليات الكبيرة الفريق يحدد الصيغة معك.",
+   "answer_en": "Depends: Curse of OS 4–6, Last One Standing 16 on the floor, The Choice Room two teams, branch group rounds 3+ on average. For large events the team designs the format with you."
+  },
+  {
+   "id": "faq-duration",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/index.html + script.js (موقع يوزر إكس)"
+   ],
+   "keywords": [
+    "مدة",
+    "كم تاخذ",
+    "وقت",
+    "duration",
+    "how long"
+   ],
+   "answer_ar": "لعنة أوس ٩٠ دقيقة. غرفة الاختيار ٣٠ ثانية لكل قرار و١٢ قرار في الجولة. آخر من يصمد خمس مراحل وكل جولة دقيقة. مدد التجارب المخصّصة تتحدد مع الجهة.",
+   "answer_en": "Curse of OS: 90 minutes. The Choice Room: 30 s per decision, 12 per round. Last One Standing: five stages, one-minute rounds. Custom experiences are scoped with you."
+  },
+  {
+   "id": "faq-app",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)"
+   ],
+   "keywords": [
+    "تطبيق",
+    "app",
+    "download",
+    "تحميل"
+   ],
+   "answer_ar": "تطبيق اللاعب يربطك بالفعالية: دخول بكود الفعالية أو رقم الجوال، تذكرة رقمية، جولات حيّة بعدّاد، ومستويات وشارات وسجلّ. التطبيق ما هو منشور في المتاجر حالياً حسب معلوماتي.",
+   "answer_en": "The player app links you to the event: join with event code or phone number, digital ticket, live timed rounds, levels, badges and history. As far as I know it isn't published in app stores yet."
+  }
+ ]
+}

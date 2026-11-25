@@ -1,0 +1,56 @@
+{
+ "topic": "policies",
+ "entries": [
+  {
+   "id": "privacy",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "خصوصية",
+    "بيانات",
+    "privacy",
+    "data",
+    "أمان"
+   ],
+   "answer_ar": "بيانات اللعب والمحافظ والقسائم داخل المملكة (منطقة الدمام السحابية)، والشريك يشوف أرقام مجمّعة مو بيانات أشخاص، وما نبيع بيانات أحد.",
+   "answer_en": "Gameplay, wallet and coupon data stays in the Kingdom (Dammam cloud region); partners see aggregated numbers, not individuals; we don't sell anyone's data."
+  },
+  {
+   "id": "minors",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/partners/index.html (عرض الشركاء)",
+    "users-x-web/index.html + script.js (موقع يوزر إكس)"
+   ],
+   "keywords": [
+    "عمر",
+    "اعمار",
+    "أطفال",
+    "قاصر",
+    "age",
+    "kids",
+    "minors",
+    "+18"
+   ],
+   "answer_ar": "فيه بوابة عمر: أقل من ١٥ سنة ما يسجّل، ومن ١٥ إلى ١٧ بقيود. ولعنة أوس للكبار +18 فقط لأنها رعب نفسي.",
+   "answer_en": "Age gate: under 15 can't register, 15–17 with restrictions. Curse of OS is 18+ only (psychological horror)."
+  },
+  {
+   "id": "site-data",
+   "status": "confirmed",
+   "source": [
+    "تعليمات المالك (نوفمبر 2026)"
+   ],
+   "keywords": [
+    "الموقع يحفظ",
+    "cookies",
+    "كوكيز",
+    "المحادثة"
+   ],
+   "answer_ar": "هذا الموقع ما يحفظ بياناتك عنده: نموذج الطلب يفتح الواتساب برسالة جاهزة، والمحادثة معي تمر على خادم الموقع بدون تخزين دائم.",
+   "answer_en": "This site doesn't store your data: the request form opens WhatsApp with a prepared message, and chats with me pass through the site server without permanent storage."
+  }
+ ]
+}

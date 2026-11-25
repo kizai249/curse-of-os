@@ -1,0 +1,16 @@
+{
+  "name": "user-x-cinematic-interactive-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "USER-X cinematic interactive website with the Nuqta AI character",
+  "main": "server/server.js",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node --test tests/server.test.cjs",
+    "test:e2e": "node tests/e2e.cjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.14.0"
+  }
+}

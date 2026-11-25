@@ -1,0 +1,24 @@
+{
+ "topic": "booking",
+ "note": "لا يوجد نظام حجز فعلي. الموقع يجمع طلب حجز/استفسار ويرسله على الواتساب، والفريق هو اللي يؤكد.",
+ "entries": [
+  {
+   "id": "how-to-book",
+   "status": "confirmed",
+   "source": [
+    "تعليمات المالك (نوفمبر 2026)"
+   ],
+   "keywords": [
+    "حجز",
+    "احجز",
+    "كيف احجز",
+    "book",
+    "booking",
+    "reserve",
+    "موعد"
+   ],
+   "answer_ar": "الحجز يتم عن طريق الفريق مباشرة: عبّي نموذج الطلب هنا (الاسم، الجوال، نوع الطلب، عدد المشاركين، التاريخ المفضّل) وينفتح لك الواتساب برسالة جاهزة على ‎+966 56 595 2065. الحجز ما يتأكد إلا لما يرد عليك الفريق.",
+   "answer_en": "Booking goes through the team: fill in the request form (name, phone, request type, participants, preferred date) and WhatsApp opens with a ready message to +966 56 595 2065. A booking is only confirmed when the team replies."
+  }
+ ]
+}

@@ -1,0 +1,120 @@
+{
+ "topic": "services",
+ "entries": [
+  {
+   "id": "templates",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)"
+   ],
+   "keywords": [
+    "قوالب",
+    "قالب",
+    "templates",
+    "ready games"
+   ],
+   "answer_ar": "قوالب ألعاب جاهزة: تجارب أساسية تنبني مرة وحدة وتتخصّص لكل عميل بتكلفة أقل ووقت أسرع، وتنعاش في الفعالية أو أونلاين بهوية الجهة.",
+   "answer_en": "Ready game templates built once and customised per client — lower cost, faster launch, played at the event or online in the partner's identity."
+  },
+  {
+   "id": "custom",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "مخصص",
+    "تجربة مخصصة",
+    "لعبة خاصة",
+    "custom game",
+    "branded",
+    "brand activation",
+    "تفعيل",
+    "براند",
+    "علامة"
+   ],
+   "answer_ar": "تجارب مخصّصة للجهات: قصة وقواعد وهوية مصمّمة لحدث واحد — إطلاق منتج، مؤتمر، أو يوم فريق. ألوانكم ورسائلكم ومنتجكم يدخلون في قصة اللعبة نفسها بدل ما تكون إعلان على الجنب.",
+   "answer_en": "Custom experiences for organisations: story, rules and identity designed for one event — product launch, conference or team day. Your colours, messages and product live inside the game's story, not on a banner beside it."
+  },
+  {
+   "id": "ad-games",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "العاب اعلانية",
+    "حملة",
+    "موسم",
+    "قسائم",
+    "كوبون",
+    "فروع",
+    "campaign",
+    "coupons",
+    "branches",
+    "advergame"
+   ],
+   "answer_ar": "ألعاب إعلانية: ألعاب جوال مرتبطة بموسم أو شريك، فيها قسائم وفروع وتحديات تعاونية. اللاعب يقرب من فرعك، يمسح رمز الفرع اليومي، يلعب مع شلّته، ويستلم قسيمة برمز استرداد يُستخدم مرة وحدة — وتوصلك تقارير مجمّعة.",
+   "answer_en": "Advertising games: phone games tied to a season or partner, with coupons, branches and co-op challenges. Players visit your branch, scan the daily branch code, play with friends and get a single-use coupon — you get aggregated reports."
+  },
+  {
+   "id": "events",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "فعالية",
+    "مؤتمر",
+    "معرض",
+    "مهرجان",
+    "event",
+    "conference",
+    "festival",
+    "organizer"
+   ],
+   "answer_ar": "للفعاليات: نختار القالب المناسب للجمهور والمكان، نخصّصه بهوية الجهة، فريقنا يشغّل الجولات والشاشات والتطبيق على الأرض، ونسلّم تقرير بأرقام التفاعل. يناسب فعاليات الشركات، المؤتمرات والمعارض، إطلاق المنتجات، والمواسم والمهرجانات.",
+   "answer_en": "For events we pick the right template for the audience and venue, brand it, run rounds/screens/app on site, and deliver an engagement report. Fits corporate events, conferences and exhibitions, product launches, seasons and festivals."
+  },
+  {
+   "id": "reports",
+   "status": "confirmed",
+   "source": [
+    "USERS-X.html (الموقع السابق المرفوع)",
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "تقرير",
+    "قياس",
+    "مؤشرات",
+    "داشبورد",
+    "report",
+    "measure",
+    "kpi",
+    "dashboard"
+   ],
+   "answer_ar": "بعد كل فعالية تقرير للرعاة: عدد اللاعبين، مدة التفاعل، القرارات، ونسب الإكمال. وفي حملات الفروع: زيارات محققة، قسائم مستردة، ولاعبين يرجعون — كلها أرقام مجمّعة.",
+   "answer_en": "After each event: a sponsor report with player count, engagement time, decisions and completion rates. For branch campaigns: verified visits, redeemed coupons and returning players — all aggregated."
+  },
+  {
+   "id": "targets",
+   "status": "confirmed",
+   "source": [
+    "users-x-web/partners/index.html (عرض الشركاء)"
+   ],
+   "keywords": [
+    "نتائج",
+    "ارقام",
+    "نسبة",
+    "results",
+    "numbers",
+    "roi"
+   ],
+   "answer_ar": "الأرقام اللي نذكرها هي أهداف التجربة الأولى، مو نتائج سابقة: ٦٠٪+ من مسوحات رموز الفروع تكون زيارات محققة، ٤٠٪+ من القسائم تنسترد، ٣٥٪/١٥٪ لاعبين يرجعون في اليوم ١ واليوم ٧، و٣+ متوسط اللاعبين في الجولة الجماعية. تنراجع بعد أول ٧ أيام من الإطلاق.",
+   "answer_en": "These are first-pilot targets, not past results: 60%+ of branch-code scans become verified visits, 40%+ of coupons redeemed, 35%/15% day-1/day-7 return, 3+ average players per group round. Reviewed after the first 7 days."
+  }
+ ]
+}
