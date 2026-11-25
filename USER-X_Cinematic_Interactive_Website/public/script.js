@@ -396,11 +396,13 @@
       setInert(true);
       var hint = $('#introHint'); if (hint) hint.hidden = !!Settings.sound;
       if (!window.UXCinema) { this.leave(false); return; } // film script missing: go straight in
-      this.film = new window.UXCinema.Film($('#cinema'), {
-        reduced: reduced(),
-        audioCtx: function () { return Settings.sound && Sound.ctx && Sound.ctx.state === 'running' ? Sound.ctx : null; }
-      });
-      this.film.play(function () { self.leave(false); });
+      try {
+        this.film = new window.UXCinema.Film($('#cinema'), {
+          reduced: reduced(),
+          audioCtx: function () { return Settings.sound && Sound.ctx && Sound.ctx.state === 'running' ? Sound.ctx : null; }
+        });
+        this.film.play(function () { self.leave(false); });
+      } catch (e) { UX.errors.push('intro film: ' + e.message); this.film = null; this.leave(false); return; } // no canvas etc.: go straight in
       if (Settings.sound) Sound.enable().then(function () { self.syncScore(); });
       $('#skipIntro').focus({ preventScroll: true });
     },
