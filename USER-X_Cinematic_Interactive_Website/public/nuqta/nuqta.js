@@ -414,7 +414,7 @@
       u.onstart = function () { self.start(); };
       u.onend = u.onerror = function () { self.done(); };
       this.utter = u;
-      window.speechSynthesis.speak(u);
+      try { window.speechSynthesis.speak(u); } catch (e) { NQ.errors.push('speech: ' + e.message); this.done(); return false; }
       return true;
     },
     // Speech-to-text (Chrome/Edge/Safari). Hidden when unsupported.
