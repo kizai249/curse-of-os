@@ -5,8 +5,8 @@
  *           frequency is a setting (lively / calm / off), reduced-motion = no running.
  *   Chat  : «اسأل نقطة» panel. Talks to /api/nuqta (Claude, server-side key) and falls
  *           back to the offline brain (knowledge/*.json) when the AI is unavailable.
- *   Voice : optional. Server TTS (/api/tts) when configured, else the browser voice.
- *           Voice input through the Web Speech API where the browser supports it.
+ *   Mic   : Nuqta never speaks aloud (text bubbles only). The visitor may dictate a question
+ *           through the Web Speech API where the browser supports it.
  * Depends on script.js (window.__ux) and nuqta/brain.js (window.NuqtaBrain).
  */
 (function () {
@@ -17,15 +17,14 @@
   var store = UX.store || { get: function (k, f) { return f; }, set: function () {} };
   var reduced = UX.reduced || function () { return false; };
   var brain = new window.NuqtaBrain.Brain();
-  var NQ = window.__nuqta = { log: [], errors: [], antics: [], director: [], spoken: [], mode: 'offline', health: { ai: false, tts: false } };
+  var NQ = window.__nuqta = { log: [], errors: [], antics: [], director: [], mode: 'offline', health: { ai: false } };
 
   function settle(name, fn) { try { return fn(); } catch (e) { NQ.errors.push(name + ': ' + e.message); console.warn('[Nuqta]', name, e); } }
 
   var Prefs = {
     antics: store.get('nq.antics', 'calm'),
-    voice: store.get('nq.voiceOn', true), // on by default; it can only speak after the visitor's first tap or key
     volume: store.get('nq.volume', 70),
-    save: function () { store.set('nq.antics', this.antics); store.set('nq.voiceOn', this.voice); store.set('nq.volume', this.volume); }
+    save: function () { store.set('nq.antics', this.antics); store.set('nq.volume', this.volume); }
   };
   NQ.prefs = Prefs;
 
@@ -234,20 +233,10 @@
   };
 
   /* ---------------------------------------------------------------- *
-   * Talk — a bubble, and Nuqta's voice when it is on (after the first tap; never mid-intro; sparingly)
+   * Talk — Nuqta speaks in bubbles only (no voice)
    * ---------------------------------------------------------------- */
   var Talk = {
-    activated: false, lastSpoken: 0,
-    canSpeak: function (force) {
-      var act = this.activated || !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
-      return Prefs.voice && act && !Chat.open && !document.hidden && UX.introPhase === 'done' &&
-        (force || (!Voice.speaking && Date.now() - this.lastSpoken > 9000));
-    },
-    line: function (text, hold, force) {
-      if (!Roam.visible() || !text) return;
-      Roam.say(text, hold);
-      if (this.canSpeak(force)) { this.lastSpoken = Date.now(); NQ.spoken.push(text); Voice.speak(text, 'ar'); }
-    }
+    line: function (text, hold) { if (Roam.visible() && text) Roam.say(text, hold); }
   };
   NQ.talk = Talk;
 
@@ -273,7 +262,7 @@
     'last-standing': 'آخر من يصمد لسا قيد التطوير. تحدّي جماعي… وأنا أول واحد يطلع.',
     'asia-journey': 'مشوار آسيا قيد البناء، والإطلاق المخطط له ديسمبر 2026.'
   };
-  var POKES = ['هيه! هذا خشمي.', 'تبي سالفة أطول؟ اضغط «اسأل نقطة».', 'لو أتكلم وتبيني أسكت، اضغطني وأسكت.', 'أنا مربّع ماجنتا لابس هودي. أدري، شكلي يجنن.', 'تبي أوريك لعبة؟ انزل لقسم التجارب.'];
+  var POKES = ['هيه! هذا خشمي.', 'تبي سالفة أطول؟ اضغط «اسأل نقطة».', 'أكتب لك بالفقاعة… الكلام مو تخصّصي.', 'أنا مربّع ماجنتا لابس هودي. أدري، شكلي يجنن.', 'تبي أوريك لعبة؟ انزل لقسم التجارب.'];
 
   var Director = {
     scene: 'universe', visited: [], game: '', lastAt: 0, once: {}, visits: 1, idleId: null,
@@ -306,8 +295,6 @@
       var v = +store.get('nq.visits', 0) || 0;
       try { if (!sessionStorage.getItem('nq.counted')) { v += 1; store.set('nq.visits', v); sessionStorage.setItem('nq.counted', '1'); } } catch (e) { v = Math.max(v, 1); }
       this.visits = Math.max(1, v);
-      // first gesture anywhere = the browser now lets Nuqta speak
-      ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { Talk.activated = true; }, { passive: true, once: true }); });
       document.addEventListener('ux:scene', function (e) {
         var id = e.detail; if (!TIPS[id] && id !== 'universe') return;
         self.scene = id; if (self.visited.indexOf(id) < 0) self.visited.push(id);
@@ -357,13 +344,12 @@
           if (self.remark('exit', 'رايح؟ قبل لا تروح… «اسأل نقطة» يجاوبك بثواني.')) Roam.act('wave');
         }
       });
-      // poke Nuqta: hush him if he is talking, else he reacts
+      // poke Nuqta: he reacts
       var av = $('#roamAvatar');
       if (av) av.addEventListener('click', function () {
         if (!Roam.visible()) return;
-        Talk.activated = true; NQ.director.push('poke');
-        if (Voice.speaking) { Voice.stop(); Roam.say('تمام، سكتّ.', 1800); return; }
-        Talk.line(POKES[Math.floor(Math.random() * POKES.length)], 3200, true);
+        NQ.director.push('poke');
+        Talk.line(POKES[Math.floor(Math.random() * POKES.length)], 3200);
         Roam.busy = false; Roam.act(Math.random() < 0.5 ? 'jump' : 'spin');
       });
       this.idle();
@@ -374,50 +360,10 @@
   NQ.roam = Roam;
 
   /* ---------------------------------------------------------------- *
-   * Voice — out (server TTS or browser voice) and in (speech recognition)
+   * Mic — the visitor may dictate a question (speech-to-text); Nuqta itself never speaks
    * ---------------------------------------------------------------- */
-  var Voice = {
-    audio: null, speaking: false, utter: null,
-    stop: function () {
-      if (this.audio) { this.audio.pause(); this.audio = null; }
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      this.done();
-    },
-    done: function () { this.speaking = false; $('#nqStop').hidden = true; Chat.avatar && Chat.avatar.set('mouth', 'closed'); },
-    start: function () { this.speaking = true; $('#nqStop').hidden = false; },
-    speak: function (text, lang) {
-      this.stop();
-      if (!text) return Promise.resolve(false);
-      var self = this, vol = Prefs.volume / 100;
-      if (NQ.health.tts) {
-        return fetch('api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: text }) })
-          .then(function (r) { if (!r.ok) throw new Error('tts ' + r.status); return r.blob(); })
-          .then(function (blob) {
-            var url = URL.createObjectURL(blob), a = new Audio(url);
-            a.volume = vol; self.audio = a; self.start();
-            a.onended = a.onerror = function () { URL.revokeObjectURL(url); self.done(); };
-            return a.play().then(function () { return true; });
-          })
-          .catch(function () { return self.browser(text, lang, vol); });
-      }
-      return Promise.resolve(this.browser(text, lang, vol));
-    },
-    browser: function (text, lang, vol) {
-      if (!('speechSynthesis' in window)) return false;
-      var u = new SpeechSynthesisUtterance(text), voices = window.speechSynthesis.getVoices() || [];
-      var want = lang === 'en' ? /^en/i : /^ar/i;
-      var v = voices.filter(function (x) { return want.test(x.lang) && /SA/i.test(x.lang); })[0] || voices.filter(function (x) { return want.test(x.lang); })[0];
-      if (v) u.voice = v;
-      u.lang = v ? v.lang : (lang === 'en' ? 'en-US' : 'ar-SA');
-      u.rate = lang === 'en' ? 1.04 : 1; u.pitch = 1.15; u.volume = vol;
-      var self = this;
-      u.onstart = function () { self.start(); };
-      u.onend = u.onerror = function () { self.done(); };
-      this.utter = u;
-      try { window.speechSynthesis.speak(u); } catch (e) { NQ.errors.push('speech: ' + e.message); this.done(); return false; }
-      return true;
-    },
-    // Speech-to-text (Chrome/Edge/Safari). Hidden when unsupported.
+  var Mic = {
+    // Chrome/Edge/Safari. The mic button stays hidden when unsupported.
     Rec: window.SpeechRecognition || window.webkitSpeechRecognition,
     listen: function (lang, onText, onEnd) {
       if (!this.Rec) return false;
@@ -429,7 +375,7 @@
     },
     stopListening: function () { if (this.rec) try { this.rec.stop(); } catch (e) { /* ignore */ } }
   };
-  NQ.voice = Voice;
+  NQ.mic = Mic;
 
   /* ---------------------------------------------------------------- *
    * Chat — «اسأل نقطة»
@@ -447,20 +393,16 @@
       var face = $('.nq-launch__face'); if (face && window.USERSX_AVATAR) face.innerHTML = window.USERSX_AVATAR.svg({});
       this.launch.addEventListener('click', function () { self.toggle(); });
       $('#nqClose').addEventListener('click', function () { self.toggle(false); });
-      $('#nqStop').addEventListener('click', function () { Voice.stop(); });
       $('#nqForm').addEventListener('submit', function (e) { e.preventDefault(); self.send(self.input.value); });
       $$('#nqQuick [data-q]').forEach(function (b) { b.addEventListener('click', function () { self.send(b.getAttribute('data-q')); }); });
       this.panel.addEventListener('keydown', function (e) { if (e.key === 'Escape') { self.toggle(false); } });
-      var vb = $('#nqVoice');
-      vb.setAttribute('aria-pressed', String(Prefs.voice));
-      vb.addEventListener('click', function () { setVoice(!Prefs.voice); });
       var mic = $('#nqMic');
-      if (Voice.Rec) {
+      if (Mic.Rec) {
         mic.hidden = false;
         mic.addEventListener('click', function () {
-          if (mic.getAttribute('aria-pressed') === 'true') { Voice.stopListening(); return; }
-          mic.setAttribute('aria-pressed', 'true'); Voice.stop();
-          Voice.listen(self.lastLang, function (t) { self.input.value = t; self.send(t); }, function () { mic.setAttribute('aria-pressed', 'false'); });
+          if (mic.getAttribute('aria-pressed') === 'true') { Mic.stopListening(); return; }
+          mic.setAttribute('aria-pressed', 'true');
+          Mic.listen(self.lastLang, function (t) { self.input.value = t; self.send(t); }, function () { mic.setAttribute('aria-pressed', 'false'); });
         });
       }
       $$('[data-ask]').forEach(function (b) { b.addEventListener('click', function () { self.toggle(true); self.send(b.getAttribute('data-ask')); }); });
@@ -478,7 +420,7 @@
         if (!this.history.length && !this.logEl.children.length) this.greet();
         this.input.focus();
         Roam.act('wave');
-      } else { Voice.stop(); Voice.stopListening(); this.launch.focus(); }
+      } else { Mic.stopListening(); this.launch.focus(); }
     },
     greet: function () {
       var line = NQ.mode === 'ai'
@@ -492,18 +434,16 @@
       if (meta && meta.lang === 'en') { p.lang = 'en'; p.dir = 'ltr'; }
       li.appendChild(p);
       if (who === 'nuqta') {
-        var tools = document.createElement('div'); tools.className = 'nq-msg__tools';
-        var replay = document.createElement('button'); replay.type = 'button'; replay.className = 'nq-replay'; replay.setAttribute('aria-label', 'اسمع الرد'); replay.textContent = '▶';
-        replay.addEventListener('click', function () { Voice.speak(text, meta && meta.lang); });
-        tools.appendChild(replay);
-        if (meta && meta.action && meta.action !== 'none') tools.appendChild(this.actionButton(meta));
-        li.appendChild(tools);
+        if (meta && meta.action && meta.action !== 'none') {
+          var tools = document.createElement('div'); tools.className = 'nq-msg__tools';
+          tools.appendChild(this.actionButton(meta));
+          li.appendChild(tools);
+        }
         if (meta && meta.mode === 'offline-notice') li.classList.add('is-notice');
       }
       this.logEl.appendChild(li);
       this.logEl.scrollTop = this.logEl.scrollHeight;
       NQ.log.push({ who: who, text: text, meta: meta || null });
-      if (who === 'nuqta' && !quiet && Prefs.voice) Voice.speak(text, meta && meta.lang);
       return li;
     },
     actionButton: function (m) {
@@ -550,7 +490,6 @@
       var self = this;
       this.toggle(true);
       this.input.value = '';
-      Voice.stop();
       this.add('user', text, { lang: window.NuqtaBrain.isEnglish(text) ? 'en' : 'ar' });
       this.history.push({ role: 'user', content: text });
       this.pending = true; this.typing(true);
@@ -604,12 +543,6 @@
     if (el) el.textContent = mode === 'ai' ? 'متصل · ذكاء اصطناعي' : 'وضع المعلومات المؤكدة (بدون ذكاء اصطناعي)';
     document.body.setAttribute('data-nq-mode', mode);
   }
-  function setVoice(on) {
-    Prefs.voice = !!on; Prefs.save();
-    var vb = $('#nqVoice'); if (vb) { vb.setAttribute('aria-pressed', String(Prefs.voice)); vb.setAttribute('aria-label', Prefs.voice ? 'إيقاف صوت نقطة' : 'تشغيل صوت نقطة'); }
-    var sv = $('#setVoice'); if (sv) sv.checked = Prefs.voice;
-    if (!Prefs.voice) Voice.stop();
-  }
 
   /* ---------------------------------------------------------------- *
    * FAQ section — rendered from the knowledge base, with "ask Nuqta"
@@ -638,14 +571,12 @@
    * Settings wiring + boot
    * ---------------------------------------------------------------- */
   function wireSettings() {
-    var a = $('#setAntics'), v = $('#setVoice'), vol = $('#setVolume'), guide = $('#setGuide');
+    var a = $('#setAntics'), vol = $('#setVolume'), guide = $('#setGuide');
     if (a) { a.value = Prefs.antics; a.addEventListener('change', function () { Prefs.antics = a.value; Prefs.save(); Roam.apply(); }); }
-    if (v) { v.checked = !!Prefs.voice; v.addEventListener('change', function () { setVoice(v.checked); }); }
     if (vol) {
       vol.value = Prefs.volume;
       vol.addEventListener('input', function () {
         Prefs.volume = +vol.value; Prefs.save();
-        if (Voice.audio) Voice.audio.volume = Prefs.volume / 100;
         var S = UX.sound; if (S && S.master && S.ctx) S.master.gain.setTargetAtTime(Prefs.volume / 100 * 0.9, S.ctx.currentTime, 0.05);
       });
     }
@@ -670,9 +601,9 @@
         if (UX.introPhase === 'done' || ++tries > 600) { clearInterval(wait); Roam.apply(); Roam.enter(); }
       }, 250);
     });
-    fetch('api/health').then(function (r) { return r.ok ? r.json() : { ai: false, tts: false }; })
-      .catch(function () { return { ai: false, tts: false }; })
-      .then(function (h) { NQ.health = { ai: !!h.ai, tts: !!h.tts }; setMode(h.ai ? 'ai' : 'offline'); NQ.ready = true; });
+    fetch('api/health').then(function (r) { return r.ok ? r.json() : { ai: false }; })
+      .catch(function () { return { ai: false }; })
+      .then(function (h) { NQ.health = { ai: !!h.ai }; setMode(h.ai ? 'ai' : 'offline'); NQ.ready = true; });
     brain.load().catch(function (e) { NQ.errors.push('kb: ' + e.message); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

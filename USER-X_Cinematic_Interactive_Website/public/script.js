@@ -375,9 +375,9 @@
         self.syncScore();
       };
       ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, self.unlock, { passive: true }); });
-      // Deep links skip; so does a reload in the same tab. Every new visit opens with the film.
+      // Every visit opens with the film (reload included). Only a link straight to a section skips it.
       var deep = location.hash && location.hash !== '#intro' && document.getElementById(location.hash.slice(1));
-      if (deep || session.get('introSeen')) { this.hide(); return; }
+      if (deep) { this.hide(); return; }
       this.play();
     },
     syncScore: function () {
@@ -412,7 +412,6 @@
       var self = this;
       this.active = false;
       if (this.film) { this.film.destroy(); this.film = null; }
-      session.set('introSeen', '1');
       if (withCue) Sound.play('intro');
       setInert(false);
       document.body.classList.remove('is-locked');
@@ -1343,6 +1342,7 @@
    * Boot
    * ------------------------------------------------------------------ */
   function boot() {
+    safeStart('intro', function () { Intro.init(); return Intro; }); // first: the film is on screen before the rest builds
     safeStart('hud', startHud);
     safeStart('stars', startStars);
     safeStart('floors', watchFloors);
@@ -1358,7 +1358,6 @@
     safeStart('outro', function () { return Outro.init(); });
     safeStart('play', function () { return Play.init(); });
     safeStart('pointer', trackPointer);
-    safeStart('intro', function () { Intro.init(); return Intro; });
     UX.ready = true;
     document.dispatchEvent(new CustomEvent('ux:ready'));
   }

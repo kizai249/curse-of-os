@@ -4,7 +4,6 @@
  *   GET  /                 static site from ../public (security headers, caching)
  *   GET  /api/health       which optional services are configured (no secrets)
  *   POST /api/nuqta        { messages:[{role,content}], context? } -> Nuqta's reply (Claude)
- *   POST /api/tts          { text } -> audio/mpeg (ElevenLabs, optional)
  * Every key stays here; the browser never sees one. Without keys the site runs in
  * offline mode: Nuqta answers from the knowledge base in the browser.
  */
@@ -15,7 +14,6 @@ const zlib = require('zlib');
 const { NuqtaAI } = require('./lib/nuqta-ai');
 const kbLib = require('./lib/kb');
 const { RateLimiter, DailyCap, cleanMessages, cleanContext } = require('./lib/guards');
-const { makeTTS } = require('./lib/tts');
 
 const PUBLIC = path.join(__dirname, '..', 'public');
 const TYPES = {
@@ -46,9 +44,7 @@ function createApp(opts = {}) {
   const env = opts.env || process.env;
   const kb = opts.kb || kbLib.load();
   const ai = opts.ai || new NuqtaAI({ apiKey: env.ANTHROPIC_API_KEY, model: env.NUQTA_MODEL, kb });
-  const tts = opts.tts || makeTTS({ apiKey: env.ELEVENLABS_API_KEY, voiceId: env.ELEVENLABS_VOICE_ID });
   const limiter = new RateLimiter({ perMinute: Number(env.NUQTA_RATE_PER_MINUTE) || 8, burst: 4 });
-  const ttsLimiter = new RateLimiter({ perMinute: 6, burst: 3 });
   const cap = new DailyCap(Number(env.NUQTA_DAILY_REQUEST_CAP) || 2000);
   const log = opts.log || ((...a) => console.log('[USER-X]', ...a));
 
@@ -78,7 +74,7 @@ function createApp(opts = {}) {
   };
 
   async function api(req, res, route) {
-    if (route === '/api/health' && req.method === 'GET') return send(res, 200, { ok: true, ai: ai.enabled, tts: tts.enabled });
+    if (route === '/api/health' && req.method === 'GET') return send(res, 200, { ok: true, ai: ai.enabled });
     if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
     if (!sameOrigin(req)) return send(res, 403, { error: 'cross-origin requests are not allowed' });
 
@@ -97,19 +93,6 @@ function createApp(opts = {}) {
       } catch (err) {
         log('nuqta error', err.code || err.status || '', err.message);
         return send(res, 502, { error: 'ai_unavailable', mode: 'offline' });
-      }
-    }
-    if (route === '/api/tts') {
-      if (!tts.enabled) return send(res, 503, { error: 'tts_offline' });
-      const rl = ttsLimiter.take(ip(req));
-      if (!rl.ok) return send(res, 429, { error: 'rate_limited', retryAfterS: rl.retryAfterS });
-      const body = await readJson(req, 4096);
-      try {
-        return send(res, 200, await tts.speak(body.text));
-      } catch (err) {
-        if (err.status === 400) return send(res, 400, { error: err.message });
-        log('tts error', err.code || '', err.message);
-        return send(res, 502, { error: 'tts_unavailable' });
       }
     }
     return send(res, 404, { error: 'not found' });
@@ -163,7 +146,7 @@ if (require.main === module) {
   }
   const port = Number(process.env.PORT) || 8080;
   server.listen(port, () => {
-    console.log(`[USER-X] http://localhost:${port}  ai=${Boolean(process.env.ANTHROPIC_API_KEY)} tts=${Boolean(process.env.ELEVENLABS_API_KEY && process.env.ELEVENLABS_VOICE_ID)}`);
+    console.log(`[USER-X] http://localhost:${port}  ai=${Boolean(process.env.ANTHROPIC_API_KEY)}`);
   });
 }
 

@@ -63,9 +63,9 @@ const quiet = () => {};
     await p.waitForFunction(() => window.__ux.introPhase === 'done', null, { timeout: 16000 });
     assert(await p.locator('#intro').isHidden(), 'film closed itself');
     assert(!errs.length, errs.join(' | '));
-    // same tab reload: straight in; a new visit (new session) plays it again
-    await p.reload({ waitUntil: 'networkidle' }); await p.waitForTimeout(300);
-    assert(await p.locator('#intro').isHidden(), 'no replay on reload in the same tab');
+    // a reload in the same tab plays it again (every visit opens with the film)
+    await p.reload({ waitUntil: 'domcontentloaded' }); await p.waitForTimeout(400);
+    assert(!(await p.locator('#intro').isHidden()), 'film plays again on reload');
     const ctx2 = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const p2 = await ctx2.newPage();
     await p2.goto(url(offline), { waitUntil: 'domcontentloaded' });
@@ -294,14 +294,16 @@ const quiet = () => {};
     await close(p);
   });
 
-  await test('voice: toggle persists; stop button hidden when silent; site works with sound off', async () => {
+  await test('Nuqta has no voice: no voice buttons or setting, and the page never speaks', async () => {
     const p = await open(offline);
+    await p.evaluate(() => { window.__spoke = 0; if (window.speechSynthesis) window.speechSynthesis.speak = () => { window.__spoke++; }; });
     await p.click('#nqLaunch');
-    assert(await p.getAttribute('#nqVoice', 'aria-pressed') === 'true', 'on by default');
-    await p.click('#nqVoice');
-    assert(await p.getAttribute('#nqVoice', 'aria-pressed') === 'false', 'off');
-    assert(await p.evaluate(() => JSON.parse(localStorage.getItem('ux.nq.voiceOn'))) === false, 'stored');
-    assert(await p.locator('#nqStop').isHidden(), 'stop hidden');
+    assert(await p.locator('#nqVoice, #nqStop, #setVoice, .nq-replay').count() === 0, 'voice controls removed');
+    await p.fill('#nqText', 'وش هي يوزر إكس؟'); await p.press('#nqText', 'Enter');
+    await p.waitForFunction(() => window.__nuqta.log.filter((m) => m.who === 'nuqta').length >= 2, null, { timeout: 5000 });
+    await p.evaluate(() => { const d = window.__nuqta.directorApi; d.lastAt = 0; window.__nuqta.roam.busy = false; });
+    assert(await p.evaluate(() => window.__spoke) === 0, 'nothing spoken');
+    assert(!p.requests.some((u) => /api\/tts/.test(u)), 'no speech requests');
     await close(p);
   });
 
@@ -341,15 +343,6 @@ const quiet = () => {};
     await p.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
     assert(await p.evaluate(() => window.__nuqta.director.includes('poke')), 'poke registered');
     assert(await p.evaluate(() => getComputedStyle(document.getElementById('roam')).pointerEvents) === 'none', 'strip never takes clicks');
-    await close(p);
-  });
-
-  await test('Nuqta voice: on by default, silent until the first gesture, never during the intro', async () => {
-    const p = await open(offline);
-    assert(await p.evaluate(() => window.__nuqta.prefs.voice) === true, 'voice default on');
-    assert(await p.evaluate(() => { const t = window.__nuqta.talk; t.lastSpoken = 0; return window.__ux.introPhase === 'done' && t.canSpeak(); }), 'can speak after the skip click');
-    await p.evaluate(() => { window.__nuqta.talk.lastSpoken = Date.now(); });
-    assert(!(await p.evaluate(() => window.__nuqta.talk.canSpeak())), 'throttled right after speaking');
     await close(p);
   });
 

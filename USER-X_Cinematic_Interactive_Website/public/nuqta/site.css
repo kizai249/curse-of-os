@@ -140,8 +140,6 @@
 .nq-msg--user { align-self: flex-end; }
 .nq-msg--user p { background: var(--magenta); color: var(--void); font-weight: 700; border-start-end-radius: 4px; }
 .nq-msg__tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.nq-replay { width: 32px; height: 32px; border-radius: 8px; border: 2px solid var(--line); background: transparent; color: var(--muted); font-size: .8rem; cursor: pointer; }
-.nq-replay:hover, .nq-replay:focus-visible { color: var(--cyan); border-color: var(--cyan); }
 .nq-action { min-height: 34px; }
 .nq-dots { display: inline-flex; gap: 4px; }
 .nq-dots i { width: 6px; height: 6px; background: var(--cyan); animation: nq-dot 900ms steps(2) infinite; }

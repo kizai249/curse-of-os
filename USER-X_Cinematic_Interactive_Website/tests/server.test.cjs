@@ -7,7 +7,6 @@ const path = require('path');
 const kbLib = require('../server/lib/kb');
 const { RateLimiter, DailyCap, cleanMessages, cleanContext } = require('../server/lib/guards');
 const { NuqtaAI, systemPrompt } = require('../server/lib/nuqta-ai');
-const { makeTTS } = require('../server/lib/tts');
 const { createApp } = require('../server/server');
 const brain = require('../public/nuqta/brain.js');
 
@@ -127,13 +126,13 @@ test('HTTP: health, offline AI, CORS guard, size limit, static safety, headers',
   const app = await listen(createApp({ env: {}, kb, log: quiet }));
   try {
     const h = await call(app, 'GET', '/api/health');
-    assert.deepEqual(h.json, { ok: true, ai: false, tts: false });
+    assert.deepEqual(h.json, { ok: true, ai: false });
     assert.match(h.headers.get('content-security-policy'), /default-src 'self'/);
     assert.equal(h.headers.get('x-content-type-options'), 'nosniff');
     const off = await call(app, 'POST', '/api/nuqta', { messages: [{ role: 'user', content: 'hi' }] });
     assert.equal(off.status, 503); assert.equal(off.json.mode, 'offline');
     const tts = await call(app, 'POST', '/api/tts', { text: 'hi' });
-    assert.equal(tts.status, 503);
+    assert.equal(tts.status, 404, 'Nuqta has no voice endpoint any more');
     const page = await call(app, 'GET', '/');
     assert.equal(page.status, 200);
     const trav = await call(app, 'GET', '/%2e%2e/.env.example');
@@ -172,20 +171,6 @@ test('HTTP: AI path — success, upstream failure, cross-origin, oversized body,
     let limited = 0;
     for (let i = 0; i < 6; i++) if ((await call(app, 'POST', '/api/nuqta', { messages: [{ role: 'user', content: 'hi' }] })).status === 429) limited++;
     assert.ok(limited > 0, 'burst gets rate limited');
-  } finally { app.close(); }
-});
-
-test('TTS: disabled without keys, proxies audio when configured, rejects empty text', async () => {
-  assert.equal(makeTTS({}).enabled, false);
-  let url, headers;
-  const tts = makeTTS({ apiKey: 'k', voiceId: 'v1', fetchImpl: async (u, o) => { url = u; headers = o.headers; return { ok: true, arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer }; } });
-  const app = await listen(createApp({ env: {}, kb, tts, log: quiet }));
-  try {
-    const a = await call(app, 'POST', '/api/tts', { text: 'هلا' });
-    assert.equal(a.status, 200); assert.equal(a.buf.length, 3);
-    assert.match(url, /text-to-speech\/v1$/); assert.equal(headers['xi-api-key'], 'k');
-    const e = await call(app, 'POST', '/api/tts', { text: '   ' });
-    assert.equal(e.status, 400);
   } finally { app.close(); }
 });
 
