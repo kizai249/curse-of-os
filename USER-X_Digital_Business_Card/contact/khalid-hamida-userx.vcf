@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+N;CHARSET=UTF-8:Hamida;Khalid;;;
+FN;CHARSET=UTF-8:Khalid Hamida
+NICKNAME;CHARSET=UTF-8:خالد حميدة
+ORG;CHARSET=UTF-8:USER-X
+TITLE;CHARSET=UTF-8:Co-Founder & Operation Manager
+item1.TEL;TYPE=WORK,VOICE:+966565952065
+item1.X-ABLabel:USER-X
+ADR;TYPE=WORK;CHARSET=UTF-8:;;;Jeddah;;;Saudi Arabia
+NOTE;CHARSET=UTF-8:خالد حميدة — شريك مؤسس ومدير ا
+ لعمليات · يوزر إكس (USER-X)\, جدة، المملكة ال
+ عربية السعودية.
+END:VCARD

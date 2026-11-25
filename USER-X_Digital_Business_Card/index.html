@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>خالد حميدة · USER-X</title>
+  <meta name="description" content="خالد حميدة — شريك مؤسس ومدير العمليات في يوزر إكس، جدة. بطاقة رقمية تفاعلية: العب التحدي واحفظ الرقم.">
+  <meta property="og:title" content="خالد حميدة · USER-X">
+  <meta property="og:description" content="بطاقة مو عادية. العب تحدي ١٢ ثانية واحفظ الرقم.">
+  <meta property="og:type" content="profile">
+  <meta name="theme-color" content="#0B0B0F">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <link rel="icon" href="assets/brand/usersx-symbol.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/kufam-arabic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="src/styles/card.css">
+  <script src="config/card.config.js" defer></script>
+  <script src="assets/brand/symbol.js" defer></script>
+  <script src="assets/brand/nuqta.js" defer></script>
+  <script src="assets/vendor/qrcode-generator.js" defer></script>
+  <script src="src/js/i18n.js" defer></script>
+  <script src="src/js/vcard.js" defer></script>
+  <script src="src/js/audio.js" defer></script>
+  <script src="src/js/fx.js" defer></script>
+  <script src="src/js/game.js" defer></script>
+  <script src="src/js/app.js" defer></script>
+</head>
+<body data-scene="boot">
+  <canvas class="bg" id="bg" aria-hidden="true"></canvas>
+  <div class="scan" aria-hidden="true"></div>
+
+  <!-- top bar (always available) -->
+  <header class="bar">
+    <span class="bar__id" lang="en" dir="ltr">USER-X · <b>P1</b></span>
+    <div class="bar__tools">
+      <button class="pill" type="button" id="langBtn" aria-label="Switch to English" lang="en">EN</button>
+      <button class="ibtn" type="button" id="soundBtn" aria-pressed="false" aria-label="الصوت مقفل — شغّله">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z"/><path class="ico-on" d="M11 5h1v1h-1zM12 6h1v4h-1zM11 10h1v1h-1zM13 4h1v1h-1zM14 5h1v6h-1zM13 11h1v1h-1z"/><path class="ico-off" d="M11 6h1v1h-1zM12 7h1v1h-1zM13 8h1v1h-1zM14 9h1v1h-1zM14 6h1v1h-1zM13 7h1v1h-1zM12 8h1v1h-1zM11 9h1v1h-1z"/></svg>
+      </button>
+      <button class="ibtn" type="button" id="setBtn" aria-expanded="false" aria-controls="settings" data-i18n-aria="settings">
+        <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M7 1h2v2h2v2h2v2h2v2h-2v2h-2v2H9v2H7v-2H5v-2H3V9H1V7h2V5h2V3h2zM7 6v4h2V6z"/></svg>
+      </button>
+    </div>
+    <div class="settings" id="settings" role="dialog" aria-modal="false" aria-labelledby="setTitle" hidden>
+      <p class="settings__title" id="setTitle" data-i18n="settings"></p>
+      <label class="row"><span data-i18n="volume"></span><input type="range" id="volume" min="0" max="100" value="70"></label>
+      <label class="row"><span data-i18n="calm"></span><input type="checkbox" id="calmMotion"></label>
+      <button class="btn btn--ghost btn--sm" type="button" id="replayIntro" data-i18n="replayIntro"></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== SCENE 1 · BOOT ===== -->
+    <section class="scene scene--boot" id="boot" aria-labelledby="bootTitle">
+      <div class="boot__symbol" id="bootSymbol" aria-hidden="true"></div>
+      <p class="boot__eyebrow" lang="en" dir="ltr"><span>USER-X</span> · <span>PLAYER CARD</span></p>
+      <h1 class="boot__title" id="bootTitle"><span data-i18n="bootTitle"></span></h1>
+      <p class="boot__sub" data-i18n="bootSub"></p>
+      <button class="start" type="button" id="startBtn"><span class="start__key" aria-hidden="true">▶</span><span data-i18n="pressStart"></span></button>
+      <button class="skip" type="button" id="skipBtn" data-i18n="skip"></button>
+    </section>
+
+    <!-- ===== SCENE 2 · THE CARD ===== -->
+    <section class="scene scene--card" id="cardScene" aria-labelledby="cardName" hidden>
+      <div class="stage" id="stage">
+        <div class="card" id="card" data-face="front">
+          <div class="card__inner" id="cardInner">
+            <!-- FRONT -->
+            <article class="face face--front" aria-label="">
+              <div class="face__glow" aria-hidden="true"></div>
+              <div class="face__sheen" aria-hidden="true"></div>
+              <div class="face__top">
+                <button class="logo-tap" type="button" id="logoTap" data-i18n-aria="logoTap"><span id="cardSymbol" class="sym" aria-hidden="true"></span></button>
+                <img class="wordmark" src="assets/brand/usersx-wordmark-sm.png" width="89" height="32" alt="USER-X">
+                <span class="badge" lang="en" dir="ltr">LV 01 · P1</span>
+              </div>
+              <div class="face__who">
+                <p class="eyebrow" lang="en" dir="ltr">PLAYER · CO-FOUNDER</p>
+                <h2 class="name" id="cardName"><span class="name__ar" lang="ar" dir="rtl" data-cfg="person.nameAr"></span><span class="name__en" lang="en" dir="ltr" data-cfg="person.nameEn"></span></h2>
+                <p class="title" data-cfg-i18n="person.title"></p>
+                <p class="where"><span aria-hidden="true" class="pin"></span><span data-cfg-i18n="company.city"></span></p>
+              </div>
+              <p class="intro" data-cfg-i18n="person.intro"></p>
+              <ul class="stats" aria-label="">
+                <li><span class="k" data-i18n="statClass"></span><span class="v" data-i18n="statClassV"></span></li>
+                <li><span class="k" data-i18n="statBase"></span><span class="v" data-i18n="statBaseV"></span></li>
+                <li><span class="k" data-i18n="statGuild"></span><span class="v" lang="en" dir="ltr">USER-X</span></li>
+              </ul>
+              <button class="flip" type="button" id="flipBtn" data-i18n="flipToBack"></button>
+            </article>
+            <!-- BACK -->
+            <article class="face face--back" aria-label="">
+              <div class="face__glow" aria-hidden="true"></div>
+              <div class="back__nuqta" id="backNuqta" aria-hidden="true"></div>
+              <p class="eyebrow" lang="en" dir="ltr">ABOUT · USER-X</p>
+              <h3 class="back__line" data-i18n="slogan"></h3>
+              <p class="back__about" data-cfg-i18n="company.about"></p>
+              <p class="back__tag" data-cfg-i18n="company.tagline"></p>
+              <a class="back__site" id="siteLink" href="#" target="_blank" rel="noopener" hidden data-i18n="website"></a>
+              <button class="flip" type="button" id="flipBackBtn" data-i18n="flipToFront"></button>
+            </article>
+          </div>
+        </div>
+        <p class="hint" id="tiltHint" data-i18n="tiltHint"></p>
+      </div>
+      <div class="actions">
+        <button class="btn btn--primary btn--play" type="button" id="playBtn"><span class="btn__ico" aria-hidden="true">▶</span><span data-i18n="playCta"></span></button>
+        <div class="quick">
+          <a class="btn btn--ghost" id="quickSave" href="contact/khalid-hamida-userx.vcf" download><span data-i18n="saveContact"></span></a>
+          <button class="btn btn--ghost" type="button" id="quickContact" data-i18n="allContacts"></button>
+        </div>
+        <p class="best" id="bestLine" hidden></p>
+      </div>
+    </section>
+
+    <!-- ===== SCENE 3 · GAME ===== -->
+    <section class="scene scene--game" id="gameScene" aria-labelledby="gameTitle" hidden>
+      <div class="hud">
+        <button class="ibtn" type="button" id="quitGame" data-i18n-aria="quit">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 3h2v2h2v2h2V5h2V3h2v2h-2v2h-2v2h2v2h2v2h-2v-2H9V9H7v2H5v2H3v-2h2V9h2V7H5V5H3z"/></svg>
+        </button>
+        <p class="hud__time"><span data-i18n="time"></span> <b class="num" id="hudTime">12.0</b></p>
+        <p class="hud__score"><span data-i18n="score"></span> <b class="num" id="hudScore">0</b></p>
+        <p class="hud__combo num" id="hudCombo" aria-hidden="true" dir="ltr"></p>
+      </div>
+      <h2 class="game__title" id="gameTitle" data-i18n="gameTitle"></h2>
+      <p class="game__rule" id="gameRule" data-i18n="gameRule"></p>
+      <div class="arena" id="arena" aria-describedby="gameRule">
+        <div class="arena__grid" aria-hidden="true"></div>
+        <p class="countdown num" id="countdown" aria-live="assertive"></p>
+      </div>
+      <p class="sr-only" id="gameLive" aria-live="polite"></p>
+    </section>
+
+    <!-- ===== RESULT (overlay on game scene) ===== -->
+    <section class="scene scene--result" id="resultScene" aria-labelledby="resultTitle" hidden>
+      <div class="result">
+        <div class="result__nuqta" id="resultNuqta" aria-hidden="true"></div>
+        <p class="eyebrow" lang="en" dir="ltr" id="resultEyebrow">GAME OVER</p>
+        <p class="result__score num" id="resultScore">0</p>
+        <h2 class="result__title" id="resultTitle"></h2>
+        <p class="result__sub" id="resultSub"></p>
+        <p class="result__stats" id="resultStats"></p>
+        <p class="result__unlock" id="resultUnlock" hidden data-i18n="goldUnlocked"></p>
+        <div class="result__actions">
+          <button class="btn btn--primary" type="button" id="toContact" data-i18n="claimReward"></button>
+          <button class="btn btn--ghost" type="button" id="againBtn" data-i18n="playAgain"></button>
+          <button class="btn btn--ghost" type="button" id="shareScore" data-i18n="shareScore"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SCENE 4 · CONTACT ===== -->
+    <section class="scene scene--contact" id="contactScene" aria-labelledby="contactTitle" hidden>
+      <p class="eyebrow" lang="en" dir="ltr">REWARD · CONTACT UNLOCKED</p>
+      <h2 class="contact__title" id="contactTitle" data-i18n="contactTitle"></h2>
+      <p class="contact__sub" data-i18n="contactSub"></p>
+      <ul class="links" id="links">
+        <li><a class="link link--save" id="saveBtn" href="contact/khalid-hamida-userx.vcf" download><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></span><span class="link__t" data-i18n="saveContact"></span><span class="link__s" data-i18n="saveContactSub"></span></a></li>
+        <li><a class="link" id="waBtn" href="#" target="_blank" rel="noopener"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M4 2h8v1h1v1h1v7h-1v1h-1v1H6l-3 2v-3H2V4h1V3h1zM5 6v1h1v1h1v1h1v1h2V9h1V8h-1V7H9v1H8V7H7V6z"/></svg></span><span class="link__t" data-i18n="whatsapp"></span><span class="link__s" id="waSub"></span></a></li>
+        <li><a class="link" id="callBtn" href="#"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M3 2h3v1h1v3H6v1h1v1h1v1h1v1h1V9h3v1h1v3h-1v1h-3v-1H8v-1H7v-1H6v-1H5V9H4V8H3V6H2V3h1z"/></svg></span><span class="link__t" data-i18n="call"></span><span class="link__s" id="callSub" dir="ltr"></span></a></li>
+        <li data-needs="email"><a class="link" id="mailBtn" href="#"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M1 3h14v10H1zM3 5v1h1v1h1v1h1v1h4V8h1V7h1V6h1V5H3zm0 3v3h10V8h-1v1h-1v1H5V9H4V8z"/></svg></span><span class="link__t" data-i18n="email"></span><span class="link__s" id="mailSub" dir="ltr"></span></a></li>
+        <li data-needs="linkedin"><a class="link" id="liBtn" href="#" target="_blank" rel="noopener"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 2h12v12H2zM4 4v2h2V4zm0 3v5h2V7zm3 0v5h2V9h1v3h2V8h-1V7h-2v1H9V7z"/></svg></span><span class="link__t">LinkedIn</span><span class="link__s" data-i18n="linkedinSub"></span></a></li>
+        <li><button class="link" type="button" id="shareBtn"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M7 1h2v1h1v1h1v1h1v1H9v6H7V5H4V4h1V3h1V2h1zM2 9h2v3h8V9h2v5H2z"/></svg></span><span class="link__t" data-i18n="share"></span><span class="link__s" data-i18n="shareSub"></span></button></li>
+        <li><button class="link" type="button" id="qrBtn"><span class="link__ico" aria-hidden="true"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M1 1h6v6H1zm2 2v2h2V3zm6-2h6v6H9zm2 2v2h2V3zM1 9h6v6H1zm2 2v2h2v-2zm6-2h2v2H9zm4 0h2v2h-2zm-2 2h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2z"/></svg></span><span class="link__t" data-i18n="qr"></span><span class="link__s" data-i18n="qrSub"></span></button></li>
+      </ul>
+      <p class="toast" id="toast" role="status" aria-live="polite"></p>
+      <div class="contact__nav">
+        <button class="btn btn--ghost btn--sm" type="button" id="backToCard" data-i18n="backToCard"></button>
+        <button class="btn btn--ghost btn--sm" type="button" id="playFromContact" data-i18n="playAgain"></button>
+      </div>
+    </section>
+  </main>
+
+  <!-- QR panel -->
+  <dialog class="sheet" id="qrSheet" aria-labelledby="qrTitle">
+    <div class="sheet__box">
+      <h2 class="sheet__title" id="qrTitle" data-i18n="qrTitle"></h2>
+      <div class="qr" id="qrBox" aria-hidden="true"></div>
+      <p class="qr__url" id="qrUrl" dir="ltr"></p>
+      <p class="qr__warn" id="qrWarn" hidden data-i18n="qrWarn"></p>
+      <div class="sheet__actions">
+        <button class="btn btn--primary btn--sm" type="button" id="qrPng" data-i18n="qrPng"></button>
+        <button class="btn btn--ghost btn--sm" type="button" id="qrSvg" data-i18n="qrSvg"></button>
+        <button class="btn btn--ghost btn--sm" type="button" id="qrClose" data-i18n="close"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- secret level -->
+  <dialog class="sheet sheet--secret" id="secret" aria-labelledby="secretTitle">
+    <div class="sheet__box">
+      <div class="secret__nuqta" id="secretNuqta" aria-hidden="true"></div>
+      <p class="eyebrow" lang="en" dir="ltr">SECRET LEVEL · UNLOCKED</p>
+      <h2 class="sheet__title" id="secretTitle" data-i18n="secretTitle"></h2>
+      <p data-i18n="secretBody"></p>
+      <button class="btn btn--primary btn--sm" type="button" id="secretClose" data-i18n="secretOk"></button>
+    </div>
+  </dialog>
+
+  <noscript><p class="noscript">خالد حميدة — شريك مؤسس ومدير العمليات · USER-X · جدة<br>Khalid Hamida — Co-Founder &amp; Operation Manager · USER-X · Jeddah<br><a href="contact/khalid-hamida-userx.vcf">احفظ جهة الاتصال · Save contact</a></p></noscript>
+</body>
+</html>

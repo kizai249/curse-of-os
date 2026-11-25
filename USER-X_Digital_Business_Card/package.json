@@ -1,0 +1,16 @@
+{
+  "name": "userx-digital-business-card",
+  "version": "1.0.0",
+  "private": true,
+  "description": "USER-X interactive digital business card — Khalid Hamida",
+  "scripts": {
+    "start": "node tools/serve.cjs",
+    "build": "node tools/build.cjs",
+    "qr": "node tools/make-qr.cjs",
+    "test": "node tools/build.cjs && node --test tests/unit.test.cjs && node tests/e2e.cjs"
+  },
+  "devDependencies": {
+    "jsqr": "1.4.0",
+    "qrcode-generator": "2.0.4"
+  }
+}
