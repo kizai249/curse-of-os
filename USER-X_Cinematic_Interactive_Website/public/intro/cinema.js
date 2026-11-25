@@ -122,13 +122,15 @@
     var gg = this.grain.getContext('2d'), id = gg.createImageData(128, 128);
     for (var k = 0; k < id.data.length; k += 4) { var v = Math.random() * 255; id.data[k] = id.data[k + 1] = id.data[k + 2] = v; id.data[k + 3] = 22; }
     gg.putImageData(id, 0, 0);
+    // grain and vignette live in CSS layers (composited by the GPU), not redrawn on the canvas every frame
+    this.host.style.setProperty('--cin-grain', 'url(' + this.grain.toDataURL() + ')');
     var self = this;
     this.onResize = function () { self.resize(); };
     window.addEventListener('resize', this.onResize);
     this.resize();
   };
   Film.prototype.resize = function () {
-    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    var dpr = Math.min(window.devicePixelRatio || 1, (this.host.clientWidth || window.innerWidth) < 700 || this.lite ? 1 : 1.5);
     this.w = this.host.clientWidth || window.innerWidth; this.h = this.host.clientHeight || window.innerHeight;
     this.cv.width = Math.round(this.w * dpr); this.cv.height = Math.round(this.h * dpr);
     this.cv.style.width = this.w + 'px'; this.cv.style.height = this.h + 'px';
@@ -139,10 +141,16 @@
     var self = this; this.onEnd = onEnd;
     if (this.reduced) { this.t = DUR - 2600; this.host.setAttribute('data-shot', '5'); this.logo.classList.add('is-on', 'is-static'); this.drawStatic(); this.endTimer = setTimeout(function () { self.finish(); }, 2400); return; }
     this.t0 = performance.now();
+    // Watchdog: whatever happens to the frame loop (a throw, a stalled tab), the film never keeps the site locked.
+    this.dog = setTimeout(function () { self.finish(); }, DUR + 3000);
+    var prev = 0, slow = 0;
     var tick = function (now) {
       if (self.done) return;
+      // slow device: after a run of long frames, drop to a lighter film (fewer particles, no glow, 1x pixels)
+      if (prev && !self.lite) { slow = now - prev > 28 ? slow + 1 : Math.max(0, slow - 1); if (slow > 8) { self.lite = true; self.resize(); } }
+      prev = now;
       self.t = now - self.t0;
-      self.frame(self.t);
+      try { self.frame(self.t); } catch (e) { self.finish(); return; } // a drawing error ends the film, never the site
       if (self.t >= DUR) { self.finish(); return; }
       self.raf = requestAnimationFrame(tick);
     };
@@ -153,11 +161,11 @@
   Film.prototype.mute = function () { this.score.stop(); this.score.started = -1; };
   Film.prototype.finish = function () {
     if (this.done) return;
-    this.done = true; cancelAnimationFrame(this.raf); clearTimeout(this.endTimer);
+    this.done = true; cancelAnimationFrame(this.raf); clearTimeout(this.endTimer); clearTimeout(this.dog);
     window.removeEventListener('resize', this.onResize);
     if (this.onEnd) this.onEnd();
   };
-  Film.prototype.destroy = function () { this.done = true; cancelAnimationFrame(this.raf); clearTimeout(this.endTimer); this.score.stop(); window.removeEventListener('resize', this.onResize); };
+  Film.prototype.destroy = function () { this.done = true; cancelAnimationFrame(this.raf); clearTimeout(this.endTimer); clearTimeout(this.dog); this.score.stop(); window.removeEventListener('resize', this.onResize); };
 
   Film.prototype.shot = function (t) { for (var i = SHOT.length - 2; i >= 0; i--) if (t >= SHOT[i]) return i + 1; return 1; };
 
@@ -180,16 +188,6 @@
     else this.logoShot(t, cx, cy);
     g.restore();
 
-    // vignette + grain + letterbox breathing
-    var vg = g.createRadialGradient(cx, cy, Math.min(w, h) * 0.25, cx, cy, Math.max(w, h) * 0.75);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.65)');
-    g.fillStyle = vg; g.fillRect(0, 0, w, h);
-    g.globalCompositeOperation = 'screen';
-    g.fillStyle = g.createPattern(this.grain, 'repeat');
-    g.translate((Math.random() * 128) | 0, (Math.random() * 128) | 0);
-    g.fillRect(-128, -128, w + 256, h + 256);
-    g.setTransform(this.cv.width / w, 0, 0, this.cv.height / h, 0, 0);
-    g.globalCompositeOperation = 'source-over';
 
     // DOM states
     this.presents.classList.toggle('is-on', t > 380 && t < 1350);
@@ -212,7 +210,7 @@
     var g = this.g, beats = [150, 520, 1050, 1250], pulse = 0;
     beats.forEach(function (k) { var d = t - k; if (d >= 0 && d < 300) pulse = Math.max(pulse, 1 - d / 300); });
     var s = this.u * (1 + pulse * 0.6);
-    g.fillStyle = C.magenta; g.shadowColor = C.magenta; g.shadowBlur = 30 + pulse * 60;
+    g.fillStyle = C.magenta; g.shadowColor = C.magenta; g.shadowBlur = this.lite ? 0 : 30 + pulse * 60;
     g.fillRect(Math.round(cx - s / 2), Math.round(cy - s / 2), Math.round(s), Math.round(s));
     g.shadowBlur = 0;
     if (t > 1100) { g.globalAlpha = clamp((t - 1100) / 300, 0, 1) * 0.5; this.scan(t); g.globalAlpha = 1; }
@@ -246,7 +244,7 @@
     } else {
       // tunnel rush (2.55 → 3.4 s)
       var p2 = (t - 2550) / 850, zoom = 1 + easeIn(p2) * 40;
-      this.stars.forEach(function (s) {
+      (this.lite ? this.stars.slice(0, 90) : this.stars).forEach(function (s) {
         var z = (s.z - p2 * 1.8) % 1; if (z < 0) z += 1;
         var r = (s.r * 0.6 + 0.05) / Math.max(z, 0.02) * Math.min(self.w, self.h) * 0.18;
         var x = cx + Math.cos(s.a) * r, y = cy + Math.sin(s.a) * r, sz = Math.max(1, (1 - z) * 7);
