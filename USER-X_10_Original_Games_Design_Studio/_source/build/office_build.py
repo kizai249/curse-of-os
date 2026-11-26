@@ -112,6 +112,13 @@ def dtable(d, head, rows):
     return t
 
 
+def save_office(obj, path):
+    try:
+        obj.save(path)
+    except OSError as e:
+        sys.exit(f"cannot save {path}: {e}")
+
+
 def new_doc():
     d = Document()
     s = d.sections[0]
@@ -239,7 +246,7 @@ def gdd_docx(g):
     _, rows = game_docs.econ_rows(g)
     dtable(d, ["البند", "القيمة", "النوع"], rows)
     p = os.path.join(game_docs.gfolder(g), "GDD_Arabic.docx")
-    d.save(p)
+    save_office(d, p)
     return p
 
 
@@ -302,7 +309,7 @@ def ops_docx():
         ],
     )
     p = os.path.join(model.PKG, "04_Operations", "USER-X_Operations_Manual.docx")
-    d.save(p)
+    save_office(d, p)
     return p
 
 
@@ -571,7 +578,7 @@ def deck():
         model.PKG, "07_Master_Presentation", "USER-X_10_Games_Master_Deck.pptx"
     )
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    prs.save(p)
+    save_office(prs, p)
     return p
 
 

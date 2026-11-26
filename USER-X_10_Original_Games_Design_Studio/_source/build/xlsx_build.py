@@ -65,7 +65,10 @@ def title(ws, text, sub=NOTE, ncols=8):
 
 def save(wb, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    wb.save(path)
+    try:
+        wb.save(path)
+    except OSError as e:
+        sys.exit(f"cannot save {path}: {e}")
     return path
 
 

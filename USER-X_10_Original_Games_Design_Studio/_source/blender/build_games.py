@@ -180,7 +180,7 @@ def whiteboard(name, x, y, rot=0.0):
 
 
 # ---------------------------------------------------------------- game builders
-def g01(g):
+def build_howeila_vault(g):
     y0 = 2.3
     box("vault_frame", (1.2, 0.12, 1.2), (0, y0, 1.7), "black", part=True)
     box("tray_A", (1.16, 0.04, 1.16), (0, y0 - 0.08, 1.7), "ply", part=True)
@@ -222,7 +222,7 @@ def g01(g):
         )
 
 
-def g02(g):
+def build_saqla_rush(g):
     for r, yy in enumerate((-1.125, 1.125)):
         for c, xx in enumerate((-0.95, 0.95)):
             table(f"t{r}{c}", 1.8, 0.75, 0.75, xx, yy)
@@ -270,7 +270,7 @@ def g02(g):
     box("timer_post", (0.05, 0.05, 1.45), (4.0, 0, 0.72), "grey")
 
 
-def g03(g):
+def build_carrom_ring(g):
     for k, yy in enumerate((-1.3, 1.3)):
         table(f"tab{k}", 1.8, 0.6, 0.8, 0, yy, top="white")
         for side in (-1, 1):
@@ -306,7 +306,7 @@ def g03(g):
         person(f"aud{j}", 2.6, -2.5 + j, m="shade")
 
 
-def g04(g):
+def build_last_majlis(g):
     for i, (cx, cy) in enumerate([(-1.7, -1.7), (1.7, -1.7), (-1.7, 1.7), (1.7, 1.7)]):
         tape_rect(f"maj{i}", 2.2, 2.2, cx, cy, m="gold", t=0.03)
         table(f"low{i}", 0.6, 0.6, 0.35, cx, cy, top="wood")
@@ -338,7 +338,7 @@ def g04(g):
     whiteboard("seals_board", 0, 3.6, 0)
 
 
-def g05(g):
+def build_pebble_market(g):
     ring("market_circle", 3.5, 0.05, (0, 0, 0.002), "cyan")
     for i in range(4):
         a = math.radians(45 + i * 90)
@@ -369,7 +369,7 @@ def g05(g):
         person(f"p{i}", 1.8 * math.cos(a), 1.8 * math.sin(a))
 
 
-def g06(g):
+def build_tug_maze(g):
     for k, cx in enumerate((-2.0, 2.0)):
         part = k == 0
         box(f"base{k}", (1.6, 1.6, 0.018), (cx, 0, 0.009), "ply", part=part)
@@ -443,7 +443,7 @@ def g06(g):
             )
 
 
-def g07(g):
+def build_seven_floors(g):
     R, n = 3.6, 8
     for i in range(n):
         a = math.radians(-150 + i * (120 / (n - 1)))
@@ -516,7 +516,7 @@ def stones_grid(prefix, cx, cy, size, z, n=4, part=False):
                 k += 1
 
 
-def g08(g):
+def build_shadow_istaffat(g):
     for t, (tx, ty) in enumerate([(-2.3, -1.6), (2.3, -1.6), (-2.3, 1.6), (2.3, 1.6)]):
         table(f"tab{t}", 1.8, 0.75, 0.75, tx, ty)
         for b, dx in enumerate((-0.45, 0.45)):
@@ -536,7 +536,7 @@ def g08(g):
     stones_grid("final", 0, 0, 0.9, 0.76)
 
 
-def g09(g):
+def build_the_well(g):
     yw = 1.8
     for i in range(5):
         x = -1.6 + i * 0.8
@@ -567,7 +567,7 @@ def g09(g):
     whiteboard("score", -3.4, 2.2, 0.4)
 
 
-def g10(g):
+def build_taqiya_circle(g):
     R = 2.0
     ring("path_in", 2.55, 0.04, (0, 0, 0.002), "cyan")
     ring("path_out", 3.35, 0.04, (0, 0, 0.002), "cyan")
@@ -618,7 +618,7 @@ EXPLODE_GAP = {"G01": 0.18, "G06": 0.3, "G09": 0.35}
 
 BUILDERS = {
     f"G{i:02d}": f
-    for i, f in enumerate([g01, g02, g03, g04, g05, g06, g07, g08, g09, g10], 1)
+    for i, f in enumerate([build_howeila_vault, build_saqla_rush, build_carrom_ring, build_last_majlis, build_pebble_market, build_tug_maze, build_seven_floors, build_shadow_istaffat, build_the_well, build_taqiya_circle], 1)
 }
 
 
@@ -719,7 +719,10 @@ def render(s, cam, path, rx, ry):
     s.camera = cam
     s.render.resolution_x, s.render.resolution_y = rx, ry
     s.render.filepath = path
-    bpy.ops.render.render(write_still=True)
+    try:
+        bpy.ops.render.render(write_still=True)
+    except RuntimeError as e:
+        sys.exit(f"render failed for {path}: {e}")
 
 
 def build(gid):
@@ -750,7 +753,11 @@ def build(gid):
         ortho=max(L * 1.08, 5.0),
     )
     side.location.z = side.data.ortho_scale * 0.5 / 2 - 0.3
-    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(proj, f"{gid}_{g['slug']}.blend"))
+    blend = os.path.join(proj, f"{gid}_{g['slug']}.blend")
+    try:
+        bpy.ops.wm.save_as_mainfile(filepath=blend)
+    except RuntimeError as e:
+        sys.exit(f"cannot save {blend}: {e}")
     rx = RES
     render(s, persp, os.path.join(img, "perspective.png"), rx, int(rx * 0.625))
     ty = int(rx * L / W * 1.0)

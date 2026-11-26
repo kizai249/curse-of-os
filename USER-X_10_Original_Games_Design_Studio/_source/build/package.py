@@ -11,6 +11,13 @@ import model
 PKG = model.PKG
 
 
+def copy_file(src, dst):
+    try:
+        shutil.copy(src, dst)
+    except OSError as e:
+        sys.exit(f"cannot copy {src} -> {dst}: {e}")
+
+
 def copy_3d():
     base = os.path.join(PKG, "03_3D_Models")
     subs = {
@@ -26,17 +33,17 @@ def copy_3d():
             os.makedirs(d, exist_ok=True)
             if sub == "Renders":
                 for v in ("perspective", "front", "side", "assembly"):
-                    shutil.copy(
+                    copy_file(
                         game_docs.img(g, f"{v}.png"), os.path.join(d, f"{tag}_{v}.png")
                     )
             else:
-                shutil.copy(game_docs.img(g, name), os.path.join(d, f"{tag}_{name}"))
+                copy_file(game_docs.img(g, name), os.path.join(d, f"{tag}_{name}"))
         d = os.path.join(base, "Blender_Files")
         os.makedirs(d, exist_ok=True)
         for b in glob.glob(
             os.path.join(game_docs.gfolder(g), "3D_Project_Files", "*.blend")
         ):
-            shutil.copy(b, d)
+            copy_file(b, d)
 
 
 def readme():
