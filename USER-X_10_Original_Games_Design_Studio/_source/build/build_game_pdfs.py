@@ -12,19 +12,21 @@ OUT = os.path.join(model.ROOT, "out_html")
 
 
 def run(jobs, name):
-    os.makedirs(OUT, exist_ok=True)
     jp = os.path.join(OUT, f"jobs_{name}.json")
-    with open(jp, "w", encoding="utf-8") as f:
-        json.dump(jobs, f, ensure_ascii=False)
-    subprocess.run(
-        ["node", os.path.join(model.ROOT, "build", "render.js"), jp], check=True
-    )
+    write(jp, json.dumps(jobs, ensure_ascii=False))
+    try:
+        subprocess.run(["node", os.path.join(model.ROOT, "build", "render.js"), jp], check=True)
+    except (OSError, subprocess.CalledProcessError) as e:
+        sys.exit(f"render failed for {jp}: {e}")
 
 
 def write(path, text):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text)
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+    except OSError as e:
+        sys.exit(f"cannot write {path}: {e}")
 
 
 def main():

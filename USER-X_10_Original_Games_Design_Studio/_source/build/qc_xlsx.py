@@ -14,21 +14,11 @@ ERR = ("#VALUE!", "#REF!", "#NAME?", "#DIV/0!", "#N/A", "#NUM!", "Err:")
 
 
 def recalc(paths, out):
-    subprocess.run(
-        [
-            "soffice",
-            "--headless",
-            "--calc",
-            "--convert-to",
-            "xlsx",
-            "--outdir",
-            out,
-            *paths,
-        ],
-        check=True,
-        capture_output=True,
-        timeout=600,
-    )
+    cmd = ["soffice", "--headless", "--calc", "--convert-to", "xlsx", "--outdir", out, *paths]
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, timeout=600)
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+        sys.exit(f"LibreOffice recalc failed for {paths}: {e}")
 
 
 def main():
