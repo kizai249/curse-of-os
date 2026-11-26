@@ -95,8 +95,12 @@ def readme():
         "الخطوط: IBM Plex Sans Arabic وKufam (رخصة OFL، في `_source/fonts`).",
         "",
     ]
-    with open(os.path.join(PKG, "README.md"), "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    path = os.path.join(PKG, "README.md")
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+    except OSError as e:
+        sys.exit(f"cannot write {path}: {e}")
 
 
 if __name__ == "__main__":
