@@ -800,6 +800,9 @@ def build(gid):
 
 
 if __name__ == "__main__":
-    ids = [a for a in sys.argv[1:] if a.startswith("G")] or list(BUILDERS)
-    for gid in ids:
-        build(gid)
+    try:
+        ids = [a for a in sys.argv[1:] if a.startswith("G")] or list(BUILDERS)
+        for gid in ids:
+            build(gid)
+    except (OSError, RuntimeError) as e:  # disk/permission/missing-file errors: name the file, stop the build
+        sys.exit(f"build step failed: {e}")

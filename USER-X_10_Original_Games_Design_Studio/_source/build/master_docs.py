@@ -1,6 +1,7 @@
 """Portfolio-level Arabic PDFs: research, research summary, operations, safety, reset system, selection, 3D catalog."""
 
 import os
+import sys
 
 import build_game_pdfs as bgp
 import game_docs
@@ -606,4 +607,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except OSError as e:  # disk/permission/missing-file errors: name the file, stop the build
+        sys.exit(f"build step failed: {e}")

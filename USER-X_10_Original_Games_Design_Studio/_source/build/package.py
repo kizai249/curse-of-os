@@ -2,6 +2,7 @@
 
 import glob
 import os
+import sys
 import shutil
 
 import game_docs
@@ -92,6 +93,9 @@ def readme():
 
 
 if __name__ == "__main__":
-    copy_3d()
-    readme()
-    print("packaged")
+    try:
+        copy_3d()
+        readme()
+        print("packaged")
+    except OSError as e:  # disk/permission/missing-file errors: name the file, stop the build
+        sys.exit(f"build step failed: {e}")

@@ -1,6 +1,7 @@
 """Editable Office files: GDD_Arabic.docx per game, Operations Manual docx, master pptx deck (RTL Arabic)."""
 
 import os
+import sys
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -581,6 +582,9 @@ def build_all():
 
 
 if __name__ == "__main__":
-    for x in build_all():
-        print(os.path.relpath(x, model.PKG))
-    _ = (common, research)
+    try:
+        for x in build_all():
+            print(os.path.relpath(x, model.PKG))
+        _ = (common, research)
+    except OSError as e:  # disk/permission/missing-file errors: name the file, stop the build
+        sys.exit(f"build step failed: {e}")

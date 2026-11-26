@@ -1,6 +1,7 @@
 """All Excel deliverables, Arabic RTL, with live formulas. Values are cross-checked after a LibreOffice recalc (qc.py)."""
 
 import os
+import sys
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -975,5 +976,8 @@ def build_all():
 
 
 if __name__ == "__main__":
-    for p in build_all():
-        print(os.path.relpath(p, PKG))
+    try:
+        for p in build_all():
+            print(os.path.relpath(p, PKG))
+    except OSError as e:  # disk/permission/missing-file errors: name the file, stop the build
+        sys.exit(f"build step failed: {e}")
