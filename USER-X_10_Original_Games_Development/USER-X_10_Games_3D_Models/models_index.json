@@ -1,0 +1,179 @@
+[
+ {
+  "id": "G01",
+  "folder": "Game_01",
+  "glb": "Game_01/model/G01_THE_LOCK.glb",
+  "prims": 78,
+  "bounds_m": [
+   6.0,
+   1.87,
+   6.0
+  ],
+  "parts": [
+   "g01_tile.stl",
+   "g01_rack.stl"
+  ],
+  "hero": "g01_tile",
+  "w": 6.0,
+  "d": 6.0
+ },
+ {
+  "id": "G02",
+  "folder": "Game_02",
+  "glb": "Game_02/model/G02_COUNTERFLOW.glb",
+  "prims": 57,
+  "bounds_m": [
+   7.0,
+   1.87,
+   7.0
+  ],
+  "parts": [
+   "g02_tower.stl"
+  ],
+  "hero": "g02_tower",
+  "w": 7.0,
+  "d": 7.0
+ },
+ {
+  "id": "G03",
+  "folder": "Game_03",
+  "glb": "Game_03/model/G03_THE_RUN.glb",
+  "prims": 58,
+  "bounds_m": [
+   7.0,
+   1.87,
+   7.0
+  ],
+  "parts": [
+   "g03_die.stl",
+   "g03_square.stl"
+  ],
+  "hero": "g03_die",
+  "w": 7.0,
+  "d": 7.0
+ },
+ {
+  "id": "G04",
+  "folder": "Game_04",
+  "glb": "Game_04/model/G04_HARAJ.glb",
+  "prims": 63,
+  "bounds_m": [
+   7.15,
+   1.87,
+   6.05
+  ],
+  "parts": [
+   "g04_podium.stl"
+  ],
+  "hero": "g04_podium",
+  "w": 7.0,
+  "d": 6.0
+ },
+ {
+  "id": "G05",
+  "folder": "Game_05",
+  "glb": "Game_05/model/G05_SILENT_PAIR.glb",
+  "prims": 56,
+  "bounds_m": [
+   6.0,
+   1.87,
+   5.0
+  ],
+  "parts": [
+   "g05_choice_box.stl"
+  ],
+  "hero": "g05_choice_box",
+  "w": 6.0,
+  "d": 5.0
+ },
+ {
+  "id": "G06",
+  "folder": "Game_06",
+  "glb": "Game_06/model/G06_THE_STRANGER.glb",
+  "prims": 80,
+  "bounds_m": [
+   6.5,
+   1.87,
+   6.5
+  ],
+  "parts": [
+   "g06_podium.stl",
+   "g06_tube.stl"
+  ],
+  "hero": "g06_podium",
+  "w": 6.5,
+  "d": 6.5
+ },
+ {
+  "id": "G07",
+  "folder": "Game_07",
+  "glb": "Game_07/model/G07_WITNESS.glb",
+  "prims": 82,
+  "bounds_m": [
+   6.0,
+   2.05,
+   6.25
+  ],
+  "parts": [
+   "g07_cubby.stl"
+  ],
+  "hero": "g07_cubby",
+  "w": 6.0,
+  "d": 6.0
+ },
+ {
+  "id": "G08",
+  "folder": "Game_08",
+  "glb": "Game_08/model/G08_THE_WELL.glb",
+  "prims": 87,
+  "bounds_m": [
+   6.0,
+   1.87,
+   6.2
+  ],
+  "parts": [
+   "g08_well_assembly.stl",
+   "g08_pedestal.stl",
+   "g08_well.stl",
+   "g08_tube_base.stl",
+   "g08_tube.stl"
+  ],
+  "hero": "g08_well_assembly",
+  "w": 6.0,
+  "d": 6.0
+ },
+ {
+  "id": "G09",
+  "folder": "Game_09",
+  "glb": "Game_09/model/G09_HARVEST.glb",
+  "prims": 90,
+  "bounds_m": [
+   6.0,
+   1.87,
+   5.0
+  ],
+  "parts": [
+   "g09_board.stl"
+  ],
+  "hero": "g09_board",
+  "w": 6.0,
+  "d": 5.0
+ },
+ {
+  "id": "G10",
+  "folder": "Game_10",
+  "glb": "Game_10/model/G10_THE_HIDDEN_RING.glb",
+  "prims": 75,
+  "bounds_m": [
+   7.0,
+   2.21,
+   5.0
+  ],
+  "parts": [
+   "g10_ring.stl"
+  ],
+  "hero": "g10_ring",
+  "w": 7.0,
+  "d": 5.0
+ }
+]
