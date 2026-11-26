@@ -37,9 +37,11 @@ def main():
             recalc([f], d)
 
         def wbv(f):
-            return load_workbook(
-                os.path.join(jobs[f], os.path.basename(f)), data_only=True
-            )
+            path = os.path.join(jobs[f], os.path.basename(f))
+            try:
+                return load_workbook(path, data_only=True)
+            except (OSError, ValueError, KeyError) as e:
+                sys.exit(f"cannot open recalculated workbook {path}: {e}")
 
         nerr = 0
         for f in files:
