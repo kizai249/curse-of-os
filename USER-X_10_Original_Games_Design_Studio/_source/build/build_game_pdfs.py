@@ -37,7 +37,7 @@ def main():
     for g in games:
         gd = game_docs.gfolder(g)
         if mode == "dims":
-            html, w, h = game_docs.dimension_page(g)
+            html, w, h = game_docs.dimension_page(g, game_docs.img(g, "top.png"))
             hp = os.path.join(OUT, g["id"], "dims.html")
             write(hp, html)
             jobs.append(

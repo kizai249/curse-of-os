@@ -837,7 +837,7 @@ def testing(g):
     return doc(f"الاختبار — {g['ar']}", body)
 
 
-def dimension_page(g):
+def dimension_page(g, top_png):
     """HTML page drawing dimension lines over the top render (screenshot -> dimensioned_top.png)."""
     W, L = g["physical"]["footprint"]
     rx = 1400
@@ -863,7 +863,7 @@ def dimension_page(g):
             "dims",
             f"""<style>body{{margin:0;background:#0B0B0F;}} .t{{position:absolute;color:#F4F4F1;font-family:Kufam;font-size:30px;}} .s{{position:absolute;color:#A9A9B6;font-family:Plex;font-size:22px;}}</style>
 <div style="position:relative;width:{tw}px;height:{th}px;background:#0B0B0F">
-<img src="file://{img(g, "top.png")}" style="position:absolute;left:{pad}px;top:{pad}px;width:{rx}px;height:{ry}px">{svg}
+<img src="file://{top_png}" style="position:absolute;left:{pad}px;top:{pad}px;width:{rx}px;height:{ry}px">{svg}
 <div class="t" style="left:{x0 + fw / 2 - 60}px;top:{y0 - 105}px;direction:ltr">{W:.1f} m</div>
 <div class="t" style="left:{x0 + fw + 64}px;top:{y0 + fl / 2 - 20}px;direction:ltr">{L:.1f} m</div>
 <div class="s" style="left:{pad}px;top:{th - 48}px;direction:ltr">0 — 1 — 2 m</div>
